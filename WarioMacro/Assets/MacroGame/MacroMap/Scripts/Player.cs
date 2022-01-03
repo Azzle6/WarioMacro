@@ -4,10 +4,20 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private Rigidbody2D rb;
-    
+    public Node currentNode;
 
-    void Start()
+   /* void Update()
+    {
+        if (currentNode != null)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, currentNode.transform.position, Time.deltaTime * 10f);
+        }
+    }*/
+
+    // [SerializeField] private Rigidbody2D rb;
+
+
+    /*void Start()
     {
     }
 
@@ -20,6 +30,6 @@ public class Player : MonoBehaviour
     public void StopMoving()
     {
         rb.velocity = Vector2.zero;
-    }
+    }*/
 
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using DG.Tweening;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
@@ -21,12 +22,13 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameControllerSO gameControllerSO;
     [SerializeField] private GameObject[] macroObjects = Array.Empty<GameObject>();
     [SerializeField] private string[] sceneNames = Array.Empty<string>();
+    [SerializeField]  private GameState state = GameState.Micro;
+    private Map map;
     private static List<ITickable> tickables = new List<ITickable>();
     private static string currentScene;
     private static bool gameFinished;
     private static bool nextMicroGame;
     private static GameController instance;
-    private GameState state = GameState.Micro;
     private bool debugMicro;
 
 
@@ -62,9 +64,7 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        state = GameState.Macro;
         StartCoroutine(TickCoroutine());
-
     }
 
     private void Update()
@@ -75,24 +75,106 @@ public class GameController : MonoBehaviour
         // update difficulty / speed
         gameSpeed = gameControllerSO.currentGameSpeed;
         difficulty = gameControllerSO.currentDifficulty;
-        
-        // DEBUG Press A for next mini game
-        if(state == GameState.Macro)
-        {
-            if (InputManager.GetKeyDown(ControllerKey.A))
-            {
-                Debug.Log("A Pressed, next micro game");
-                nextMicroGame = true;
-            }
-        }
     }
 
+    private IEnumerator MovePlayerToCurrentNode()
+    {
+        //yield return new WaitForSeconds(1f);
+        map.player.transform.DOPunchScale(Vector3.one * .25f, 1f);
+        yield return new WaitForSeconds(1f);
+        // TODO : animate with (DOTween?)
+        //map.player.transform.position = map.currentNode.transform.position;
+        var tween = map.player.transform.DOMove(map.currentNode.transform.position, 1f);
+        while (tween.IsPlaying()) yield return null;
+        //yield return new WaitForSeconds(1f);
+    }
+
+    private bool LastNodeReached()
+    {
+        return map != null && map.currentNode == map.endNode;
+    }
+
+    private IEnumerator LoadNextMap()
+    {
+        map = FindObjectOfType<Map>();
+        
+        // TODO
+        map.currentNode = map.startNode;
+        map.player.transform.position = map.currentNode.transform.position;
+        yield break;
+    }
+
+    private IEnumerator WaitForNodeSelection()
+    {
+        // init
+        var arrowObject = map.arrowPrefab;
+        var currentNode = map.currentNode;
+        var nextNode = default(Node);
+        var selectedNode = default(Node);
+        var selectedDirection = default(Node.Direction);
+        var selectInput = default(bool);
+        var validInput = ControllerKey.A;
+        
+        arrowObject.gameObject.SetActive(false);
+        
+        // TODO : display message "select next node"
+        Debug.Log("Select Next Node with Left Stick");
+        
+        // input loop
+        while (nextNode == null)
+        {
+            foreach (Node.Path path in currentNode.paths)
+            {
+                var hAxis = Input.GetAxis("LEFT_STICK_HORIZONTAL");
+                var vAxis = Input.GetAxis("LEFT_STICK_VERTICAL");
+                var isUp = vAxis > 0.5f;
+                var isDown = vAxis < -0.5f;
+                var isRight = hAxis > 0.5f;
+                var isLeft = hAxis < -0.5f;
+                
+                selectInput = (path.direction == Node.Direction.Up && isUp)
+                              || (path.direction == Node.Direction.Down && isDown)
+                              || (path.direction == Node.Direction.Left && isLeft)
+                              || (path.direction == Node.Direction.Right && isRight);
+
+                if (selectInput)
+                {
+                    selectedNode = path.destination;
+                    selectedDirection = path.direction;
+                    break;
+                }
+            }
+            
+            if (selectedNode != null)
+            {
+                arrowObject.gameObject.SetActive(true);
+                
+                arrowObject.transform.rotation = Quaternion.Euler(0,0,(int)selectedDirection * -90f);
+
+                if (InputManager.GetKeyDown(validInput))
+                {
+                    nextNode = selectedNode;
+                }
+            }
+            else
+            {
+                arrowObject.gameObject.SetActive(false);
+            }
+
+            yield return null;
+        }
+        
+        map.currentNode = nextNode;
+        Debug.Log("new node selected");
+
+        // dispose
+        arrowObject.gameObject.SetActive(false);
+    }
+    
     private IEnumerator TickCoroutine()
     {
         while (true)
         {
-            Debug.Log(this + " => TickCoroutine: " + currentTick);
-            
             foreach (var t in tickables.ToArray())
             {
                 t.OnTick();
@@ -132,8 +214,14 @@ public class GameController : MonoBehaviour
                 }
                 else
                 {
-                    // TODO : handle player movement on game board / map
-                    Debug.Log("Wait for next micro game (PRESS A)");
+                    if (LastNodeReached() || map == null)
+                    {
+                        yield return StartCoroutine(LoadNextMap());
+                    }
+
+                    yield return StartCoroutine(WaitForNodeSelection());
+                    yield return StartCoroutine(MovePlayerToCurrentNode());
+                    nextMicroGame = true;
                 }
             }
             

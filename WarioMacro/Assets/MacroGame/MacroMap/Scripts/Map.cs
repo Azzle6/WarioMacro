@@ -4,18 +4,24 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Map : MonoBehaviour, ITickable
+public class Map : MonoBehaviour/*, ITickable*/
 {
-    [SerializeField] private Node startNode;
-    [SerializeField] private Node endNode;
-    [SerializeField] private Player player;
-    [SerializeField] private Node currentNode;
-    [SerializeField] private GameObject arrowPrefab;
-    [SerializeField] private int selected = 0;
+    [SerializeField] public Node startNode;
+    [SerializeField] public Node endNode;
+    [SerializeField] public Node currentNode;
+    [SerializeField] public Player player;
+    [SerializeField] public GameObject arrowPrefab;
+    [SerializeField] public int selected = 0;
     private bool isMoving;
     private Queue<Vector3> pathing = new Queue<Vector3>();
 
-    private void Start()
+    private void Awake()
+    {
+        currentNode = startNode;
+        arrowPrefab.SetActive(false);
+    }
+
+   /* private void Start()
     {
         GameManager.Register();
         GameController.Init(this);
@@ -114,5 +120,5 @@ public class Map : MonoBehaviour, ITickable
             arrowPrefab.transform.parent = currentNode.paths[selected].destination.transform;
             arrowPrefab.transform.localPosition = new Vector2(0, 1);
         }
-    }
+    }*/
 }
