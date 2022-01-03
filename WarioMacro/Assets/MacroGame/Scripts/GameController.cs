@@ -62,9 +62,7 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        SetObjActive(false);
         state = GameState.Macro;
-        //LoadMicroGame(sceneNames[Random.Range(0, sceneNames.Length)]);
         StartCoroutine(TickCoroutine());
 
     }
@@ -123,11 +121,11 @@ public class GameController : MonoBehaviour
                 if(nextMicroGame)
                 {
                     ResetTick();
-                    SetObjActive(false);
                     currentScene = sceneNames[Random.Range(0, sceneNames.Length)];
                     Debug.Log("Launch Micro Game:" + currentScene);
                     asyncOp = SceneManager.LoadSceneAsync(currentScene, LoadSceneMode.Additive);
                     while (!asyncOp.isDone) yield return null;
+                    SetObjActive(false);
                     state = GameState.Micro;
                     gameFinished = false;
                     nextMicroGame = false;
