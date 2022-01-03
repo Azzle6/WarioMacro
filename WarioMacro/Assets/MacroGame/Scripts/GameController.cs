@@ -12,7 +12,7 @@ public interface ITickable
     void OnTick();
 }
 
-public class GameController : MonoBehaviour, ITickable
+public class GameController : MonoBehaviour
 {
     public static int currentTick { get; private set; }
     private static float gameSpeed { get; set; }
@@ -24,6 +24,7 @@ public class GameController : MonoBehaviour, ITickable
     private static List<ITickable> tickables = new List<ITickable>();
     private static string currentScene;
     private static bool gameFinished;
+    private static bool nextMicroGame;
     private static GameController instance;
     private GameState state = GameState.Micro;
     private bool debugMicro;
@@ -59,68 +60,88 @@ public class GameController : MonoBehaviour, ITickable
         gameFinished = true;
     }
 
-    private static void LoadMicroGame(string sceneName)
-    {
-        currentScene = sceneName;
-        SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
-    }
-
     private void Start()
     {
         SetObjActive(false);
-        if (state == GameState.Macro)
-        {
-            LoadMicroGame(sceneNames[Random.Range(0, sceneNames.Length)]);
-        }
+        state = GameState.Macro;
+        //LoadMicroGame(sceneNames[Random.Range(0, sceneNames.Length)]);
         StartCoroutine(TickCoroutine());
 
+    }
+
+    private void Update()
+    {
+        // update global timescale
+        Time.timeScale = gameSpeed / 120;
+        
+        // update difficulty / speed
+        gameSpeed = gameControllerSO.currentGameSpeed;
+        difficulty = gameControllerSO.currentDifficulty;
+        
+        // DEBUG Press A for next mini game
+        if(state == GameState.Macro)
+        {
+            if (InputManager.GetKeyDown(ControllerKey.A))
+            {
+                Debug.Log("A Pressed, next micro game");
+                nextMicroGame = true;
+            }
+        }
     }
 
     private IEnumerator TickCoroutine()
     {
         while (true)
         {
+            Debug.Log(this + " => TickCoroutine: " + currentTick);
+            
             foreach (var t in tickables.ToArray())
             {
                 t.OnTick();
             }
-            OnTick();
-            yield return new WaitForSeconds(1);
-            currentTick++;
-        }
-    }
-
-    public void OnTick()
-    {
-        //Debug.Log("Macro " + currentTick + " : " + Time.time);
-        if (gameFinished && debugMicro)
-        {
-            ResetTick();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
-
-        /*Debug.Log("Macro" + currentTick);
-        if (gameFinished)
-        {
+            
+            var asyncOp = default(AsyncOperation);
             if (state == GameState.Micro)
             {
-                //SceneManager.UnloadSceneAsync(currentScene);
-                ResetTick();
-                SetObjActive(true);
-                state = GameState.Macro;
-            }
-            else
-            {
-                if (currentTick == 8)
+                if (gameFinished)
                 {
+                    // Unload current micro game
+                    Debug.Log("MicroGame Finished");
+                    asyncOp = SceneManager.UnloadSceneAsync(currentScene);
+                    while (!asyncOp.isDone) yield return null;
                     ResetTick();
-                    SetObjActive(false);
-                    LoadMicroGame(sceneNames[Random.Range(0, sceneNames.Length)]);
-                    state = GameState.Micro;
+                    SetObjActive(true);
+                    // switch back to macro
+                    state = GameState.Macro;
+                    nextMicroGame = false;
                     gameFinished = false;
                 }
             }
-        }*/
+            else if (state == GameState.Macro)
+            {
+                // Launch next micro game
+                if(nextMicroGame)
+                {
+                    ResetTick();
+                    SetObjActive(false);
+                    currentScene = sceneNames[Random.Range(0, sceneNames.Length)];
+                    Debug.Log("Launch Micro Game:" + currentScene);
+                    asyncOp = SceneManager.LoadSceneAsync(currentScene, LoadSceneMode.Additive);
+                    while (!asyncOp.isDone) yield return null;
+                    state = GameState.Micro;
+                    gameFinished = false;
+                    nextMicroGame = false;
+                }
+                else
+                {
+                    // TODO : handle player movement on game board / map
+                    Debug.Log("Wait for next micro game (PRESS A)");
+                }
+            }
+            
+            yield return new WaitForSeconds(1f);
+            currentTick++;
+        }
     }
 
     private void SetObjActive(bool value)
@@ -138,13 +159,6 @@ public class GameController : MonoBehaviour, ITickable
         gameSpeed = gameControllerSO.currentGameSpeed;
         difficulty = gameControllerSO.currentDifficulty;
 
-        Time.timeScale = gameSpeed / 120;
-    }
-
-    private void Update()
-    {
-        gameSpeed = gameControllerSO.currentGameSpeed;
-        difficulty = gameControllerSO.currentDifficulty;
         Time.timeScale = gameSpeed / 120;
     }
 
