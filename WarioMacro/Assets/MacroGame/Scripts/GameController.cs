@@ -19,6 +19,8 @@ public class GameController : MonoBehaviour
     private static float gameSpeed { get; set; }
     public static int difficulty { get; private set; }
 
+    
+    [SerializeField] public Player player;
     [SerializeField] private GameControllerSO gameControllerSO;
     [SerializeField] private GameObject[] macroObjects = Array.Empty<GameObject>();
     [SerializeField] private string[] sceneNames = Array.Empty<string>();
@@ -199,14 +201,14 @@ public class GameController : MonoBehaviour
         //yield return new WaitForSeconds(1f);
         //map.player.transform.DOPunchScale(Vector3.one * .25f, 1f);
         //yield return new WaitForSeconds(1f);
-        map.player.StartMove();
+        player.StartMove();
         // TODO : animate with (DOTween?)
         //map.player.transform.position = map.currentNode.transform.position;
-        var tween = map.player.transform.DOMove(map.currentNode.transform.position, map.player.moveSpeed)
+        var tween = player.transform.DOMove(map.currentNode.transform.position, player.moveSpeed)
             .SetSpeedBased()
             .SetEase(Ease.Linear);
         while (tween.IsPlaying()) yield return null;
-        map.player.StopMove();
+        player.StopMove();
         //yield return new WaitForSeconds(1f);
     }
 
@@ -221,14 +223,14 @@ public class GameController : MonoBehaviour
         
         // TODO
         map.currentNode = map.startNode;
-        map.player.transform.position = map.currentNode.transform.position;
+        player.transform.position = map.currentNode.transform.position;
         yield break;
     }
 
     private IEnumerator WaitForNodeSelection()
     {
         // init
-        var arrowPrefabs = map.arrowPrefabs.ToList();
+        var arrowPrefabs = player.arrowPrefabs.ToList();
         var currentNode = map.currentNode;
         var nextNode = default(Node);
         var selectedNode = default(Node);

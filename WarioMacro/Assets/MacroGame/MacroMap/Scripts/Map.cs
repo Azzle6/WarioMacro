@@ -8,8 +8,7 @@ public class Map : MonoBehaviour/*, ITickable*/
 {
     [SerializeField] public Node startNode;
     [SerializeField] public Node endNode;
-    [SerializeField] public Player player;
-    [SerializeField] public GameObject[] arrowPrefabs = new GameObject[3];
+    
     [SerializeField] public int selected = 0;
     private bool isMoving;
     private Queue<Vector3> pathing = new Queue<Vector3>();
@@ -19,6 +18,6 @@ public class Map : MonoBehaviour/*, ITickable*/
     private void Awake()
     {
         currentNode = startNode;
-        arrowPrefabs.ToList().ForEach(go => go.SetActive(false));
+        
     }
 }
