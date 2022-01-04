@@ -22,7 +22,8 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameControllerSO gameControllerSO;
     [SerializeField] private GameObject[] macroObjects = Array.Empty<GameObject>();
     [SerializeField] private string[] sceneNames = Array.Empty<string>();
-    [SerializeField]  private GameState state = GameState.Micro;
+    [SerializeField] private GameState state = GameState.Micro;
+    [SerializeField] private MiniGameResultPannel_UI resultPanel = null;
     private Map map;
     private static List<ITickable> tickables = new List<ITickable>();
     private static string currentScene;
@@ -120,10 +121,29 @@ public class GameController : MonoBehaviour
                         microGamesList.RemoveAt(rdIndex);
                         microGamesQueue.Enqueue(pickedMicroGame);
                     }
+                    
+                    // init result panel
+                    resultPanel.ToggleWindow(true);
+                    resultPanel.ClearAllNodes();
+                    resultPanel.SetStartingNodeNumber(microGamesQueue.Count);
+                    resultPanel.PopWindowUp();
 
                     // play each micro games one by one
+                    int gameCount = 0;
                     while (microGamesQueue.Count > 0)
                     {
+                        // wait for input pressed
+                        while (true)
+                        {
+                            if (InputManager.GetKeyDown(ControllerKey.A))
+                                break;
+                            else
+                                yield return null;
+                        }
+                        
+                        resultPanel.PopWindowDown();
+                        yield return new WaitForSeconds(1f);
+                        
                         // start next micro game in queue
                         currentScene = microGamesQueue.Dequeue();
                         Debug.Log("Launch Micro Game:" + currentScene);
@@ -153,16 +173,19 @@ public class GameController : MonoBehaviour
                         
                         // display result
                         Debug.Log("MicroGame Finished: " + (gameResult ? "SUCCESS" : "FAILURE"));
-                        while (true)
-                        {
-                            if (InputManager.GetKeyDown(ControllerKey.A))
-                                break;
-                            else
-                                yield return null;
-                        }
+                        
+                        resultPanel.PopWindowUp();
+                        yield return new WaitForSeconds(1f);
+                        
+                        resultPanel.SetCurrentNode(gameResult, gameCount+=1);
+                        yield return new WaitForSeconds(1f);
                     }
                     
                     Debug.Log("Node completed");
+                    
+                    // dispose
+                    resultPanel.PopWindowDown();
+                    resultPanel.ToggleWindow(false);
                 }
             }
 
