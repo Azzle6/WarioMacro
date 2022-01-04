@@ -27,7 +27,7 @@ public class GameController : MonoBehaviour
     private static List<ITickable> tickables = new List<ITickable>();
     private static string currentScene;
     private static bool gameFinished;
-    private static bool nextMicroGame;
+    private static bool gameResult;
     private static GameController instance;
     private bool debugMicro;
 
@@ -53,13 +53,18 @@ public class GameController : MonoBehaviour
     private static void ResetTick()
     {
         currentTick = 0;
+    }
+
+    private static void ResetTickables()
+    {
         tickables.Clear();
-        gameFinished = false;
     }
 
     public static void FinishGame(bool result)
     {
+        Debug.Log("FinishGame: " + result);
         gameFinished = true;
+        gameResult = result;
     }
 
     private void Start()
@@ -80,49 +85,84 @@ public class GameController : MonoBehaviour
 
     private IEnumerator GameStateCoroutine()
     {
+        var asyncOp = default(AsyncOperation);
+        
         while(true)
-        {var asyncOp = default(AsyncOperation);
+        {
             if (state == GameState.Micro)
             {
-                if (gameFinished)
-                {
-                    // Unload current micro game
-                    Debug.Log("MicroGame Finished");
-                    asyncOp = SceneManager.UnloadSceneAsync(currentScene);
-                    while (!asyncOp.isDone) yield return null;
-                    ResetTick();
-                    SetObjActive(true);
-                    // switch back to macro
-                    state = GameState.Macro;
-                    nextMicroGame = false;
-                    gameFinished = false;
-                }
+                // Game launched from Micro Game Scene
             }
             else if (state == GameState.Macro)
             {
-                // Launch next micro game
-                if(nextMicroGame)
+                if (LastNodeReached() || map == null)
                 {
-                    ResetTick();
-                    currentScene = sceneNames[Random.Range(0, sceneNames.Length)];
-                    Debug.Log("Launch Micro Game:" + currentScene);
-                    asyncOp = SceneManager.LoadSceneAsync(currentScene, LoadSceneMode.Additive);
-                    while (!asyncOp.isDone) yield return null;
-                    SetObjActive(false);
-                    state = GameState.Micro;
-                    gameFinished = false;
-                    nextMicroGame = false;
+                    yield return StartCoroutine(LoadNextMap());
                 }
-                else
+
+                Debug.Log("WaitForNodeSelection");
+                yield return StartCoroutine(WaitForNodeSelection());
+                
+                Debug.Log("MovePlayerToCurrentNode");
+                yield return StartCoroutine(MovePlayerToCurrentNode());
+
+                var nextMicroGame = map.currentNode.GetComponent<NodeTriggerMicroGame>();
+                if(nextMicroGame != null)
                 {
-                    if (LastNodeReached() || map == null)
+                    // select 3 random micro games from micro games list
+                    var microGamesQueue = new Queue<string>();
+                    var microGamesList = new List<string>(sceneNames);
+                    var microGamesCount = Mathf.Min(3, microGamesList.Count);
+                    while (microGamesCount-- > 0)
                     {
-                        yield return StartCoroutine(LoadNextMap());
+                        var rdIndex = Random.Range(0, microGamesList.Count);
+                        var pickedMicroGame = microGamesList[rdIndex];
+                        microGamesList.RemoveAt(rdIndex);
+                        microGamesQueue.Enqueue(pickedMicroGame);
                     }
 
-                    yield return StartCoroutine(WaitForNodeSelection());
-                    yield return StartCoroutine(MovePlayerToCurrentNode());
-                    nextMicroGame = map.currentNode.GetComponent<NodeTriggerMicroGame>() != null;
+                    // play each micro games one by one
+                    while (microGamesQueue.Count > 0)
+                    {
+                        // start next micro game in queue
+                        currentScene = microGamesQueue.Dequeue();
+                        Debug.Log("Launch Micro Game:" + currentScene);
+                        
+                        // switch micro game state
+                        SetObjActive(false);
+                        state = GameState.Micro;
+                        
+                        // load scene
+                        asyncOp = SceneManager.LoadSceneAsync(currentScene, LoadSceneMode.Additive);
+                        while (!asyncOp.isDone) yield return null;
+                        
+                        // wait for game finished
+                        ResetTick();
+                        gameFinished = false;
+                        while (!gameFinished) yield return null;
+                        
+                        // unload scene
+                        asyncOp = SceneManager.UnloadSceneAsync(currentScene);
+                        while (!asyncOp.isDone) yield return null;
+                        
+                        // switch back to macro state
+                        state = GameState.Macro;
+                        SetObjActive(true);
+                        ResetTickables();
+                        ResetTick();
+                        
+                        // display result
+                        Debug.Log("MicroGame Finished: " + (gameResult ? "SUCCESS" : "FAILURE"));
+                        while (true)
+                        {
+                            if (InputManager.GetKeyDown(ControllerKey.A))
+                                break;
+                            else
+                                yield return null;
+                        }
+                    }
+                    
+                    Debug.Log("Node completed");
                 }
             }
 
@@ -173,7 +213,7 @@ public class GameController : MonoBehaviour
         var validInput = ControllerKey.A;
         
         // TODO : display message "select next node"
-        Debug.Log("Select Next Node with Left Stick");
+        Debug.Log("Select Next Node");
         
         arrowPrefabs.ForEach((go => go.SetActive(true)));
         
@@ -234,6 +274,7 @@ public class GameController : MonoBehaviour
     {
         while (true)
         {
+            //Debug.Log("TICK: " + currentTick);
             foreach (var t in tickables.ToArray())
             {
                 t.OnTick();
