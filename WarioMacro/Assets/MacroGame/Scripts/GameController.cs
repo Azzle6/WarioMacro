@@ -105,7 +105,8 @@ public class GameController : MonoBehaviour
                 }
 
                 Debug.Log("WaitForNodeSelection");
-                yield return StartCoroutine(WaitForNodeSelection());
+                if(!map.currentNode.autoMove)
+                    yield return StartCoroutine(WaitForNodeSelection());
                 
                 Debug.Log("MovePlayerToCurrentNode");
                 yield return StartCoroutine(MovePlayerToCurrentNode());
@@ -208,9 +209,10 @@ public class GameController : MonoBehaviour
         player.StartMove();
         // TODO : animate with (DOTween?)
         //map.player.transform.position = map.currentNode.transform.position;
-        var tween = player.transform.DOMove(map.currentNode.transform.position, player.moveSpeed)
-            .SetSpeedBased()
-            .SetEase(Ease.Linear);
+        var tween = player.transform.DOMove(map.currentNode.transform.position, player.moveSpeed).SetSpeedBased().SetEase(Ease.Linear);
+
+       // var positions = map.currentPath.GetPositions();
+       // var tween = player.transform.DOPath((Vector3[])positions, player.moveSpeed).SetSpeedBased().SetEase(Ease.Linear);
         while (tween.IsPlaying()) yield return null;
         player.StopMove();
         //yield return new WaitForSeconds(1f);
@@ -237,6 +239,8 @@ public class GameController : MonoBehaviour
         var arrowPrefabs = player.arrowPrefabs.ToList();
         var currentNode = map.currentNode;
         var nextNode = default(Node);
+        var nextPath = default(Node.Path);
+        var selectedPath = default(Node.Path);
         var selectedNode = default(Node);
         var selectedDirection = -1;
         var selectInput = default(bool);
@@ -269,6 +273,7 @@ public class GameController : MonoBehaviour
                 if (selectInput)
                 {
                     selectedNode = path.destination;
+                    selectedPath = path;
                     selectedDirection = (int)path.direction;
                     break;
                 }
@@ -287,6 +292,7 @@ public class GameController : MonoBehaviour
                 if (InputManager.GetKeyDown(validInput))
                 {
                     nextNode = selectedNode;
+                    nextPath = selectedPath;
                 }
             }
             yield return null;
@@ -294,6 +300,7 @@ public class GameController : MonoBehaviour
         
         map.currentNode.animator.SetBool("Current", false);
         map.currentNode = nextNode;
+        map.currentPath = nextPath;
         Debug.Log("new node selected");
 
         // dispose

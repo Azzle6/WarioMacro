@@ -14,6 +14,7 @@ public class Map : MonoBehaviour/*, ITickable*/
     private Queue<Vector3> pathing = new Queue<Vector3>();
 
     public Node currentNode { get; set; }
+    public Node.Path currentPath { get; set; }
     
     private void Awake()
     {
