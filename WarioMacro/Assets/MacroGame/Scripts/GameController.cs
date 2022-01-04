@@ -223,7 +223,7 @@ public class GameController : MonoBehaviour
 
                     yield return StartCoroutine(WaitForNodeSelection());
                     yield return StartCoroutine(MovePlayerToCurrentNode());
-                    nextMicroGame = true;
+                    nextMicroGame = map.currentNode.GetComponent<NodeTriggerMicroGame>() != null;
                 }
             }
             
