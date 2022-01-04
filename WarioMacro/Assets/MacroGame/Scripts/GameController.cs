@@ -65,6 +65,7 @@ public class GameController : MonoBehaviour
     private void Start()
     {
         StartCoroutine(TickCoroutine());
+        StartCoroutine(GameStateCoroutine());
     }
 
     private void Update()
@@ -77,6 +78,58 @@ public class GameController : MonoBehaviour
         difficulty = gameControllerSO.currentDifficulty;
     }
 
+    private IEnumerator GameStateCoroutine()
+    {
+        while(true)
+        {var asyncOp = default(AsyncOperation);
+            if (state == GameState.Micro)
+            {
+                if (gameFinished)
+                {
+                    // Unload current micro game
+                    Debug.Log("MicroGame Finished");
+                    asyncOp = SceneManager.UnloadSceneAsync(currentScene);
+                    while (!asyncOp.isDone) yield return null;
+                    ResetTick();
+                    SetObjActive(true);
+                    // switch back to macro
+                    state = GameState.Macro;
+                    nextMicroGame = false;
+                    gameFinished = false;
+                }
+            }
+            else if (state == GameState.Macro)
+            {
+                // Launch next micro game
+                if(nextMicroGame)
+                {
+                    ResetTick();
+                    currentScene = sceneNames[Random.Range(0, sceneNames.Length)];
+                    Debug.Log("Launch Micro Game:" + currentScene);
+                    asyncOp = SceneManager.LoadSceneAsync(currentScene, LoadSceneMode.Additive);
+                    while (!asyncOp.isDone) yield return null;
+                    SetObjActive(false);
+                    state = GameState.Micro;
+                    gameFinished = false;
+                    nextMicroGame = false;
+                }
+                else
+                {
+                    if (LastNodeReached() || map == null)
+                    {
+                        yield return StartCoroutine(LoadNextMap());
+                    }
+
+                    yield return StartCoroutine(WaitForNodeSelection());
+                    yield return StartCoroutine(MovePlayerToCurrentNode());
+                    nextMicroGame = map.currentNode.GetComponent<NodeTriggerMicroGame>() != null;
+                }
+            }
+
+            yield return null;
+        }
+    }
+    
     private IEnumerator MovePlayerToCurrentNode()
     {
         //yield return new WaitForSeconds(1f);
@@ -172,7 +225,7 @@ public class GameController : MonoBehaviour
         // dispose
         arrowPrefabs.ForEach((go => go.SetActive(false)));
     }
-    
+
     private IEnumerator TickCoroutine()
     {
         while (true)
@@ -181,52 +234,7 @@ public class GameController : MonoBehaviour
             {
                 t.OnTick();
             }
-            
-            var asyncOp = default(AsyncOperation);
-            if (state == GameState.Micro)
-            {
-                if (gameFinished)
-                {
-                    // Unload current micro game
-                    Debug.Log("MicroGame Finished");
-                    asyncOp = SceneManager.UnloadSceneAsync(currentScene);
-                    while (!asyncOp.isDone) yield return null;
-                    ResetTick();
-                    SetObjActive(true);
-                    // switch back to macro
-                    state = GameState.Macro;
-                    nextMicroGame = false;
-                    gameFinished = false;
-                }
-            }
-            else if (state == GameState.Macro)
-            {
-                // Launch next micro game
-                if(nextMicroGame)
-                {
-                    ResetTick();
-                    currentScene = sceneNames[Random.Range(0, sceneNames.Length)];
-                    Debug.Log("Launch Micro Game:" + currentScene);
-                    asyncOp = SceneManager.LoadSceneAsync(currentScene, LoadSceneMode.Additive);
-                    while (!asyncOp.isDone) yield return null;
-                    SetObjActive(false);
-                    state = GameState.Micro;
-                    gameFinished = false;
-                    nextMicroGame = false;
-                }
-                else
-                {
-                    if (LastNodeReached() || map == null)
-                    {
-                        yield return StartCoroutine(LoadNextMap());
-                    }
 
-                    yield return StartCoroutine(WaitForNodeSelection());
-                    yield return StartCoroutine(MovePlayerToCurrentNode());
-                    nextMicroGame = map.currentNode.GetComponent<NodeTriggerMicroGame>() != null;
-                }
-            }
-            
             yield return new WaitForSeconds(1f);
             currentTick++;
         }
