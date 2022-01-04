@@ -127,6 +127,7 @@ public class GameController : MonoBehaviour
                     
                     // init result panel
                     resultPanel.ToggleWindow(true);
+                    resultPanel.SetHeaderText(MiniGameResultPannel_UI.HeaderType.GetReady);
                     resultPanel.ClearAllNodes();
                     resultPanel.SetStartingNodeNumber(microGamesQueue.Count);
                     resultPanel.PopWindowUp();
@@ -178,6 +179,9 @@ public class GameController : MonoBehaviour
                         Debug.Log("MicroGame Finished: " + (gameResult ? "SUCCESS" : "FAILURE"));
                         
                         resultPanel.PopWindowUp();
+                        resultPanel.SetHeaderText(gameResult
+                            ? MiniGameResultPannel_UI.HeaderType.Success
+                            : MiniGameResultPannel_UI.HeaderType.Failure);
                         yield return new WaitForSeconds(1f);
                         
                         resultPanel.SetCurrentNode(gameResult, gameCount+=1);

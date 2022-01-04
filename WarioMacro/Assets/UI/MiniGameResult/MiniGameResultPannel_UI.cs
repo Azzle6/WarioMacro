@@ -7,6 +7,13 @@ using DG.Tweening;
 
 public class MiniGameResultPannel_UI : MonoBehaviour
 {
+    public enum HeaderType
+    {
+        GetReady,
+        Success,
+        Failure
+    }
+    
     [SerializeField] private RectTransform pannel;
 
     [Header("Nodes Group")]
@@ -17,6 +24,7 @@ public class MiniGameResultPannel_UI : MonoBehaviour
     [Header("TextFields")]
     [SerializeField] private string successKeyword;
     [SerializeField] private string failureKeyword;
+    [SerializeField] private string readyKeyword;
     [SerializeField] private TMP_Text whiteTextField;
     [SerializeField] private TMP_Text blueOutlineTextField;
     [SerializeField] private TMP_Text pinkOutlineTextField;
@@ -77,20 +85,15 @@ public class MiniGameResultPannel_UI : MonoBehaviour
         checkMarkImage.enabled = true;
     }
 
-    public void SetHeaderText(bool result)
+    public void SetHeaderText(HeaderType headerType)
     {
-        if(result)
-        {
-            whiteTextField.text = successKeyword;
-            blueOutlineTextField.text = successKeyword;
-            pinkOutlineTextField.text = successKeyword;
-        }
-        else
-        {
-            whiteTextField.text = failureKeyword;
-            blueOutlineTextField.text = failureKeyword;
-            pinkOutlineTextField.text = failureKeyword;
-        }
+        var keyword = headerType == HeaderType.Success ? successKeyword
+            : headerType == HeaderType.Failure ? failureKeyword
+            : readyKeyword;
+        
+        whiteTextField.text = keyword;
+        blueOutlineTextField.text = keyword;
+        pinkOutlineTextField.text = keyword;
     }
 
     public void PopWindowUp()
