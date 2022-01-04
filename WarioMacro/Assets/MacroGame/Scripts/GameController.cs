@@ -107,18 +107,18 @@ public class GameController : MonoBehaviour
     private IEnumerator WaitForNodeSelection()
     {
         // init
-        var arrowObject = map.arrowPrefab;
+        var arrowPrefabs = map.arrowPrefabs.ToList();
         var currentNode = map.currentNode;
         var nextNode = default(Node);
         var selectedNode = default(Node);
-        var selectedDirection = default(Node.Direction);
+        var selectedDirection = -1;
         var selectInput = default(bool);
         var validInput = ControllerKey.A;
         
-        arrowObject.gameObject.SetActive(false);
-        
         // TODO : display message "select next node"
         Debug.Log("Select Next Node with Left Stick");
+        
+        arrowPrefabs.ForEach((go => go.SetActive(true)));
         
         // input loop
         while (nextNode == null)
@@ -140,27 +140,26 @@ public class GameController : MonoBehaviour
                 if (selectInput)
                 {
                     selectedNode = path.destination;
-                    selectedDirection = path.direction;
+                    selectedDirection = (int)path.direction;
                     break;
                 }
+            }
+
+            for (int i = 0; i < arrowPrefabs.Count; i++)
+            {
+                // is any path setup with arrow direction?
+                arrowPrefabs[i].gameObject.SetActive(currentNode.paths.FirstOrDefault(p => p.direction == (Node.Direction)i) != null);
+                // is the selected direction equals to the path direction?
+                arrowPrefabs[i].transform.localScale = i == (int) selectedDirection ? Vector3.one : Vector3.one * .5f;
             }
             
             if (selectedNode != null)
             {
-                arrowObject.gameObject.SetActive(true);
-                
-                arrowObject.transform.rotation = Quaternion.Euler(0,0,(int)selectedDirection * -90f);
-
                 if (InputManager.GetKeyDown(validInput))
                 {
                     nextNode = selectedNode;
                 }
             }
-            else
-            {
-                arrowObject.gameObject.SetActive(false);
-            }
-
             yield return null;
         }
         
@@ -168,7 +167,7 @@ public class GameController : MonoBehaviour
         Debug.Log("new node selected");
 
         // dispose
-        arrowObject.gameObject.SetActive(false);
+        arrowPrefabs.ForEach((go => go.SetActive(false)));
     }
     
     private IEnumerator TickCoroutine()

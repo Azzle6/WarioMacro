@@ -1,9 +1,11 @@
+using TMPro;
 using UnityEngine;
 
 public class ULC_TM_GameManager : MonoBehaviour, ITickable
 {
     public static ULC_TM_GameManager instance;
     [SerializeField] private ULC_TM_Enemy enemy;
+    [SerializeField] private TMP_Text tickText;
     
     private Animator playerAnimator;
     private Animator enemyAnimator;
@@ -22,7 +24,7 @@ public class ULC_TM_GameManager : MonoBehaviour, ITickable
         GameManager.Register();
         GameController.Init(this);
 
-        enemy.chanceOfDoubleFire = GameController.difficulty / 3f;
+        enemy.chanceOfDoubleFire = (GameController.difficulty-1) / 3f;
         
         playerAnimator = GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
         enemyAnimator = GameObject.FindGameObjectWithTag("Enemy").GetComponent<Animator>();
@@ -32,7 +34,7 @@ public class ULC_TM_GameManager : MonoBehaviour, ITickable
     
     public void OnTick()
     {
-        Debug.Log(GameController.currentTick);
+        if (isRunning) tickText.text = ""+(8-GameController.currentTick);
         if (GameController.currentTick == 8)
         {
             GameController.FinishGame(result);
@@ -43,6 +45,6 @@ public class ULC_TM_GameManager : MonoBehaviour, ITickable
     {
         result = false;
         isRunning = false;
-        Debug.Log("Lose");
+        tickText.text = "Lose";
     }
 }

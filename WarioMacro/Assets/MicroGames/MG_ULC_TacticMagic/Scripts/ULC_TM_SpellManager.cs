@@ -9,6 +9,8 @@ public class ULC_TM_SpellManager : MonoBehaviour
     [SerializeField] private Transform[] playerSpawns;
     [SerializeField] private Transform[] enemySpawns;
 
+    [SerializeField] private Sprite yellowProj, redProj, greenProj;
+
     void Awake()
     {
         instance = this;
@@ -20,8 +22,8 @@ public class ULC_TM_SpellManager : MonoBehaviour
         
         if (caster.GetType() == typeof(ULC_TM_Player)) PrepareSpell(playerSpawns[0].position, Vector3.right, caster);
         else if (caster.GetType() == typeof(ULC_TM_Enemy)) PrepareSpell(enemySpawns[0].position, -Vector3.right, caster);
-        
-        //spell.GetComponent<SpriteRenderer>().color = new Color(236/255f,219/255f,51/255f);
+
+        spell.GetComponent<SpriteRenderer>().sprite = yellowProj;
     }
     
     public void MidSpell(Object caster)
@@ -30,8 +32,8 @@ public class ULC_TM_SpellManager : MonoBehaviour
         
         if (caster.GetType() == typeof(ULC_TM_Player)) PrepareSpell(playerSpawns[1].position, Vector3.right, caster);
         else if (caster.GetType() == typeof(ULC_TM_Enemy)) PrepareSpell(enemySpawns[1].position, -Vector3.right, caster);
-        
-        //spell.GetComponent<SpriteRenderer>().color = new Color(208/255f,66/255f,66/255f);
+
+        spell.GetComponent<SpriteRenderer>().sprite = redProj;
     }
     
     public void BotSpell(Object caster)
@@ -40,8 +42,8 @@ public class ULC_TM_SpellManager : MonoBehaviour
         
         if (caster.GetType() == typeof(ULC_TM_Player)) PrepareSpell(playerSpawns[2].position, Vector3.right, caster);
         else if (caster.GetType() == typeof(ULC_TM_Enemy)) PrepareSpell(enemySpawns[2].position, -Vector3.right, caster);
-        
-        //spell.GetComponent<SpriteRenderer>().color = new Color(60/255f,219/255f,78/255f);
+
+        spell.GetComponent<SpriteRenderer>().sprite = greenProj;
     }
 
     public void PrepareSpell(Vector3 startPos, Vector3 direction, Object caster)

@@ -15,6 +15,8 @@ public class ULC_TM_Player : MonoBehaviour
 
     void Update()
     {
+        if (!ULC_TM_GameManager.instance.isRunning) return;
+        
         myCharger.sprite = bulletChargerSprites[nbBullets];
 
         if (nbBullets != 7 && !isReloadCRRunning) StartCoroutine(ReloadBulletCoroutine());
@@ -53,7 +55,6 @@ public class ULC_TM_Player : MonoBehaviour
     
     public void TopSpell()
     {
-        Debug.Log(nbBullets);
         if (nbBullets > 0)
         {
             ULC_TM_SpellManager.instance.TopSpell(this);

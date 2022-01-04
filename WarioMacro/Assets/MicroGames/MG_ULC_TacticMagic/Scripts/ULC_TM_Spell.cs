@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class ULC_TM_Spell : MonoBehaviour
 {
-    public Animator exploseAnimator;
-    public Animator enemyAnimator;
+    private Animator playerAnimator, enemyAnimator;
+    
     public Vector3 direction;
     public float speed;
 
@@ -11,7 +11,7 @@ public class ULC_TM_Spell : MonoBehaviour
 
     private void Start()
     {
-        exploseAnimator = GameObject.FindGameObjectWithTag("Spell").GetComponent<Animator>();
+        playerAnimator = GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
         enemyAnimator = GameObject.FindGameObjectWithTag("Enemy").GetComponent<Animator>();
     }
 
@@ -20,18 +20,19 @@ public class ULC_TM_Spell : MonoBehaviour
     {
         transform.position += direction * speed * Time.deltaTime;
     }
+    
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("EndLine"))
+        if (other.CompareTag("EndLinePlayer"))
         {
-            if (direction == Vector3.left) ULC_TM_GameManager.instance.LoseGame();
+            playerAnimator.SetTrigger("Hurt");
+            ULC_TM_GameManager.instance.LoseGame();
             ULC_TM_Pooler.instance.Depop("Spell", gameObject);
         }
 
         if (other.CompareTag("EndLineEnemy"))
         {
             enemyAnimator.SetTrigger("Hurt");
-            if (direction == Vector3.left) ULC_TM_GameManager.instance.LoseGame();
             ULC_TM_Pooler.instance.Depop("Spell", gameObject);
         }
         
