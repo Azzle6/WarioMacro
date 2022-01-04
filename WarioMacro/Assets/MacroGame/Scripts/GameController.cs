@@ -29,6 +29,7 @@ public class GameController : MonoBehaviour
     private static string currentScene;
     private static bool gameFinished;
     private static bool gameResult;
+    private static bool lockTimescale;
     private static GameController instance;
     private bool debugMicro;
 
@@ -76,12 +77,12 @@ public class GameController : MonoBehaviour
 
     private void Update()
     {
-        // update global timescale
-        Time.timeScale = gameSpeed / 120;
-        
         // update difficulty / speed
         gameSpeed = gameControllerSO.currentGameSpeed;
         difficulty = gameControllerSO.currentDifficulty;
+        
+        // update global timescale
+        Time.timeScale =lockTimescale ? 0f: gameSpeed / 120;
     }
 
     private IEnumerator GameStateCoroutine()
@@ -148,16 +149,16 @@ public class GameController : MonoBehaviour
                         currentScene = microGamesQueue.Dequeue();
                         Debug.Log("Launch Micro Game:" + currentScene);
                         
-                        // switch micro game state
-                        SetObjActive(false);
-                        state = GameState.Micro;
-                        
                         // load scene
                         asyncOp = SceneManager.LoadSceneAsync(currentScene, LoadSceneMode.Additive);
                         while (!asyncOp.isDone) yield return null;
                         
-                        // wait for game finished
+                        // switch micro game state
+                        SetObjActive(false);
                         ResetTick();
+                        state = GameState.Micro;
+                        
+                        // wait for game finished
                         gameFinished = false;
                         while (!gameFinished) yield return null;
                         
@@ -166,10 +167,10 @@ public class GameController : MonoBehaviour
                         while (!asyncOp.isDone) yield return null;
                         
                         // switch back to macro state
-                        state = GameState.Macro;
                         SetObjActive(true);
                         ResetTickables();
                         ResetTick();
+                        state = GameState.Macro;
                         
                         // display result
                         Debug.Log("MicroGame Finished: " + (gameResult ? "SUCCESS" : "FAILURE"));

@@ -37,10 +37,9 @@ public class MiniGameResultPannel_UI : MonoBehaviour
 
     public void ClearAllNodes()
     {
-
         for(int i = 0; i < pannelLayoutGroup.transform.childCount; i++)
         {
-            Destroy(pannelLayoutGroup.transform.GetChild(i));
+            Destroy(pannelLayoutGroup.transform.GetChild(i).gameObject);
         }
     }
     
