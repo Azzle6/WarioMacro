@@ -7,7 +7,7 @@ using System.Linq;
 public class Node : MonoBehaviour
 {
     [CanBeNull] public Path[] paths = new Path[4];
-    public LineRenderer lineRenderer;
+    public Animator animator;
 
     public Path GetNodeFromInput(ControllerKey key)
     {
@@ -19,26 +19,6 @@ public class Node : MonoBehaviour
             case ControllerKey.DPAD_RIGHT: return paths[3];
             default: return null;
         }
-    }
-
-    void Start()
-    {
-        UpdateLineRenderer();
-    }
-    
-    [ContextMenu("UpdateLineRenderer")]
-    private void UpdateLineRenderer()
-    {
-        List<Vector3> points = new List<Vector3>();
-        foreach (var path in paths)
-        {
-            points.Add(transform.position);
-            points.Add(path.destination.transform.position);
-            points.Add(transform.position);
-        }
-
-        lineRenderer.positionCount = points.Count;
-        lineRenderer.SetPositions(points.ToArray());
     }
 
     private void OnDrawGizmos()

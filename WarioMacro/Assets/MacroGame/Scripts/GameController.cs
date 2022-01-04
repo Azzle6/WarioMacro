@@ -120,6 +120,8 @@ public class GameController : MonoBehaviour
         
         arrowPrefabs.ForEach((go => go.SetActive(true)));
         
+        map.currentNode.animator.SetBool("Current", true);
+        
         // input loop
         while (nextNode == null)
         {
@@ -163,6 +165,7 @@ public class GameController : MonoBehaviour
             yield return null;
         }
         
+        map.currentNode.animator.SetBool("Current", false);
         map.currentNode = nextNode;
         Debug.Log("new node selected");
 
