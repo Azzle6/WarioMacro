@@ -16,7 +16,8 @@ public class ExportManager : EditorWindow
     private string trigramme = "AAA";
     private string path = "Select folder";
     private string MiniGameName = "MiniGame name";
-    private string[] ignoreNames = new string[] {"Resources", "Scripts"};
+    private int MiniGameIndex = 1;
+    private string[] ignoreNames = new string[] {"Resources", "Scripts", "DONT DELETE"};
     private List<String> wrongNamesPaths = new List<string>();
     
     //List<String> foldersPath = new List<string>();
@@ -48,7 +49,7 @@ public class ExportManager : EditorWindow
         switch (nt)
         {
             case NameType.ASSETS :
-                if (itemName.Substring(0, 4) == trigramme + "_") return true;
+                if (itemName.Substring(0, 5) == trigramme + MiniGameIndex + "_") return true;
                 break;
             
             case NameType.SCENE :
@@ -84,6 +85,10 @@ public class ExportManager : EditorWindow
         GUILayout.Label(("MiniGame name"));
         MiniGameName = EditorGUILayout.TextField("", MiniGameName);
         
+        //Renseigner l'index du Mini jeu
+        GUILayout.Label(("MiniGame index"));
+        MiniGameIndex = EditorGUILayout.IntField("", MiniGameIndex);
+        
         //Renseigner le path
         EditorGUILayout.Space();
         EditorGUILayout.Space();
@@ -104,6 +109,8 @@ public class ExportManager : EditorWindow
         {
             CheckExportConditions();
         }
+        
+        EditorGUILayout.Space();
 
         if (GUILayout.Button("Export"))
         {
@@ -126,7 +133,8 @@ public class ExportManager : EditorWindow
     {
         //référencer tous les éléments des dossiers
         string[] pathArray = new string[]{path};
-        List<String> allPathUUIDs = AssetDatabase.FindAssets("", pathArray).ToList();
+        string[] scriptsPaths = new string[] {path + "/Scripts"};
+        List<String> allPathUUIDs = AssetDatabase.FindAssets("", scriptsPaths).ToList();
         List<String> allAssetsNames = new List<string>();
         
         
@@ -184,7 +192,12 @@ public class ExportManager : EditorWindow
         
         foreach (var UIDs in allPathUUIDs)
         {
-            allAssetsNames.Add(Path.GetFileNameWithoutExtension(AssetDatabase.GUIDToAssetPath(UIDs)));
+            string fileName = Path.GetFileName(AssetDatabase.GUIDToAssetPath(UIDs));
+
+            if (fileName.Substring(fileName.Length - 2, 2) == "cs")
+            {
+                allAssetsNames.Add(Path.GetFileNameWithoutExtension(AssetDatabase.GUIDToAssetPath(UIDs)));
+            }
         }
         
         //Vérification des noms
