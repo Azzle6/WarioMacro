@@ -4,32 +4,16 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public Node currentNode;
+    public Animator animator;
+    public float moveSpeed = 1f;
 
-   /* void Update()
+    public void StartMove()
     {
-        if (currentNode != null)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, currentNode.transform.position, Time.deltaTime * 10f);
-        }
-    }*/
-
-    // [SerializeField] private Rigidbody2D rb;
-
-
-    /*void Start()
-    {
+        animator.SetTrigger("Move");
     }
 
-    public void Move(Vector3 des)
+    public void StopMove()
     {
-        rb.velocity = Vector2.zero;
-        rb.velocity = (des - rb.transform.position).magnitude * (des - rb.transform.position).normalized;
+        animator.SetTrigger("Idle");
     }
-
-    public void StopMoving()
-    {
-        rb.velocity = Vector2.zero;
-    }*/
-
 }

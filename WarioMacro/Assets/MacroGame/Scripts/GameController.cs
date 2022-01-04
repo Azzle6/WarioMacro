@@ -133,12 +133,16 @@ public class GameController : MonoBehaviour
     private IEnumerator MovePlayerToCurrentNode()
     {
         //yield return new WaitForSeconds(1f);
-        map.player.transform.DOPunchScale(Vector3.one * .25f, 1f);
-        yield return new WaitForSeconds(1f);
+        //map.player.transform.DOPunchScale(Vector3.one * .25f, 1f);
+        //yield return new WaitForSeconds(1f);
+        map.player.StartMove();
         // TODO : animate with (DOTween?)
         //map.player.transform.position = map.currentNode.transform.position;
-        var tween = map.player.transform.DOMove(map.currentNode.transform.position, 1f);
+        var tween = map.player.transform.DOMove(map.currentNode.transform.position, map.player.moveSpeed)
+            .SetSpeedBased()
+            .SetEase(Ease.Linear);
         while (tween.IsPlaying()) yield return null;
+        map.player.StopMove();
         //yield return new WaitForSeconds(1f);
     }
 
