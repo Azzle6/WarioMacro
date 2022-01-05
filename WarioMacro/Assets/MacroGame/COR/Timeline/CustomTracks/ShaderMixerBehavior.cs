@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
+using UnityEngine.UI;
 
 public class ShaderMixerBehavior : PlayableBehaviour
 {
@@ -11,8 +12,8 @@ public class ShaderMixerBehavior : PlayableBehaviour
     public override void ProcessFrame(
     Playable playable, FrameData info, object playerData)
     {
-        Renderer rend = playerData as Renderer;
-        if (rend == null)
+        Image img = playerData as Image;
+        if (img == null)
             return;
         int inputCount = playable.GetInputCount();
         float finalFloat = 0;
@@ -25,9 +26,9 @@ public class ShaderMixerBehavior : PlayableBehaviour
         }
         Material mat;
         if (Application.isPlaying)
-            mat = rend.material;
+            mat = img.material;
         else
-            mat = rend.sharedMaterial;
+            mat = img.material;
         mat.SetFloat(shaderVarName, finalFloat);
     }
 }
