@@ -82,8 +82,8 @@ public class GameController : MonoBehaviour
     private void Update()
     {
         // update difficulty / speed
-        gameSpeed = gameControllerSO.currentGameSpeed;
-        difficulty = gameControllerSO.currentDifficulty;
+        //gameSpeed = gameControllerSO.currentGameSpeed;
+        //difficulty = gameControllerSO.currentDifficulty;
         
         // update global timescale
         Time.timeScale =lockTimescale ? 0f: gameSpeed / 120;
@@ -144,6 +144,7 @@ public class GameController : MonoBehaviour
 
                     // play each micro games one by one
                     int gameCount = 0;
+                    int nodeSuccessCount = 0;
                     while (microGamesQueue.Count > 0)
                     {
                         // wait for input pressed
@@ -207,9 +208,14 @@ public class GameController : MonoBehaviour
                         ResetTick();
                         state = GameState.Macro;
                         
+                        //Change BPM
+                        gameSpeed = Mathf.Clamp(gameSpeed + (gameResult ? 10 : -10), 120, 190);
+                        Debug.Log(gameSpeed);
+                        
                         // display result
                         Debug.Log("MicroGame Finished: " + (gameResult ? "SUCCESS" : "FAILURE"));
-                        
+                        if (gameResult) nodeSuccessCount++;
+
                         resultPanel.PopWindowUp();
                         resultPanel.SetHeaderText(gameResult
                             ? MiniGameResultPannel_UI.HeaderType.Success
@@ -222,6 +228,10 @@ public class GameController : MonoBehaviour
                     
                     Debug.Log("Node completed");
                     
+                    // change difficulty
+                    difficulty = Mathf.Clamp(difficulty + (nodeSuccessCount > 1 ? 1 : -1), 1, 3);
+                    Debug.Log("Difficulty : " + difficulty);
+
                     // dispose
                     resultPanel.PopWindowDown();
                     resultPanel.ToggleWindow(false);
