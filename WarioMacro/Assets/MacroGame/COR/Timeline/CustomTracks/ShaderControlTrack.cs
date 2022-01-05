@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
+using UnityEngine.UI;
 
 [TrackColor(0.715f, 0.903f, 0.87f)]
 [TrackClipType(typeof(ShaderControlClip))]
-[TrackBindingType(typeof(Renderer))]
+[TrackBindingType(typeof(Image))]
 public class ShaderControlTrack : TrackAsset
 {
     public string shaderVarName;
