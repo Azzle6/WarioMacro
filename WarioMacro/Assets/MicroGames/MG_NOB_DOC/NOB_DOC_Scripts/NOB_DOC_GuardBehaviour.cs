@@ -7,6 +7,7 @@ public class NOB_DOC_GuardBehaviour : MonoBehaviour
 {
     [SerializeField] private Light2D light;
     [SerializeField] private GameObject player;
+    [SerializeField] private GameObject finishLine;
     [SerializeField] private float detectionDepth;
     [SerializeField] private int detectionWidth;
     [SerializeField] private Vector3 detectionSpread;
@@ -51,9 +52,7 @@ public class NOB_DOC_GuardBehaviour : MonoBehaviour
             {
                 light.color = Color.red;
                 light.intensity = 3;
-                NOB_DOC_GameManager.instance.resultPending = false;
-                GameController.FinishGame(false);
-                Debug.Log("Lose !");
+                NOB_DOC_GameManager.instance.SetResult(false);
             }
         }
     }

@@ -8,6 +8,7 @@ public class NAC_AnswerManager : MonoBehaviour
     [SerializeField] private NAC_QuelleCouleurController qcController;
 
     [SerializeField] private string[] answerText;
+    [SerializeField] private string[] answerColors;
     [SerializeField] private TMP_Text[] buttonTexts;
     private int goodAnswer;
     private int answer;
@@ -28,13 +29,13 @@ public class NAC_AnswerManager : MonoBehaviour
         {
             if (i == goodAnswer)
             {
-                buttonTexts[i].text = (GameController.difficulty == 3 ? "<color=\"" + answerText[Random.Range(0, answerText.Length)].ToLower() + "\">" : "" ) + answerText[goodColors[0]] + "</color>" +
-                    (GameController.difficulty > 1 ? "/" + (GameController.difficulty == 3 ? "<color=\"" + answerText[Random.Range(0, answerText.Length)].ToLower() + "\">" : "") + answerText[goodColors[1]] : "");
+                buttonTexts[i].text = (GameController.difficulty == 3 ? "<color=" + answerColors[Random.Range(0, answerText.Length)].ToLower() + ">" : "" ) + answerText[goodColors[0]] + "</color>" +
+                    (GameController.difficulty > 1 ? "/" + (GameController.difficulty == 3 ? "<color=" + answerColors[Random.Range(0, answerText.Length)].ToLower() + ">" : "") + answerText[goodColors[1]] : "");
             }
             else
             {
-                buttonTexts[i].text = (GameController.difficulty == 3 ? "<color=\"" + answerText[Random.Range(0, answerText.Length)].ToLower() + "\">" : "") + answerText[(goodColors[0] + falseAnswer) % answerText.Length] + "</color>" +
-                    (GameController.difficulty > 1 ? "/" + (GameController.difficulty == 3 ? "<color=\"" + answerText[Random.Range(0, answerText.Length)].ToLower() + "\">" : "") + answerText[(goodColors[1] + falseAnswer) % answerText.Length] : "");
+                buttonTexts[i].text = (GameController.difficulty == 3 ? "<color=" + answerColors[Random.Range(0, answerText.Length)].ToLower() + ">" : "") + answerText[(goodColors[0] + falseAnswer) % answerText.Length] + "</color>" +
+                    (GameController.difficulty > 1 ? "/" + (GameController.difficulty == 3 ? "<color=" + answerColors[Random.Range(0, answerText.Length)].ToLower() + ">" : "") + answerText[(goodColors[1] + falseAnswer) % answerText.Length] : "");
                 falseAnswer++;
             }
         }

@@ -26,6 +26,8 @@ public class GameController : MonoBehaviour
     [SerializeField] private string[] sceneNames = Array.Empty<string>();
     [SerializeField] private GameState state = GameState.Micro;
     [SerializeField] private MiniGameResultPannel_UI resultPanel = null;
+    [SerializeField] private Timer timer;
+    [SerializeField] private TransitionController transitionController;
     private Map map;
     private static List<ITickable> tickables = new List<ITickable>();
     private static string currentScene;
@@ -87,6 +89,13 @@ public class GameController : MonoBehaviour
         Time.timeScale =lockTimescale ? 0f: gameSpeed / 120;
     }
 
+    private bool toLaunch = false;
+
+    public void ToogleToLaunch(bool toggle)
+    {
+        toLaunch = toggle;
+    }
+    
     private IEnumerator GameStateCoroutine()
     {
         var asyncOp = default(AsyncOperation);
@@ -142,12 +151,20 @@ public class GameController : MonoBehaviour
                         {
                             if (InputManager.GetKeyDown(ControllerKey.A))
                                 break;
-                            else
-                                yield return null;
+                            yield return null;
                         }
                         
                         resultPanel.PopWindowDown();
+                        
                         yield return new WaitForSeconds(1f);
+
+                        // start transition UI
+                        transitionController.TransitionStart();
+                        toLaunch = false; 
+                        while (!toLaunch) yield return null;
+                        
+                        // hide macro game objects
+                        SetObjActive(false);
                         
                         // start next micro game in queue
                         currentScene = microGamesQueue.Dequeue();
@@ -157,18 +174,32 @@ public class GameController : MonoBehaviour
                         asyncOp = SceneManager.LoadSceneAsync(currentScene, LoadSceneMode.Additive);
                         while (!asyncOp.isDone) yield return null;
                         
+                        // resume transition UI
+                        transitionController.TransitionResume();
+                        
                         // switch micro game state
-                        SetObjActive(false);
                         ResetTick();
                         state = GameState.Micro;
+                        timer.StartTimer();
                         
                         // wait for game finished
                         gameFinished = false;
                         while (!gameFinished) yield return null;
                         
+                        // stop timer
+                        timer.StopTimer();
+                        
+                        // start transition UI
+                        transitionController.TransitionStart();
+                        toLaunch = false; 
+                        while (!toLaunch) yield return null;
+                        
                         // unload scene
                         asyncOp = SceneManager.UnloadSceneAsync(currentScene);
                         while (!asyncOp.isDone) yield return null;
+                        
+                        // resume transition UI
+                        transitionController.TransitionResume();
                         
                         // switch back to macro state
                         SetObjActive(true);

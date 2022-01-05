@@ -17,9 +17,7 @@ public class NOB_DOC_PlayerMovement : MonoBehaviour
     {
         if (other.gameObject == finishLine && NOB_DOC_GameManager.instance.resultPending)
         {
-            NOB_DOC_GameManager.instance.resultPending = false;
-            GameController.FinishGame(true);
-            Debug.Log("Win !");
+            NOB_DOC_GameManager.instance.SetResult(true);
         }
     }
     private void Start()
@@ -59,6 +57,6 @@ public class NOB_DOC_PlayerMovement : MonoBehaviour
                 spriteState = !spriteState;
             }
         }
-        
+       
     }
 }

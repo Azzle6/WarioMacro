@@ -3,7 +3,7 @@ using UnityEngine;
 public class ULB_Unlock_PlayerMovement : MonoBehaviour
 {
     [SerializeField] private Rigidbody rb;
-    [SerializeField] private float speed;
+    public float speed;
 
     private void Update()
     {

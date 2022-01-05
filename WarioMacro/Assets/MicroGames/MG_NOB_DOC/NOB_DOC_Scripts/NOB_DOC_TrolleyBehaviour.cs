@@ -10,16 +10,14 @@ public class NOB_DOC_TrolleyBehaviour : MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private float speed;
     public bool shouldStop = false;
-    private bool stopped;
+    public bool stopped;
 
     
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject == finishLine && NOB_DOC_GameManager.instance.resultPending)
         {
-            NOB_DOC_GameManager.instance.resultPending = false;
-            GameController.FinishGame(false);
-            Debug.Log("Lose !");
+            NOB_DOC_GameManager.instance.SetResult(false);
         }
     }
 
@@ -38,12 +36,5 @@ public class NOB_DOC_TrolleyBehaviour : MonoBehaviour
         {
             rb.velocity = Vector2.zero;
         }
-    }
-
-    IEnumerator Stop()
-    {
-        stopped = true;
-        yield return new WaitForSeconds(1);
-        stopped = false;
     }
 }

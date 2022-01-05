@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -7,7 +8,6 @@ using Random = UnityEngine.Random;
 public class ULB_Unlock_GameManager : MonoBehaviour, ITickable
 {
     [SerializeField] private Camera cam;
-    [SerializeField] private int level;
     [SerializeField] private string[] easyLevels;
     [SerializeField] private string[] middleLevels;
     [SerializeField] private string[] hardLevels;
@@ -21,10 +21,6 @@ public class ULB_Unlock_GameManager : MonoBehaviour, ITickable
     [SerializeField] private AnimationClip cameraLevel1;
     [SerializeField] private AnimationClip cameraLevel2;
     [SerializeField] private AnimationClip cameraLevel3;
-    [SerializeField] private AudioManager audioManager;
-    [SerializeField] private Image fullTimeline;
-    [SerializeField] private Image cop;
-    [SerializeField] private float copSpeed;
     private bool isPlay;
     [SerializeField] private Gradient gradient;
     [SerializeField] private Image blackScreen;
@@ -36,6 +32,14 @@ public class ULB_Unlock_GameManager : MonoBehaviour, ITickable
     [SerializeField] private Material green;
     [SerializeField] private AudioClip footStep;
     [SerializeField] private AudioClip handCuffSound;
+    [SerializeField] private ULB_Unlock_PlayerMovement playerMovement;
+    public static ULB_Unlock_GameManager instance;
+    [SerializeField] private GameObject escape;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     private void Start()
     {
@@ -46,7 +50,6 @@ public class ULB_Unlock_GameManager : MonoBehaviour, ITickable
 
     void Init()
     {
-        Debug.Log(GameController.difficulty);
         switch (GameController.difficulty)
         {
             case 1 :
@@ -69,16 +72,17 @@ public class ULB_Unlock_GameManager : MonoBehaviour, ITickable
         cameraAnim.clip = cameraLevel1;
         cameraAnim.Play();
         yield return new WaitForSeconds(1);
+        escape.SetActive(false);
         randomMaze = Random.Range(0, easyLevels.Length);
         chosenMaze = easyLevels[randomMaze];
         maze = ULB_Unlock_Pooler.instance.Pop(chosenMaze);
-        maze.transform.position = Vector3.zero;
+        maze.transform.position = new Vector3(0,-401,0);
         player.position = maze.transform.GetChild(maze.transform.childCount - 1).transform.position;
         cam.orthographicSize = 5;
         cam.transform.position = new Vector3(0, 1, -10);
         chest.SetActive(false);
         isPlay = true;
-
+        playerMovement.speed = 15;
     }
     
     IEnumerator Level2()
@@ -86,14 +90,17 @@ public class ULB_Unlock_GameManager : MonoBehaviour, ITickable
         cameraAnim.clip = cameraLevel2;
         cameraAnim.Play();
         yield return new WaitForSeconds(1);
+        escape.SetActive(false);
         randomMaze = Random.Range(0, middleLevels.Length);
         chosenMaze = middleLevels[randomMaze];
         maze = ULB_Unlock_Pooler.instance.Pop(chosenMaze);
-        maze.transform.position = Vector3.zero;
+        maze.transform.position = new Vector3(0,-401,0);
+        player.position = maze.transform.GetChild(maze.transform.childCount - 1).transform.position;
         cam.orthographicSize = 7;
         cam.transform.position = new Vector3(0, 1, -10);
         chest.SetActive(false);
         isPlay = true;
+        playerMovement.speed = 17;
     }
     
     IEnumerator Level3()
@@ -101,14 +108,17 @@ public class ULB_Unlock_GameManager : MonoBehaviour, ITickable
         cameraAnim.clip = cameraLevel3;
         cameraAnim.Play();
         yield return new WaitForSeconds(1);
+        escape.SetActive(false);
         randomMaze = Random.Range(0, hardLevels.Length);
         chosenMaze = hardLevels[randomMaze];
         maze = ULB_Unlock_Pooler.instance.Pop(chosenMaze);
-        maze.transform.position = Vector3.zero;
-        cam.orthographicSize = 9;
+        maze.transform.position = new Vector3(0,-401,0);
+        player.position = maze.transform.GetChild(maze.transform.childCount - 1).transform.position;
+        cam.orthographicSize = 7;
         cam.transform.position = new Vector3(0, 1, -10);
         chest.SetActive(false);
         isPlay = true;
+        playerMovement.speed = 17;
     }
 
     public void FinishGame(bool Win)
@@ -143,15 +153,6 @@ public class ULB_Unlock_GameManager : MonoBehaviour, ITickable
     {
         if (isPlay)
         {
-            if (fullTimeline.fillAmount < 1)
-            {
-                fullTimeline.fillAmount += 0.1f;
-                cop.transform.position += Vector3.right*copSpeed;
-            }
-            else
-            {
-                FinishGame(false);
-            }
             if (GameController.currentTick%2==0)
             {
                 AudioManager.PlaySound(footStep);
