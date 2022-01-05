@@ -8,16 +8,19 @@ using UnityEngine;
  
 public class MusicManager : MonoBehaviour, ITickable
 {
+    private static MusicManager instance;
+    
     public AudioSource AudioS; 
     public AudioClip currentAudioClip; 
-    private AudioClip nextAudioClip; 
+    private AudioClip nextAudioClip;
+    public MusicsManagerSO MusicsSO;
     private bool WaitForTick;
     
     [Header("Visualize music Timer")]
     [Range(0, 1f)] public float musicTime;
      
     [Header("Musics")]
-    public List<Soundgroup> AllSoundsList = new List<Soundgroup>(2);
+    public List<Soundgroup> AllSoundsList;
 
     
     
@@ -25,6 +28,8 @@ public class MusicManager : MonoBehaviour, ITickable
     {
         GameManager.Register();
         GameController.Init(this);
+        AllSoundsList = MusicsSO.MusicsList;
+        
         AudioS.loop = true;
         
         //Juste pour tester
@@ -35,8 +40,18 @@ public class MusicManager : MonoBehaviour, ITickable
         }
         
         SwitchMusic(100, Soundgroup.PhaseState.MINIGAME, Soundgroup.CurrentPhase.RECRUIT);
-        StartCoroutine("CallSwitch");
+        StartCoroutine("CallSwitch"); //Juste pour tester
 
+    }
+
+    public static void Register()
+    {
+        if (instance != null) return;
+
+        var go = new GameObject("Musics Manager");
+        go.AddComponent<AudioManager>();
+        
+        //trouver un moyen de add l'audio source + ajouter le Scriptable Object
     }
 
     private void Update() //L'update est juste pour afficher le slider
@@ -46,8 +61,8 @@ public class MusicManager : MonoBehaviour, ITickable
 
     IEnumerator CallSwitch() // juste pour tester
     {
-        yield return new WaitForSeconds(6);
-        SwitchMusic(110, Soundgroup.PhaseState.MACROGAME, Soundgroup.CurrentPhase.RECRUIT);
+        yield return new WaitForSeconds(3);
+        SwitchMusic(140, Soundgroup.PhaseState.MACROGAME, Soundgroup.CurrentPhase.RECRUIT);
         yield return new WaitForSeconds(6);
         SwitchMusic(100, Soundgroup.PhaseState.MINIGAME, Soundgroup.CurrentPhase.RECRUIT);
     }
@@ -107,32 +122,5 @@ public class MusicManager : MonoBehaviour, ITickable
      
 } 
  
-[System.Serializable] 
-public class Soundgroup 
-{ 
-    public enum PhaseState 
-    { 
-        MACROGAME, 
-        MINIGAME 
-    } 
-    public enum CurrentPhase 
-    { 
-        RECRUIT, 
-        ACTION, 
-        ESCAPE 
-    } 
-     
-    public PhaseState musicState = PhaseState.MACROGAME; 
-    public CurrentPhase musicPhase = CurrentPhase.RECRUIT; 
-    public List<SoundRef> sounds = new List<SoundRef>(8); 
- 
- 
-} 
- 
-[System.Serializable] 
-public class SoundRef 
-{ 
-    public int BPM = 120; 
-    public AudioClip Clip; 
-} 
+
 
