@@ -966,6 +966,133 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c85fb967c8ac3a840a5602f2d08eb275, type: 3}
+--- !u!1 &1114084217
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1114084219}
+  - component: {fileID: 1114084218}
+  m_Layer: 0
+  m_Name: Audio Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!82 &1114084218
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1114084217}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!4 &1114084219
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1114084217}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1027.1034, y: 550.81024, z: -116.81529}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1235174356
 GameObject:
   m_ObjectHideFlags: 0
@@ -1344,6 +1471,7 @@ GameObject:
   - component: {fileID: 1749864762}
   - component: {fileID: 1749864764}
   - component: {fileID: 1749864765}
+  - component: {fileID: 1749864766}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -1373,15 +1501,16 @@ MonoBehaviour:
   - MG_ULB_Unlock
   - MG_NAC_QuelleCouleur
   - MG_NAC_Scene_PanPanneau
-  - MG_ULA_EscapeFromThem
   - MG_NOB_Scene_PAP
   - MG_ULC_Scene_TacticMagic
+  - MG_ULA_EscapeFromThem
   state: 0
   resultPanel: {fileID: 135660540}
   timer: {fileID: 1749864763}
   transitionController: {fileID: 1749864762}
   lifeBar: {fileID: 1749864765}
   macroGameCanvasAnimator: {fileID: 2008032679}
+  musicManager: {fileID: 1749864766}
 --- !u!4 &1749864761
 Transform:
   m_ObjectHideFlags: 0
@@ -1479,6 +1608,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifeBarGO: {fileID: 1823378425}
   life: 4
+--- !u!114 &1749864766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1749864759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be7cd37b1fc2b0342a86107ea1601c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AudioS: {fileID: 1114084218}
+  currentAudioClip: {fileID: 0}
+  MusicsSO: {fileID: 11400000, guid: 2f2a2a6d2ea52be4fba8c5d2abe3804b, type: 2}
+  musicTime: 0
+  AllSoundsList: []
 --- !u!1 &1796344224
 GameObject:
   m_ObjectHideFlags: 0

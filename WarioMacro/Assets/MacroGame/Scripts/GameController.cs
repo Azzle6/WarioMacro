@@ -16,7 +16,7 @@ public interface ITickable
 public class GameController : MonoBehaviour
 {
     public static int currentTick { get; private set; }
-    private static float gameSpeed { get; set; }
+    public static float gameBPM { get; private set; }
     public static int difficulty { get; private set; }
 
     
@@ -30,6 +30,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private TransitionController transitionController;
     [SerializeField] private LifeBar lifeBar;
     [SerializeField] private Animator macroGameCanvasAnimator;
+    [SerializeField] private MusicManager musicManager;
     private Map map;
     private static List<ITickable> tickables = new List<ITickable>();
     private static string currentScene;
@@ -77,18 +78,21 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
+        gameControllerSO.currentGameSpeed = 100;
         StartCoroutine(TickCoroutine());
         StartCoroutine(GameStateCoroutine());
     }
 
     private void Update()
     {
+        gameBPM = gameControllerSO.currentGameSpeed;
+        difficulty = gameControllerSO.currentDifficulty;
         // update difficulty / speed
         //gameSpeed = gameControllerSO.currentGameSpeed;
         //difficulty = gameControllerSO.currentDifficulty;
         
         // update global timescale
-        Time.timeScale =lockTimescale ? 0f: gameSpeed / 120;
+        Time.timeScale =lockTimescale ? 0f: gameBPM / 120;
     }
 
     private bool toLaunch = false;
@@ -216,8 +220,7 @@ public class GameController : MonoBehaviour
                         state = GameState.Macro;
                         
                         //Change BPM
-                        gameSpeed = Mathf.Clamp(gameSpeed + (gameResult ? 10 : -10), 120, 190);
-                        Debug.Log(gameSpeed);
+                        gameControllerSO.currentGameSpeed = Mathf.Clamp(gameBPM + (gameResult ? 20 : -20), 100, 160);
                         
                         // display result
                         Debug.Log("MicroGame Finished: " + (gameResult ? "SUCCESS" : "FAILURE"));
@@ -387,6 +390,7 @@ public class GameController : MonoBehaviour
             {
                 t.OnTick();
             }
+            musicManager.OnTick();
 
             yield return new WaitForSeconds(1f);
             currentTick++;
@@ -405,10 +409,8 @@ public class GameController : MonoBehaviour
     {
         instance = this;
         gameControllerSO = Resources.LoadAll<GameControllerSO>("").First();
-        gameSpeed = gameControllerSO.currentGameSpeed;
-        difficulty = gameControllerSO.currentDifficulty;
 
-        Time.timeScale = gameSpeed / 120;
+        Time.timeScale = gameBPM / 120;
     }
 
     private enum GameState
