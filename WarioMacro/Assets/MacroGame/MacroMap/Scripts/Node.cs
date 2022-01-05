@@ -9,9 +9,8 @@ public class Node : MonoBehaviour
 {
     [CanBeNull] public Path[] paths = new Path[4];
     public Animator animator;
-    public bool autoMove;
 
-    
+
     public Path GetNodeFromInput(ControllerKey key)
     {
         switch (key)

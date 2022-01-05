@@ -105,8 +105,8 @@ public class GameController : MonoBehaviour
                 }
 
                 Debug.Log("WaitForNodeSelection");
-                if(!map.currentNode.autoMove)
-                    yield return StartCoroutine(WaitForNodeSelection());
+                
+                yield return StartCoroutine(WaitForNodeSelection());
                 
                 Debug.Log("MovePlayerToCurrentNode");
                 yield return StartCoroutine(MovePlayerToCurrentNode());
