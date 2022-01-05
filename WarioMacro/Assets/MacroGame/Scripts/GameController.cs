@@ -28,6 +28,8 @@ public class GameController : MonoBehaviour
     [SerializeField] private MiniGameResultPannel_UI resultPanel = null;
     [SerializeField] private Timer timer;
     [SerializeField] private TransitionController transitionController;
+    [SerializeField] private LifeBar lifeBar;
+    [SerializeField] private Animator macroGameCanvasAnimator;
     private Map map;
     private static List<ITickable> tickables = new List<ITickable>();
     private static string currentScene;
@@ -95,6 +97,11 @@ public class GameController : MonoBehaviour
     {
         toLaunch = toggle;
     }
+
+    private void ToggleEndGame(bool value)
+    {
+        macroGameCanvasAnimator.SetTrigger(value ? "Victory" : "Defeat");
+    }
     
     private IEnumerator GameStateCoroutine()
     {
@@ -108,7 +115,7 @@ public class GameController : MonoBehaviour
             }
             else if (state == GameState.Macro)
             {
-                if (LastNodeReached() || map == null)
+                if (map == null)
                 {
                     yield return StartCoroutine(LoadNextMap());
                 }
@@ -229,12 +236,35 @@ public class GameController : MonoBehaviour
                     Debug.Log("Node completed");
                     
                     // change difficulty
-                    difficulty = Mathf.Clamp(difficulty + (nodeSuccessCount > 1 ? 1 : -1), 1, 3);
+                    if (nodeSuccessCount > 1)
+                    {
+                        difficulty++;
+                    }
+                    else
+                    {
+                        difficulty--;
+                        lifeBar.Damage();
+                    }
+                    difficulty = Mathf.Clamp(difficulty, 1, 3);
                     Debug.Log("Difficulty : " + difficulty);
 
                     // dispose
                     resultPanel.PopWindowDown();
                     resultPanel.ToggleWindow(false);
+                    if (lifeBar.GetLife() == 0)
+                    {
+                        ToggleEndGame(false);
+                        while (!InputManager.GetKeyDown(ControllerKey.A)) yield return null;
+                        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                    }
+                    
+                    if (map.currentNode == map.endNode)
+                    {
+                        ToggleEndGame(true);
+                        while (!InputManager.GetKeyDown(ControllerKey.A)) yield return null;
+                        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                    }
+                    
                 }
             }
 
