@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
 using System.Linq;
+using UnityEditor;
 
 public class Node : MonoBehaviour
 {
     [CanBeNull] public Path[] paths = new Path[4];
     public Animator animator;
+
 
     public Path GetNodeFromInput(ControllerKey key)
     {
@@ -57,6 +59,15 @@ public class Node : MonoBehaviour
         public Direction direction;
         [CanBeNull] public Node destination;
         [CanBeNull] public Transform[] steps;
+
+        // public Vector3[] GetPositions()
+        // {
+        //     var points = new List<Vector3>();
+        //     foreach(Transform step in steps)
+        //         points.Add(step.position);
+        //     points.Add(destination.transform.position);
+        //     return points.ToArray();
+        // }
     }
 
     public enum Direction
