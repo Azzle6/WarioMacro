@@ -95,7 +95,21 @@ public class GameController : MonoBehaviour
         
         // update global timescale
 
-        mainCam.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, -10);
+        float height = 2f * mainCam.orthographicSize;
+        float width = height * mainCam.aspect;
+        
+        mainCam.transform.position = new Vector3(
+            Mathf.Clamp(
+                player.transform.position.x,
+                -(map.transform.GetChild(0).localScale.x/2 - width/2),
+                (map.transform.GetChild(0).localScale.x/2 - width/2)
+                ), 
+            Mathf.Clamp(
+                player.transform.position.y,
+                -(map.transform.GetChild(0).localScale.y/2 - height/2),
+                (map.transform.GetChild(0).localScale.y/2 - height/2)
+                ), 
+            -10);
         Time.timeScale =lockTimescale ? 0f: gameBPM / 120;
     }
 
