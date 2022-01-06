@@ -6,6 +6,7 @@ using UnityEngine;
 public class MusicsManagerSO : ScriptableObject
 {
     public List<Soundgroup> MusicsList = new List<Soundgroup>(2);
+
 }
 
 [System.Serializable] 
