@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -8,7 +6,6 @@ public class Player : MonoBehaviour
     public Animator animator;
     public float moveSpeed = 1f;
     [SerializeField] public GameObject[] arrowPrefabs = new GameObject[3];
-
 
     void Awake()
     {

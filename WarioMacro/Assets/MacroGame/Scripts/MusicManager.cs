@@ -27,7 +27,7 @@ public class MusicManager : MonoBehaviour, ITickable
     private void Start() 
     {
         GameManager.Register();
-        GameController.Init(this);
+        //GameController.Init(this);
         AllSoundsList = MusicsSO.MusicsList;
         
         AudioS.loop = true;
@@ -40,8 +40,8 @@ public class MusicManager : MonoBehaviour, ITickable
         }
         
         SwitchMusic(100, Soundgroup.PhaseState.MINIGAME, Soundgroup.CurrentPhase.RECRUIT);
-        StartCoroutine("CallSwitch"); //Juste pour tester
-
+        //StartCoroutine("CallSwitch"); //Juste pour tester
+        
     }
 
     public static void Register()
@@ -56,7 +56,8 @@ public class MusicManager : MonoBehaviour, ITickable
 
     private void Update() //L'update est juste pour afficher le slider
     {
-        musicTime = AudioS.time / AudioS.clip.length; 
+        if(AudioS.clip != null)
+            musicTime = AudioS.time / AudioS.clip.length; 
     }
 
     IEnumerator CallSwitch() // juste pour tester
@@ -84,6 +85,7 @@ public class MusicManager : MonoBehaviour, ITickable
                     {
                         nextAudioClip = sounds.Clip;
                         WaitForTick = true;
+                        //Debug.Log("nextAudioClip: " + nextAudioClip);
                         return;
                     } 
                 } 
@@ -95,6 +97,9 @@ public class MusicManager : MonoBehaviour, ITickable
  
     public void OnTick() 
     { 
+        // TODO
+        SwitchMusic((int) GameController.gameBPM, Soundgroup.PhaseState.MACROGAME, Soundgroup.CurrentPhase.RECRUIT);
+        
         if (WaitForTick)
         {
             float nextTimer = 0;
@@ -105,19 +110,22 @@ public class MusicManager : MonoBehaviour, ITickable
             }
             
             AudioS.clip = nextAudioClip;
-            AudioS.Play();
+            Debug.Log(nextTimer);
+            
             AudioS.time = nextTimer;
+            AudioS.Play();
             
             currentAudioClip = nextAudioClip;
             nextAudioClip = null;
-            WaitForTick = false; 
+            WaitForTick = false;
         } 
     } 
  
     public float ConvertMusicTimers() 
     { 
-        float percentage = AudioS.time / AudioS.clip.length; 
-        return nextAudioClip.length * percentage; 
+        double percentage = AudioS.time / currentAudioClip.length; 
+        Debug.Log(percentage);
+        return (float) (nextAudioClip.length * percentage);
     } 
      
 } 

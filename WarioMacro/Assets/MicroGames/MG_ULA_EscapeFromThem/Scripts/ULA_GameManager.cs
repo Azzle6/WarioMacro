@@ -99,7 +99,6 @@ public class ULA_GameManager : MonoBehaviour, ITickable
     IEnumerator CoroutineFinInit()
     {
         yield return new WaitForSeconds(1.25f);
-        AudioManager.PlaySound(audioClips[0],0.2f);
         AudioManager.PlaySound(audioClips[2]);
         cinematic = false;
     }

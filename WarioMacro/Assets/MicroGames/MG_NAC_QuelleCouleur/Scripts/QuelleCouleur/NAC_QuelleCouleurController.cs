@@ -6,7 +6,7 @@ public class NAC_QuelleCouleurController : MonoBehaviour, ITickable
 {
     [SerializeField] private int difficulty;
     private int nbBalls;
-    private int tickSecondPhase; //Le tick durant lequel est affiché le menu de sélection des réponses
+    private int tickSecondPhase; //Le tick durant lequel est affichÃ© le menu de sÃ©lection des rÃ©ponses
     [SerializeField] private NAC_MoveBall[] balls;
     //[SerializeField] private Color[] colors;
     [SerializeField] private Sprite[] sprites;
