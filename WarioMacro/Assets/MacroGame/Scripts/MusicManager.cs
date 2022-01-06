@@ -14,6 +14,7 @@ public class MusicManager : MonoBehaviour, ITickable
     public AudioClip currentAudioClip; 
     private AudioClip nextAudioClip;
     public MusicsManagerSO MusicsSO;
+    public SoundsListSO SoundsList;
     private bool WaitForTick;
     
     [Header("Visualize music Timer")]
@@ -27,6 +28,7 @@ public class MusicManager : MonoBehaviour, ITickable
     private void Start() 
     {
         GameManager.Register();
+        instance = this;
         //GameController.Init(this);
         AllSoundsList = MusicsSO.MusicsList;
         
@@ -42,6 +44,11 @@ public class MusicManager : MonoBehaviour, ITickable
         SwitchMusic(100, Soundgroup.PhaseState.MINIGAME, Soundgroup.CurrentPhase.RECRUIT);
         //StartCoroutine("CallSwitch"); //Juste pour tester
         
+    }
+
+    public void PlayASound(string clipName)
+    {
+        AudioManager.PlaySound(SoundsList.FindSound(clipName));
     }
 
     public static void Register()
