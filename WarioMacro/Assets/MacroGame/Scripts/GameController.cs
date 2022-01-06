@@ -21,6 +21,7 @@ public class GameController : MonoBehaviour
 
     
     [SerializeField] public Player player;
+    [SerializeField] private Camera mainCam;
     [SerializeField] private GameControllerSO gameControllerSO;
     [SerializeField] private GameObject[] macroObjects = Array.Empty<GameObject>();
     [SerializeField] private string[] sceneNames = Array.Empty<string>();
@@ -79,6 +80,7 @@ public class GameController : MonoBehaviour
     private void Start()
     {
         gameControllerSO.currentGameSpeed = 100;
+        difficulty = gameControllerSO.currentDifficulty;
         StartCoroutine(TickCoroutine());
         StartCoroutine(GameStateCoroutine());
     }
@@ -86,12 +88,14 @@ public class GameController : MonoBehaviour
     private void Update()
     {
         gameBPM = gameControllerSO.currentGameSpeed;
-        difficulty = gameControllerSO.currentDifficulty;
+        //difficulty = gameControllerSO.currentDifficulty;
         // update difficulty / speed
         //gameSpeed = gameControllerSO.currentGameSpeed;
         //difficulty = gameControllerSO.currentDifficulty;
         
         // update global timescale
+
+        mainCam.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, -10);
         Time.timeScale =lockTimescale ? 0f: gameBPM / 120;
     }
 

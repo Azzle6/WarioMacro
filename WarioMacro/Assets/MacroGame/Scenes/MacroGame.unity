@@ -4509,6 +4509,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1862497960}
+  mainCam: {fileID: 1028382126}
   gameControllerSO: {fileID: 11400000, guid: 3eb3fccf2c11a9347b96f0ec0c8cb566, type: 2}
   macroObjects:
   - {fileID: 1028382124}
@@ -5432,7 +5433,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2008032675
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5773,6 +5774,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2053484115}
     m_Modifications:
+    - target: {fileID: 8659334006190063378, guid: 1ece027c310a43b4598f48c19fcd5237, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8659334006535778456, guid: 1ece027c310a43b4598f48c19fcd5237, type: 3}
       propertyPath: endNode
       value: 
