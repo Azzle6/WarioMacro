@@ -47,7 +47,7 @@ public class NOB_DOC_GameManager : MonoBehaviour, ITickable
         
         if (GameController.currentTick == 5)
         {
-            resultText.gameObject.SetActive(true);
+            
             if (result)
             {
                 resultText.text = "Victory";
@@ -56,6 +56,7 @@ public class NOB_DOC_GameManager : MonoBehaviour, ITickable
             {
                 resultText.text = "Defeat";
             }
+            resultText.gameObject.SetActive(true);
             //Le jeu se finit, il nous reste 3 ticks pour afficher le résultat
         }
 
