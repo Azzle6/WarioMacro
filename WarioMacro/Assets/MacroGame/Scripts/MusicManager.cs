@@ -8,7 +8,7 @@ using UnityEngine;
  
 public class MusicManager : MonoBehaviour, ITickable
 {
-    private static MusicManager instance;
+    public static MusicManager instance;
     
     public AudioSource AudioS; 
     public AudioClip currentAudioClip; 
