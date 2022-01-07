@@ -1,15 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
 using UnityEngine;
 using UnityEditor;
-using UnityEditor.SearchService;
-using UnityEngine.WSA;
-using Object = UnityEngine.Object;
-using Scene = UnityEngine.SceneManagement.Scene;
 
 public class ExportManager : EditorWindow
 {
