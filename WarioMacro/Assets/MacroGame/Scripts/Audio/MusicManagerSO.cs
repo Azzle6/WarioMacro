@@ -1,11 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-[CreateAssetMenu(fileName = "newMusicsManagerSO", menuName = "MacroGame/MusicsManagerSO", order = 0)]
-public class MusicsManagerSO : ScriptableObject
+[CreateAssetMenu(fileName = "MusicManagerSO", menuName = "MacroGame/MusicManagerSO", order = 0)]
+public class MusicManagerSO : ScriptableObject
 {
-    public List<Soundgroup> MusicsList = new List<Soundgroup>(2);
+    [FormerlySerializedAs("MusicsList")] public List<Soundgroup> MusicList = new List<Soundgroup>(2);
 
 }
 

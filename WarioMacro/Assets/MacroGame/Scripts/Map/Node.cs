@@ -3,24 +3,23 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
 using System.Linq;
-using UnityEditor;
+// ReSharper disable PossibleNullReferenceException
 
 public class Node : MonoBehaviour
 {
     [CanBeNull] public Path[] paths = new Path[4];
     public Animator animator;
 
-
     public Path GetNodeFromInput(ControllerKey key)
     {
-        switch (key)
+        return key switch
         {
-            case ControllerKey.DPAD_UP: return paths[0];
-            case ControllerKey.DPAD_LEFT: return paths[1];
-            case ControllerKey.DPAD_DOWN: return paths[2];
-            case ControllerKey.DPAD_RIGHT: return paths[3];
-            default: return null;
-        }
+            ControllerKey.DPAD_UP => paths[0],
+            ControllerKey.DPAD_LEFT => paths[1],
+            ControllerKey.DPAD_DOWN => paths[2],
+            ControllerKey.DPAD_RIGHT => paths[3],
+            _ => null
+        };
     }
 
     private void OnDrawGizmos()
@@ -37,17 +36,13 @@ public class Node : MonoBehaviour
 
             if (path.steps != null)
             {
-                foreach (Transform step in path.steps)
-                {
-                    if (step == null) continue;
-                    points.Add(step.position);
-                }
+                points.AddRange(from step in path.steps where step != null select step.position);
             }
 
             for (int i = 0; i < points.Count; i++)
             {
-                var p0 = i > 0 ? points[i - 1] : transform.position;
-                var p1 = points[i];
+                Vector3 p0 = i > 0 ? points[i - 1] : transform.position;
+                Vector3 p1 = points[i];
                 Gizmos.DrawLine(p0, p1);
             }
         }

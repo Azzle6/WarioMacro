@@ -30429,8 +30429,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1862497960}
+  mainMenuBuildIndex: 0
   mainCam: {fileID: 1028382126}
   gameControllerSO: {fileID: 11400000, guid: 3eb3fccf2c11a9347b96f0ec0c8cb566, type: 2}
+  bpmSettingsSO: {fileID: 11400000, guid: 996be0bf0d7ce5346a498077aa92f7c6, type: 2}
   macroObjects:
   - {fileID: 1028382124}
   - {fileID: 2053484114}
@@ -30443,7 +30445,6 @@ MonoBehaviour:
   - MG_NOB_Scene_PAP
   - MG_ULC_Scene_TacticMagic
   - MG_ULA_EscapeFromThem
-  state: 0
   resultPanel: {fileID: 135660540}
   timer: {fileID: 1749864763}
   transitionController: {fileID: 1749864762}
@@ -30523,7 +30524,7 @@ MonoBehaviour:
           m_CallState: 2
         - m_Target: {fileID: 1749864760}
           m_TargetAssemblyTypeName: GameController, Assembly-CSharp
-          m_MethodName: ToogleToLaunch
+          m_MethodName: ToggleToLaunch
           m_Mode: 6
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -30559,12 +30560,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be7cd37b1fc2b0342a86107ea1601c38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AudioS: {fileID: 1114084218}
-  currentAudioClip: {fileID: 0}
-  MusicsSO: {fileID: 11400000, guid: 2f2a2a6d2ea52be4fba8c5d2abe3804b, type: 2}
-  SoundsList: {fileID: 11400000, guid: b8e758d00d9919a4b83fc0e17ec8154b, type: 2}
   musicTime: 0
   AllSoundsList: []
+  musicSO: {fileID: 11400000, guid: 2f2a2a6d2ea52be4fba8c5d2abe3804b, type: 2}
+  AudioS: {fileID: 1114084218}
+  currentAudioClip: {fileID: 0}
+  SoundsList: {fileID: 11400000, guid: b8e758d00d9919a4b83fc0e17ec8154b, type: 2}
 --- !u!1 &1796344224
 GameObject:
   m_ObjectHideFlags: 0

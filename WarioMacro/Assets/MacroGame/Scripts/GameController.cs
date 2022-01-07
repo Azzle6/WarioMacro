@@ -17,38 +17,41 @@ public class GameController : MonoBehaviour
     public static int currentTick { get; private set; }
     public static float gameBPM { get; private set; }
     public static int difficulty { get; private set; }
+    public Player player;
 
-    
-    [SerializeField] public Player player;
+    [SerializeField] private int mainMenuBuildIndex = 0;
     [SerializeField] private Camera mainCam;
     [SerializeField] private GameControllerSO gameControllerSO;
+    [SerializeField] private BPMSettingsSO bpmSettingsSO;
     [SerializeField] private GameObject[] macroObjects = Array.Empty<GameObject>();
     [SerializeField] private string[] sceneNames = Array.Empty<string>();
-    [SerializeField] private GameState state = GameState.Micro;
-    [SerializeField] private MiniGameResultPannel_UI resultPanel = null;
+    [SerializeField] private MiniGameResultPannel_UI resultPanel;
     [SerializeField] private Timer timer;
     [SerializeField] private TransitionController transitionController;
     [SerializeField] private LifeBar lifeBar;
     [SerializeField] private Animator macroGameCanvasAnimator;
     [SerializeField] private MusicManager musicManager;
-    private Map map;
-    private static List<ITickable> tickables = new List<ITickable>();
+    
+    private static readonly List<ITickable> tickables = new List<ITickable>();
+    private static readonly int current = Animator.StringToHash("Current");
     private static string currentScene;
     private static bool gameFinished;
     private static bool gameResult;
     private static bool lockTimescale;
     private static GameController instance;
-    private bool debugMicro;
+    private Map map;
+    private float cameraHeight;
+    private float cameraWidth;
+    private int nodeSuccessCount;
+    private bool toLaunch;
+    
 
 
     public static void Register()
     {
-        if (instance == null)
-        {
-            new GameObject("GameController").AddComponent<GameController>();
-            instance.debugMicro = true;
-        }
-
+        if (instance != null) return;
+        
+        new GameObject("GameController").AddComponent<GameController>();
     }
 
     public static void Init(ITickable t)
@@ -58,6 +61,20 @@ public class GameController : MonoBehaviour
             tickables.Add(t);
         }
     }
+    
+    public static void FinishGame(bool result)
+    {
+        Debug.Log("FinishGame: " + result);
+        gameFinished = true;
+        gameResult = result;
+    }
+    
+    public void ToggleToLaunch(bool toggle)
+    {
+        toLaunch = toggle;
+    }
+    
+    
 
     private static void ResetTick()
     {
@@ -69,234 +86,71 @@ public class GameController : MonoBehaviour
         tickables.Clear();
     }
 
-    public static void FinishGame(bool result)
-    {
-        Debug.Log("FinishGame: " + result);
-        gameFinished = true;
-        gameResult = result;
-    }
+    
 
-    private void Start()
+    private IEnumerator ToggleEndGame(bool value)
     {
-        gameControllerSO.currentGameSpeed = 100;
-        difficulty = gameControllerSO.currentDifficulty;
-        StartCoroutine(TickCoroutine());
-        StartCoroutine(GameStateCoroutine());
-    }
-
-    private void Update()
-    {
-        gameBPM = gameControllerSO.currentGameSpeed;
-        //difficulty = gameControllerSO.currentDifficulty;
-        // update difficulty / speed
-        //gameSpeed = gameControllerSO.currentGameSpeed;
-        //difficulty = gameControllerSO.currentDifficulty;
+        if (value)
+        {
+            // ReSharper disable once Unity.PreferAddressByIdToGraphicsParams
+            macroGameCanvasAnimator.SetTrigger("Victory");
+            MusicManager.instance.PlayASound("MOU_GameWin");
+        }
+        else
+        {
+            // ReSharper disable once Unity.PreferAddressByIdToGraphicsParams
+            macroGameCanvasAnimator.SetTrigger("Defeat");
+            MusicManager.instance.PlayASound("MOU_GameLose");
+        }
         
-        // update global timescale
-
-        float height = 2f * mainCam.orthographicSize;
-        float width = height * mainCam.aspect;
-        
-        mainCam.transform.position = new Vector3(
-            Mathf.Clamp(
-                player.transform.position.x,
-                -(map.transform.GetChild(0).localScale.x/2 - width/2),
-                (map.transform.GetChild(0).localScale.x/2 - width/2)
-                ), 
-            Mathf.Clamp(
-                player.transform.position.y,
-                -(map.transform.GetChild(0).localScale.y/2 - height/2),
-                (map.transform.GetChild(0).localScale.y/2 - height/2)
-                ), 
-            -10);
-        Time.timeScale =lockTimescale ? 0f: gameBPM / 120;
-    }
-
-    private bool toLaunch = false;
-
-    public void ToogleToLaunch(bool toggle)
-    {
-        toLaunch = toggle;
-    }
-
-    private void ToggleEndGame(bool value)
-    {
-        macroGameCanvasAnimator.SetTrigger(value ? "Victory" : "Defeat");
+        while (!InputManager.GetKeyDown(ControllerKey.A)) yield return null;
+        SceneManager.LoadScene(mainMenuBuildIndex);
     }
     
     private IEnumerator GameStateCoroutine()
     {
-        var asyncOp = default(AsyncOperation);
-        
         while(true)
         {
-            if (state == GameState.Micro)
+            if (map == null)
             {
-                // Game launched from Micro Game Scene
+                yield return StartCoroutine(LoadNextMap());
             }
-            else if (state == GameState.Macro)
+
+            //Debug.Log("WaitForNodeSelection");
+            
+            yield return StartCoroutine(WaitForNodeSelection());
+            
+            //Debug.Log("MovePlayerToCurrentNode");
+            
+            yield return StartCoroutine(MovePlayerToCurrentNode());
+            MusicManager.instance.PlayASound("MOU_NodeSelect");
+            var nodeMicroGame = map.currentNode.GetComponent<NodeMicroGame>();
+
+            // True if node with micro games, false otherwise
+            if (nodeMicroGame != null)
             {
-                if (map == null)
+                yield return StartCoroutine(NodeWithMicroGameHandler(nodeMicroGame));
+                
+                ChangeDifficulty();
+
+                // dispose
+                resultPanel.PopWindowDown();
+                resultPanel.ToggleWindow(false);
+
+                if (lifeBar.GetLife() == 0)
                 {
-                    yield return StartCoroutine(LoadNextMap());
+                    StartCoroutine(ToggleEndGame(false));
                 }
-
-                Debug.Log("WaitForNodeSelection");
-                
-                yield return StartCoroutine(WaitForNodeSelection());
-                
-                Debug.Log("MovePlayerToCurrentNode");
-                
-                yield return StartCoroutine(MovePlayerToCurrentNode());
-                MusicManager.instance.PlayASound("MOU_NodeSelect");
-                var nextMicroGame = map.currentNode.GetComponent<NodeTriggerMicroGame>();
-                if(nextMicroGame != null)
-                {
-                    // select 3 random micro games from micro games list
-                    var microGamesQueue = new Queue<string>();
-                    var microGamesList = new List<string>(sceneNames);
-                    var microGamesCount = Mathf.Min(3, microGamesList.Count);
-                    while (microGamesCount-- > 0)
-                    {
-                        var rdIndex = Random.Range(0, microGamesList.Count);
-                        var pickedMicroGame = microGamesList[rdIndex];
-                        microGamesList.RemoveAt(rdIndex);
-                        microGamesQueue.Enqueue(pickedMicroGame);
-                    }
-                    
-                    // init result panel
-                    resultPanel.ToggleWindow(true);
-                    resultPanel.SetHeaderText(MiniGameResultPannel_UI.HeaderType.GetReady);
-                    resultPanel.ClearAllNodes();
-                    resultPanel.SetStartingNodeNumber(microGamesQueue.Count);
-                    resultPanel.PopWindowUp();
-
-                    // play each micro games one by one
-                    int gameCount = 0;
-                    int nodeSuccessCount = 0;
-                    while (microGamesQueue.Count > 0)
-                    {
-                        // wait for input pressed
-                        while (true)
-                        {
-                            if (InputManager.GetKeyDown(ControllerKey.A))
-                                break;
-                            yield return null;
-                        }
-                        
-                        resultPanel.PopWindowDown();
-                        
-                        yield return new WaitForSeconds(1f);
-
-                        // start transition UI
-                        MusicManager.instance.PlayASound("MOU_MiniGameEnter");
-                        transitionController.TransitionStart();
-                        toLaunch = false; 
-                        while (!toLaunch) yield return null;
-                        
-                        // hide macro game objects
-                        SetObjActive(false);
-                        
-                        // start next micro game in queue
-                        currentScene = microGamesQueue.Dequeue();
-                        Debug.Log("Launch Micro Game:" + currentScene);
-                        
-                        // load scene
-                        asyncOp = SceneManager.LoadSceneAsync(currentScene, LoadSceneMode.Additive);
-                        while (!asyncOp.isDone) yield return null;
-                        
-                        // resume transition UI
-                        transitionController.TransitionResume();
-                        
-                        // switch micro game state
-                        ResetTick();
-                        state = GameState.Micro;
-                        timer.StartTimer();
-                        
-                        // wait for game finished
-                        gameFinished = false;
-                        while (!gameFinished) yield return null;
-                        
-                        // stop timer
-                        timer.StopTimer();
-                        
-                        // start transition UI
-                        transitionController.TransitionStart();
-                        toLaunch = false; 
-                        while (!toLaunch) yield return null;
-                        
-                        // unload scene
-                        asyncOp = SceneManager.UnloadSceneAsync(currentScene);
-                        while (!asyncOp.isDone) yield return null;
-                        
-                        // resume transition UI
-                        transitionController.TransitionResume();
-                        
-                        // switch back to macro state
-                        SetObjActive(true);
-                        ResetTickables();
-                        ResetTick();
-                        state = GameState.Macro;
-                        
-                        //Change BPM
-                        gameControllerSO.currentGameSpeed = Mathf.Clamp(gameBPM + (gameResult ? 20 : -20), 100, 160);
-                        MusicManager.instance.PlayASound(gameResult ? "MOU_SpeedUp" : "MOU_SpeedDown");
-                        
-                        
-                        // display result
-                        Debug.Log("MicroGame Finished: " + (gameResult ? "SUCCESS" : "FAILURE"));
-                        if (gameResult) nodeSuccessCount++;
-
-                        resultPanel.PopWindowUp();
-                        resultPanel.SetHeaderText(gameResult
-                            ? MiniGameResultPannel_UI.HeaderType.Success
-                            : MiniGameResultPannel_UI.HeaderType.Failure);
-                        yield return new WaitForSeconds(1f);
-                        
-                        resultPanel.SetCurrentNode(gameResult, gameCount+=1);
-                        yield return new WaitForSeconds(1f);
-                    }
-                    
-                    Debug.Log("Node completed");
-                    
-                    // change difficulty
-                    if (nodeSuccessCount > 1)
-                    {
-                        difficulty++;
-                        MusicManager.instance.PlayASound("MOU_NodeSuccess");
-                    }
-                    else
-                    {
-                        difficulty--;
-                        MusicManager.instance.PlayASound("MOU_NodeFail");
-                        lifeBar.Damage();
-                    }
-                    difficulty = Mathf.Clamp(difficulty, 1, 3);
-                    Debug.Log("Difficulty : " + difficulty);
-
-                    // dispose
-                    resultPanel.PopWindowDown();
-                    resultPanel.ToggleWindow(false);
-                    if (lifeBar.GetLife() == 0)
-                    {
-                        ToggleEndGame(false);
-                        MusicManager.instance.PlayASound("MOU_GameLose");
-                        while (!InputManager.GetKeyDown(ControllerKey.A)) yield return null;
-                        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-                    }
-                }
-                
-                if (map.currentNode == map.endNode)
-                {
-                    ToggleEndGame(true);
-                    MusicManager.instance.PlayASound("MOU_GameWin");
-                    while (!InputManager.GetKeyDown(ControllerKey.A)) yield return null;
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-                }
+            }
+            
+            if (map.currentNode == map.endNode)
+            {
+                StartCoroutine(ToggleEndGame(true));
             }
 
             yield return null;
         }
+        // ReSharper disable once IteratorNeverReturns
     }
     
     private IEnumerator MovePlayerToCurrentNode()
@@ -316,11 +170,6 @@ public class GameController : MonoBehaviour
         //yield return new WaitForSeconds(1f);
     }
 
-    private bool LastNodeReached()
-    {
-        return map != null && map.currentNode == map.endNode;
-    }
-
     private IEnumerator LoadNextMap()
     {
         map = FindObjectOfType<Map>();
@@ -335,26 +184,27 @@ public class GameController : MonoBehaviour
     {
         // init
         var arrowPrefabs = player.arrowPrefabs.ToList();
-        var currentNode = map.currentNode;
+        Node currentNode = map.currentNode;
         var nextNode = default(Node);
         var nextPath = default(Node.Path);
         var selectedPath = default(Node.Path);
         var selectedNode = default(Node);
         var selectedDirection = -1;
-        var selectInput = default(bool);
+        // ReSharper disable once TooWideLocalVariableScope
+        bool selectInput;
         var lastDirectionSelected = -1;
-        var validInput = ControllerKey.A;
+        const ControllerKey validInput = ControllerKey.A;
         
-        // TODO : display message "select next node"
-        Debug.Log("Select Next Node");
+        //Debug.Log("Select Next Node");
         
-        arrowPrefabs.ForEach((go => go.SetActive(true)));
+        arrowPrefabs.ForEach(go => go.SetActive(true));
         
-        map.currentNode.animator.SetBool("Current", true);
+        map.currentNode.animator.SetBool(current, true);
         
         // input loop
         while (nextNode == null)
         {
+            // ReSharper disable once PossibleNullReferenceException
             foreach (Node.Path path in currentNode.paths)
             {
                 var hAxis = Input.GetAxis("LEFT_STICK_HORIZONTAL");
@@ -370,15 +220,14 @@ public class GameController : MonoBehaviour
                               || (path.direction == Node.Direction.Left && isLeft)
                               || (path.direction == Node.Direction.Right && isRight);
 
-                if (selectInput)
-                {
-                    selectedNode = path.destination;
-                    selectedPath = path;
-                    selectedDirection = (int)path.direction;
-                    if(selectedDirection != lastDirectionSelected) MusicManager.instance.PlayASound("MOU_NodeDirection");
-                    lastDirectionSelected = selectedDirection;
-                    break;
-                }
+                if (!selectInput) continue;
+                
+                selectedNode = path.destination;
+                selectedPath = path;
+                selectedDirection = (int)path.direction;
+                if(selectedDirection != lastDirectionSelected) MusicManager.instance.PlayASound("MOU_NodeDirection");
+                lastDirectionSelected = selectedDirection;
+                break;
             }
 
             for (int i = 0; i < arrowPrefabs.Count; i++)
@@ -386,27 +235,132 @@ public class GameController : MonoBehaviour
                 // is any path setup with arrow direction?
                 arrowPrefabs[i].gameObject.SetActive(currentNode.paths.FirstOrDefault(p => p.direction == (Node.Direction)i) != null);
                 // is the selected direction equals to the path direction?
-                arrowPrefabs[i].transform.localScale = i == (int) selectedDirection ? Vector3.one : Vector3.one * .5f;
+                arrowPrefabs[i].transform.localScale = i == selectedDirection ? Vector3.one : Vector3.one * .5f;
             }
             
-            if (selectedNode != null)
+            if (selectedNode != null && InputManager.GetKeyDown(validInput))
             {
-                if (InputManager.GetKeyDown(validInput))
-                {
-                    nextNode = selectedNode;
-                    nextPath = selectedPath;
-                }
+                nextNode = selectedNode;
+                nextPath = selectedPath;
             }
             yield return null;
         }
         
-        map.currentNode.animator.SetBool("Current", false);
+        map.currentNode.animator.SetBool(current, false);
         map.currentNode = nextNode;
         map.currentPath = nextPath;
-        Debug.Log("new node selected");
+        //Debug.Log("new node selected");
 
         // dispose
-        arrowPrefabs.ForEach((go => go.SetActive(false)));
+        arrowPrefabs.ForEach(go => go.SetActive(false));
+    }
+
+    private IEnumerator NodeWithMicroGameHandler(NodeMicroGame node)
+    {
+        // select 3 random micro games from micro games list
+        var microGamesQueue = new Queue<string>();
+        var microGamesList = new List<string>(sceneNames);
+        var microGamesCount = Mathf.Min(node.microGamesNumber, microGamesList.Count);
+        while (microGamesCount-- > 0)
+        {
+            var rdIndex = Random.Range(0, microGamesList.Count);
+            var pickedMicroGame = microGamesList[rdIndex];
+            microGamesList.RemoveAt(rdIndex);
+            microGamesQueue.Enqueue(pickedMicroGame);
+        }
+        
+        // init result panel
+        resultPanel.ToggleWindow(true);
+        resultPanel.SetHeaderText(MiniGameResultPannel_UI.HeaderType.GetReady);
+        resultPanel.ClearAllNodes();
+        resultPanel.SetStartingNodeNumber(microGamesQueue.Count);
+        resultPanel.PopWindowUp();
+
+        // play each micro games one by one
+        int gameCount = 0;
+        nodeSuccessCount = 0;
+        while (microGamesQueue.Count > 0)
+        {
+            yield return new WaitForSeconds(1f);
+            
+            resultPanel.PopWindowDown();
+            
+            yield return new WaitForSeconds(1f);
+
+            // start transition UI
+            MusicManager.instance.PlayASound("MOU_MiniGameEnter");
+            
+            // start next micro game in queue
+            currentScene = microGamesQueue.Dequeue();
+            Debug.Log("Launch Micro Game:" + currentScene);
+            yield return StartCoroutine(TransitionHandler(true));
+
+            // micro game start
+            ResetTick();
+            timer.StartTimer();
+            gameFinished = false;
+            
+            // wait for game finished
+            while (!gameFinished) yield return null;
+            
+            // stop timer
+            timer.StopTimer();
+            
+            yield return StartCoroutine(TransitionHandler(false));
+            
+            // switch back to macro state
+            ResetTickables();
+            ResetTick();
+            
+            
+            // Change BPM
+            gameControllerSO.currentGameSpeed = Mathf.Clamp(
+                gameBPM + (gameResult ? bpmSettingsSO.increasingBPM : -bpmSettingsSO.decreasingBPM), 
+                bpmSettingsSO.minBPM, 
+                bpmSettingsSO.maxBPM);
+            MusicManager.instance.PlayASound(gameResult ? "MOU_SpeedUp" : "MOU_SpeedDown");
+            
+            
+            // display result
+            Debug.Log("MicroGame Finished: " + (gameResult ? "SUCCESS" : "FAILURE"));
+            if (gameResult) nodeSuccessCount++;
+
+            resultPanel.PopWindowUp();
+            resultPanel.SetHeaderText(gameResult
+                ? MiniGameResultPannel_UI.HeaderType.Success
+                : MiniGameResultPannel_UI.HeaderType.Failure);
+            yield return new WaitForSeconds(1f);
+            
+            resultPanel.SetCurrentNode(gameResult, gameCount+=1);
+            yield return new WaitForSeconds(1f);
+        }
+        
+        //Debug.Log("Node completed");
+    }
+
+    private IEnumerator TransitionHandler(bool toLoad)
+    {
+        // start transition UI
+        transitionController.TransitionStart();
+        toLaunch = false; 
+        while (!toLaunch) yield return null;
+
+        AsyncOperation asyncOp;
+        if (toLoad)
+        {
+            ShowMacroObjects(false);
+            asyncOp = SceneManager.LoadSceneAsync(currentScene, LoadSceneMode.Additive);
+        }
+        else
+        {
+            ShowMacroObjects(true);
+            asyncOp = SceneManager.UnloadSceneAsync(currentScene);
+        }
+        
+        while (!asyncOp.isDone) yield return null;
+            
+        // resume transition UI
+        transitionController.TransitionResume();
     }
 
     private IEnumerator TickCoroutine()
@@ -414,7 +368,7 @@ public class GameController : MonoBehaviour
         while (true)
         {
             //Debug.Log("TICK: " + currentTick);
-            foreach (var t in tickables.ToArray())
+            foreach (ITickable t in tickables.ToArray())
             {
                 t.OnTick();
             }
@@ -423,11 +377,29 @@ public class GameController : MonoBehaviour
             yield return new WaitForSeconds(1f);
             currentTick++;
         }
+        // ReSharper disable once IteratorNeverReturns
     }
 
-    private void SetObjActive(bool value)
+    private void ChangeDifficulty()
     {
-        foreach (var obj in macroObjects)
+        if (nodeSuccessCount > 1)
+        {
+            gameControllerSO.currentDifficulty++;
+            MusicManager.instance.PlayASound("MOU_NodeSuccess");
+        }
+        else
+        {
+            gameControllerSO.currentDifficulty--;
+            MusicManager.instance.PlayASound("MOU_NodeFail");
+            lifeBar.Damage();
+        }
+        gameControllerSO.currentDifficulty = Mathf.Clamp(gameControllerSO.currentDifficulty, 1, 3);
+        //Debug.Log("Difficulty : " + difficulty);
+    }
+
+    private void ShowMacroObjects(bool value)
+    {
+        foreach (GameObject obj in macroObjects)
         {
             obj.SetActive(value);
         }
@@ -437,13 +409,43 @@ public class GameController : MonoBehaviour
     {
         instance = this;
         gameControllerSO = Resources.LoadAll<GameControllerSO>("").First();
-
+    }
+    
+    private void Start()
+    {
+        // Init
+        gameControllerSO.currentGameSpeed = 100;
+        gameControllerSO.currentDifficulty = 1;
         Time.timeScale = gameBPM / 120;
+        cameraHeight = 2f * mainCam.orthographicSize;
+        cameraWidth = cameraHeight * mainCam.aspect;
+        
+        StartCoroutine(TickCoroutine());
+        StartCoroutine(GameStateCoroutine());
     }
 
-    private enum GameState
+    private void Update()
     {
-        Macro,
-        Micro
+        // update difficulty / speed
+        gameBPM = gameControllerSO.currentGameSpeed;
+        difficulty = gameControllerSO.currentDifficulty;
+        
+        // Camera movement
+        Vector3 position = player.transform.position;
+        mainCam.transform.position = new Vector3(
+            Mathf.Clamp(
+                position.x,
+                -(map.transform.GetChild(0).localScale.x/2 - cameraWidth/2),
+                (map.transform.GetChild(0).localScale.x/2 - cameraWidth/2)
+            ), 
+            Mathf.Clamp(
+                position.y,
+                -(map.transform.GetChild(0).localScale.y/2 - cameraHeight/2),
+                (map.transform.GetChild(0).localScale.y/2 - cameraHeight/2)
+            ), 
+            -10);
+        
+        // update global timescale
+        Time.timeScale = lockTimescale ? 0f: gameBPM / 120;
     }
 }
