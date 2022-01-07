@@ -147,8 +147,9 @@ public class GameController : MonoBehaviour
                 yield return StartCoroutine(WaitForNodeSelection());
                 
                 Debug.Log("MovePlayerToCurrentNode");
+                
                 yield return StartCoroutine(MovePlayerToCurrentNode());
-
+                MusicManager.instance.PlayASound("MOU_NodeSelect");
                 var nextMicroGame = map.currentNode.GetComponent<NodeTriggerMicroGame>();
                 if(nextMicroGame != null)
                 {
@@ -189,6 +190,7 @@ public class GameController : MonoBehaviour
                         yield return new WaitForSeconds(1f);
 
                         // start transition UI
+                        MusicManager.instance.PlayASound("MOU_MiniGameEnter");
                         transitionController.TransitionStart();
                         toLaunch = false; 
                         while (!toLaunch) yield return null;
@@ -239,6 +241,8 @@ public class GameController : MonoBehaviour
                         
                         //Change BPM
                         gameControllerSO.currentGameSpeed = Mathf.Clamp(gameBPM + (gameResult ? 20 : -20), 100, 160);
+                        MusicManager.instance.PlayASound(gameResult ? "MOU_SpeedUp" : "MOU_SpeedDown");
+                        
                         
                         // display result
                         Debug.Log("MicroGame Finished: " + (gameResult ? "SUCCESS" : "FAILURE"));
@@ -260,10 +264,12 @@ public class GameController : MonoBehaviour
                     if (nodeSuccessCount > 1)
                     {
                         difficulty++;
+                        MusicManager.instance.PlayASound("MOU_NodeSuccess");
                     }
                     else
                     {
                         difficulty--;
+                        MusicManager.instance.PlayASound("MOU_NodeFail");
                         lifeBar.Damage();
                     }
                     difficulty = Mathf.Clamp(difficulty, 1, 3);
@@ -275,6 +281,7 @@ public class GameController : MonoBehaviour
                     if (lifeBar.GetLife() == 0)
                     {
                         ToggleEndGame(false);
+                        MusicManager.instance.PlayASound("MOU_GameLose");
                         while (!InputManager.GetKeyDown(ControllerKey.A)) yield return null;
                         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
                     }
@@ -282,6 +289,7 @@ public class GameController : MonoBehaviour
                     if (map.currentNode == map.endNode)
                     {
                         ToggleEndGame(true);
+                        MusicManager.instance.PlayASound("MOU_GameWin");
                         while (!InputManager.GetKeyDown(ControllerKey.A)) yield return null;
                         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
                     }
@@ -336,6 +344,7 @@ public class GameController : MonoBehaviour
         var selectedNode = default(Node);
         var selectedDirection = -1;
         var selectInput = default(bool);
+        var lastDirectionSelected = -1;
         var validInput = ControllerKey.A;
         
         // TODO : display message "select next node"
@@ -357,6 +366,7 @@ public class GameController : MonoBehaviour
                 var isRight = hAxis > 0.5f;
                 var isLeft = hAxis < -0.5f;
                 
+                
                 selectInput = (path.direction == Node.Direction.Up && isUp)
                               || (path.direction == Node.Direction.Down && isDown)
                               || (path.direction == Node.Direction.Left && isLeft)
@@ -367,6 +377,8 @@ public class GameController : MonoBehaviour
                     selectedNode = path.destination;
                     selectedPath = path;
                     selectedDirection = (int)path.direction;
+                    if(selectedDirection != lastDirectionSelected) MusicManager.instance.PlayASound("MOU_NodeDirection");
+                    lastDirectionSelected = selectedDirection;
                     break;
                 }
             }
