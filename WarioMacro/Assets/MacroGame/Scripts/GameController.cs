@@ -285,15 +285,14 @@ public class GameController : MonoBehaviour
                         while (!InputManager.GetKeyDown(ControllerKey.A)) yield return null;
                         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
                     }
-                    
-                    if (map.currentNode == map.endNode)
-                    {
-                        ToggleEndGame(true);
-                        MusicManager.instance.PlayASound("MOU_GameWin");
-                        while (!InputManager.GetKeyDown(ControllerKey.A)) yield return null;
-                        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-                    }
-                    
+                }
+                
+                if (map.currentNode == map.endNode)
+                {
+                    ToggleEndGame(true);
+                    MusicManager.instance.PlayASound("MOU_GameWin");
+                    while (!InputManager.GetKeyDown(ControllerKey.A)) yield return null;
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
                 }
             }
 
