@@ -141,6 +141,8 @@ public class GameController : MonoBehaviour
                 
                 ChangeDifficulty();
 
+                yield return new WaitForSecondsRealtime(1f);
+                
                 // dispose
                 resultPanel.PopWindowDown();
                 resultPanel.ToggleWindow(false);
@@ -289,7 +291,7 @@ public class GameController : MonoBehaviour
         nodeSuccessCount = 0;
         while (microGamesQueue.Count > 0)
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSecondsRealtime(1f);
             
             resultPanel.PopWindowDown();
             
