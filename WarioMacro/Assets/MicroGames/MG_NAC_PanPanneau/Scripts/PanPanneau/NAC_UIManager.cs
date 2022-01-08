@@ -18,7 +18,7 @@ public class NAC_UIManager : MonoBehaviour
 
     public void UpdateTimer(int nbTickLeft) 
     {
-        timerText.text = nbTickLeft.ToString();
+        //timerText.text = nbTickLeft.ToString();
     }
 
     public void EnableEndScreen(bool result) 
