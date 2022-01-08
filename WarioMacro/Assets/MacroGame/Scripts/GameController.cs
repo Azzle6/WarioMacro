@@ -14,10 +14,13 @@ public interface ITickable
 
 public class GameController : MonoBehaviour
 {
+    public static GameController instance;
+    public static bool lockTimescale;
     public static int currentTick { get; private set; }
     public static float gameBPM { get; private set; }
     public static int difficulty { get; private set; }
     public Player player;
+    
 
     [SerializeField] private int mainMenuBuildIndex = 0;
     [SerializeField] private Camera mainCam;
@@ -32,19 +35,17 @@ public class GameController : MonoBehaviour
     [SerializeField] private Animator macroGameCanvasAnimator;
     [SerializeField] private MusicManager musicManager;
     
+    
     private static readonly List<ITickable> tickables = new List<ITickable>();
     private static readonly int current = Animator.StringToHash("Current");
     private static string currentScene;
     private static bool gameFinished;
     private static bool gameResult;
-    private static bool lockTimescale;
-    private static GameController instance;
     private IEnumerator tickEnumerator;
     private Map map;
     private float cameraHeight;
     private float cameraWidth;
     private int nodeSuccessCount;
-    private bool toLaunch;
     
 
 
@@ -70,14 +71,17 @@ public class GameController : MonoBehaviour
         gameResult = result;
     }
     
-    // Used in Transition's signal receiver
-    public void ToggleToLaunch(bool toggle)
+    
+    public void ShowMacroObjects(bool value)
     {
-        toLaunch = toggle;
+        foreach (GameObject obj in macroObjects)
+        {
+            obj.SetActive(value);
+        }
     }
-    
-    
-    
+
+
+
 
     private static void ResetTickables()
     {
@@ -297,7 +301,7 @@ public class GameController : MonoBehaviour
             // start next micro game in queue
             currentScene = microGamesQueue.Dequeue();
             Debug.Log("Launch Micro Game:" + currentScene);
-            yield return StartCoroutine(TransitionHandler(true));
+            yield return StartCoroutine(transitionController.TransitionHandler(currentScene, true));
 
             // micro game start
             ResetTick();
@@ -306,13 +310,12 @@ public class GameController : MonoBehaviour
             
             // wait for game finished
             while (!gameFinished) yield return null;
-            
-            // stop timer
+
             timer.StopTimer();
-            
-            yield return StartCoroutine(TransitionHandler(false));
-            
+            yield return StartCoroutine(transitionController.TransitionHandler(currentScene, false));
+
             // switch back to macro state
+            
             ResetTickables();
             ResetTick();
             
@@ -341,31 +344,7 @@ public class GameController : MonoBehaviour
         
         //Debug.Log("Node completed");
     }
-
-    private IEnumerator TransitionHandler(bool toLoad)
-    {
-        // start transition UI
-        transitionController.TransitionStart();
-        toLaunch = false; 
-        while (!toLaunch) yield return null;
-
-        AsyncOperation asyncOp;
-        if (toLoad)
-        {
-            ShowMacroObjects(false);
-            asyncOp = SceneManager.LoadSceneAsync(currentScene, LoadSceneMode.Additive);
-        }
-        else
-        {
-            ShowMacroObjects(true);
-            asyncOp = SceneManager.UnloadSceneAsync(currentScene);
-        }
-        
-        while (!asyncOp.isDone) yield return null;
-            
-        // resume transition UI
-        transitionController.TransitionResume();
-    }
+    
 
     private IEnumerator TickCoroutine()
     {
@@ -399,14 +378,6 @@ public class GameController : MonoBehaviour
         }
         gameControllerSO.currentDifficulty = Mathf.Clamp(gameControllerSO.currentDifficulty, 1, 3);
         //Debug.Log("Difficulty : " + difficulty);
-    }
-
-    private void ShowMacroObjects(bool value)
-    {
-        foreach (GameObject obj in macroObjects)
-        {
-            obj.SetActive(value);
-        }
     }
 
     private void Awake()

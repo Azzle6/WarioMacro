@@ -1520,10 +1520,6 @@ PrefabInstance:
       value: Transition_Director
       objectReference: {fileID: 0}
     - target: {fileID: 7828056267887566319, guid: 4e0231904b977784b96f645c12c31c3f, type: 3}
-      propertyPath: m_DirectorUpdateMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7828056267887566319, guid: 4e0231904b977784b96f645c12c31c3f, type: 3}
       propertyPath: m_SceneBindings.Array.size
       value: 7
       objectReference: {fileID: 0}
@@ -20015,12 +20011,13 @@ PrefabInstance:
       propertyPath: m_SceneBindings.Array.data[9].value
       value: 
       objectReference: {fileID: 1237233994}
-    - target: {fileID: 2032698174247607, guid: c526801d65ade4e43912c6513864ea76, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c526801d65ade4e43912c6513864ea76, type: 3}
+--- !u!320 &1287644082 stripped
+PlayableDirector:
+  m_CorrespondingSourceObject: {fileID: 2032697343633295, guid: c526801d65ade4e43912c6513864ea76, type: 3}
+  m_PrefabInstance: {fileID: 1287644081}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1323023703
 GameObject:
   m_ObjectHideFlags: 0
@@ -30478,7 +30475,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   director: {fileID: 1696372370}
-  isReady: 0
+  timerGO: {fileID: 2036940331}
 --- !u!114 &1749864763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30491,7 +30488,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22c809458cd2bd74fb82064de3a66bfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timerGO: {fileID: 2036940331}
+  director: {fileID: 1287644082}
 --- !u!114 &1749864764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30522,9 +30519,9 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-        - m_Target: {fileID: 1749864760}
-          m_TargetAssemblyTypeName: GameController, Assembly-CSharp
-          m_MethodName: ToggleToLaunch
+        - m_Target: {fileID: 1749864762}
+          m_TargetAssemblyTypeName: TransitionController, Assembly-CSharp
+          m_MethodName: StartAsyncMGOp
           m_Mode: 6
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
