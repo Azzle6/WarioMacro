@@ -4,18 +4,22 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
+[SuppressMessage("ReSharper", "SwitchStatementHandlesSomeKnownEnumValuesWithDefault")]
 public class AudioManager : MonoBehaviour
 {
     private static AudioManager instance;
 
-    // public List<AudioClip> musicClips;
-    // public List<AudioClip> soundClips;
+    public List<AudioClip> musicClips;
 
     [SerializeField] private GameObject musicSourcesGO;
     [SerializeField] private GameObject soundSourcesGO;
+    [SerializeField] private GameObject mgSoundSourcesGO;
+    [SerializeField] private SoundsListSO soundList;
     private AudioSource[] musicSources;
     private AudioSource[] soundSources;
+    private AudioSource[] mgSoundSources;
     private int currentSoundSourceID;
+    private int currentMGSoundSourceID;
     private int currentMusicSourceID;
     private int unavailableAudioCount;
 
@@ -53,47 +57,61 @@ public class AudioManager : MonoBehaviour
         instance.soundSources = instance.soundSourcesGO.GetComponents<AudioSource>();
     }
 
-    /*
+    
     /// <summary>
     /// Method used to play a music. Don't use this one during a micro game. Use PlayMusic(AudioClip musicClip) instead.
     /// </summary>
     /// <param name="musicId"></param>
-    public void PlayMusic(int musicId) => PlayAudio(musicClips[musicId], AudioType.MUSIC);
-    
+    public void MacroPlayMusic(int musicId) => PlayAudio(musicClips[musicId], AudioType.Music, 1f, 0f);
+
     /// <summary>
     /// Method used to play a sound. Don't use this one during a micro game. Use PlaySound(AudioClip soundClip) instead.
     /// </summary>
-    /// <param name="soundId"></param>
-    public void PlaySound(int soundId) => PlayAudio(soundClips[soundId], AudioType.SOUND);
-    */
+    /// <param name="soundName"></param>
+    /// <param name="delay"></param>
+    public void MacroPlaySound(string soundName, float delay)
+    {
+        SoundInfo sound = soundList.FindSound(soundName);
+        instance.StartCoroutine(PlayAudio(sound.clip, AudioType.Sound, sound.clipVolume, delay));
+    }
 
-    /*
-        /// <summary>
-        /// Method used to instantly play a music.
-        /// </summary>
-        /// <param name="musicClip">the music you want to play</param>
-        public static void PlayMusic(AudioClip musicClip) => instance.StartCoroutine(instance.PlayAudio(musicClip, AudioType.Music, 0f));
+    /// <summary>
+    /// Method used to stop a music. Delay is measured in seconds and will delay the end by its value
+    /// </summary>
+    /// <param name="musicClip">the music you want to stop</param>
+    /// <param name="delay">the delay before the music stops playing</param>
+    public void StopMusic(AudioClip musicClip, float delay) => instance.StartCoroutine(instance.StopAudio(musicClip, AudioType.Music, delay));
 
-        /// <summary>
-        /// Method used to play a music. Delay is measured in seconds and will delay the start by its value
-        /// </summary>
-        /// <param name="musicClip">the music you want to play</param>
-        /// <param name="delay">the delay before the music starts playing</param>
-        public static void PlayMusic(AudioClip musicClip, float delay) => instance.StartCoroutine(instance.PlayAudio(musicClip, AudioType.Music, delay));
-    */
+    /// <summary>
+    /// Method used to stop a music. Delay is measured in seconds and will delay the end by its value
+    /// </summary>
+    /// <param name="soundName"></param>
+    /// <param name="delay">the delay before the music stops playing</param>
+    public void StopMacroSound(string soundName, float delay) => instance.StartCoroutine(instance.StopAudio(soundList.FindSound(soundName).clip, AudioType.Sound, delay));
 
+    public static void StopAllMicroSounds()
+    {
+        foreach (AudioSource audioSource in instance.mgSoundSources)
+        {
+            audioSource.Stop();
+        }
+    }
+
+    
+    
+    
     /// <summary>
     /// Method used to instantly play a sound.
     /// </summary>
     /// <param name="soundClip">the sound you want to play</param>
-    public static void PlaySound(AudioClip soundClip) => instance.StartCoroutine(instance.PlayAudio(soundClip, AudioType.Sound, 1f, 0f));
+    public static void PlaySound(AudioClip soundClip) => instance.StartCoroutine(instance.PlayAudio(soundClip, AudioType.SoundMG, 1f, 0f));
 
     /// <summary>
     /// Method used to instantly play a sound. Volume must be a float between 0 and 1.
     /// </summary>
     /// <param name="soundClip">the sound you want to play</param>
     /// <param name="volume">the volume of the sound</param>
-    public static void PlaySound(AudioClip soundClip, float volume) => instance.StartCoroutine(instance.PlayAudio(soundClip, AudioType.Sound, volume, 0f));
+    public static void PlaySound(AudioClip soundClip, float volume) => instance.StartCoroutine(instance.PlayAudio(soundClip, AudioType.SoundMG, volume, 0f));
     
     /// <summary>
     /// Method used to play a sound. Volume must be a float between 0 and 1. Delay is measured in seconds and will delay
@@ -102,35 +120,20 @@ public class AudioManager : MonoBehaviour
     /// <param name="soundClip">the sound you want to play</param>
     /// <param name="volume">the volume of the sound</param>
     /// <param name="delay">the delay before the music starts playing</param>
-    public static void PlaySound(AudioClip soundClip, float volume, float delay) => instance.StartCoroutine(instance.PlayAudio(soundClip, AudioType.Sound, volume, delay));
-
-    /*
-        /// <summary>
-        /// Method used to instantly stop a music.
-        /// </summary>
-        /// <param name="musicClip">the music you want to stop</param>
-        public static void StopMusic(AudioClip musicClip) => instance.StartCoroutine(instance.StopAudio(musicClip, AudioType.Music, 0f));
-
-        /// <summary>
-        /// Method used to stop a music. Delay is measured in seconds and will delay the end by its value
-        /// </summary>
-        /// <param name="musicClip">the music you want to stop</param>
-        /// <param name="delay">the delay before the music stops playing</param>
-        public static void StopMusic(AudioClip musicClip, float delay) => instance.StartCoroutine(instance.StopAudio(musicClip, AudioType.Music, delay));
-    */
+    public static void PlaySound(AudioClip soundClip, float volume, float delay) => instance.StartCoroutine(instance.PlayAudio(soundClip, AudioType.SoundMG, volume, delay));
 
     /// <summary>
     /// Method used to instantly stop a sound.
     /// </summary>
     /// <param name="soundClip">the sound you want to stop</param>
-    public static void StopSound(AudioClip soundClip) => instance.StartCoroutine(instance.StopAudio(soundClip, AudioType.Sound, 0f));
+    public static void StopSound(AudioClip soundClip) => instance.StartCoroutine(instance.StopAudio(soundClip, AudioType.SoundMG, 0f));
 
     /// <summary>
     /// Method used to stop a sound. Delay is measured in seconds and will delay the end by its value
     /// </summary>
     /// <param name="soundClip">the sound you want to stop</param>
     /// <param name="delay">the delay before the music stops playing</param>
-    public static void StopSound(AudioClip soundClip, float delay) => instance.StartCoroutine(instance.StopAudio(soundClip, AudioType.Sound, delay));
+    public static void StopSound(AudioClip soundClip, float delay) => instance.StartCoroutine(instance.StopAudio(soundClip, AudioType.SoundMG, delay));
 
 
 
@@ -150,6 +153,7 @@ public class AudioManager : MonoBehaviour
     {
         musicSources = musicSourcesGO.GetComponents<AudioSource>();
         soundSources = soundSourcesGO.GetComponents<AudioSource>();
+        mgSoundSources = mgSoundSourcesGO.GetComponents<AudioSource>();
     }
 
     private IEnumerator PlayAudio(AudioClip audioClip, AudioType type, float volume, float delay)
@@ -168,6 +172,9 @@ public class AudioManager : MonoBehaviour
                 break;
             case AudioType.Sound:
                 PlayAudio(audioClip, volume, soundSources, ref currentSoundSourceID);
+                break;
+            case AudioType.SoundMG:
+                PlayAudio(audioClip, volume, mgSoundSources, ref currentMGSoundSourceID);
                 break;
         }
     }
@@ -215,11 +222,13 @@ public class AudioManager : MonoBehaviour
             case AudioType.Sound:
                 StopAudio(audioClip, soundSources);
                 break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(type), type, null);
+            case AudioType.SoundMG:
+                StopAudio(audioClip, mgSoundSources);
+                break;
         }
     }
 
+    // ReSharper disable once SuggestBaseTypeForParameter
     private static void StopAudio(AudioClip audioClip, IEnumerable<AudioSource> audioSources)
     {
         foreach (AudioSource audioSource in audioSources)
@@ -235,6 +244,7 @@ public class AudioManager : MonoBehaviour
     private enum AudioType
     {
         Music,
-        Sound
+        Sound,
+        SoundMG
     }
 }

@@ -34,6 +34,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private LifeBar lifeBar;
     [SerializeField] private Animator macroGameCanvasAnimator;
     [SerializeField] private MusicManager musicManager;
+    [SerializeField] private AudioManager audioManager;
     
     
     private static readonly List<ITickable> tickables = new List<ITickable>();
@@ -102,13 +103,13 @@ public class GameController : MonoBehaviour
         {
             // ReSharper disable once Unity.PreferAddressByIdToGraphicsParams
             macroGameCanvasAnimator.SetTrigger("Victory");
-            MusicManager.instance.PlayASound("MOU_GameWin");
+            audioManager.MacroPlaySound("MOU_GameWin", 0);
         }
         else
         {
             // ReSharper disable once Unity.PreferAddressByIdToGraphicsParams
             macroGameCanvasAnimator.SetTrigger("Defeat");
-            MusicManager.instance.PlayASound("MOU_GameLose");
+            audioManager.MacroPlaySound("MOU_GameLose", 0);
         }
         
         while (!InputManager.GetKeyDown(ControllerKey.A)) yield return null;
@@ -131,7 +132,7 @@ public class GameController : MonoBehaviour
             //Debug.Log("MovePlayerToCurrentNode");
             
             yield return StartCoroutine(MovePlayerToCurrentNode());
-            MusicManager.instance.PlayASound("MOU_NodeSelect");
+            audioManager.MacroPlaySound("MOU_NodeSelect", 0);
             var nodeMicroGame = map.currentNode.GetComponent<NodeMicroGame>();
 
             // True if node with micro games, false otherwise
@@ -235,7 +236,7 @@ public class GameController : MonoBehaviour
                 selectedNode = path.destination;
                 selectedPath = path;
                 selectedDirection = (int)path.direction;
-                if(selectedDirection != lastDirectionSelected) MusicManager.instance.PlayASound("MOU_NodeDirection");
+                if (selectedDirection != lastDirectionSelected) audioManager.MacroPlaySound("MOU_NodeDirection", 0);
                 lastDirectionSelected = selectedDirection;
                 break;
             }
@@ -298,7 +299,7 @@ public class GameController : MonoBehaviour
             yield return new WaitForSeconds(1f);
 
             // start transition UI
-            MusicManager.instance.PlayASound("MOU_MiniGameEnter");
+            audioManager.MacroPlaySound("MOU_MiniGameEnter", 0);
             
             // start next micro game in queue
             currentScene = microGamesQueue.Dequeue();
@@ -327,7 +328,7 @@ public class GameController : MonoBehaviour
                 gameBPM + (gameResult ? bpmSettingsSO.increasingBPM : -bpmSettingsSO.decreasingBPM), 
                 bpmSettingsSO.minBPM, 
                 bpmSettingsSO.maxBPM);
-            MusicManager.instance.PlayASound(gameResult ? "MOU_SpeedUp" : "MOU_SpeedDown");
+            audioManager.MacroPlaySound(gameResult ? "MOU_SpeedUp" : "MOU_SpeedDown", 0);
             
             
             // display result
@@ -370,12 +371,12 @@ public class GameController : MonoBehaviour
         if (nodeSuccessCount > 1)
         {
             gameControllerSO.currentDifficulty++;
-            MusicManager.instance.PlayASound("MOU_NodeSuccess");
+            audioManager.MacroPlaySound("MOU_NodeSuccess", 0);
         }
         else
         {
             gameControllerSO.currentDifficulty--;
-            MusicManager.instance.PlayASound("MOU_NodeFail");
+            audioManager.MacroPlaySound("MOU_NodeFail", 0);
             lifeBar.Damage();
         }
         gameControllerSO.currentDifficulty = Mathf.Clamp(gameControllerSO.currentDifficulty, 1, 3);

@@ -51,6 +51,7 @@ public class TransitionController : MonoBehaviour
         {
             GameController.instance.ShowMacroObjects(true);
             timerGO.SetActive(false);
+            AudioManager.StopAllMicroSounds();
             asyncOp = SceneManager.UnloadSceneAsync(sceneName);
         }
 
