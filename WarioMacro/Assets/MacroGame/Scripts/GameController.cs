@@ -39,6 +39,7 @@ public class GameController : MonoBehaviour
     private static bool gameResult;
     private static bool lockTimescale;
     private static GameController instance;
+    private IEnumerator tickEnumerator;
     private Map map;
     private float cameraHeight;
     private float cameraWidth;
@@ -69,24 +70,27 @@ public class GameController : MonoBehaviour
         gameResult = result;
     }
     
+    // Used in Transition's signal receiver
     public void ToggleToLaunch(bool toggle)
     {
         toLaunch = toggle;
     }
     
     
-
-    private static void ResetTick()
-    {
-        currentTick = 0;
-    }
+    
 
     private static void ResetTickables()
     {
         tickables.Clear();
     }
 
-    
+    private void ResetTick()
+    {
+        StopCoroutine(tickEnumerator);
+        currentTick = 0;
+        tickEnumerator = TickCoroutine();
+        StartCoroutine(tickEnumerator);
+    }
 
     private IEnumerator ToggleEndGame(bool value)
     {
@@ -322,7 +326,7 @@ public class GameController : MonoBehaviour
             
             
             // display result
-            Debug.Log("MicroGame Finished: " + (gameResult ? "SUCCESS" : "FAILURE"));
+            //Debug.Log("MicroGame Finished: " + (gameResult ? "SUCCESS" : "FAILURE"));
             if (gameResult) nodeSuccessCount++;
 
             resultPanel.PopWindowUp();
@@ -419,8 +423,9 @@ public class GameController : MonoBehaviour
         Time.timeScale = gameBPM / 120;
         cameraHeight = 2f * mainCam.orthographicSize;
         cameraWidth = cameraHeight * mainCam.aspect;
-        
-        StartCoroutine(TickCoroutine());
+
+        tickEnumerator = TickCoroutine();
+        StartCoroutine(tickEnumerator);
         StartCoroutine(GameStateCoroutine());
     }
 

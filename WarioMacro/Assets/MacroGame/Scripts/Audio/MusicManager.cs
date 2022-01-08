@@ -70,7 +70,7 @@ public class MusicManager : MonoBehaviour, ITickable
             }
         }
         
-        Debug.Log("No music corresponding to : " + newBPM + " " + newState + " " + newPhase);
+        //Debug.Log("No music corresponding to : " + newBPM + " " + newState + " " + newPhase);
     } 
  
     public void OnTick() 
