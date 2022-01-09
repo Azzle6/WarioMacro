@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using DG.Tweening;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
@@ -22,20 +21,20 @@ public class GameController : MonoBehaviour
     public Player player;
     
 
-    [SerializeField] private int mainMenuBuildIndex = 0;
-    [SerializeField] private Camera mainCam;
     [SerializeField] private GameControllerSO gameControllerSO;
     [SerializeField] private BPMSettingsSO bpmSettingsSO;
-    [SerializeField] private GameObject[] macroObjects = Array.Empty<GameObject>();
-    [SerializeField] private string[] sceneNames = Array.Empty<string>();
+    [SerializeField] private Camera mainCam;
+    [SerializeField] private Animator macroGameCanvasAnimator;
+    [SerializeField] private MapManager mapManager;
     [SerializeField] private MiniGameResultPannel_UI resultPanel;
     [SerializeField] private Timer timer;
     [SerializeField] private TransitionController transitionController;
     [SerializeField] private LifeBar lifeBar;
-    [SerializeField] private Animator macroGameCanvasAnimator;
+    [SerializeField] private int mainMenuBuildIndex;
+    [SerializeField] private GameObject[] macroObjects = Array.Empty<GameObject>();
+    [SerializeField] private string[] sceneNames = Array.Empty<string>();
 
     private static readonly List<ITickable> tickables = new List<ITickable>();
-    private static readonly int current = Animator.StringToHash("Current");
     private static string currentScene;
     private static bool gameFinished;
     private static bool gameResult;
@@ -114,22 +113,15 @@ public class GameController : MonoBehaviour
         SceneManager.LoadScene(mainMenuBuildIndex);
     }
     
-    private IEnumerator GameStateCoroutine()
+    private IEnumerator GameLoop()
     {
+        map = mapManager.LoadNextMap();
+        
         while(true)
         {
-            if (map == null)
-            {
-                yield return StartCoroutine(LoadNextMap());
-            }
+            yield return StartCoroutine(map.WaitForNodeSelection());
 
-            //Debug.Log("WaitForNodeSelection");
-            
-            yield return StartCoroutine(WaitForNodeSelection());
-            
-            //Debug.Log("MovePlayerToCurrentNode");
-            
-            yield return StartCoroutine(MovePlayerToCurrentNode());
+            yield return StartCoroutine(player.MoveToPosition(map.currentNode.transform.position));
             AudioManager.MacroPlaySound("MOU_NodeSelect", 0);
             var nodeMicroGame = map.currentNode.GetComponent<NodeMicroGame>();
 
@@ -152,116 +144,18 @@ public class GameController : MonoBehaviour
                 }
             }
             
-            if (map.currentNode == map.endNode)
+            if (map.OnLastNode())
             {
-                StartCoroutine(ToggleEndGame(true));
+                if (mapManager.OnLastMap())
+                {
+                    StartCoroutine(ToggleEndGame(true));
+                    yield break;
+                }
+                map = mapManager.LoadNextMap();
             }
 
             yield return null;
         }
-        // ReSharper disable once IteratorNeverReturns
-    }
-    
-    private IEnumerator MovePlayerToCurrentNode()
-    {
-        //yield return new WaitForSeconds(1f);
-        //map.player.transform.DOPunchScale(Vector3.one * .25f, 1f);
-        //yield return new WaitForSeconds(1f);
-        player.StartMove();
-        // TODO : animate with (DOTween?)
-        //map.player.transform.position = map.currentNode.transform.position;
-        var tween = player.transform.DOMove(map.currentNode.transform.position, player.moveSpeed).SetSpeedBased().SetEase(Ease.Linear);
-
-       // var positions = map.currentPath.GetPositions();
-       // var tween = player.transform.DOPath((Vector3[])positions, player.moveSpeed).SetSpeedBased().SetEase(Ease.Linear);
-        while (tween.IsPlaying()) yield return null;
-        player.StopMove();
-        //yield return new WaitForSeconds(1f);
-    }
-
-    private IEnumerator LoadNextMap()
-    {
-        map = FindObjectOfType<Map>();
-        
-        // TODO
-        map.currentNode = map.startNode;
-        player.transform.position = map.currentNode.transform.position;
-        yield break;
-    }
-
-    private IEnumerator WaitForNodeSelection()
-    {
-        // init
-        var arrowPrefabs = player.arrowPrefabs.ToList();
-        Node currentNode = map.currentNode;
-        var nextNode = default(Node);
-        var nextPath = default(Node.Path);
-        var selectedPath = default(Node.Path);
-        var selectedNode = default(Node);
-        var selectedDirection = -1;
-        // ReSharper disable once TooWideLocalVariableScope
-        bool selectInput;
-        var lastDirectionSelected = -1;
-        const ControllerKey validInput = ControllerKey.A;
-        
-        //Debug.Log("Select Next Node");
-        
-        arrowPrefabs.ForEach(go => go.SetActive(true));
-        
-        map.currentNode.animator.SetBool(current, true);
-        
-        // input loop
-        while (nextNode == null)
-        {
-            // ReSharper disable once PossibleNullReferenceException
-            foreach (Node.Path path in currentNode.paths)
-            {
-                var hAxis = Input.GetAxis("LEFT_STICK_HORIZONTAL");
-                var vAxis = Input.GetAxis("LEFT_STICK_VERTICAL");
-                var isUp = vAxis > 0.5f;
-                var isDown = vAxis < -0.5f;
-                var isRight = hAxis > 0.5f;
-                var isLeft = hAxis < -0.5f;
-                
-                
-                selectInput = (path.direction == Node.Direction.Up && isUp)
-                              || (path.direction == Node.Direction.Down && isDown)
-                              || (path.direction == Node.Direction.Left && isLeft)
-                              || (path.direction == Node.Direction.Right && isRight);
-
-                if (!selectInput) continue;
-                
-                selectedNode = path.destination;
-                selectedPath = path;
-                selectedDirection = (int)path.direction;
-                if (selectedDirection != lastDirectionSelected) AudioManager.MacroPlaySound("MOU_NodeDirection", 0);
-                lastDirectionSelected = selectedDirection;
-                break;
-            }
-
-            for (int i = 0; i < arrowPrefabs.Count; i++)
-            {
-                // is any path setup with arrow direction?
-                arrowPrefabs[i].gameObject.SetActive(currentNode.paths.FirstOrDefault(p => p.direction == (Node.Direction)i) != null);
-                // is the selected direction equals to the path direction?
-                arrowPrefabs[i].transform.localScale = i == selectedDirection ? Vector3.one : Vector3.one * .5f;
-            }
-            
-            if (selectedNode != null && InputManager.GetKeyDown(validInput))
-            {
-                nextNode = selectedNode;
-                nextPath = selectedPath;
-            }
-            yield return null;
-        }
-        
-        map.currentNode.animator.SetBool(current, false);
-        map.currentNode = nextNode;
-        map.currentPath = nextPath;
-        //Debug.Log("new node selected");
-
-        // dispose
-        arrowPrefabs.ForEach(go => go.SetActive(false));
     }
 
     private IEnumerator NodeWithMicroGameHandler(NodeMicroGame node)
@@ -383,7 +277,14 @@ public class GameController : MonoBehaviour
 
     private void Awake()
     {
-        instance = this;
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
         gameControllerSO = Resources.LoadAll<GameControllerSO>("").First();
     }
     
@@ -402,7 +303,7 @@ public class GameController : MonoBehaviour
 
         tickEnumerator = TickCoroutine();
         StartCoroutine(tickEnumerator);
-        StartCoroutine(GameStateCoroutine());
+        StartCoroutine(GameLoop());
     }
 
     private void Update()
@@ -425,7 +326,7 @@ public class GameController : MonoBehaviour
                 (map.transform.GetChild(0).localScale.y/2 - cameraHeight/2)
             ), 
             -10);
-        
+
         // update global timescale
         Time.timeScale = lockTimescale ? 0f: gameBPM / 120;
     }
