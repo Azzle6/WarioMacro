@@ -7,7 +7,6 @@ public class AudioListenerMGUnload : MonoBehaviour
 
     private void OnDestroy()
     {
-        Debug.Log("destroyed");
         mainCamera.SetActive(true);
     }
 }

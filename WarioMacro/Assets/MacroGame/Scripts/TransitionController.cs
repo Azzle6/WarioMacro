@@ -43,8 +43,6 @@ public class TransitionController : MonoBehaviour
         AsyncOperation asyncOp;
         if (toLoad)
         {
-            GameController.instance.ShowMacroObjects(false);
-            timerGO.SetActive(true);
             asyncOp = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
         }
         else
@@ -56,6 +54,13 @@ public class TransitionController : MonoBehaviour
         }
 
         while (!asyncOp.isDone) yield return null;
+
+        if (toLoad)
+        {
+            GameController.instance.ShowMacroObjects(false);
+            timerGO.SetActive(true);
+            SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
+        }
 
         GameController.lockTimescale = true;
         // resume transition UI
