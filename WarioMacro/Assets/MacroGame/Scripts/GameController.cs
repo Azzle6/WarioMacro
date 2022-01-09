@@ -33,16 +33,14 @@ public class GameController : MonoBehaviour
     [SerializeField] private TransitionController transitionController;
     [SerializeField] private LifeBar lifeBar;
     [SerializeField] private Animator macroGameCanvasAnimator;
-    [SerializeField] private MusicManager musicManager;
-    [SerializeField] private AudioManager audioManager;
-    
-    
+
     private static readonly List<ITickable> tickables = new List<ITickable>();
     private static readonly int current = Animator.StringToHash("Current");
     private static string currentScene;
     private static bool gameFinished;
     private static bool gameResult;
     private IEnumerator tickEnumerator;
+    private MusicManager musicManager;
     private Map map;
     private float cameraHeight;
     private float cameraWidth;
@@ -103,13 +101,13 @@ public class GameController : MonoBehaviour
         {
             // ReSharper disable once Unity.PreferAddressByIdToGraphicsParams
             macroGameCanvasAnimator.SetTrigger("Victory");
-            audioManager.MacroPlaySound("MOU_GameWin", 0);
+            AudioManager.MacroPlaySound("MOU_GameWin", 0);
         }
         else
         {
             // ReSharper disable once Unity.PreferAddressByIdToGraphicsParams
             macroGameCanvasAnimator.SetTrigger("Defeat");
-            audioManager.MacroPlaySound("MOU_GameLose", 0);
+            AudioManager.MacroPlaySound("MOU_GameLose", 0);
         }
         
         while (!InputManager.GetKeyDown(ControllerKey.A)) yield return null;
@@ -132,7 +130,7 @@ public class GameController : MonoBehaviour
             //Debug.Log("MovePlayerToCurrentNode");
             
             yield return StartCoroutine(MovePlayerToCurrentNode());
-            audioManager.MacroPlaySound("MOU_NodeSelect", 0);
+            AudioManager.MacroPlaySound("MOU_NodeSelect", 0);
             var nodeMicroGame = map.currentNode.GetComponent<NodeMicroGame>();
 
             // True if node with micro games, false otherwise
@@ -236,7 +234,7 @@ public class GameController : MonoBehaviour
                 selectedNode = path.destination;
                 selectedPath = path;
                 selectedDirection = (int)path.direction;
-                if (selectedDirection != lastDirectionSelected) audioManager.MacroPlaySound("MOU_NodeDirection", 0);
+                if (selectedDirection != lastDirectionSelected) AudioManager.MacroPlaySound("MOU_NodeDirection", 0);
                 lastDirectionSelected = selectedDirection;
                 break;
             }
@@ -299,7 +297,7 @@ public class GameController : MonoBehaviour
             yield return new WaitForSeconds(1f);
 
             // start transition UI
-            audioManager.MacroPlaySound("MOU_MiniGameEnter", 0);
+            AudioManager.MacroPlaySound("MOU_MiniGameEnter", 0);
             
             // start next micro game in queue
             currentScene = microGamesQueue.Dequeue();
@@ -328,7 +326,7 @@ public class GameController : MonoBehaviour
                 gameBPM + (gameResult ? bpmSettingsSO.increasingBPM : -bpmSettingsSO.decreasingBPM), 
                 bpmSettingsSO.minBPM, 
                 bpmSettingsSO.maxBPM);
-            audioManager.MacroPlaySound(gameResult ? "MOU_SpeedUp" : "MOU_SpeedDown", 0);
+            AudioManager.MacroPlaySound(gameResult ? "MOU_SpeedUp" : "MOU_SpeedDown", 0);
             
             
             // display result
@@ -371,12 +369,12 @@ public class GameController : MonoBehaviour
         if (nodeSuccessCount > 1)
         {
             gameControllerSO.currentDifficulty++;
-            audioManager.MacroPlaySound("MOU_NodeSuccess", 0);
+            AudioManager.MacroPlaySound("MOU_NodeSuccess", 0);
         }
         else
         {
             gameControllerSO.currentDifficulty--;
-            audioManager.MacroPlaySound("MOU_NodeFail", 0);
+            AudioManager.MacroPlaySound("MOU_NodeFail", 0);
             lifeBar.Damage();
         }
         gameControllerSO.currentDifficulty = Mathf.Clamp(gameControllerSO.currentDifficulty, 1, 3);
@@ -391,12 +389,16 @@ public class GameController : MonoBehaviour
     
     private void Start()
     {
+        GameManager.Register();
         // Init
         gameControllerSO.currentGameSpeed = 100;
         gameControllerSO.currentDifficulty = 1;
         Time.timeScale = gameBPM / 120;
+        
         cameraHeight = 2f * mainCam.orthographicSize;
         cameraWidth = cameraHeight * mainCam.aspect;
+        
+        musicManager = MusicManager.instance;
 
         tickEnumerator = TickCoroutine();
         StartCoroutine(tickEnumerator);

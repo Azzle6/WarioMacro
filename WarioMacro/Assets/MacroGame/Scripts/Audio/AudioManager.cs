@@ -41,20 +41,33 @@ public class AudioManager : MonoBehaviour
         instance.musicSourcesGO.transform.SetParent(go.transform);
         instance.soundSourcesGO = new GameObject("Sound Sources");
         instance.soundSourcesGO.transform.SetParent(go.transform);
+        instance.mgSoundSourcesGO = new GameObject("Micro Games Sound Sources");
+        instance.mgSoundSourcesGO.transform.SetParent(go.transform);
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 6; i++)
         {
             instance.musicSourcesGO.AddComponent<AudioSource>();
         }
 
-        for (int i = 0; i < 16; i++)
+        for (int i = 0; i < 9; i++)
         {
             instance.soundSourcesGO.AddComponent<AudioSource>();
+        }
+        
+        for (int i = 0; i < 13; i++)
+        {
+            instance.mgSoundSourcesGO.AddComponent<AudioSource>();
         }
 
         instance = go.GetComponent<AudioManager>();
         instance.musicSources = instance.musicSourcesGO.GetComponents<AudioSource>();
         instance.soundSources = instance.soundSourcesGO.GetComponents<AudioSource>();
+        instance.soundSources = instance.mgSoundSourcesGO.GetComponents<AudioSource>();
+
+        instance.soundList = Resources.Load<SoundsListSO>("SoundListSO");
+        
+        // Adding Music Manger (must be called after initializing audio sources)
+        go.AddComponent<MusicManager>();
     }
 
     
@@ -62,17 +75,17 @@ public class AudioManager : MonoBehaviour
     /// Method used to play a music. Don't use this one during a micro game. Use PlayMusic(AudioClip musicClip) instead.
     /// </summary>
     /// <param name="musicId"></param>
-    public void MacroPlayMusic(int musicId) => PlayAudio(musicClips[musicId], AudioType.Music, 1f, 0f);
+    public static void MacroPlayMusic(int musicId) => instance.StartCoroutine(instance.PlayAudio(instance.musicClips[musicId], AudioType.Music, 1f, 0f));
 
     /// <summary>
     /// Method used to play a sound. Don't use this one during a micro game. Use PlaySound(AudioClip soundClip) instead.
     /// </summary>
     /// <param name="soundName"></param>
     /// <param name="delay"></param>
-    public void MacroPlaySound(string soundName, float delay)
+    public static void MacroPlaySound(string soundName, float delay)
     {
-        SoundInfo sound = soundList.FindSound(soundName);
-        instance.StartCoroutine(PlayAudio(sound.clip, AudioType.Sound, sound.clipVolume, delay));
+        SoundInfo sound = instance.soundList.FindSound(soundName);
+        instance.StartCoroutine(instance.PlayAudio(sound.clip, AudioType.Sound, sound.clipVolume, delay));
     }
 
     /// <summary>
@@ -80,14 +93,14 @@ public class AudioManager : MonoBehaviour
     /// </summary>
     /// <param name="musicClip">the music you want to stop</param>
     /// <param name="delay">the delay before the music stops playing</param>
-    public void StopMusic(AudioClip musicClip, float delay) => instance.StartCoroutine(instance.StopAudio(musicClip, AudioType.Music, delay));
+    public static void StopMusic(AudioClip musicClip, float delay) => instance.StartCoroutine(instance.StopAudio(musicClip, AudioType.Music, delay));
 
     /// <summary>
     /// Method used to stop a music. Delay is measured in seconds and will delay the end by its value
     /// </summary>
     /// <param name="soundName"></param>
     /// <param name="delay">the delay before the music stops playing</param>
-    public void StopMacroSound(string soundName, float delay) => instance.StartCoroutine(instance.StopAudio(soundList.FindSound(soundName).clip, AudioType.Sound, delay));
+    public static void StopMacroSound(string soundName, float delay) => instance.StartCoroutine(instance.StopAudio(instance.soundList.FindSound(soundName).clip, AudioType.Sound, delay));
 
     public static void StopAllMicroSounds()
     {
@@ -154,6 +167,7 @@ public class AudioManager : MonoBehaviour
         musicSources = musicSourcesGO.GetComponents<AudioSource>();
         soundSources = soundSourcesGO.GetComponents<AudioSource>();
         mgSoundSources = mgSoundSourcesGO.GetComponents<AudioSource>();
+        DontDestroyOnLoad(gameObject);
     }
 
     private IEnumerator PlayAudio(AudioClip audioClip, AudioType type, float volume, float delay)
