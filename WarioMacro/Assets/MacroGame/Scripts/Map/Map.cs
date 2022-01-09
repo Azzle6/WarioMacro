@@ -32,7 +32,6 @@ public class Map : MonoBehaviour
     
     public IEnumerator WaitForNodeSelection()
     {
-        Debug.Log("wait for node selection");
         // init
         var arrowPrefabs = player.arrowPrefabs.ToList();
         var nextNode = default(Node);
@@ -42,9 +41,7 @@ public class Map : MonoBehaviour
         bool selectInput;
         var lastDirectionSelected = -1;
         const ControllerKey validInput = ControllerKey.A;
-        
-        //Debug.Log("Select Next Node");
-        
+
         arrowPrefabs.ForEach(go => go.SetActive(true));
         
         currentNode.animator.SetBool(current, true);
@@ -94,7 +91,6 @@ public class Map : MonoBehaviour
         
         currentNode.animator.SetBool(current, false);
         currentNode = nextNode;
-        //Debug.Log("new node selected");
 
         // dispose
         arrowPrefabs.ForEach(go => go.SetActive(false));

@@ -14,13 +14,11 @@ public class Player : MonoBehaviour
 
     public void TeleportPlayer(Vector3 pos)
     {
-        Debug.Log("Teleport to " + pos);
         transform.position = pos;
     }
     
     public IEnumerator MoveToPosition(Vector3 position)
     {
-        Debug.Log("Player Move");
         //yield return new WaitForSeconds(1f);
         //map.player.transform.DOPunchScale(Vector3.one * .25f, 1f);
         //yield return new WaitForSeconds(1f);

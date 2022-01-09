@@ -11,13 +11,11 @@ public class MapManager : MonoBehaviour
 
     public Map LoadNextMap()
     {
-        Debug.Log("load next map");
         if (currentMap != null)
         {
             currentMap.Unload();
         }
         
-        Debug.Log("Loading + " + mapGoQueue);
         currentMap = mapGoQueue.Dequeue().GetComponent<Map>();
         currentMap.Load();
         
@@ -32,7 +30,5 @@ public class MapManager : MonoBehaviour
     private void OnEnable()
     {
         mapGoQueue = new Queue<GameObject>(mapGOList);
-        
-        Debug.Log("Enable + " + mapGoQueue);
     }
 }
