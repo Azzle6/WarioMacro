@@ -20,14 +20,13 @@ public class MusicManager : MonoBehaviour, ITickable
         // TODO
         FindMusic((int) Ticker.gameBPM, Soundgroup.PhaseState.MACROGAME, Soundgroup.CurrentPhase.RECRUIT);
 
-        if (nextAudioClip.Equals(currentAudioClip)) return;
+        if (currentAudioClip.Equals(nextAudioClip)) return;
         
         Debug.Log("nextAudioClip: " + nextAudioClip);
         float nextTimer = ConvertMusicTimers();
 
         AudioS.clip = nextAudioClip;
         currentAudioClip = nextAudioClip;
-        nextAudioClip = null;
         AudioS.time = nextTimer;
         AudioS.Play();
     }
