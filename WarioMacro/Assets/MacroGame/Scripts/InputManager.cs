@@ -1,8 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 using UnityEditor;
+// ReSharper disable InconsistentNaming
 
+// ReSharper disable once CheckNamespace
 public enum ControllerKey
 {
     A,
@@ -31,7 +32,7 @@ public enum ControllerAxis
 
 public class InputManager : MonoBehaviour
 {
-    static InputManager inputManager = null;
+    private static InputManager inputManager;
 
     public static void Register()
     {
@@ -43,40 +44,24 @@ public class InputManager : MonoBehaviour
 
     public static bool GetKey(ControllerKey key)
     {
-        if (IsNotdPad(key))
+        if (IsNotDPad(key))
         {
             return Input.GetButton(ToButton(key));
         }
-        else
-        {
-            return
-            dPadToBool(key, ButtonState.PRESSED) ||
-            dPadToBool(key, ButtonState.DOWN);
-        }
+
+        return
+            DPadToBool(key, ButtonState.PRESSED) ||
+            DPadToBool(key, ButtonState.DOWN);
     }
 
     public static bool GetKeyDown(ControllerKey key)
     {
-        if (IsNotdPad(key))
-        {
-            return Input.GetButtonDown(ToButton(key));
-        }
-        else
-        {
-            return dPadToBool(key, ButtonState.DOWN);
-        }
+        return IsNotDPad(key) ? Input.GetButtonDown(ToButton(key)) : DPadToBool(key, ButtonState.DOWN);
     }
 
     public static bool GetKeyUp(ControllerKey key)
     {
-        if (IsNotdPad(key))
-        {
-            return Input.GetButtonUp(ToButton(key));
-        }
-        else
-        {
-            return dPadToBool(key, ButtonState.UP);
-        }
+        return IsNotDPad(key) ? Input.GetButtonUp(ToButton(key)) : DPadToBool(key, ButtonState.UP);
     }
 
     public static float GetAxis(ControllerAxis axis)
@@ -89,40 +74,31 @@ public class InputManager : MonoBehaviour
         return Input.GetAxisRaw(ToAxis(axis));
     }
 
-    static string ToButton(ControllerKey key)
+    private static string ToButton(ControllerKey key)
     {
         return key.ToString();
     }
 
-    static string ToAxis(ControllerAxis axis)
+    private static string ToAxis(ControllerAxis axis)
     {
         return axis.ToString();
     }
 
     #region DPAD Management
 
-    static bool dPadToBool(ControllerKey key, ButtonState state)
+    private static bool DPadToBool(ControllerKey key, ButtonState state)
     {
-        switch (key)
+        return key switch
         {
-            case ControllerKey.DPAD_LEFT:
-                return leftDpadState == state;
-
-            case ControllerKey.DPAD_RIGHT:
-                return rightDpadState == state;
-
-            case ControllerKey.DPAD_UP:
-                return upDpadState == state;
-
-            case ControllerKey.DPAD_DOWN:
-                return downDpadState == state;
-
-            default:
-                return false;
-        }
+            ControllerKey.DPAD_LEFT => leftDpadState == state,
+            ControllerKey.DPAD_RIGHT => rightDpadState == state,
+            ControllerKey.DPAD_UP => upDpadState == state,
+            ControllerKey.DPAD_DOWN => downDpadState == state,
+            _ => false
+        };
     }
 
-    static bool IsNotdPad(ControllerKey key)
+    private static bool IsNotDPad(ControllerKey key)
     {
         return
         key != ControllerKey.DPAD_LEFT &&
@@ -131,10 +107,10 @@ public class InputManager : MonoBehaviour
         key != ControllerKey.DPAD_DOWN;
     }
 
-    static Vector2 lastdPadAxis;
-    static Vector2 dPadAxis;
+    private static Vector2 lastDPadAxis;
+    private static Vector2 dPadAxis;
 
-    enum ButtonState
+    private enum ButtonState
     {
         NONE,
         DOWN,
@@ -142,40 +118,41 @@ public class InputManager : MonoBehaviour
         PRESSED
     }
 
-    static ButtonState leftDpadState = ButtonState.NONE;
-    static ButtonState rightDpadState = ButtonState.NONE;
-    static ButtonState upDpadState = ButtonState.NONE;
-    static ButtonState downDpadState = ButtonState.NONE;
+    private static ButtonState leftDpadState = ButtonState.NONE;
+    private static ButtonState rightDpadState = ButtonState.NONE;
+    private static ButtonState upDpadState = ButtonState.NONE;
+    private static ButtonState downDpadState = ButtonState.NONE;
 
-    static float deadZone = 0.2f;
+    private const float deadZone = 0.2f;
 
-    void Update()
+    [SuppressMessage("ReSharper", "CompareOfFloatsByEqualityOperator")]
+    private void Update()
     {
         dPadAxis.x = Input.GetAxis("DpadHorizontal");
         dPadAxis.y = Input.GetAxis("DpadVertical");
 
         //left
         leftDpadState = dPadAxis.x < -deadZone ?
-        (dPadAxis.x != lastdPadAxis.x ? ButtonState.DOWN : ButtonState.PRESSED) :
-        ((dPadAxis.x != lastdPadAxis.x && lastdPadAxis.x < -deadZone) ? ButtonState.UP : ButtonState.NONE);
+        (dPadAxis.x != lastDPadAxis.x ? ButtonState.DOWN : ButtonState.PRESSED) :
+        ((dPadAxis.x != lastDPadAxis.x && lastDPadAxis.x < -deadZone) ? ButtonState.UP : ButtonState.NONE);
 
         //right
         rightDpadState = dPadAxis.x > deadZone ?
-        (dPadAxis.x != lastdPadAxis.x ? ButtonState.DOWN : ButtonState.PRESSED) :
-        ((dPadAxis.x != lastdPadAxis.x && lastdPadAxis.x > deadZone) ? ButtonState.UP : ButtonState.NONE);
+        (dPadAxis.x != lastDPadAxis.x ? ButtonState.DOWN : ButtonState.PRESSED) :
+        ((dPadAxis.x != lastDPadAxis.x && lastDPadAxis.x > deadZone) ? ButtonState.UP : ButtonState.NONE);
 
         //up
         upDpadState = dPadAxis.y > deadZone ?
-        (dPadAxis.y != lastdPadAxis.y ? ButtonState.DOWN : ButtonState.PRESSED) :
-        ((dPadAxis.y != lastdPadAxis.y && lastdPadAxis.y > deadZone) ? ButtonState.UP : ButtonState.NONE);
+        (dPadAxis.y != lastDPadAxis.y ? ButtonState.DOWN : ButtonState.PRESSED) :
+        ((dPadAxis.y != lastDPadAxis.y && lastDPadAxis.y > deadZone) ? ButtonState.UP : ButtonState.NONE);
 
         //down
         downDpadState = dPadAxis.y < -deadZone ?
-        (dPadAxis.y != lastdPadAxis.y ? ButtonState.DOWN : ButtonState.PRESSED) :
-        ((dPadAxis.y != lastdPadAxis.y && lastdPadAxis.y < -deadZone) ? ButtonState.UP : ButtonState.NONE);
+        (dPadAxis.y != lastDPadAxis.y ? ButtonState.DOWN : ButtonState.PRESSED) :
+        ((dPadAxis.y != lastDPadAxis.y && lastDPadAxis.y < -deadZone) ? ButtonState.UP : ButtonState.NONE);
 
 
-        lastdPadAxis = dPadAxis;
+        lastDPadAxis = dPadAxis;
 
     }
 
@@ -184,13 +161,13 @@ public class InputManager : MonoBehaviour
     #region Bruteforce InputManager.asset
 
 #if UNITY_EDITOR
-    [UnityEditor.MenuItem("Tools/Update Input Manager Asset")]
+    [MenuItem("Tools/Update Input Manager Asset")]
 #endif
-    static public void UpdateInputManagerAsset()
+    public static void UpdateInputManagerAsset()
     {
         var filepath = System.IO.Directory.GetParent(Application.dataPath) + "/ProjectSettings/InputManager.asset";
 
-        var newtext = @"%YAML 1.1
+        const string newText = @"%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!13 &1
 InputManager:
@@ -647,7 +624,7 @@ InputManager:
     joyNum: 0
 ";
 
-        System.IO.File.WriteAllText(filepath, newtext);
+        System.IO.File.WriteAllText(filepath, newText);
     }
 
     #endregion
