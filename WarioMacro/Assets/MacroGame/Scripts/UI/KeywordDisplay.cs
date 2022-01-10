@@ -12,13 +12,30 @@ public class KeywordDisplay : MonoBehaviour
     [SerializeField]private ButtonsReferences[] buttons;
     [SerializeField]private string CurrentKeyword;
     public Image InputPlaceholder;
-    public TMP_Text Textplaceholder;
-    
+    public TMP_Text BlueTextplaceholder;
+    public TMP_Text PinkTextplaceholder;
+    public TMP_Text WhiteTextplaceholder;
+
+    private void Start()
+    {
+        StartCoroutine("testPlay");
+    }
+
+    IEnumerator testPlay()
+    {
+        yield return new WaitForSeconds(4);
+        PlayKeyword(ButtonsReferences.ButtonsNames.A, "Pouet");
+        yield return new WaitForSeconds(4);
+        PlayKeyword(ButtonsReferences.ButtonsNames.B, "OUI BAGUETTE");
+    }
 
     public void PlayKeyword(ButtonsReferences.ButtonsNames buttonName, string Keyword)
     {
         Sprite buttonSprite = null;
-        Textplaceholder.text = Keyword;
+        BlueTextplaceholder.text = Keyword;
+        WhiteTextplaceholder.text = Keyword;
+        PinkTextplaceholder.text = Keyword;
+        
         foreach (ButtonsReferences ButtonRef in buttons)
         {
             if (ButtonRef.InputRef == buttonName)
@@ -32,7 +49,8 @@ public class KeywordDisplay : MonoBehaviour
             Debug.Log("Pas de référence de sprite d'input pour " + buttonName.ToString());
         }
         else InputPlaceholder.sprite = buttonSprite;
-
+        
+        director.Play();
 
 
     }
