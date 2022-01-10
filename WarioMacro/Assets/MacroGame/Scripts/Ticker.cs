@@ -48,13 +48,18 @@ public class Ticker : MonoBehaviour
         gameControllerSO = Resources.LoadAll<GameControllerSO>("").First();
     }
 
-    private protected void TickerStart()
+    private protected void TickerStart(bool debug)
     {
         musicManager = MusicManager.instance;
         
-        // Reset bpm and difficulty
-        gameControllerSO.currentGameSpeed = 100;
-        gameControllerSO.currentDifficulty = 1;
+        if (!debug)
+        {
+            // Reset bpm and difficulty 
+            gameControllerSO.currentGameSpeed = 100;
+            gameControllerSO.currentDifficulty = 1;
+        }
+        
+        // Update BPM and difficulty
         gameBPM = gameControllerSO.currentGameSpeed;
         difficulty = gameControllerSO.currentDifficulty;
         Time.timeScale = gameBPM / 120;
@@ -97,7 +102,7 @@ public class Ticker : MonoBehaviour
 
     private void Start()
     {
-        TickerStart();
+        TickerStart(false);
     }
 
     private void Update()

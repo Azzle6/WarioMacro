@@ -5,12 +5,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
+// ReSharper disable once CheckNamespace
 public class GameController : Ticker
 {
     public static GameController instance;
     public Player player;
     
-    [SerializeField] private Camera mainCam;
     [SerializeField] private Animator macroGameCanvasAnimator;
     [SerializeField] private GameSettingsManager settingsManager;
     [SerializeField] private MapManager mapManager;
@@ -28,9 +28,8 @@ public class GameController : Ticker
     private static bool gameFinished;
     private static bool gameResult;
     private Map map;
-    private float cameraHeight;
-    private float cameraWidth;
     private int nodeSuccessCount;
+    private bool debugMicro;
     
 
 
@@ -39,6 +38,9 @@ public class GameController : Ticker
         if (instance != null) return;
         
         new GameObject("GameController").AddComponent<GameController>();
+        instance.TickerStart(true);
+        instance.debugMicro = true;
+        Debug.Log("macro registered");
     }
     
     public static void FinishGame(bool result)
@@ -233,32 +235,17 @@ public class GameController : Ticker
     
     private void Start()
     {
+        if (debugMicro) return;
+        
         // Init
         GameManager.Register();
-        TickerStart();
-        cameraHeight = 2f * mainCam.orthographicSize;
-        cameraWidth = cameraHeight * mainCam.aspect;
-        
+        TickerStart(false);
+
         StartCoroutine(GameLoop());
     }
 
     private void Update()
     {
         TickerUpdate();
-        
-        // Camera movement
-        Vector3 position = player.transform.position;
-        mainCam.transform.position = new Vector3(
-            Mathf.Clamp(
-                position.x,
-                -(map.transform.GetChild(0).localScale.x/2 - cameraWidth/2),
-                (map.transform.GetChild(0).localScale.x/2 - cameraWidth/2)
-            ), 
-            Mathf.Clamp(
-                position.y,
-                -(map.transform.GetChild(0).localScale.y/2 - cameraHeight/2),
-                (map.transform.GetChild(0).localScale.y/2 - cameraHeight/2)
-            ), 
-            -10);
     }
 }
