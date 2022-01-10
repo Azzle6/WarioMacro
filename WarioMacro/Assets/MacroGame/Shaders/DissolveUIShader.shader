@@ -2,6 +2,7 @@ Shader "Unlit/DissolveUIShader"
 {
     Properties
     {
+        _MainTex ("Base (RGB)", 2D) = "white" {}
         [NoScaleOffset] Texture2D_5835b96659df4d0b98ca91a03b47a1a5("_MainTex", 2D) = "white" {}
         _DissolveRange("DissolveRange", Range(0, 1)) = 0
         [HDR]Color_f867a1f90a304ceba8200912999ef33d("BaseColor", Color) = (0, 0, 0, 0)
