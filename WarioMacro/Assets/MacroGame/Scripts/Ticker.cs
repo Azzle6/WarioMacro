@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+// ReSharper disable once CheckNamespace
 public interface ITickable
 {
     void OnTick();
@@ -51,8 +52,11 @@ public class Ticker : MonoBehaviour
     {
         musicManager = MusicManager.instance;
         
+        // Reset bpm and difficulty
         gameControllerSO.currentGameSpeed = 100;
         gameControllerSO.currentDifficulty = 1;
+        gameBPM = gameControllerSO.currentGameSpeed;
+        difficulty = gameControllerSO.currentDifficulty;
         Time.timeScale = gameBPM / 120;
 
         tickEnumerator = TickCoroutine();
