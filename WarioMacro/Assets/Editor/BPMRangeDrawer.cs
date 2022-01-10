@@ -4,7 +4,7 @@ using UnityEditor;
 
 [CustomPropertyDrawer(typeof(BPMRangeAttribute))]
 // ReSharper disable once CheckNamespace
-public class StepRangeDrawer : PropertyDrawer
+public class BPMRangeDrawer : PropertyDrawer
 {
     // Draw the property inside the given rect
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
