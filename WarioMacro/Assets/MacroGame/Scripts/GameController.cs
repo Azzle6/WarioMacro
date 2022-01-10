@@ -1,30 +1,18 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
-public interface ITickable
-{
-    void OnTick();
-}
-
-public class GameController : MonoBehaviour
+public class GameController : Ticker
 {
     public static GameController instance;
-    public static bool lockTimescale;
-    public static int currentTick { get; private set; }
-    public static float gameBPM { get; private set; }
-    public static int difficulty { get; private set; }
     public Player player;
     
-
-    [SerializeField] private GameControllerSO gameControllerSO;
-    [SerializeField] private BPMSettingsSO bpmSettingsSO;
     [SerializeField] private Camera mainCam;
     [SerializeField] private Animator macroGameCanvasAnimator;
+    [SerializeField] private GameSettingsManager settingsManager;
     [SerializeField] private MapManager mapManager;
     [SerializeField] private MiniGameResultPannel_UI resultPanel;
     [SerializeField] private Timer timer;
@@ -33,13 +21,12 @@ public class GameController : MonoBehaviour
     [SerializeField] private int mainMenuBuildIndex;
     [SerializeField] private GameObject[] macroObjects = Array.Empty<GameObject>();
     [SerializeField] private string[] sceneNames = Array.Empty<string>();
-
-    private static readonly List<ITickable> tickables = new List<ITickable>();
+    
+    private static readonly int victory = Animator.StringToHash("Victory");
+    private static readonly int defeat = Animator.StringToHash("Defeat");
     private static string currentScene;
     private static bool gameFinished;
     private static bool gameResult;
-    private IEnumerator tickEnumerator;
-    private MusicManager musicManager;
     private Map map;
     private float cameraHeight;
     private float cameraWidth;
@@ -53,14 +40,6 @@ public class GameController : MonoBehaviour
         
         new GameObject("GameController").AddComponent<GameController>();
     }
-
-    public static void Init(ITickable t)
-    {
-        if (!tickables.Contains(t))
-        {
-            tickables.Add(t);
-        }
-    }
     
     public static void FinishGame(bool result)
     {
@@ -68,8 +47,7 @@ public class GameController : MonoBehaviour
         gameFinished = true;
         gameResult = result;
     }
-    
-    
+
     public void ShowMacroObjects(bool value)
     {
         foreach (GameObject obj in macroObjects)
@@ -78,34 +56,17 @@ public class GameController : MonoBehaviour
         }
     }
 
-
-
-
-    private static void ResetTickables()
-    {
-        tickables.Clear();
-    }
-
-    private void ResetTick()
-    {
-        StopCoroutine(tickEnumerator);
-        currentTick = 0;
-        tickEnumerator = TickCoroutine();
-        StartCoroutine(tickEnumerator);
-    }
-
+    
     private IEnumerator ToggleEndGame(bool value)
     {
         if (value)
         {
-            // ReSharper disable once Unity.PreferAddressByIdToGraphicsParams
-            macroGameCanvasAnimator.SetTrigger("Victory");
+            macroGameCanvasAnimator.SetTrigger(victory);
             AudioManager.MacroPlaySound("MOU_GameWin", 0);
         }
         else
         {
-            // ReSharper disable once Unity.PreferAddressByIdToGraphicsParams
-            macroGameCanvasAnimator.SetTrigger("Defeat");
+            macroGameCanvasAnimator.SetTrigger(defeat);
             AudioManager.MacroPlaySound("MOU_GameLose", 0);
         }
         
@@ -128,9 +89,9 @@ public class GameController : MonoBehaviour
             // True if node with micro games, false otherwise
             if (nodeMicroGame != null)
             {
-                yield return StartCoroutine(NodeWithMicroGameHandler(nodeMicroGame));
-                
-                ChangeDifficulty();
+                yield return StartCoroutine(NodeWithMicroGame(nodeMicroGame));
+
+                NodeResults();
 
                 yield return new WaitForSecondsRealtime(1f);
                 
@@ -158,7 +119,7 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private IEnumerator NodeWithMicroGameHandler(NodeMicroGame node)
+    private IEnumerator NodeWithMicroGame(NodeMicroGame node)
     {
         // select 3 random micro games from micro games list
         var microGamesQueue = new Queue<string>();
@@ -210,19 +171,21 @@ public class GameController : MonoBehaviour
             yield return StartCoroutine(transitionController.TransitionHandler(currentScene, false));
 
             // switch back to macro state
-            
             ResetTickables();
             ResetTick();
             
-            
-            // Change BPM
-            gameControllerSO.currentGameSpeed = Mathf.Clamp(
-                gameBPM + (gameResult ? bpmSettingsSO.increasingBPM : -bpmSettingsSO.decreasingBPM), 
-                bpmSettingsSO.minBPM, 
-                bpmSettingsSO.maxBPM);
-            AudioManager.MacroPlaySound(gameResult ? "MOU_SpeedUp" : "MOU_SpeedDown", 0);
-            
-            
+            // change BPM
+            if (gameResult)
+            {
+                settingsManager.IncreaseBPM();
+                AudioManager.MacroPlaySound("MOU_SpeedUp", 0);
+            }
+            else
+            {
+                settingsManager.DecreaseBPM();
+                AudioManager.MacroPlaySound("MOU_SpeedDown", 0);
+            }
+
             // display result
             //Debug.Log("MicroGame Finished: " + (gameResult ? "SUCCESS" : "FAILURE"));
             if (gameResult) nodeSuccessCount++;
@@ -239,40 +202,20 @@ public class GameController : MonoBehaviour
         
         //Debug.Log("Node completed");
     }
-    
 
-    private IEnumerator TickCoroutine()
-    {
-        while (true)
-        {
-            //Debug.Log("TICK: " + currentTick);
-            foreach (ITickable t in tickables.ToArray())
-            {
-                t.OnTick();
-            }
-            musicManager.OnTick();
-
-            yield return new WaitForSeconds(1f);
-            currentTick++;
-        }
-        // ReSharper disable once IteratorNeverReturns
-    }
-
-    private void ChangeDifficulty()
+    private void NodeResults()
     {
         if (nodeSuccessCount > 1)
         {
-            gameControllerSO.currentDifficulty++;
+            settingsManager.IncreaseDifficulty();
             AudioManager.MacroPlaySound("MOU_NodeSuccess", 0);
         }
         else
         {
-            gameControllerSO.currentDifficulty--;
+            settingsManager.DecreaseDifficulty();
             AudioManager.MacroPlaySound("MOU_NodeFail", 0);
             lifeBar.Damage();
         }
-        gameControllerSO.currentDifficulty = Mathf.Clamp(gameControllerSO.currentDifficulty, 1, 3);
-        //Debug.Log("Difficulty : " + difficulty);
     }
 
     private void Awake()
@@ -285,32 +228,23 @@ public class GameController : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        gameControllerSO = Resources.LoadAll<GameControllerSO>("").First();
+        TickerAwake();
     }
     
     private void Start()
     {
-        GameManager.Register();
         // Init
-        gameControllerSO.currentGameSpeed = 100;
-        gameControllerSO.currentDifficulty = 1;
-        Time.timeScale = gameBPM / 120;
-        
+        GameManager.Register();
+        TickerStart();
         cameraHeight = 2f * mainCam.orthographicSize;
         cameraWidth = cameraHeight * mainCam.aspect;
         
-        musicManager = MusicManager.instance;
-
-        tickEnumerator = TickCoroutine();
-        StartCoroutine(tickEnumerator);
         StartCoroutine(GameLoop());
     }
 
     private void Update()
     {
-        // update difficulty / speed
-        gameBPM = gameControllerSO.currentGameSpeed;
-        difficulty = gameControllerSO.currentDifficulty;
+        TickerUpdate();
         
         // Camera movement
         Vector3 position = player.transform.position;
@@ -326,8 +260,5 @@ public class GameController : MonoBehaviour
                 (map.transform.GetChild(0).localScale.y/2 - cameraHeight/2)
             ), 
             -10);
-
-        // update global timescale
-        Time.timeScale = lockTimescale ? 0f: gameBPM / 120;
     }
 }

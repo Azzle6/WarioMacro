@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -16,14 +14,11 @@ public class MusicManager : MonoBehaviour, ITickable
     public AudioClip currentAudioClip;
     
     private AudioClip nextAudioClip;
-    private bool started;
 
     public void OnTick()
     {
-        if (!started) return;
-        
         // TODO
-        FindMusic((int) GameController.gameBPM, Soundgroup.PhaseState.MACROGAME, Soundgroup.CurrentPhase.RECRUIT);
+        FindMusic((int) Ticker.gameBPM, Soundgroup.PhaseState.MACROGAME, Soundgroup.CurrentPhase.RECRUIT);
 
         if (nextAudioClip.Equals(currentAudioClip)) return;
         
@@ -77,7 +72,7 @@ public class MusicManager : MonoBehaviour, ITickable
         }
     }
     
-    private void Start() 
+    private void OnEnable() 
     {
         //GameManager.Register();
 
@@ -86,11 +81,9 @@ public class MusicManager : MonoBehaviour, ITickable
         AudioS.clip = currentAudioClip;
         AudioS.Play();
         AudioS.loop = true;
-
-        started = true;
     }
 
-    private void Update() //L'update est juste pour afficher le slider
+    private void Update() // L'update est juste pour afficher le slider
     {
         if(AudioS.clip != null)
             musicTime = AudioS.time / AudioS.clip.length; 
