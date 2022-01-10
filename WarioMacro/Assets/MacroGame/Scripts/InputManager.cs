@@ -36,10 +36,10 @@ public class InputManager : MonoBehaviour
 
     public static void Register()
     {
-        if (inputManager == null)
-        {
-            inputManager = new GameObject("InputManager").AddComponent<InputManager>();
-        }
+        if (inputManager != null) return;
+        
+        inputManager = new GameObject("InputManager").AddComponent<InputManager>();
+        inputManager.gameObject.AddComponent<EventSystemBehaviour>();
     }
 
     public static bool GetKey(ControllerKey key)
@@ -189,7 +189,7 @@ InputManager:
     invert: 0
     type: 2
     axis: 0
-    joyNum: 0
+    joyNum: 1
   - serializedVersion: 3
     m_Name: LEFT_STICK_VERTICAL
     descriptiveName: 
@@ -205,13 +205,13 @@ InputManager:
     invert: 1
     type: 2
     axis: 1
-    joyNum: 0
+    joyNum: 1
   - serializedVersion: 3
     m_Name: A
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: joystick button 0
+    positiveButton: joystick 1 button 0
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1000
@@ -221,13 +221,13 @@ InputManager:
     invert: 0
     type: 0
     axis: 0
-    joyNum: 0
+    joyNum: 1
   - serializedVersion: 3
     m_Name: B
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: joystick button 1
+    positiveButton: joystick 1 button 1
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1000
@@ -237,13 +237,13 @@ InputManager:
     invert: 0
     type: 0
     axis: 0
-    joyNum: 0
+    joyNum: 1
   - serializedVersion: 3
     m_Name: Y
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: joystick button 3
+    positiveButton: joystick 1 button 3
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1000
@@ -253,13 +253,13 @@ InputManager:
     invert: 0
     type: 0
     axis: 0
-    joyNum: 0
+    joyNum: 1
   - serializedVersion: 3
     m_Name: X
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: joystick button 2
+    positiveButton: joystick 1 button 2
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1000
@@ -269,13 +269,13 @@ InputManager:
     invert: 0
     type: 0
     axis: 0
-    joyNum: 0
+    joyNum: 1
   - serializedVersion: 3
     m_Name: LB
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: joystick button 4
+    positiveButton: joystick 1 button 4
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1000
@@ -285,13 +285,13 @@ InputManager:
     invert: 0
     type: 0
     axis: 0
-    joyNum: 0
+    joyNum: 1
   - serializedVersion: 3
     m_Name: RB
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: joystick button 5
+    positiveButton: joystick 1 button 5
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1000
@@ -301,13 +301,13 @@ InputManager:
     invert: 0
     type: 0
     axis: 0
-    joyNum: 0
+    joyNum: 1
   - serializedVersion: 3
     m_Name: LEFTSTICK
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: joystick button 8
+    positiveButton: joystick 1 button 8
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1000
@@ -317,13 +317,13 @@ InputManager:
     invert: 0
     type: 0
     axis: 0
-    joyNum: 0
+    joyNum: 1
   - serializedVersion: 3
     m_Name: RIGHTSTICK
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: joystick button 9
+    positiveButton: joystick 1 button 9
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1000
@@ -333,7 +333,7 @@ InputManager:
     invert: 0
     type: 0
     axis: 0
-    joyNum: 0
+    joyNum: 1
   - serializedVersion: 3
     m_Name: RIGHT_STICK_HORIZONTAL
     descriptiveName: 
@@ -349,7 +349,7 @@ InputManager:
     invert: 0
     type: 2
     axis: 3
-    joyNum: 0
+    joyNum: 1
   - serializedVersion: 3
     m_Name: RIGHT_STICK_VERTICAL
     descriptiveName: 
@@ -365,7 +365,7 @@ InputManager:
     invert: 1
     type: 2
     axis: 4
-    joyNum: 0
+    joyNum: 1
   - serializedVersion: 3
     m_Name: DpadHorizontal
     descriptiveName: 
@@ -381,7 +381,7 @@ InputManager:
     invert: 0
     type: 2
     axis: 5
-    joyNum: 0
+    joyNum: 1
   - serializedVersion: 3
     m_Name: DpadVertical
     descriptiveName: 
@@ -397,7 +397,7 @@ InputManager:
     invert: 0
     type: 2
     axis: 6
-    joyNum: 0
+    joyNum: 1
   - serializedVersion: 3
     m_Name: LEFT_TRIGGER
     descriptiveName: 
@@ -413,7 +413,7 @@ InputManager:
     invert: 0
     type: 2
     axis: 8
-    joyNum: 0
+    joyNum: 1
   - serializedVersion: 3
     m_Name: RIGHT_TRIGGER
     descriptiveName: 
@@ -429,7 +429,7 @@ InputManager:
     invert: 0
     type: 2
     axis: 9
-    joyNum: 0
+    joyNum: 1
   - serializedVersion: 3
     m_Name: Debug Persistent
     descriptiveName: 
@@ -437,7 +437,7 @@ InputManager:
     negativeButton: 
     positiveButton: right shift
     altNegativeButton: 
-    altPositiveButton: joystick button 2
+    altPositiveButton: joystick 1 button 2
     gravity: 0
     dead: 0
     sensitivity: 0
@@ -445,7 +445,7 @@ InputManager:
     invert: 0
     type: 0
     axis: 0
-    joyNum: 0
+    joyNum: 1
   - serializedVersion: 3
     m_Name: Debug Multiplier
     descriptiveName: 
@@ -453,7 +453,7 @@ InputManager:
     negativeButton: 
     positiveButton: left shift
     altNegativeButton: 
-    altPositiveButton: joystick button 3
+    altPositiveButton: joystick 1 button 3
     gravity: 0
     dead: 0
     sensitivity: 0
@@ -461,7 +461,7 @@ InputManager:
     invert: 0
     type: 0
     axis: 0
-    joyNum: 0
+    joyNum: 1
   - serializedVersion: 3
     m_Name: Debug Horizontal
     descriptiveName: 
@@ -477,7 +477,7 @@ InputManager:
     invert: 0
     type: 0
     axis: 0
-    joyNum: 0
+    joyNum: 1
   - serializedVersion: 3
     m_Name: Debug Vertical
     descriptiveName: 
@@ -493,7 +493,7 @@ InputManager:
     invert: 0
     type: 0
     axis: 0
-    joyNum: 0
+    joyNum: 1
   - serializedVersion: 3
     m_Name: Debug Vertical
     descriptiveName: 
@@ -509,7 +509,7 @@ InputManager:
     invert: 0
     type: 2
     axis: 6
-    joyNum: 0
+    joyNum: 1
   - serializedVersion: 3
     m_Name: Debug Horizontal
     descriptiveName: 
@@ -525,7 +525,7 @@ InputManager:
     invert: 0
     type: 2
     axis: 5
-    joyNum: 0
+    joyNum: 1
   - serializedVersion: 3
     m_Name: Enable Debug Button 1
     descriptiveName: 
@@ -533,7 +533,7 @@ InputManager:
     negativeButton: 
     positiveButton: left ctrl
     altNegativeButton: 
-    altPositiveButton: joystick button 8
+    altPositiveButton: joystick 1 button 8
     gravity: 0
     dead: 0
     sensitivity: 0
@@ -541,7 +541,7 @@ InputManager:
     invert: 0
     type: 0
     axis: 0
-    joyNum: 0
+    joyNum: 1
   - serializedVersion: 3
     m_Name: Enable Debug Button 2
     descriptiveName: 
@@ -549,7 +549,7 @@ InputManager:
     negativeButton: 
     positiveButton: backspace
     altNegativeButton: 
-    altPositiveButton: joystick button 9
+    altPositiveButton: joystick 1 button 9
     gravity: 0
     dead: 0
     sensitivity: 0
@@ -557,7 +557,7 @@ InputManager:
     invert: 0
     type: 0
     axis: 0
-    joyNum: 0
+    joyNum: 1
   - serializedVersion: 3
     m_Name: Debug Reset
     descriptiveName: 
@@ -565,7 +565,7 @@ InputManager:
     negativeButton: 
     positiveButton: left alt
     altNegativeButton: 
-    altPositiveButton: joystick button 1
+    altPositiveButton: joystick 1 button 1
     gravity: 0
     dead: 0
     sensitivity: 0
@@ -573,7 +573,7 @@ InputManager:
     invert: 0
     type: 0
     axis: 0
-    joyNum: 0
+    joyNum: 1
   - serializedVersion: 3
     m_Name: Debug Next
     descriptiveName: 
@@ -581,7 +581,7 @@ InputManager:
     negativeButton: 
     positiveButton: page down
     altNegativeButton: 
-    altPositiveButton: joystick button 5
+    altPositiveButton: joystick 1 button 5
     gravity: 0
     dead: 0
     sensitivity: 0
@@ -589,7 +589,7 @@ InputManager:
     invert: 0
     type: 0
     axis: 0
-    joyNum: 0
+    joyNum: 1
   - serializedVersion: 3
     m_Name: Debug Previous
     descriptiveName: 
@@ -597,7 +597,7 @@ InputManager:
     negativeButton: 
     positiveButton: page up
     altNegativeButton: 
-    altPositiveButton: joystick button 4
+    altPositiveButton: joystick 1 button 4
     gravity: 0
     dead: 0
     sensitivity: 0
@@ -605,7 +605,7 @@ InputManager:
     invert: 0
     type: 0
     axis: 0
-    joyNum: 0
+    joyNum: 1
   - serializedVersion: 3
     m_Name: Debug Validate
     descriptiveName: 
@@ -613,7 +613,7 @@ InputManager:
     negativeButton: 
     positiveButton: return
     altNegativeButton: 
-    altPositiveButton: joystick button 0
+    altPositiveButton: joystick 1 button 0
     gravity: 0
     dead: 0
     sensitivity: 0
@@ -621,7 +621,7 @@ InputManager:
     invert: 0
     type: 0
     axis: 0
-    joyNum: 0
+    joyNum: 1
 ";
 
         System.IO.File.WriteAllText(filepath, newText);
