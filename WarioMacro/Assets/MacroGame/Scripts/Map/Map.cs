@@ -36,10 +36,7 @@ public class Map : MonoBehaviour
         var arrowPrefabs = player.arrowPrefabs.ToList();
         var nextNode = default(Node);
         var selectedNode = default(Node);
-        var selectedDirection = -1;
-        // ReSharper disable once TooWideLocalVariableScope
-        bool selectInput;
-        var lastDirectionSelected = -1;
+        Node.Direction? lastDirectionSelected = null;
         const ControllerKey validInput = ControllerKey.A;
 
         arrowPrefabs.ForEach(go => go.SetActive(true));
@@ -49,37 +46,27 @@ public class Map : MonoBehaviour
         // input loop
         while (nextNode == null)
         {
+            var selectedDirection = Node.GetPlayerDirection();
+            
             // ReSharper disable once PossibleNullReferenceException
             foreach (Node.Path path in currentNode.paths)
             {
-                var hAxis = Input.GetAxis("LEFT_STICK_HORIZONTAL");
-                var vAxis = Input.GetAxis("LEFT_STICK_VERTICAL");
-                var isUp = vAxis > 0.5f;
-                var isDown = vAxis < -0.5f;
-                var isRight = hAxis > 0.5f;
-                var isLeft = hAxis < -0.5f;
-                
-                
-                selectInput = (path.direction == Node.Direction.Up && isUp)
-                              || (path.direction == Node.Direction.Down && isDown)
-                              || (path.direction == Node.Direction.Left && isLeft)
-                              || (path.direction == Node.Direction.Right && isRight);
-
-                if (!selectInput) continue;
+                if (selectedDirection == null || path.direction != selectedDirection) continue;
                 
                 selectedNode = path.destination;
-                selectedDirection = (int)path.direction;
                 if (selectedDirection != lastDirectionSelected) AudioManager.MacroPlaySound("MOU_NodeDirection", 0);
                 lastDirectionSelected = selectedDirection;
                 break;
             }
 
-            for (int i = 0; i < arrowPrefabs.Count; i++)
+            selectedDirection = lastDirectionSelected;
+
+            for (var i = 0; i < arrowPrefabs.Count; i++)
             {
                 // is any path setup with arrow direction?
                 arrowPrefabs[i].gameObject.SetActive(currentNode.paths.FirstOrDefault(p => p.direction == (Node.Direction)i) != null);
                 // is the selected direction equals to the path direction?
-                arrowPrefabs[i].transform.localScale = i == selectedDirection ? Vector3.one : Vector3.one * .5f;
+                arrowPrefabs[i].transform.localScale = (selectedDirection != null && i == (int) selectedDirection) ? Vector3.one : Vector3.one * .5f;
             }
             
             if (selectedNode != null && InputManager.GetKeyDown(validInput))
@@ -95,7 +82,7 @@ public class Map : MonoBehaviour
         // dispose
         arrowPrefabs.ForEach(go => go.SetActive(false));
     }
-    
+
     private void Awake()
     {
         currentNode = startNode;
