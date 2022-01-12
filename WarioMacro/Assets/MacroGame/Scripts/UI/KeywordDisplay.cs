@@ -16,19 +16,6 @@ public class KeywordDisplay : MonoBehaviour
     public TMP_Text PinkTextplaceholder;
     public TMP_Text WhiteTextplaceholder;
 
-    private void Start()
-    {
-        StartCoroutine("testPlay");
-    }
-
-    IEnumerator testPlay()
-    {
-        yield return new WaitForSeconds(4);
-        PlayKeyword(ButtonsReferences.ButtonsNames.A, "Pouet");
-        yield return new WaitForSeconds(4);
-        PlayKeyword(ButtonsReferences.ButtonsNames.B, "OUI BAGUETTE");
-    }
-
     public void PlayKeyword(ButtonsReferences.ButtonsNames buttonName, string Keyword)
     {
         Sprite buttonSprite = null;
