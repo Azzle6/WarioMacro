@@ -17,10 +17,11 @@ public class GameController : Ticker
     [SerializeField] private MiniGameResultPannel_UI resultPanel;
     [SerializeField] private Timer timer;
     [SerializeField] private TransitionController transitionController;
+    [SerializeField] private KeywordDisplay KeywordControl;
     [SerializeField] private LifeBar lifeBar;
     [SerializeField] private int mainMenuBuildIndex;
     [SerializeField] private GameObject[] macroObjects = Array.Empty<GameObject>();
-    [SerializeField] private string[] sceneNames = Array.Empty<string>();
+    [SerializeField] public string[] sceneNames = Array.Empty<string>();
     
     private static readonly int victory = Animator.StringToHash("Victory");
     private static readonly int defeat = Animator.StringToHash("Defeat");
@@ -30,7 +31,6 @@ public class GameController : Ticker
     private Map map;
     private int nodeSuccessCount;
     private bool debugMicro;
-    
 
 
     public static void Register()
