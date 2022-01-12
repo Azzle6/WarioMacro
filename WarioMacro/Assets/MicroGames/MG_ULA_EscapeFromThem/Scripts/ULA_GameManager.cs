@@ -38,9 +38,9 @@ public class ULA_GameManager : MonoBehaviour, ITickable
         result = true;
         cinematic = true;
         GameManager.Register(); //Mise en place du Input Manager, du Sound Manager et du Game Controller
-        GameController.Init(this); //Permet a ce script d'utiliser le OnTick
+        Ticker.Init(this); //Permet a ce script d'utiliser le OnTick
             
-        switch (GameController.difficulty)
+        switch (Ticker.difficulty)
         {
             case 1:
                 prefabs = Instantiate(levelsEasy[lvl],lvlParent);
@@ -54,7 +54,9 @@ public class ULA_GameManager : MonoBehaviour, ITickable
                 prefabs = Instantiate(levelsHard[lvl],lvlParent);
                 prefabs.transform.position = Vector3.zero;
                 break;
-                
+            default:
+                Debug.Log("no difficulty");
+                break;
         }
         
         StartCoroutine(CoroutineFinInit());

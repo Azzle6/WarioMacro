@@ -2,29 +2,37 @@ using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
-using System.Linq;
-// ReSharper disable PossibleNullReferenceException
 
 public class Node : MonoBehaviour
 {
     [CanBeNull] public Path[] paths = new Path[4];
     public Animator animator;
 
-    public Path GetNodeFromInput(ControllerKey key)
+    public static Direction? GetPlayerDirection()
     {
-        return key switch
-        {
-            ControllerKey.DPAD_UP => paths[0],
-            ControllerKey.DPAD_LEFT => paths[1],
-            ControllerKey.DPAD_DOWN => paths[2],
-            ControllerKey.DPAD_RIGHT => paths[3],
-            _ => null
-        };
-    }
+        float horizontalInput = InputManager.GetAxis(ControllerAxis.LEFT_STICK_HORIZONTAL);
+        float verticalInput = InputManager.GetAxis(ControllerAxis.LEFT_STICK_VERTICAL);
+        
+        if (horizontalInput == 0 && verticalInput == 0)
+            return null;
+        
+        float joystickRotation =
+            Mathf.Atan2(horizontalInput, verticalInput) * 180 / Mathf.PI;
 
+        if (joystickRotation > -45 && joystickRotation <= 45)
+            return Direction.Up;
+        if (joystickRotation > 45 && joystickRotation <= 135) 
+            return Direction.Right;
+        if (joystickRotation > -135 && joystickRotation <= -45) 
+            return Direction.Left;
+        
+        return Direction.Down;
+    }
+    
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
+        // ReSharper disable once PossibleNullReferenceException
         foreach (Path path in paths)
         {
             if (path == null) continue;
@@ -32,11 +40,6 @@ public class Node : MonoBehaviour
             if (path.destination != null)
             {
                 points.Add(path.destination.transform.position);
-            }
-
-            if (path.steps != null)
-            {
-                points.AddRange(from step in path.steps where step != null select step.position);
             }
 
             for (int i = 0; i < points.Count; i++)
@@ -53,16 +56,6 @@ public class Node : MonoBehaviour
     {
         public Direction direction;
         [CanBeNull] public Node destination;
-        [CanBeNull] public Transform[] steps;
-
-        // public Vector3[] GetPositions()
-        // {
-        //     var points = new List<Vector3>();
-        //     foreach(Transform step in steps)
-        //         points.Add(step.position);
-        //     points.Add(destination.transform.position);
-        //     return points.ToArray();
-        // }
     }
 
     public enum Direction

@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public class AudioListenerManager : MonoBehaviour
+// ReSharper disable once CheckNamespace
+public class AudioListenersManager : MonoBehaviour
 {
     [SerializeField] private AudioListener mainAudioListener;
     private AudioListener[] audioListeners;
