@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -12,6 +13,7 @@ public class PlaytestTool : MonoBehaviour
     [SerializeField] private GameObject ToggleTemplate;
     private List<Toggle> TogglesList;
     [SerializeField] private GameController GameControl;
+    [SerializeField] private ScenesReferencesSO ScenesRefs;
 
     private void Start()
     {
@@ -21,20 +23,29 @@ public class PlaytestTool : MonoBehaviour
     public void InitSceneList()
     {
         TogglesList = new List<Toggle>();
+
+        List<String> SNames = new List<string>();
+        foreach (MiniGameScriptableObject MGSO in ScenesRefs.MiniGames)
+        {
+            SNames.Add(MGSO.MiniGameScene.name);
+        }
+
+        GameControl.sceneNames = SNames.ToArray();
+            
         ScenesList = GameControl.sceneNames;
 
         for (int i = 0; i < ScenesList.Length; i++)
         {
             GameObject go = Instantiate(ToggleTemplate, ScrollContent.transform);
             go.GetComponentInChildren<Text>().text = ScenesList[i];
-            Toggle toggle = go.GetComponentInChildren<Toggle>();
-            
-            toggle.onValueChanged.AddListener((value) =>
+
+            var i1 = i;
+            go.GetComponentInChildren<Toggle>().onValueChanged.AddListener((value) =>
             {
-                OnListUpdate(i);
+                OnListUpdate(i1, value);
             });
             
-            TogglesList.Add(toggle);
+            TogglesList.Add(go.GetComponentInChildren<Toggle>());
         }
 
         if (ToggleTemplate != null)
@@ -44,9 +55,35 @@ public class PlaytestTool : MonoBehaviour
         }
     }
 
-    public void OnListUpdate(int toggleIndex)
+    public void OnListUpdate(int toggleIndex, bool isActivated)
     {
-        Debug.Log("La scene " + ScenesList[toggleIndex] +" n'est plus active");
+        Debug.Log(toggleIndex);
+        List<String> SNames = new List<string>();
+        SNames = GameControl.sceneNames.ToList();
+        
+        if (isActivated)
+        {
+            SNames.Add(ScenesList[toggleIndex]);
+            GameControl.sceneNames = SNames.ToArray();
+        }
+        else
+        {
+            for (int i = 0; i < SNames.Count; i++)
+            {
+                if (SNames[i] == ScenesList[toggleIndex])
+                {
+                    SNames.RemoveAt(i);
+                    GameControl.sceneNames = SNames.ToArray();
+                    Debug.Log("La scene " + ScenesList[toggleIndex] +" n'est plus active");
+                    return;
+                }
+            }
+        }
+        
+        
+        
+        
+        
     }
     
     

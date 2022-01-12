@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -23,5 +24,5 @@ public class MiniGameScriptableObject : ScriptableObject
 
     public ButtonsNames MiniGameInput;
     public string MiniGameKeyword;
-    public Scene MiniGameScene;
+    public SceneAsset MiniGameScene;
 }

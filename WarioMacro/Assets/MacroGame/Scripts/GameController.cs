@@ -31,7 +31,6 @@ public class GameController : Ticker
     private Map map;
     private int nodeSuccessCount;
     private bool debugMicro;
-    
 
 
     public static void Register()
