@@ -16,7 +16,7 @@ public class KeywordDisplay : MonoBehaviour
     public TMP_Text PinkTextplaceholder;
     public TMP_Text WhiteTextplaceholder;
 
-    public void PlayKeyword(ButtonsReferences.ButtonsNames buttonName, string Keyword)
+    public void PlayKeyword(MiniGameScriptableObject.ButtonsNames buttonName, string Keyword)
     {
         Sprite buttonSprite = null;
         BlueTextplaceholder.text = Keyword;
@@ -49,21 +49,6 @@ public class KeywordDisplay : MonoBehaviour
 [System.Serializable]
 public class ButtonsReferences
 {
-    public enum ButtonsNames
-    {
-        X,
-        Y,
-        A,
-        B,
-        LeftJoystick,
-        RightJoystick,
-        LeftTrigger,
-        RightTrigger,
-        LeftButton,
-        RightButton,
-        DirectionalButtons
-    }
-
-    public ButtonsNames InputRef;
+    public MiniGameScriptableObject.ButtonsNames InputRef;
     public Sprite SpriteAsset;
 }

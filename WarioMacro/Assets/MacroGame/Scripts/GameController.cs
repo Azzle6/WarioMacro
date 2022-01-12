@@ -21,7 +21,7 @@ public class GameController : Ticker
     [SerializeField] private LifeBar lifeBar;
     [SerializeField] private int mainMenuBuildIndex;
     [SerializeField] private GameObject[] macroObjects = Array.Empty<GameObject>();
-    [SerializeField] private string[] sceneNames = Array.Empty<string>();
+    [SerializeField] public string[] sceneNames = Array.Empty<string>();
     
     private static readonly int victory = Animator.StringToHash("Victory");
     private static readonly int defeat = Animator.StringToHash("Defeat");
