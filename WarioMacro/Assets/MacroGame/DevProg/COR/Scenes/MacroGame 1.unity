@@ -1142,6 +1142,11 @@ PlayableDirector:
   m_CorrespondingSourceObject: {fileID: 2032697343633295, guid: c526801d65ade4e43912c6513864ea76, type: 3}
   m_PrefabInstance: {fileID: 1287644081}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1426492335 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 481867903098265975, guid: 3d12763b259aecf4ca435cd3d8ca091d, type: 3}
+  m_PrefabInstance: {fileID: 5896603837024698241}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1439749327 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2056309721574369033, guid: 61c30988b7ee7fe4f8e1f4f5d7dd1872, type: 3}
@@ -1168,6 +1173,7 @@ GameObject:
   - component: {fileID: 1749864764}
   - component: {fileID: 1749864765}
   - component: {fileID: 1749864767}
+  - component: {fileID: 1749864768}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -1190,6 +1196,7 @@ MonoBehaviour:
   player: {fileID: 1862497960}
   macroGameCanvasAnimator: {fileID: 2008032679}
   settingsManager: {fileID: 1749864766}
+  alarm: {fileID: 1749864768}
   mapManager: {fileID: 1749864767}
   resultPanel: {fileID: 135660540}
   timer: {fileID: 1749864763}
@@ -1333,6 +1340,25 @@ MonoBehaviour:
   player: {fileID: 1862497960}
   mapGOList:
   - {fileID: 718502399}
+  - {fileID: 1426492335}
+--- !u!114 &1749864768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1749864759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b3b6619aeba9cf45936132424083d3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  increaseOnWin: 1.5
+  increaseOnLose: 3
+  floorFactorIncrease: 0.3
+  bpmFactorIncrease: 0.1
+  difficultyFactorIncrease: 0.25
+  floor: 0
 --- !u!1 &1796344224
 GameObject:
   m_ObjectHideFlags: 0
@@ -1940,6 +1966,18 @@ PrefabInstance:
       objectReference: {fileID: 1862497960}
     - target: {fileID: 5591491363040502322, guid: 3d12763b259aecf4ca435cd3d8ca091d, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5896603836108868178, guid: 3d12763b259aecf4ca435cd3d8ca091d, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5896603836108868178, guid: 3d12763b259aecf4ca435cd3d8ca091d, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5896603836108868178, guid: 3d12763b259aecf4ca435cd3d8ca091d, type: 3}
+      propertyPath: m_Color.r
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8577499763087329914, guid: 3d12763b259aecf4ca435cd3d8ca091d, type: 3}

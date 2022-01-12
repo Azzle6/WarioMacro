@@ -13,6 +13,7 @@ public class GameController : Ticker
     
     [SerializeField] private Animator macroGameCanvasAnimator;
     [SerializeField] private GameSettingsManager settingsManager;
+    [SerializeField] private Alarm alarm;
     [SerializeField] private MapManager mapManager;
     [SerializeField] private MiniGameResultPannel_UI resultPanel;
     [SerializeField] private Timer timer;
@@ -180,11 +181,13 @@ public class GameController : Ticker
             if (gameResult)
             {
                 settingsManager.IncreaseBPM();
+                alarm.DecrementCount(true);
                 AudioManager.MacroPlaySound("MOU_SpeedUp", 0);
             }
             else
             {
                 settingsManager.DecreaseBPM();
+                alarm.DecrementCount(false);
                 AudioManager.MacroPlaySound("MOU_SpeedDown", 0);
             }
 
