@@ -5,6 +5,7 @@ using UnityEngine;
 public class Map : MonoBehaviour
 { 
     public Node currentNode { get; private set; }
+    public Node.Path currentPath { get; private set; }
     
     [SerializeField] private Player player;
     [SerializeField] private Node startNode;
@@ -35,7 +36,9 @@ public class Map : MonoBehaviour
         // init
         var arrowPrefabs = player.arrowPrefabs.ToList();
         var nextNode = default(Node);
+        var nextPath = default(Node.Path);
         var selectedNode = default(Node);
+        var selectedPath = default(Node.Path);
         Node.Direction? lastDirectionSelected = null;
         const ControllerKey validInput = ControllerKey.A;
 
@@ -54,6 +57,7 @@ public class Map : MonoBehaviour
                 if (selectedDirection == null || path.direction != selectedDirection) continue;
                 
                 selectedNode = path.destination;
+                selectedPath = path;
                 if (selectedDirection != lastDirectionSelected) AudioManager.MacroPlaySound("MOU_NodeDirection", 0);
                 lastDirectionSelected = selectedDirection;
                 break;
@@ -72,12 +76,14 @@ public class Map : MonoBehaviour
             if (selectedNode != null && InputManager.GetKeyDown(validInput))
             {
                 nextNode = selectedNode;
+                nextPath = selectedPath;
             }
             yield return null;
         }
         
         currentNode.animator.SetBool(current, false);
         currentNode = nextNode;
+        currentPath = nextPath;
 
         // dispose
         arrowPrefabs.ForEach(go => go.SetActive(false));

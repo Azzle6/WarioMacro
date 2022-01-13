@@ -8,6 +8,13 @@ public class Node : MonoBehaviour
     [CanBeNull] public Path[] paths = new Path[4];
     public Animator animator;
 
+    void Start()
+    {
+        foreach (var path in paths)
+        {
+            path.wayPoints.Add(path.destination.transform);
+        }
+    }   
     public static Direction? GetPlayerDirection()
     {
         float horizontalInput = InputManager.GetAxis(ControllerAxis.LEFT_STICK_HORIZONTAL);
@@ -35,19 +42,32 @@ public class Node : MonoBehaviour
         // ReSharper disable once PossibleNullReferenceException
         foreach (Path path in paths)
         {
-            if (path == null) continue;
             var points = new List<Vector3>();
+            if (path == null) continue;
+            if (path.wayPoints.Count == 0)
+            {
+                if (path.destination != null)
+                {
+                    points.Add(path.destination.transform.position);
+                }
+                continue;
+            }
+            
+            foreach(var waypoint in path.wayPoints)
+            {
+                points.Add(waypoint.position);
+            }
             if (path.destination != null)
             {
                 points.Add(path.destination.transform.position);
             }
-
             for (int i = 0; i < points.Count; i++)
             {
                 Vector3 p0 = i > 0 ? points[i - 1] : transform.position;
                 Vector3 p1 = points[i];
                 Gizmos.DrawLine(p0, p1);
             }
+
         }
     }
     
@@ -55,7 +75,8 @@ public class Node : MonoBehaviour
     public class Path
     {
         public Direction direction;
-        [CanBeNull] public Node destination;
+        public Node destination;
+        public List<Transform> wayPoints = new List<Transform>();
     }
 
     public enum Direction
