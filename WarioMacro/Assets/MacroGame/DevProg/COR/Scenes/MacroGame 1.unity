@@ -1189,7 +1189,6 @@ GameObject:
   - component: {fileID: 1749864764}
   - component: {fileID: 1749864765}
   - component: {fileID: 1749864767}
-  - component: {fileID: 1749864768}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -1212,11 +1211,12 @@ MonoBehaviour:
   player: {fileID: 1862497960}
   macroGameCanvasAnimator: {fileID: 2008032679}
   settingsManager: {fileID: 1749864766}
-  alarm: {fileID: 1749864768}
+  alarm: {fileID: 0}
   mapManager: {fileID: 1749864767}
   resultPanel: {fileID: 135660540}
   timer: {fileID: 1749864763}
   transitionController: {fileID: 1749864762}
+  KeywordControl: {fileID: 0}
   lifeBar: {fileID: 1749864765}
   mainMenuBuildIndex: 0
   macroObjects:
@@ -1358,24 +1358,6 @@ MonoBehaviour:
   mapGOList:
   - {fileID: 718502399}
   - {fileID: 6303634013485162230}
---- !u!114 &1749864768
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1749864759}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b3b6619aeba9cf45936132424083d3f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  director: {fileID: 2032697607178705}
-  increaseOnWin: 1.5
-  increaseOnLose: 3
-  floorFactorIncrease: 0.3
-  bpmFactorIncrease: 0.1
-  difficultyFactorIncrease: 0.25
 --- !u!1 &1796344224
 GameObject:
   m_ObjectHideFlags: 0
@@ -1897,11 +1879,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!320 &2032697607178705 stripped
-PlayableDirector:
-  m_CorrespondingSourceObject: {fileID: 4377784196031337853, guid: 2ce2da841ea3ae6408496ef6ea0338ad, type: 3}
-  m_PrefabInstance: {fileID: 4379252775361158316}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2032697607178706 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4377784196031337854, guid: 2ce2da841ea3ae6408496ef6ea0338ad, type: 3}

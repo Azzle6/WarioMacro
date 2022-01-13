@@ -10274,6 +10274,7 @@ GameObject:
   - component: {fileID: 4377784196031337855}
   - component: {fileID: 4377784196031337852}
   - component: {fileID: 4377784196031337853}
+  - component: {fileID: 8717866440002024900}
   m_Layer: 5
   m_Name: Alarm Placeholder
   m_TagString: Untagged
@@ -10360,6 +10361,24 @@ PlayableDirector:
     value: {fileID: 4377784196602882157}
   m_ExposedReferences:
     m_References: []
+--- !u!114 &8717866440002024900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4377784196031337854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b3b6619aeba9cf45936132424083d3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  director: {fileID: 4377784196031337853}
+  increaseOnWin: 1.5
+  increaseOnLose: 3
+  floorFactorIncrease: 0.3
+  bpmFactorIncrease: 0.1
+  difficultyFactorIncrease: 0.25
 --- !u!1 &4377784196054096312
 GameObject:
   m_ObjectHideFlags: 0
