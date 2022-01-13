@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class MapManager : MonoBehaviour
 {
+    public static int floor { get; private set; } = -1;
+    
     [SerializeField] private Player player;
     [SerializeField] private GameObject[] mapGOList;
     private Queue<GameObject> mapGoQueue;
@@ -18,6 +20,7 @@ public class MapManager : MonoBehaviour
         
         currentMap = mapGoQueue.Dequeue().GetComponent<Map>();
         currentMap.Load();
+        floor++;
         
         return currentMap;
     }

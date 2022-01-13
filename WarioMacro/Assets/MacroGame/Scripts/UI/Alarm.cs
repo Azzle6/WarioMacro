@@ -13,10 +13,6 @@ public class Alarm : MonoBehaviour
     [Range(0.01f, 10f)]
     [SerializeField] private float difficultyFactorIncrease;
 
-    // TODO : Replace by real floor number
-    // First floor is 0
-    [SerializeField] private int floor = 0;
-    
     private float count = 100;
     private float currentFactor = 1;
 
@@ -28,8 +24,8 @@ public class Alarm : MonoBehaviour
 
     private void Update()
     {
-        currentFactor = 1 + floor * floorFactorIncrease 
-                          + (Ticker.gameBPM - 50) / 5 * bpmFactorIncrease 
+        currentFactor = 1 + MapManager.floor * floorFactorIncrease
+                          + (Ticker.gameBPM - 100) / 10 * bpmFactorIncrease 
                           + (Ticker.difficulty - 1) * difficultyFactorIncrease;
     }
 }
