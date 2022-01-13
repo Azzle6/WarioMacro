@@ -84,7 +84,7 @@ public class GameController : Ticker
         {
             yield return StartCoroutine(map.WaitForNodeSelection());
 
-            yield return StartCoroutine(player.MoveToPosition(map.currentNode.transform.position));
+            yield return StartCoroutine(player.MoveToPosition(map.currentPath.wayPoints));
             AudioManager.MacroPlaySound("MOU_NodeSelect", 0);
             var nodeMicroGame = map.currentNode.GetComponent<NodeMicroGame>();
 

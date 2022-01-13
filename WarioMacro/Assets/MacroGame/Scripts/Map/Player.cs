@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using UnityEngine;
@@ -17,7 +18,7 @@ public class Player : MonoBehaviour
         transform.position = pos;
     }
     
-    public IEnumerator MoveToPosition(Vector3 position)
+    public IEnumerator MoveToPosition(List<Transform> positions)
     {
         //yield return new WaitForSeconds(1f);
         //map.player.transform.DOPunchScale(Vector3.one * .25f, 1f);
@@ -25,11 +26,16 @@ public class Player : MonoBehaviour
         StartMove();
         // TODO : animate with (DOTween?)
         //map.player.transform.position = map.currentNode.transform.position;
-        var tween = transform.DOMove(position, moveSpeed).SetSpeedBased().SetEase(Ease.Linear);
+        for (int i = 0; i < positions.Count; i++)
+        {
+            var tween = transform.DOMove(positions[i].position, moveSpeed).SetSpeedBased().SetEase(Ease.Linear);
+            while (tween.IsPlaying()) yield return null;
+        }
+        
 
         // var positions = map.currentPath.GetPositions();
         // var tween = player.transform.DOPath((Vector3[])positions, player.moveSpeed).SetSpeedBased().SetEase(Ease.Linear);
-        while (tween.IsPlaying()) yield return null;
+        
         StopMove();
         //yield return new WaitForSeconds(1f);
     }
