@@ -295,6 +295,7 @@ GameObject:
   - component: {fileID: 8465403085796528754}
   - component: {fileID: 1791085827585426714}
   - component: {fileID: 4546991966780627657}
+  - component: {fileID: 6466022112012463125}
   - component: {fileID: 6696850198112609211}
   m_Layer: 0
   m_Name: Node
@@ -311,8 +312,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6102864330239635029}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.05555556, y: 0.1, z: 1}
+  m_LocalPosition: {x: 1.9769659, y: -1.6617393, z: -0.8281851}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3029399860520721143}
   - {fileID: 5872036807853324127}
@@ -382,8 +383,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ed55c304a8197e46bf04c615e97ff46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  paths: []
   animator: {fileID: 6696850198112609211}
+  paths: []
+--- !u!114 &6466022112012463125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6102864330239635029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52fe0b234514ea4d980a7147b59f9e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  microGamesNumber: 3
+  type: 0
 --- !u!95 &6696850198112609211
 Animator:
   serializedVersion: 3

@@ -88,7 +88,7 @@ public class GameController : Ticker
 
             yield return StartCoroutine(player.MoveToPosition(map.currentPath.wayPoints));
             AudioManager.MacroPlaySound("MOU_NodeSelect", 0);
-            var nodeMicroGame = map.currentNode.GetComponent<NodeMicroGame>();
+            var nodeMicroGame = map.currentNode.GetComponent<NodeSettings>();
 
             // True if node with micro games, false otherwise
             if (nodeMicroGame != null)
@@ -123,7 +123,7 @@ public class GameController : Ticker
         }
     }
 
-    private IEnumerator NodeWithMicroGame(NodeMicroGame node)
+    private IEnumerator NodeWithMicroGame(NodeSettings node)
     {
         // select 3 random micro games from micro games list
         var microGamesQueue = new Queue<string>();
