@@ -22,6 +22,7 @@ public class GameController : Ticker
     [SerializeField] private LifeBar lifeBar;
     [SerializeField] private int mainMenuBuildIndex;
     [SerializeField] private GameObject[] macroObjects = Array.Empty<GameObject>();
+    [SerializeField] private ScenesReferencesSO minigamesList;
     [SerializeField] public string[] sceneNames = Array.Empty<string>();
     
     private static readonly int victory = Animator.StringToHash("Victory");
@@ -157,11 +158,25 @@ public class GameController : Ticker
             // start transition UI
             AudioManager.MacroPlaySound("MOU_MiniGameEnter", 0);
             
-            // start next micro game in queue
+            //Choose next MicroGame
             currentScene = microGamesQueue.Dequeue();
             Debug.Log("Launch Micro Game:" + currentScene);
+            
+            //Keyword trigger
+            for (int i = 0; i < minigamesList.MiniGames.Length; i++)
+            {
+                if (minigamesList.MiniGames[i].MiniGameScene.name == currentScene)
+                {
+                    KeywordControl.PlayKeyword( minigamesList.MiniGames[i].MiniGameInput, minigamesList.MiniGames[i].MiniGameKeyword);
+                    Debug.Log("Keyword = " + minigamesList.MiniGames[i].MiniGameKeyword + "Input = " + minigamesList.MiniGames[i].MiniGameInput.ToString());
+                }
+            }
+            
+            // start next micro game in queue
             yield return StartCoroutine(transitionController.TransitionHandler(currentScene, true));
-
+            
+            
+            
             // micro game start
             ResetTick();
             timer.StartTimer();
