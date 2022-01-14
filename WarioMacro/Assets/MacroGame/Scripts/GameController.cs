@@ -95,7 +95,7 @@ public class GameController : Ticker
             {
                 yield return StartCoroutine(NodeWithMicroGame(nodeMicroGame));
 
-                NodeResults();
+                NodeResults(nodeMicroGame);
 
                 yield return new WaitForSecondsRealtime(1f);
                 
@@ -223,9 +223,9 @@ public class GameController : Ticker
         //Debug.Log("Node completed");
     }
 
-    private void NodeResults()
+    private void NodeResults(NodeSettings node)
     {
-        if (nodeSuccessCount > 1)
+        if (nodeSuccessCount >= node.microGamesNumber * 0.5f)
         {
             settingsManager.IncreaseDifficulty();
             AudioManager.MacroPlaySound("MOU_NodeSuccess", 0);
@@ -234,7 +234,11 @@ public class GameController : Ticker
         {
             settingsManager.DecreaseDifficulty();
             AudioManager.MacroPlaySound("MOU_NodeFail", 0);
-            lifeBar.Damage();
+
+            if (Alarm.isActive && nodeSuccessCount == 0) // TODO : && node.type in characters' types
+            {
+                lifeBar.Damage();
+            }
         }
     }
 
