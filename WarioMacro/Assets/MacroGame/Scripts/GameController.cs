@@ -13,6 +13,7 @@ public class GameController : Ticker
     
     [SerializeField] private Animator macroGameCanvasAnimator;
     [SerializeField] private GameSettingsManager settingsManager;
+    [SerializeField] private Alarm alarm;
     [SerializeField] private MapManager mapManager;
     [SerializeField] private MiniGameResultPannel_UI resultPanel;
     [SerializeField] private Timer timer;
@@ -84,7 +85,7 @@ public class GameController : Ticker
         {
             yield return StartCoroutine(map.WaitForNodeSelection());
 
-            yield return StartCoroutine(player.MoveToPosition(map.currentNode.transform.position));
+            yield return StartCoroutine(player.MoveToPosition(map.currentPath.wayPoints));
             AudioManager.MacroPlaySound("MOU_NodeSelect", 0);
             var nodeMicroGame = map.currentNode.GetComponent<NodeMicroGame>();
 
@@ -180,11 +181,13 @@ public class GameController : Ticker
             if (gameResult)
             {
                 settingsManager.IncreaseBPM();
+                alarm.DecrementCount(true);
                 AudioManager.MacroPlaySound("MOU_SpeedUp", 0);
             }
             else
             {
                 settingsManager.DecreaseBPM();
+                alarm.DecrementCount(false);
                 AudioManager.MacroPlaySound("MOU_SpeedDown", 0);
             }
 

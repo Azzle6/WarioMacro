@@ -21,14 +21,18 @@ public class NodeConnectionRenderer : MonoBehaviour
     private void UpdateLineRenderer()
     {
         if (node == null) return;
-        if (lineRenderer == null) return;
+        if ( lineRenderer == null) return;
         List<Vector3> points = new List<Vector3>();
         foreach (var path in node.paths)
         {
             if (path.destination == null) continue;
+            if (path.wayPoints.Count == 0) continue;
             points.Add(transform.position);
+            foreach (var wayPoint in path.wayPoints)
+            {
+                points.Add(wayPoint.position);
+            }
             points.Add(path.destination.transform.position);
-            points.Add(transform.position);
         }
 
         lineRenderer.positionCount = points.Count;
