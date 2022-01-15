@@ -209,11 +209,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 1
---- !u!1 &81771132 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8489662429927931511, guid: a77b2ab0250adec40b8594d8cab7bd3d, type: 3}
-  m_PrefabInstance: {fileID: 1381475235}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &81771133 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8489662429927931504, guid: a77b2ab0250adec40b8594d8cab7bd3d, type: 3}
@@ -1799,6 +1794,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2032698174247607, guid: c526801d65ade4e43912c6513864ea76, type: 3}
   m_PrefabInstance: {fileID: 1287644081}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1260537800 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8431841513928399150, guid: a5c8c710ed2e09941b2ac9927623953b, type: 3}
+  m_PrefabInstance: {fileID: 3409883734055842231}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1287644081
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2175,14 +2175,13 @@ MonoBehaviour:
   resultPanel: {fileID: 135660540}
   timer: {fileID: 1749864763}
   transitionController: {fileID: 1749864762}
-  KeywordControl: {fileID: 1112552556}
+  keywordManager: {fileID: 1112552556}
   lifeBar: {fileID: 1749864765}
   mainMenuBuildIndex: 0
   macroObjects:
   - {fileID: 2053484114}
   - {fileID: 982991960}
   - {fileID: 432299753}
-  minigamesList: {fileID: 11400000, guid: d76fb35deef7b814f871c4671b373ba0, type: 2}
   sceneNames:
   - MG_NOB_Scene_DOC
   - MG_ULB_Unlock
@@ -2317,7 +2316,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1862497960}
   mapGOList:
-  - {fileID: 81771132}
+  - {fileID: 1260537800}
   - {fileID: 7524916876160050252}
 --- !u!1 &1796344224
 GameObject:
@@ -2857,10 +2856,6 @@ PrefabInstance:
     - target: {fileID: 1156184967029394194, guid: 90f899e0f87d274438150ff1df241653, type: 3}
       propertyPath: m_Name
       value: KeyWord_Mask
-      objectReference: {fileID: 0}
-    - target: {fileID: 1156184967029394194, guid: 90f899e0f87d274438150ff1df241653, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1156184967029394195, guid: 90f899e0f87d274438150ff1df241653, type: 3}
       propertyPath: m_Pivot.x

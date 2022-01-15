@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 1156184967029394190}
   - component: {fileID: 1156184967029394189}
   - component: {fileID: 1156184967029394188}
+  - component: {fileID: 4044660357561854861}
   - component: {fileID: 1156184967029394191}
   - component: {fileID: 1156184967029394184}
-  - component: {fileID: 4044660357561854861}
   m_Layer: 5
   m_Name: KeyWord_Mask
   m_TagString: Untagged
@@ -29,7 +29,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1156184967029394194}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.9, y: 0.9, z: 1}
   m_Children:
@@ -93,6 +93,42 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 0
+--- !u!114 &4044660357561854861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1156184967029394194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 697f0d5e551413a4db8a249f4f748b53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  microGameList: {fileID: 11400000, guid: d76fb35deef7b814f871c4671b373ba0, type: 2}
+  director: {fileID: 1156184967029394191}
+  inputPlaceholder: {fileID: 1156184967532966736}
+  texts:
+  - {fileID: 1156184968180665589}
+  - {fileID: 1156184967074702493}
+  - {fileID: 1156184968539387142}
+  buttons:
+  - inputRef: 0
+    spriteAsset: {fileID: 21300000, guid: 7d588836498f4ee42a50658e86cde293, type: 3}
+  - inputRef: 1
+    spriteAsset: {fileID: 21300000, guid: f218f85cef7b18a428efc2f197e8bb78, type: 3}
+  - inputRef: 2
+    spriteAsset: {fileID: 21300000, guid: 14e8ba29960ac9947a6e10a5895172fe, type: 3}
+  - inputRef: 3
+    spriteAsset: {fileID: 21300000, guid: eecc80261e19dbb48996f579ba556787, type: 3}
+  - inputRef: 4
+    spriteAsset: {fileID: 21300000, guid: 793744b02569e3a46a42fc1afc1bb7d9, type: 3}
+  - inputRef: 5
+    spriteAsset: {fileID: 21300000, guid: b9839ef9f82206e4f96d7aaee10efedd, type: 3}
+  - inputRef: 6
+    spriteAsset: {fileID: 21300000, guid: b80f5ed850064d548a7383b0dbba4ca2, type: 3}
+  - inputRef: 7
+    spriteAsset: {fileID: 21300000, guid: 729a27109916c024880c14ec0f2836e4, type: 3}
 --- !u!320 &1156184967029394191
 PlayableDirector:
   m_ObjectHideFlags: 0
@@ -139,41 +175,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &4044660357561854861
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1156184967029394194}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 697f0d5e551413a4db8a249f4f748b53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  director: {fileID: 1156184967029394191}
-  buttons:
-  - InputRef: 0
-    SpriteAsset: {fileID: 21300000, guid: 7d588836498f4ee42a50658e86cde293, type: 3}
-  - InputRef: 1
-    SpriteAsset: {fileID: 21300000, guid: f218f85cef7b18a428efc2f197e8bb78, type: 3}
-  - InputRef: 2
-    SpriteAsset: {fileID: 21300000, guid: 14e8ba29960ac9947a6e10a5895172fe, type: 3}
-  - InputRef: 3
-    SpriteAsset: {fileID: 21300000, guid: eecc80261e19dbb48996f579ba556787, type: 3}
-  - InputRef: 4
-    SpriteAsset: {fileID: 21300000, guid: 793744b02569e3a46a42fc1afc1bb7d9, type: 3}
-  - InputRef: 5
-    SpriteAsset: {fileID: 21300000, guid: b9839ef9f82206e4f96d7aaee10efedd, type: 3}
-  - InputRef: 6
-    SpriteAsset: {fileID: 21300000, guid: b80f5ed850064d548a7383b0dbba4ca2, type: 3}
-  - InputRef: 7
-    SpriteAsset: {fileID: 21300000, guid: 729a27109916c024880c14ec0f2836e4, type: 3}
-  CurrentKeyword: 
-  InputPlaceholder: {fileID: 1156184967532966736}
-  BlueTextplaceholder: {fileID: 1156184968180665589}
-  PinkTextplaceholder: {fileID: 1156184967074702493}
-  WhiteTextplaceholder: {fileID: 1156184968539387142}
 --- !u!1 &1156184967074702563
 GameObject:
   m_ObjectHideFlags: 0

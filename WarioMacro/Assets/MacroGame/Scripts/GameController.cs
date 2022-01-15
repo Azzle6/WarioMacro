@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 // ReSharper disable once CheckNamespace
@@ -18,11 +19,10 @@ public class GameController : Ticker
     [SerializeField] private MiniGameResultPannel_UI resultPanel;
     [SerializeField] private Timer timer;
     [SerializeField] private TransitionController transitionController;
-    [SerializeField] private KeywordDisplay KeywordControl;
+    [FormerlySerializedAs("KeywordControl")] [SerializeField] private KeywordDisplay keywordManager;
     [SerializeField] private LifeBar lifeBar;
     [SerializeField] private int mainMenuBuildIndex;
     [SerializeField] private GameObject[] macroObjects = Array.Empty<GameObject>();
-    [SerializeField] private ScenesReferencesSO minigamesList;
     [SerializeField] public string[] sceneNames = Array.Empty<string>();
     
     private static readonly int victory = Animator.StringToHash("Victory");
@@ -163,19 +163,12 @@ public class GameController : Ticker
             // start transition UI
             AudioManager.MacroPlaySound("MOU_MiniGameEnter", 0);
             
-            //Choose next MicroGame
+            // Choose next MicroGame
             currentScene = microGamesQueue.Dequeue();
             Debug.Log("Launch Micro Game:" + currentScene);
             
-            //Keyword trigger
-            for (int i = 0; i < minigamesList.MiniGames.Length; i++)
-            {
-                if (minigamesList.MiniGames[i].MiniGameScene.name == currentScene)
-                {
-                    KeywordControl.PlayKeyword( minigamesList.MiniGames[i].MiniGameInput[0], minigamesList.MiniGames[i].MiniGameKeyword);
-                    Debug.Log("Keyword = " + minigamesList.MiniGames[i].MiniGameKeyword + "Input = " + minigamesList.MiniGames[i].MiniGameInput.ToString());
-                }
-            }
+            // Keyword trigger
+            yield return keywordManager.KeyWordHandler(currentScene);
             
             // start next micro game in queue
             yield return StartCoroutine(transitionController.TransitionHandler(currentScene, true));

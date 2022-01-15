@@ -1,33 +1,48 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
+// ReSharper disable once CheckNamespace
 public class KeywordDisplay : MonoBehaviour
 {
-    [SerializeField]private PlayableDirector director;
-    [SerializeField]private ButtonsReferences[] buttons;
-    [SerializeField]private string CurrentKeyword;
-    public Image InputPlaceholder;
-    public TMP_Text BlueTextplaceholder;
-    public TMP_Text PinkTextplaceholder;
-    public TMP_Text WhiteTextplaceholder;
+    [SerializeField] private ScenesReferencesSO microGameList;
+    [SerializeField] private PlayableDirector director;
+    [SerializeField] private Image inputPlaceholder;
+    [SerializeField] private TextMeshProUGUI[] texts;
+    [SerializeField] private ButtonsReferences[] buttons;
+    
 
-    public void PlayKeyword(MiniGameScriptableObject.ButtonsNames buttonName, string Keyword)
+    public IEnumerator KeyWordHandler(string sceneName)
+    {
+        foreach (MiniGameScriptableObject t in microGameList.MiniGames)
+        {
+            if (t.MiniGameScene.name != sceneName) continue;
+                
+            PlayKeyword( t.MiniGameInput[0], t.MiniGameKeyword);
+            break;
+        }
+
+        while (director.state == PlayState.Playing) yield return null;
+    }
+
+    private void PlayKeyword(MiniGameScriptableObject.ButtonsNames buttonName, string keyword)
     {
         Sprite buttonSprite = null;
-        BlueTextplaceholder.text = Keyword;
-        WhiteTextplaceholder.text = Keyword;
-        PinkTextplaceholder.text = Keyword;
         
-        foreach (ButtonsReferences ButtonRef in buttons)
+        foreach (TextMeshProUGUI text in texts)
         {
-            if (ButtonRef.InputRef == buttonName)
+            text.text = keyword;
+        }
+        
+        foreach (ButtonsReferences buttonRef in buttons)
+        {
+            if (buttonRef.inputRef == buttonName)
             {
-                buttonSprite = ButtonRef.SpriteAsset;
+                buttonSprite = buttonRef.spriteAsset;
             }
         }
 
@@ -35,20 +50,16 @@ public class KeywordDisplay : MonoBehaviour
         {
             Debug.Log("Pas de référence de sprite d'input pour " + buttonName.ToString());
         }
-        else InputPlaceholder.sprite = buttonSprite;
+        else inputPlaceholder.sprite = buttonSprite;
         
-        director.Play();
-
-
+        director.Play();    
     }
-
-
 
 }
 
-[System.Serializable]
+[Serializable]
 public class ButtonsReferences
 {
-    public MiniGameScriptableObject.ButtonsNames InputRef;
-    public Sprite SpriteAsset;
+    [FormerlySerializedAs("InputRef")] public MiniGameScriptableObject.ButtonsNames inputRef;
+    [FormerlySerializedAs("SpriteAsset")] public Sprite spriteAsset;
 }
