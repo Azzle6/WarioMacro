@@ -4,7 +4,7 @@ using UnityEngine;
 public class GameControllerSO : ScriptableObject
 {
     [BPMRange]
-    public int currentGameSpeed = 80;
+    public int currentGameSpeed = 50;
 
     [Range(1, 3)]
     public int currentDifficulty = 1;

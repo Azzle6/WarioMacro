@@ -51,7 +51,7 @@ public class Alarm : MonoBehaviour
         if (isActive) return;
 
         currentFactor = 1 + MapManager.floor * floorFactorIncrease
-                          + (Ticker.gameBPM - 100) / 10 * bpmFactorIncrease 
+                          + (Ticker.gameBPM - 50) / 10 * bpmFactorIncrease 
                           + (Ticker.difficulty - 1) * difficultyFactorIncrease;
     }
 }
