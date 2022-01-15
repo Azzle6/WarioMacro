@@ -1,11 +1,14 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Random = System.Random;
 
 public class MapManager : MonoBehaviour
 {
     public static int floor { get; private set; } = -1;
     
     [SerializeField] private Player player;
+    [SerializeField] private int mapsPerGame = 5;
     [SerializeField] private GameObject[] mapGOList;
     private Queue<GameObject> mapGoQueue;
 
@@ -32,6 +35,8 @@ public class MapManager : MonoBehaviour
 
     private void OnEnable()
     {
-        mapGoQueue = new Queue<GameObject>(mapGOList);
+        var rd = new Random();
+        mapGoQueue = new Queue<GameObject>(mapGOList.OrderBy(go => rd.Next())
+            .Take(mapGOList.Length < mapsPerGame ? mapGOList.Length : mapsPerGame));
     }
 }
