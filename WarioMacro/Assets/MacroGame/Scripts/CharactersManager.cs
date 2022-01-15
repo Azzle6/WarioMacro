@@ -20,7 +20,6 @@ public class CharactersManager : MonoBehaviour
     private void Start()
     {
         instance = this;
-        DisplayCharacters(CharaTypes.Alchemist);
     }
 
     public void DisplayCharacters(CharaTypes charType)
