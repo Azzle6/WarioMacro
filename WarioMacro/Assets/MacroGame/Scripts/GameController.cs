@@ -45,6 +45,11 @@ public class GameController : Ticker
         Debug.Log("macro registered");
     }
     
+    public static void StopTimer()
+    {
+        instance.timer.PauseTimer();
+    }
+    
     public static void FinishGame(bool result)
     {
         Debug.Log("FinishGame: " + result);
@@ -167,7 +172,7 @@ public class GameController : Ticker
             {
                 if (minigamesList.MiniGames[i].MiniGameScene.name == currentScene)
                 {
-                    KeywordControl.PlayKeyword( minigamesList.MiniGames[i].MiniGameInput, minigamesList.MiniGames[i].MiniGameKeyword);
+                    KeywordControl.PlayKeyword( minigamesList.MiniGames[i].MiniGameInput[0], minigamesList.MiniGames[i].MiniGameKeyword);
                     Debug.Log("Keyword = " + minigamesList.MiniGames[i].MiniGameKeyword + "Input = " + minigamesList.MiniGames[i].MiniGameInput.ToString());
                 }
             }
