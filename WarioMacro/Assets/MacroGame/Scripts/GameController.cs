@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 // ReSharper disable once CheckNamespace
@@ -18,11 +19,10 @@ public class GameController : Ticker
     [SerializeField] private MiniGameResultPannel_UI resultPanel;
     [SerializeField] private Timer timer;
     [SerializeField] private TransitionController transitionController;
-    [SerializeField] private KeywordDisplay KeywordControl;
+    [FormerlySerializedAs("KeywordControl")] [SerializeField] private KeywordDisplay keywordManager;
     [SerializeField] private LifeBar lifeBar;
     [SerializeField] private int mainMenuBuildIndex;
     [SerializeField] private GameObject[] macroObjects = Array.Empty<GameObject>();
-    [SerializeField] private ScenesReferencesSO minigamesList;
     [SerializeField] public string[] sceneNames = Array.Empty<string>();
     
     private static readonly int victory = Animator.StringToHash("Victory");
@@ -43,6 +43,11 @@ public class GameController : Ticker
         instance.TickerStart(true);
         instance.debugMicro = true;
         Debug.Log("macro registered");
+    }
+    
+    public static void StopTimer()
+    {
+        instance.timer.PauseTimer();
     }
     
     public static void FinishGame(bool result)
@@ -88,14 +93,14 @@ public class GameController : Ticker
 
             yield return StartCoroutine(player.MoveToPosition(map.currentPath.wayPoints));
             AudioManager.MacroPlaySound("MOU_NodeSelect", 0);
-            var nodeMicroGame = map.currentNode.GetComponent<NodeMicroGame>();
+            var nodeMicroGame = map.currentNode.GetComponent<NodeSettings>();
 
             // True if node with micro games, false otherwise
             if (nodeMicroGame != null)
             {
                 yield return StartCoroutine(NodeWithMicroGame(nodeMicroGame));
 
-                NodeResults();
+                NodeResults(nodeMicroGame);
 
                 yield return new WaitForSecondsRealtime(1f);
                 
@@ -123,7 +128,7 @@ public class GameController : Ticker
         }
     }
 
-    private IEnumerator NodeWithMicroGame(NodeMicroGame node)
+    private IEnumerator NodeWithMicroGame(NodeSettings node)
     {
         // select 3 random micro games from micro games list
         var microGamesQueue = new Queue<string>();
@@ -158,19 +163,12 @@ public class GameController : Ticker
             // start transition UI
             AudioManager.MacroPlaySound("MOU_MiniGameEnter", 0);
             
-            //Choose next MicroGame
+            // Choose next MicroGame
             currentScene = microGamesQueue.Dequeue();
             Debug.Log("Launch Micro Game:" + currentScene);
             
-            //Keyword trigger
-            for (int i = 0; i < minigamesList.MiniGames.Length; i++)
-            {
-                if (minigamesList.MiniGames[i].MiniGameScene.name == currentScene)
-                {
-                    KeywordControl.PlayKeyword( minigamesList.MiniGames[i].MiniGameInput, minigamesList.MiniGames[i].MiniGameKeyword);
-                    Debug.Log("Keyword = " + minigamesList.MiniGames[i].MiniGameKeyword + "Input = " + minigamesList.MiniGames[i].MiniGameInput.ToString());
-                }
-            }
+            // Keyword trigger
+            yield return keywordManager.KeyWordHandler(currentScene);
             
             // start next micro game in queue
             yield return StartCoroutine(transitionController.TransitionHandler(currentScene, true));
@@ -223,9 +221,9 @@ public class GameController : Ticker
         //Debug.Log("Node completed");
     }
 
-    private void NodeResults()
+    private void NodeResults(NodeSettings node)
     {
-        if (nodeSuccessCount > 1)
+        if (nodeSuccessCount >= node.microGamesNumber * 0.5f)
         {
             settingsManager.IncreaseDifficulty();
             AudioManager.MacroPlaySound("MOU_NodeSuccess", 0);
@@ -234,7 +232,11 @@ public class GameController : Ticker
         {
             settingsManager.DecreaseDifficulty();
             AudioManager.MacroPlaySound("MOU_NodeFail", 0);
-            lifeBar.Damage();
+
+            if (Alarm.isActive && nodeSuccessCount == 0) // TODO : && node.type in characters' types
+            {
+                lifeBar.Damage();
+            }
         }
     }
 

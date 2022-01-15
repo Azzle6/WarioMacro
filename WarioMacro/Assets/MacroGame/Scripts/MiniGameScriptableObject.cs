@@ -9,10 +9,7 @@ public class MiniGameScriptableObject : ScriptableObject
 {
     public enum ButtonsNames
     {
-        X,
-        Y,
-        A,
-        B,
+        ABXY,
         LeftJoystick,
         RightJoystick,
         LeftTrigger,
@@ -22,7 +19,7 @@ public class MiniGameScriptableObject : ScriptableObject
         DirectionalButtons
     }
 
-    public ButtonsNames MiniGameInput;
+    public ButtonsNames[] MiniGameInput;
     public string MiniGameKeyword;
     public SceneAsset MiniGameScene;
 }

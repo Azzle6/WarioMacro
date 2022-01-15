@@ -1,20 +1,22 @@
 using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using UnityEngine;
 
+// ReSharper disable once CheckNamespace
 public class Node : MonoBehaviour
 {
-    [CanBeNull] public Path[] paths = new Path[4];
     public Animator animator;
+    public Path[] paths = new Path[4];
 
-    void Start()
+
+    private void Start()
     {
-        foreach (var path in paths)
+        foreach (Path path in paths)
         {
             path.wayPoints.Add(path.destination.transform);
         }
     }   
+    
     public static Direction? GetPlayerDirection()
     {
         float horizontalInput = InputManager.GetAxis(ControllerAxis.LEFT_STICK_HORIZONTAL);
@@ -39,7 +41,7 @@ public class Node : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
-        // ReSharper disable once PossibleNullReferenceException
+        
         foreach (Path path in paths)
         {
             var points = new List<Vector3>();
@@ -53,7 +55,7 @@ public class Node : MonoBehaviour
                 continue;
             }
             
-            foreach(var waypoint in path.wayPoints)
+            foreach(Transform waypoint in path.wayPoints)
             {
                 points.Add(waypoint.position);
             }
