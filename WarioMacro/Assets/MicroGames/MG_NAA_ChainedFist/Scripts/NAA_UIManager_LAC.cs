@@ -85,7 +85,7 @@ public class NAA_UIManager_LAC : MonoBehaviour
 
         public void ResetPad(float duration = 1)
         {
-            pad.transform.position = Vector3.Lerp(pad.transform.position, arrowDir.transform.position,(Time.time - (stopMoveTime/(Ticker.gameBPM / 120)))/duration);
+            pad.transform.position = Vector3.Lerp(pad.transform.position, arrowDir.transform.position,(Time.time - (stopMoveTime/(Ticker.gameBPM / 60)))/duration);
         }
 
         public bool CheckStickMove()
