@@ -11,6 +11,8 @@ public class PlaytestTool : MonoBehaviour
     [SerializeField] private string[] ScenesList = null;
     [SerializeField] private GameObject ScrollContent;
     [SerializeField] private GameObject ToggleTemplate;
+    [SerializeField] private GameObject PlaytestPanel;
+    private bool panelIsActive = false;
     private List<Toggle> TogglesList;
     [SerializeField] private GameController GameControl;
     [SerializeField] private ScenesReferencesSO ScenesRefs;
@@ -18,6 +20,15 @@ public class PlaytestTool : MonoBehaviour
     private void Start()
     {
         InitSceneList();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            panelIsActive = !panelIsActive;
+            PlaytestPanel.SetActive(panelIsActive);
+        }
     }
 
     public void InitSceneList()
