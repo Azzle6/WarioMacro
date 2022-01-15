@@ -55,14 +55,14 @@ public class Ticker : MonoBehaviour
         if (!debug)
         {
             // Reset bpm and difficulty 
-            gameControllerSO.currentGameSpeed = 100;
+            gameControllerSO.currentGameSpeed = Resources.Load<BPMSettingsSO>("BPMSettingsSO").minBPM;
             gameControllerSO.currentDifficulty = 1;
         }
         
         // Update BPM and difficulty
         gameBPM = gameControllerSO.currentGameSpeed;
         difficulty = gameControllerSO.currentDifficulty;
-        Time.timeScale = gameBPM / 120;
+        Time.timeScale = gameBPM / 60;
 
         tickEnumerator = TickCoroutine();
         StartCoroutine(tickEnumerator);
@@ -75,7 +75,7 @@ public class Ticker : MonoBehaviour
         difficulty = gameControllerSO.currentDifficulty;
         
         // update global timescale
-        Time.timeScale = lockTimescale ? 0f : gameBPM / 120;
+        Time.timeScale = lockTimescale ? 0f : gameBPM / 60;
     }
     
     private IEnumerator TickCoroutine()

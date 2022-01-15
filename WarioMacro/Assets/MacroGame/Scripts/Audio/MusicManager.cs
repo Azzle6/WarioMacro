@@ -18,7 +18,7 @@ public class MusicManager : MonoBehaviour, ITickable
     public void OnTick()
     {
         // TODO
-        FindMusic((int) Ticker.gameBPM, Soundgroup.PhaseState.MACROGAME, Soundgroup.CurrentPhase.RECRUIT);
+        FindMusic((int) Ticker.gameBPM * 2, Soundgroup.PhaseState.MACROGAME, Soundgroup.CurrentPhase.RECRUIT);
 
         if (currentAudioClip.Equals(nextAudioClip)) return;
         
