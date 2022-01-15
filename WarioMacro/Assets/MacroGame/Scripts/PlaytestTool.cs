@@ -96,8 +96,15 @@ public class PlaytestTool : MonoBehaviour
         
         
     }
+    
+    
 
-    /*public void CopyDebug()
+    public void OpenScenesList()
+    {
+        
+    }
+
+    public void CopyDebug()
     {
         
     }
@@ -110,5 +117,5 @@ public class PlaytestTool : MonoBehaviour
     public void TakeScreenshot()
     {
         
-    }*/
+    }
 }
