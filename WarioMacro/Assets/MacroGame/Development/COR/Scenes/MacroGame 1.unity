@@ -1422,6 +1422,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e5b2d632e7aacf14a93e64332d08e823, type: 3}
+--- !u!320 &833807339 stripped
+PlayableDirector:
+  m_CorrespondingSourceObject: {fileID: 6847896506640998377, guid: c526801d65ade4e43912c6513864ea76, type: 3}
+  m_PrefabInstance: {fileID: 1287644081}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &882813278 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6847896505585499407, guid: c526801d65ade4e43912c6513864ea76, type: 3}
+  m_PrefabInstance: {fileID: 1287644081}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &882813279 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 6847896505585499406, guid: c526801d65ade4e43912c6513864ea76, type: 3}
+  m_PrefabInstance: {fileID: 1287644081}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &982991960 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7721295140537220737, guid: df3476a9979186948a7818bfde291d43, type: 3}
@@ -1895,11 +1910,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1235174356}
   m_CullTransparentMesh: 1
---- !u!1 &1237233994 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2032698174247607, guid: c526801d65ade4e43912c6513864ea76, type: 3}
-  m_PrefabInstance: {fileID: 1287644081}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1287644081
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2006,14 +2016,13 @@ PrefabInstance:
     - target: {fileID: 2032697343633295, guid: c526801d65ade4e43912c6513864ea76, type: 3}
       propertyPath: m_SceneBindings.Array.data[9].value
       value: 
-      objectReference: {fileID: 1237233994}
+      objectReference: {fileID: 0}
+    - target: {fileID: 6847896505585499406, guid: c526801d65ade4e43912c6513864ea76, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c526801d65ade4e43912c6513864ea76, type: 3}
---- !u!320 &1287644082 stripped
-PlayableDirector:
-  m_CorrespondingSourceObject: {fileID: 2032697343633295, guid: c526801d65ade4e43912c6513864ea76, type: 3}
-  m_PrefabInstance: {fileID: 1287644081}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1439749327 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2056309721574369033, guid: 61c30988b7ee7fe4f8e1f4f5d7dd1872, type: 3}
@@ -2230,7 +2239,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   director: {fileID: 1696372370}
-  timerGO: {fileID: 2036940331}
+  timerGO: {fileID: 882813278}
 --- !u!114 &1749864763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2243,7 +2252,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22c809458cd2bd74fb82064de3a66bfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  director: {fileID: 1287644082}
+  director: {fileID: 833807339}
 --- !u!114 &1749864764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2327,6 +2336,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1862497960}
+  mapsPerGame: 5
   mapGOList:
   - {fileID: 1484099089}
   - {fileID: 7524916876160050252}
@@ -3397,7 +3407,7 @@ RectTransform:
   - {fileID: 1823378425}
   - {fileID: 485812077}
   - {fileID: 432299752}
-  - {fileID: 2036940332}
+  - {fileID: 882813279}
   - {fileID: 545898767}
   - {fileID: 1022589566}
   - {fileID: 1235174357}
@@ -3508,16 +3518,6 @@ Transform:
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8431841513928399150, guid: a5c8c710ed2e09941b2ac9927623953b, type: 3}
   m_PrefabInstance: {fileID: 2023213644}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &2036940331 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2032697343633292, guid: c526801d65ade4e43912c6513864ea76, type: 3}
-  m_PrefabInstance: {fileID: 1287644081}
-  m_PrefabAsset: {fileID: 0}
---- !u!224 &2036940332 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 2032697343633293, guid: c526801d65ade4e43912c6513864ea76, type: 3}
-  m_PrefabInstance: {fileID: 1287644081}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &2046637688
 GameObject:
