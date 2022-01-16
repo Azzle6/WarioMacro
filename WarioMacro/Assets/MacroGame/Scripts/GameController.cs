@@ -238,7 +238,7 @@ public class GameController : Ticker
             settingsManager.DecreaseDifficulty();
             AudioManager.MacroPlaySound("MOU_NodeFail", 0);
 
-            if (!Alarm.isActive || nodeSuccessCount != 0 || characterManager.SpecialistOfType(node.type) != 0) return;
+            if (!Alarm.isActive || nodeSuccessCount != 0 || characterManager.SpecialistOfTypeInTeam(node.type) != 0) return;
             
             lifeBar.Damage();
             characterManager.LoseCharacter();

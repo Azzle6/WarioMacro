@@ -50,8 +50,7 @@ public class RecruitmentController : GameController
         }
         else if (instance.nodeSuccessCount >= randomSpecialistThreshold)
         {
-            // TODO : Random other type character
-            instance.characterManager.AddDefaultCharacter();
+            instance.characterManager.AddDifferentSpecialist(node.type);
         }
         else
         {

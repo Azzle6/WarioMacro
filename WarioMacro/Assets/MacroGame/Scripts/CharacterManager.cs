@@ -8,9 +8,9 @@ using Random = UnityEngine.Random;
 // ReSharper disable once CheckNamespace
 public class CharacterManager : MonoBehaviour
 {
-    public List<Character> allAvailableCharacters = new List<Character>();
-    public bool isTeamFull;
+    public CharacterList[] allAvailableCharacters;
     public int totalCharacterCount = 4;
+    [HideInInspector] public bool isTeamFull;
 
     [SerializeField] private GameObject chooseCharacterGO;
     [SerializeField] private GameObject cardButtonTemplate;
@@ -18,62 +18,73 @@ public class CharacterManager : MonoBehaviour
     private readonly Stack<Character> playerTeam = new Stack<Character>();
     private int currentCount;
 
+    public int SpecialistOfTypeInTeam(int type)
+    {
+        return playerTeam.Count(c => c.characterType == type);
+    }
+    
     public void DisplayRecruitmentChoice(int charaType)
     {
-        var choiceList = new List<Character>(allAvailableCharacters.Where(character => character.characterType == charaType));
+        CharacterList choices = allAvailableCharacters.First(list => list.type == charaType);
+        int charaLeft = choices.count;
+
         chooseCharacterGO.SetActive(true);
 
-        if (choiceList.Count == 0)
+        if (charaLeft == 0)
         {
             Debug.LogError("Plus de persos "+ charaType +" disponibles.");
             return;
         }
         
         //Re-positionnement automatique
-        float spacing = 900 / Mathf.Pow(3, (choiceList.Count - 1));
+        float spacing = 900 / Mathf.Pow(3, (charaLeft - 1));
         chooseCharacterGO.transform.localPosition =
-            choiceList.Count > 1 ? new Vector3(-200, 0, 0) : Vector3.zero;
+            charaLeft > 1 ? new Vector3(-200, 0, 0) : Vector3.zero;
         
 
         chooseCharacterGO.GetComponent<HorizontalLayoutGroup>().spacing = spacing;
 
         //Instancier toutes les cartes dont on a besoin
-        var displayedGO = choiceList
+        List<GameObject> displayedGO = choices
             .Select(characterSO => Instantiate(cardButtonTemplate, chooseCharacterGO.transform)).ToList();
 
         Destroy(chooseCharacterGO.transform.GetChild(0).gameObject);
 
-        for (int i = 0; i < choiceList.Count; i++)
+        for (int i = 0; i < charaLeft; i++)
         {
-            displayedGO[i].GetComponent<Image>().sprite = choiceList[i].cardSprite;
+            displayedGO[i].GetComponent<Image>().sprite = choices.Get(i).cardSprite;
 
             //Ajoute un listener au bouton pour qu'il ajoute le bon personnage
             int i1 = i;
             displayedGO[i].GetComponent<Button>().onClick
-                .AddListener(delegate { AddCharacter(choiceList[i1]); });
+                .AddListener(delegate { AddCharacter(choices, i1); });
         }
     }
 
-    public int SpecialistOfType(int type)
+    public void AddDifferentSpecialist(int type)
     {
-        return playerTeam.Count(c => c.characterType == type);
+        var choices = allAvailableCharacters
+            .Where(cList => cList.type != CharacterType.Scoundrel && cList.type != type && !cList.IsEmpty()).ToList();
+
+        CharacterList charaList = choices[Random.Range(0, choices.Count)];
+        AddCharacter(charaList, Random.Range(0, charaList.count));
     }
 
     public void AddDefaultCharacter()
     {
-        var choices = new List<Character>(allAvailableCharacters.Where(availableChara =>
-            availableChara.characterType == CharacterType.Scoundrel));
+        CharacterList choices = allAvailableCharacters.First(list => list.type == CharacterType.Scoundrel);
+        int charaLeft = choices.count;
 
-        if (choices.Count == 0)
+        if (charaLeft == 0)
         {
             Debug.LogWarning("Plus de persos basiques disponibles.");
             return;
         }
-        int randomN = Random.Range(0, choices.Count );
-        AddCharacter(choices[randomN]);
+        int randomN = Random.Range(0, charaLeft);
+        AddCharacter(choices, randomN);
     }
 
-    private void AddCharacter(Character newChara)
+    private void AddCharacter(CharacterList characterList, int index)
     {
         if (isTeamFull)
         {
@@ -81,15 +92,15 @@ public class CharacterManager : MonoBehaviour
             return;
         }
         
-        playerTeam.Push(newChara);
-        allAvailableCharacters.Remove(newChara);
+        playerTeam.Push(characterList.Get(index));
+        characterList.RemoveAt(index);
         currentCount++;
 
         if (currentCount == totalCharacterCount)
         {
             isTeamFull = true;
         }
-        Debug.Log("personnage " + newChara + " a été ajouté à l'équipe!");
+        Debug.Log("personnage " + playerTeam.Peek() + " a été ajouté à l'équipe!");
     }
     
     public void LoseCharacter()
