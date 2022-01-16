@@ -26,13 +26,13 @@ public class RecruitmentController : GameController
             {
                 yield return StartCoroutine(instance.NodeWithMicroGame(nodeMicroGame));
 
-                NodeResults(nodeMicroGame);
-
                 yield return new WaitForSecondsRealtime(1f);
                 
                 // dispose
                 instance.resultPanel.PopWindowDown();
                 instance.resultPanel.ToggleWindow(false);
+                
+                yield return NodeResults(nodeMicroGame);
                 
                 instance.player.TeleportPlayer(startNode.transform.position);
                 instance.map.currentNode = startNode;
@@ -42,19 +42,19 @@ public class RecruitmentController : GameController
         }
     }
 
-    private void NodeResults(NodeSettings node)
+    private IEnumerator NodeResults(NodeSettings node)
     {
         if (instance.nodeSuccessCount >= askedCharacterThreshold)
         {
-            instance.characterManager.DisplayRecruitmentChoice(node.type);
+            yield return instance.characterManager.DisplayRecruitmentChoice(node.type);
         }
         else if (instance.nodeSuccessCount >= randomSpecialistThreshold)
         {
-            instance.characterManager.AddDifferentSpecialist(node.type);
+            yield return instance.characterManager.AddDifferentSpecialist(node.type);
         }
         else
         {
-            instance.characterManager.AddDefaultCharacter();
+            yield return instance.characterManager.AddDefaultCharacter();
         }
     }
 

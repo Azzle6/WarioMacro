@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using GameTypes;
@@ -13,9 +15,9 @@ public class CharacterManager : MonoBehaviour
     [HideInInspector] public bool isTeamFull;
 
     [SerializeField] private GameObject chooseCharacterGO;
-    [SerializeField] private GameObject cardButtonTemplate;
     
     private readonly Stack<Character> playerTeam = new Stack<Character>();
+    private GameObject[] buttonGOList;
     private int currentCount;
 
     public int SpecialistOfTypeInTeam(int type)
@@ -23,65 +25,96 @@ public class CharacterManager : MonoBehaviour
         return playerTeam.Count(c => c.characterType == type);
     }
     
-    public void DisplayRecruitmentChoice(int charaType)
+    public IEnumerator DisplayRecruitmentChoice(int charaType)
     {
         CharacterList choices = allAvailableCharacters.First(list => list.type == charaType);
-        int charaLeft = choices.count;
+        int choicesCount = buttonGOList.Length < choices.count ? buttonGOList.Length : choices.count;
 
-        chooseCharacterGO.SetActive(true);
-
-        if (charaLeft == 0)
+        if (choices.count == 0)
         {
             Debug.LogError("Plus de persos "+ charaType +" disponibles.");
-            return;
+            yield break;
         }
+        
+        ResetUI();
         
         //Re-positionnement automatique
-        float spacing = 900 / Mathf.Pow(3, (charaLeft - 1));
-        chooseCharacterGO.transform.localPosition =
-            charaLeft > 1 ? new Vector3(-200, 0, 0) : Vector3.zero;
-        
+        chooseCharacterGO.transform.localPosition = new Vector3(-200 * (choicesCount - 1), 0, 0);
 
-        chooseCharacterGO.GetComponent<HorizontalLayoutGroup>().spacing = spacing;
-
-        //Instancier toutes les cartes dont on a besoin
-        List<GameObject> displayedGO = choices
-            .Select(characterSO => Instantiate(cardButtonTemplate, chooseCharacterGO.transform)).ToList();
-
-        Destroy(chooseCharacterGO.transform.GetChild(0).gameObject);
-
-        for (int i = 0; i < charaLeft; i++)
+        for (int i = 0; i < choicesCount; i++)
         {
-            displayedGO[i].GetComponent<Image>().sprite = choices.Get(i).cardSprite;
-
-            //Ajoute un listener au bouton pour qu'il ajoute le bon personnage
-            int i1 = i;
-            displayedGO[i].GetComponent<Button>().onClick
-                .AddListener(delegate { AddCharacter(choices, i1); });
+            ShowCharacterCard(choices, i, i);
         }
+
+        yield return WaitForTeamChange();
     }
 
-    public void AddDifferentSpecialist(int type)
+    public IEnumerator AddDifferentSpecialist(int type)
     {
         var choices = allAvailableCharacters
             .Where(cList => cList.type != CharacterType.Scoundrel && cList.type != type && !cList.IsEmpty()).ToList();
 
         CharacterList charaList = choices[Random.Range(0, choices.Count)];
-        AddCharacter(charaList, Random.Range(0, charaList.count));
+        
+        ResetUI();
+        
+        //Re-positionnement automatique
+        chooseCharacterGO.transform.localPosition = new Vector3(0, 0, 0);
+
+        ShowCharacterCard(charaList, Random.Range(0, charaList.count), 0);
+
+        yield return WaitForTeamChange();
     }
 
-    public void AddDefaultCharacter()
+    public IEnumerator AddDefaultCharacter()
     {
         CharacterList choices = allAvailableCharacters.First(list => list.type == CharacterType.Scoundrel);
         int charaLeft = choices.count;
 
         if (charaLeft == 0)
         {
-            Debug.LogWarning("Plus de persos basiques disponibles.");
-            return;
+            Debug.LogWarning("Plus de persos par défaut disponibles.");
+            yield break;
         }
         int randomN = Random.Range(0, charaLeft);
-        AddCharacter(choices, randomN);
+        
+        ResetUI();
+        
+        //Re-positionnement automatique
+        chooseCharacterGO.transform.localPosition = new Vector3(0, 0, 0);
+
+        ShowCharacterCard(choices, randomN, 0);
+
+        yield return WaitForTeamChange();
+    }
+
+    private void ResetUI()
+    {
+        chooseCharacterGO.SetActive(true);
+
+        foreach (GameObject go in buttonGOList)
+        {
+            go.SetActive(false);
+        }
+    }
+    
+    private void ShowCharacterCard(CharacterList list, int charaIndex, int buttonIndex)
+    {
+        // Reset Button
+        buttonGOList[buttonIndex].SetActive(true);
+        buttonGOList[buttonIndex].GetComponent<Image>().sprite = list.Get(charaIndex).cardSprite;
+        buttonGOList[buttonIndex].GetComponent<Button>().onClick.RemoveAllListeners();
+            
+        //Ajoute un listener au bouton pour qu'il ajoute le bon personnage
+        buttonGOList[buttonIndex].GetComponent<Button>().onClick.AddListener(() => chooseCharacterGO.SetActive(false));
+        buttonGOList[buttonIndex].GetComponent<Button>().onClick.AddListener(delegate { AddCharacter(list, charaIndex); });
+    }
+
+    private IEnumerator WaitForTeamChange()
+    {
+        int currentTeamCount = playerTeam.Count;
+
+        while (currentTeamCount == playerTeam.Count) yield return null;
     }
 
     private void AddCharacter(CharacterList characterList, int index)
@@ -108,5 +141,12 @@ public class CharacterManager : MonoBehaviour
         playerTeam.Pop();
     }
 
-    
+    private void Start()
+    {
+        buttonGOList = new GameObject[chooseCharacterGO.transform.childCount];
+        for (int i = 0; i < buttonGOList.Length; i++)
+        {
+            buttonGOList[i] = chooseCharacterGO.transform.GetChild(i).gameObject;
+        }
+    }
 }
