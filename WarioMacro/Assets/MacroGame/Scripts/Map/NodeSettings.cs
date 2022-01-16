@@ -6,6 +6,7 @@ using Random = UnityEngine.Random;
 public class NodeSettings : MonoBehaviour
 {
     public int microGamesNumber;
+    [GameType(typeof(NodeType))]
     public int type;
     
     [SerializeField] private SpriteRenderer sRenderer;

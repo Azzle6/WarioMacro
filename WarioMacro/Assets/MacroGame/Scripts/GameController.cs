@@ -16,6 +16,7 @@ public class GameController : Ticker
     [SerializeField] private GameSettingsManager settingsManager;
     [SerializeField] private Alarm alarm;
     [SerializeField] private MapManager mapManager;
+    [SerializeField] private CharacterManager characterManager;
     [SerializeField] private MiniGameResultPannel_UI resultPanel;
     [SerializeField] private Timer timer;
     [SerializeField] private TransitionController transitionController;
@@ -65,7 +66,6 @@ public class GameController : Ticker
         }
     }
 
-    
     private IEnumerator ToggleEndGame(bool value)
     {
         if (value)
@@ -233,10 +233,10 @@ public class GameController : Ticker
             settingsManager.DecreaseDifficulty();
             AudioManager.MacroPlaySound("MOU_NodeFail", 0);
 
-            if (Alarm.isActive && nodeSuccessCount == 0) // TODO : && node.type in characters' types
-            {
-                lifeBar.Damage();
-            }
+            if (!Alarm.isActive || nodeSuccessCount != 0 || characterManager.SpecialistOfType(node.type) != 0) return;
+            
+            lifeBar.Damage();
+            characterManager.LoseCharacter();
         }
     }
 
@@ -260,6 +260,8 @@ public class GameController : Ticker
         // Init
         GameManager.Register();
         TickerStart(false);
+        
+        characterManager.DisplayRecrutementChoice(2);
 
         StartCoroutine(GameLoop());
     }

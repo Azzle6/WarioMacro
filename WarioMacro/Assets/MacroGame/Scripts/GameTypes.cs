@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using JetBrains.Annotations;
-using UnityEngine;
 
 // ReSharper disable once CheckNamespace
 namespace GameTypes
@@ -15,9 +13,16 @@ namespace GameTypes
         public const int Technomancer = 7;
     }
     
+    [UsedImplicitly]
     public class CharacterType : GameType
     {
         public const int Scoundrel = 1; 
+        
+        public static string[] GetTypeNames() => new[] {"Scoundrel", "Brute", "Alchemist", "Expert", "Ghost", "Acrobat", "Technomancer"};
+
+        public static int DropdownAsRealValue(int dropdownValue) => dropdownValue + 1;
+        
+        public static int RealValueAsDropdown(int value) => value - 1;
     }
 
     [UsedImplicitly]
@@ -25,5 +30,11 @@ namespace GameTypes
     {
         public const int None = 0;
         public const int Random = 1;
+
+        public static string[] GetTypeNames() => new[] {"None", "Random", "Brute", "Alchemist", "Expert", "Ghost", "Acrobat", "Technomancer"};
+        
+        public static int DropdownAsRealValue(int dropdownValue) => dropdownValue;
+        
+        public static int RealValueAsDropdown(int value) => value;
     }
 }
