@@ -1,105 +1,81 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using GameTypes;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
+// ReSharper disable once CheckNamespace
 public class CharactersManager : MonoBehaviour
 {
-    public static CharactersManager instance;
+    public List<Character> allAvailableCharacters = new List<Character>();
 
-    public List<CharacterSO> AllAvailableCharacters = new List<CharacterSO>();
+    [SerializeField] private GameObject chooseCharacterGO;
+    [SerializeField] private GameObject cardButtonTemplate;
+    
+    private readonly Stack<Character> playerCurrentTeam = new Stack<Character>();
 
-    public List<CharacterSO> PlayerCurrentTeam = new List<CharacterSO>();
-
-    [SerializeField] private GameObject ChooseCharacterGO;
-    [SerializeField] private GameObject CardButtonTemplate;
-    [SerializeField] private List<CharacterSO> currentChooseList;
-
-    private void Start()
+    public void DisplayCharacters(int charaType)
     {
-        instance = this;
-    }
+        var choiceList = new List<Character>(allAvailableCharacters.Where(character => character.characterType == charaType));
+        chooseCharacterGO.SetActive(true);
 
-    public void DisplayCharacters(CharaTypes charType)
-    {
-        currentChooseList = new List<CharacterSO>();
-        ChooseCharacterGO.SetActive(true);
-        foreach (CharacterSO availablesChara in AllAvailableCharacters)
+        if (choiceList.Count == 0)
         {
-            if(availablesChara.CharacterType == charType) currentChooseList.Add(availablesChara);
-        }
-        
-        if (currentChooseList.Count == 0)
-        {
-            Debug.Log("Plus de persos "+ charType +" disponibles.");
+            Debug.LogError("Plus de persos "+ charaType +" disponibles.");
             return;
         }
         
-        //Repositionnement automatique
-        float spacing = 900 / Mathf.Pow(3, (currentChooseList.Count - 1));
-        if (currentChooseList.Count > 1)
-        {
-            ChooseCharacterGO.transform.localPosition = new Vector3(-200, 0, 0);
-        }
-        else ChooseCharacterGO.transform.localPosition = Vector3.zero;
+        //Re-positionnement automatique
+        float spacing = 900 / Mathf.Pow(3, (choiceList.Count - 1));
+        chooseCharacterGO.transform.localPosition =
+            choiceList.Count > 1 ? new Vector3(-200, 0, 0) : Vector3.zero;
         
 
-        ChooseCharacterGO.GetComponent<HorizontalLayoutGroup>().spacing = spacing;
+        chooseCharacterGO.GetComponent<HorizontalLayoutGroup>().spacing = spacing;
 
         //Instancier toutes les cartes dont on a besoin
-        List<GameObject> DisplayedGO = new List<GameObject>();
-        
-        foreach (var VARIABLE in currentChooseList)
-        {
-            GameObject go = Instantiate(CardButtonTemplate, ChooseCharacterGO.transform);
-            DisplayedGO.Add(go);
-        }
-        Destroy(ChooseCharacterGO.transform.GetChild(0).gameObject);
+        var displayedGO = choiceList
+            .Select(characterSO => Instantiate(cardButtonTemplate, chooseCharacterGO.transform)).ToList();
 
-        for (int i = 0; i < currentChooseList.Count; i++)
+        Destroy(chooseCharacterGO.transform.GetChild(0).gameObject);
+
+        for (int i = 0; i < choiceList.Count; i++)
         {
-            DisplayedGO[i].GetComponent<Image>().sprite = currentChooseList[i].CardSprite;
+            displayedGO[i].GetComponent<Image>().sprite = choiceList[i].cardSprite;
 
             //Ajoute un listener au bouton pour qu'il ajoute le bon personnage
             int i1 = i;
-            DisplayedGO[i].GetComponent<Button>().onClick.AddListener(delegate { AddCharacter(currentChooseList[i1]);});
+            displayedGO[i].GetComponent<Button>().onClick
+                .AddListener(delegate { AddCharacter(choiceList[i1]); });
         }
     }
 
-    public void AddbasicCharacter()
+    public void AddDefaultCharacter()
     {
-        currentChooseList = new List<CharacterSO>();
-        foreach (CharacterSO availablesChara in AllAvailableCharacters)
-        {
-            if(availablesChara.CharacterType == CharaTypes.Scoundrel) currentChooseList.Add(availablesChara);
-        }
+        var choices = new List<Character>(allAvailableCharacters.Where(availableChara =>
+            availableChara.characterType == CharacterType.Scoundrel));
 
-        if (currentChooseList.Count == 0)
+        if (choices.Count == 0)
         {
-            Debug.Log("Plus de persos basiques disponibles.");
+            Debug.LogWarning("Plus de persos basiques disponibles.");
             return;
         }
-        int randomN = Random.Range(0, currentChooseList.Count );
-        AddCharacter(currentChooseList[randomN]);
+        int randomN = Random.Range(0, choices.Count );
+        AddCharacter(choices[randomN]);
     }
     
-    public void AddCharacter(CharacterSO newChara)
+    public void AddCharacter(Character newChara)
     {
-        instance.PlayerCurrentTeam.Add(newChara);
-        Debug.Log("personnage " + newChara.ToString() + " a été ajouté à l'équipe!");
-        for (int i = 0; i < AllAvailableCharacters.Count; i++)
-        {
-            if (AllAvailableCharacters[i] == newChara)
-            {
-                AllAvailableCharacters.RemoveAt(i);
-            }
-        }
+        playerCurrentTeam.Push(newChara);
+        allAvailableCharacters.Remove(newChara);
+        Debug.Log("personnage " + newChara + " a été ajouté à l'équipe!");
     }
-
+    
     public void LoseCharacter()
     {
-        PlayerCurrentTeam.RemoveAt(PlayerCurrentTeam.Count - 1);
+        playerCurrentTeam.Pop();
     }
+
+    
 }
