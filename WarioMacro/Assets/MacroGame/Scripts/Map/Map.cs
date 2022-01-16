@@ -18,6 +18,7 @@ public class Map : MonoBehaviour
 
     public void Load()
     {
+        player = GameController.instance.player;
         gameObject.SetActive(true);
         currentNode = startNode;
         player.TeleportPlayer(currentNode.transform.position);
@@ -95,10 +96,5 @@ public class Map : MonoBehaviour
     {
         currentNode = startNode;
         
-    }
-
-    private void Start()
-    {
-        player = GameController.instance.player;
     }
 }
