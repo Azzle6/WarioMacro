@@ -1,17 +1,19 @@
+using System;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
 
 public class Map : MonoBehaviour
-{ 
-    public Node currentNode { get; private set; }
+{
+    [HideInInspector]
+    public Node currentNode;
     public Node.Path currentPath { get; private set; }
     
-    [SerializeField] private Player player;
     [SerializeField] private Node startNode;
     [SerializeField] private Node endNode;
     
     private static readonly int current = Animator.StringToHash("Current");
+    private Player player;
 
 
     public void Load()
@@ -93,5 +95,10 @@ public class Map : MonoBehaviour
     {
         currentNode = startNode;
         
+    }
+
+    private void Start()
+    {
+        player = GameController.instance.player;
     }
 }

@@ -82,7 +82,7 @@ public class Ticker : MonoBehaviour
     {
         while (true)
         {
-            //Debug.Log("TICK: " + currentTick);
+            Debug.Log("TICK: " + currentTick);
             foreach (ITickable t in tickables.ToArray())
             {
                 t.OnTick();

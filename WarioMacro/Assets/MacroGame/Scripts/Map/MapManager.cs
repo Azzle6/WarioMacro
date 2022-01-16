@@ -3,24 +3,29 @@ using System.Linq;
 using UnityEngine;
 using Random = System.Random;
 
+// ReSharper disable once CheckNamespace
 public class MapManager : MonoBehaviour
 {
     public static int floor { get; private set; } = -1;
     
-    [SerializeField] private Player player;
+    [SerializeField] private Map recruitmentMap;
     [SerializeField] private int mapsPerGame = 5;
     [SerializeField] private GameObject[] mapGOList;
     private Queue<GameObject> mapGoQueue;
 
     private Map currentMap;
 
+    public Map LoadRecruitmentMap()
+    {
+        currentMap = recruitmentMap;
+        currentMap.Load();
+        return currentMap;
+    }
+    
     public Map LoadNextMap()
     {
-        if (currentMap != null)
-        {
-            currentMap.Unload();
-        }
-        
+        currentMap.Unload();
+
         currentMap = mapGoQueue.Dequeue().GetComponent<Map>();
         currentMap.Load();
         floor++;

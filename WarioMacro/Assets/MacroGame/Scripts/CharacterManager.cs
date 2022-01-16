@@ -9,13 +9,16 @@ using Random = UnityEngine.Random;
 public class CharacterManager : MonoBehaviour
 {
     public List<Character> allAvailableCharacters = new List<Character>();
+    public bool isTeamFull;
+    public int totalCharacterCount = 4;
 
     [SerializeField] private GameObject chooseCharacterGO;
     [SerializeField] private GameObject cardButtonTemplate;
     
     private readonly Stack<Character> playerTeam = new Stack<Character>();
+    private int currentCount;
 
-    public void DisplayRecrutementChoice(int charaType)
+    public void DisplayRecruitmentChoice(int charaType)
     {
         var choiceList = new List<Character>(allAvailableCharacters.Where(character => character.characterType == charaType));
         chooseCharacterGO.SetActive(true);
@@ -69,11 +72,23 @@ public class CharacterManager : MonoBehaviour
         int randomN = Random.Range(0, choices.Count );
         AddCharacter(choices[randomN]);
     }
-    
-    public void AddCharacter(Character newChara)
+
+    private void AddCharacter(Character newChara)
     {
+        if (isTeamFull)
+        {
+            Debug.LogError("Character added when the team is complete.");
+            return;
+        }
+        
         playerTeam.Push(newChara);
         allAvailableCharacters.Remove(newChara);
+        currentCount++;
+
+        if (currentCount == totalCharacterCount)
+        {
+            isTeamFull = true;
+        }
         Debug.Log("personnage " + newChara + " a été ajouté à l'équipe!");
     }
     
