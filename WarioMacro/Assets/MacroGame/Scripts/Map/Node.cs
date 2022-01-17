@@ -46,7 +46,7 @@ public class Node : MonoBehaviour
         {
             var points = new List<Vector3>();
             if (path == null) continue;
-            if (path.wayPoints.Count == 0)
+            if (path.wayPoints == null)
             {
                 if (path.destination != null)
                 {
