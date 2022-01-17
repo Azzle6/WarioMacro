@@ -15,6 +15,7 @@ public class GameController : Ticker
     [SerializeField] protected internal CharacterManager characterManager;
     [SerializeField] protected internal MiniGameResultPannel_UI resultPanel;
     [SerializeField] private Animator macroGameCanvasAnimator;
+    [SerializeField] private ScoreManager scoreManager;
     [SerializeField] private GameSettingsManager settingsManager;
     [SerializeField] private Alarm alarm;
     [SerializeField] private MapManager mapManager;
@@ -34,13 +35,13 @@ public class GameController : Ticker
     private static bool gameResult;
     protected internal Map map;
     protected internal int nodeSuccessCount;
+    protected internal int microGamesNumber;
     private bool debugMicro;
 
 
     public static void Register()
     {
         if (instance != null) return;
-        
         new GameObject("GameController").AddComponent<GameController>();
         instance.TickerStart(true);
         instance.debugMicro = true;
@@ -91,7 +92,6 @@ public class GameController : Ticker
         yield return recruitmentController.RecruitmentLoop();
         
         map = mapManager.LoadNextMap();
-        
         while(true)
         {
             yield return StartCoroutine(map.WaitForNodeSelection());
@@ -135,10 +135,11 @@ public class GameController : Ticker
 
     protected internal IEnumerator NodeWithMicroGame(NodeSettings node)
     {
+        microGamesNumber = scoreManager.CheckTeamTypes(characterManager.playerTeam) == 0 ? 5 : 3;
         // select 3 random micro games from micro games list
         var microGamesQueue = new Queue<string>();
         var microGamesList = new List<string>(sceneNames);
-        var microGamesCount = Mathf.Min(node.microGamesNumber, microGamesList.Count);
+        var microGamesCount = Mathf.Min(microGamesNumber, microGamesList.Count);
         while (microGamesCount-- > 0)
         {
             var rdIndex = Random.Range(0, microGamesList.Count);
@@ -223,12 +224,13 @@ public class GameController : Ticker
             yield return new WaitForSeconds(1f);
         }
         
-        //Debug.Log("Node completed");
+
     }
 
     private void NodeResults(NodeSettings node)
     {
-        if (nodeSuccessCount >= node.microGamesNumber * 0.5f)
+        scoreManager.UpdateScore(nodeSuccessCount,microGamesNumber,characterManager.playerTeam);
+        if (nodeSuccessCount >= microGamesNumber * 0.5f)
         {
             settingsManager.IncreaseDifficulty();
             AudioManager.MacroPlaySound("MOU_NodeSuccess", 0);
@@ -241,7 +243,6 @@ public class GameController : Ticker
             if (!Alarm.isActive || nodeSuccessCount != 0 || characterManager.SpecialistOfTypeInTeam(node.type) != 0) return;
             
             lifeBar.Damage();
-            characterManager.LoseCharacter();
         }
     }
 
