@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NAA_ArmController_LAC : MonoBehaviour
+public class NAA3_ArmController_LAC : MonoBehaviour
 {
-    public NAA_MicroGameController_LAC MC_Controller;
+    public NAA3_MicroGameController_LAC MC_Controller;
     GameObject armPlace;
 
-    NAA_StickData_LAC stickData;
+    NAA3_StickData_LAC stickData;
     public Animator animator;
 
     float maxAngleRot = 30;
@@ -64,7 +64,7 @@ public class NAA_ArmController_LAC : MonoBehaviour
             stickData = MC_Controller.leftStick;
     }
 
-    bool CheckStickMove(NAA_StickData_LAC stickData)
+    bool CheckStickMove(NAA3_StickData_LAC stickData)
     {
         if (lastMvtCount < stickData.mvtCount)
         {

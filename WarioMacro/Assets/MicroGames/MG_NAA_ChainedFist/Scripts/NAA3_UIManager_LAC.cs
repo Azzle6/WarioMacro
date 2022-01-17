@@ -4,9 +4,9 @@ using UnityEngine;
 using TMPro;
 
 
-public class NAA_UIManager_LAC : MonoBehaviour
+public class NAA3_UIManager_LAC : MonoBehaviour
 {
-    public NAA_MicroGameController_LAC MC_Controller;
+    public NAA3_MicroGameController_LAC MC_Controller;
     public uiStick rightStick, leftStick;
 
     public float stickAmp;
@@ -24,8 +24,9 @@ public class NAA_UIManager_LAC : MonoBehaviour
     private void Update()
     {
 
-        // right stick
-        if (Time.time - (rightStick.moveRefreshTime/Time.timeScale) > stickMoveRefresh)
+        // right stick 
+        
+        if (Time.unscaledTime - (rightStick.moveRefreshTime) > stickMoveRefresh)
         {
             rightStick.isMoving = rightStick.CheckStickMove();
 
@@ -37,10 +38,10 @@ public class NAA_UIManager_LAC : MonoBehaviour
         if (rightStick.isMoving)
             rightStick.MovePad(stickAmp,stickSpeed);
         else
-            rightStick.ResetPad(0.5f);
+            rightStick.ResetPad();
 
         //left stick
-        if (Time.time - (leftStick.moveRefreshTime/Time.timeScale) > stickMoveRefresh)
+        if (Time.unscaledTime - (leftStick.moveRefreshTime) > stickMoveRefresh)
         {
             leftStick.isMoving = leftStick.CheckStickMove();
 
@@ -52,7 +53,7 @@ public class NAA_UIManager_LAC : MonoBehaviour
         if (leftStick.isMoving)
             leftStick.MovePad(stickAmp, stickSpeed);
         else
-            leftStick.ResetPad(0.5f) ;
+            leftStick.ResetPad();
 
         if (!MC_Controller.isPlaying)
         {
@@ -65,8 +66,8 @@ public class NAA_UIManager_LAC : MonoBehaviour
     public struct uiStick
     {
         [HideInInspector]
-        public NAA_StickData_LAC stickData;
-        public GameObject pad, arrowDir;
+        public NAA3_StickData_LAC stickData;
+        public GameObject stick,pad, arrowDir;
         float stopMoveTime;
         int lastMvtCount;
 
@@ -77,20 +78,21 @@ public class NAA_UIManager_LAC : MonoBehaviour
 
         public void MovePad( float amp, float speed)
         {
-            stopMoveTime = Time.time;
-            float value = (Mathf.PingPong(Time.time * 100 * speed, 2*amp) - amp);
+            stopMoveTime = Time.unscaledTime;
+            float value = (Mathf.PingPong(Time.unscaledTime * 100 * speed, 2*amp) - amp);
             pad.transform.position =  arrowDir.transform.position + (Vector3)stickData.validStickDir.normalized * -value ;
             
         }
 
         public void ResetPad(float duration = 1)
         {
-            pad.transform.position = Vector3.Lerp(pad.transform.position, arrowDir.transform.position,(Time.time - (stopMoveTime/(Ticker.gameBPM / 60)))/duration);
+            pad.transform.position = Vector3.Lerp(pad.transform.position, arrowDir.transform.position,(Time.unscaledTime - stopMoveTime)/duration);
         }
+
 
         public bool CheckStickMove()
         {
-            moveRefreshTime = Time.time;
+            moveRefreshTime = Time.unscaledTime;
             if (lastMvtCount < stickData.mvtCount)
             {
                 lastMvtCount = stickData.mvtCount;

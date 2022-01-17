@@ -2,24 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NAA_MicroGameController_LAC : MonoBehaviour, ITickable
+public class NAA3_MicroGameController_LAC : MonoBehaviour, ITickable
 {
 
 
-    public NAA_StickData_LAC rightStick, leftStick;
+    public NAA3_StickData_LAC rightStick, leftStick;
 
     public Vector2[] possibleStickDir;
     Vector2 validStickDir;
 
-    public NAA_MicroGameData_LAC MC_Data;
+    public NAA3_MicroGameData_LAC MC_Data;
     float changeDirPrbPerTick;
 
-    public int minimumBpmRequire;
+    public int minimumBpmRequire, currentBPM;
     public GameObject[] electricLines;
     [HideInInspector]
     public bool isPlaying = true, result;
 
-    public NAA_UIManager_LAC uiManager;
+    public NAA3_UIManager_LAC uiManager;
 
     [Header("Sound")]
     public AudioClip[] audioClips;
@@ -31,7 +31,7 @@ public class NAA_MicroGameController_LAC : MonoBehaviour, ITickable
         GameManager.Register(); //Mise en place du Input Manager, du Sound Manager et du Game Controller
         GameController.Init(this); //Permet a ce script d'utiliser le OnTick
 
-        LoadDifficultyData((GameController.difficulty-1),(Time.timeScale * 120));
+        LoadDifficultyData((GameController.difficulty-1), (GameController.gameBPM * 2)/Time.timeScale );
         ChooseStcikDir(Random.Range(0, possibleStickDir.Length - 1));
 
         //AudioManager.PlaySound(audioClips[0],1,);
@@ -41,6 +41,7 @@ public class NAA_MicroGameController_LAC : MonoBehaviour, ITickable
     private void Update()
     {
         elecSource.volume = Mathf.PingPong(Time.time,1);
+        currentBPM = (int)currentBpm();
     }
 
 
@@ -55,6 +56,9 @@ public class NAA_MicroGameController_LAC : MonoBehaviour, ITickable
         if(GameController.currentTick == 5)
         {
             GameController.StopTimer();
+
+            Debug.Log("Bpm : " + currentBpm() + " V_Bpm : " +minimumBpmRequire);
+            Debug.Log("R_Bpm : " + rightStick.bpm + " L_Bpm : " + leftStick.bpm);
             result = CheckBpm();
 
             AudioManager.PlaySound(audioClips[(result)?0:1]);

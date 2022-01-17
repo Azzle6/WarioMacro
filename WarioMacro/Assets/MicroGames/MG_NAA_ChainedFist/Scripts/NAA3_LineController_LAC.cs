@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NAA_LineController_LAC : MonoBehaviour
+public class NAA3_LineController_LAC : MonoBehaviour
 {
-    public NAA_MicroGameController_LAC MC_Controller;
+    public NAA3_MicroGameController_LAC MC_Controller;
     public LineRenderer line;
     public Transform startPoint, endPoint;
     public float bpmFactor; // between 0 & 1

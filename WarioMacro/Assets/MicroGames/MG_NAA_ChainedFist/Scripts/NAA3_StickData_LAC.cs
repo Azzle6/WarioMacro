@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NAA_StickData_LAC : MonoBehaviour
+public class NAA3_StickData_LAC : MonoBehaviour
 {
     [Header("Stick PARAM")]
     public ControllerAxis xAxis, yAxis;
@@ -13,7 +13,8 @@ public class NAA_StickData_LAC : MonoBehaviour
     [Range(0, 1)]
     public float dirThreshold;
     public Vector2 validStickDir;
-    Vector2 stickValue;
+    [HideInInspector]
+    public Vector2 stickValue;
     [Range(0,1)]
     public float checkLength, resetLength;
     public bool stickReset;
@@ -26,7 +27,7 @@ public class NAA_StickData_LAC : MonoBehaviour
     private void Start()
     {
         GameManager.Register(); //Mise en place du Input Manager, du Sound Manager et du Game Controller
-        startTime = Time.time;
+        startTime = Time.unscaledTime;
     }
     private void Update()
     {
@@ -45,6 +46,6 @@ public class NAA_StickData_LAC : MonoBehaviour
         }
 
         // Bpm count
-        bpm = (mvtCount * 0.5f / (Time.time - (startTime/Time.timeScale)) )* 60;
+        bpm = (mvtCount * 0.5f / (Time.unscaledTime - (startTime)))* 60;
     }
 }
