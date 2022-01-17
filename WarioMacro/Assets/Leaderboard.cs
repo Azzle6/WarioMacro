@@ -1,74 +1,53 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Leaderboard : MonoBehaviour
 {
-    public string[] leaderboard = new string[10];
+    [SerializeField] private int[] leaderboard = new int[10];
     
-    public int score;
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            UpdateLeaderboard();
-            ShowLeaderboards();
-        }
-    }
 
     void Start()
     {
-        
         var scores = PlayerPrefs.GetString("leaderboard");
-        if(scores == "") return;
+        if (scores == "") return;
         var scoresTab = scores.Split(';');
-        leaderboard = new string[scoresTab.Length];
-        for(int i = 0;i < scoresTab.Length ;i++)
+        leaderboard = new int[Mathf.Clamp(scoresTab.Length,0,10)];
+        for (int i = 0; i < scoresTab.Length; i++)
         {
-            leaderboard[i] = scoresTab[i];
+            var value = 0;
+            var tried = int.TryParse(scoresTab[i], out value);
+            if (tried) leaderboard[i] = value;
         }
-        Debug.Log(scores);
     }
 
-    void ShowLeaderboards()
+    private void ShowLeaderboard()
     {
         var scores = PlayerPrefs.GetString("leaderboard");
         Debug.Log(scores);
     }
     
-
-    void UpdateLeaderboard()
+    public void UpdateLeaderboard(int score)
     {
         var lb = "";
-        var min = 0;
-        var full = int.TryParse(leaderboard[9],out min);
-        if(full)
-            if (score < int.Parse(leaderboard[9])) return;
-        leaderboard[9] = score.ToString();
+        if (leaderboard.Length == 10 && score < leaderboard[leaderboard.Length-1]) return;
+        for (int i = 0; i < leaderboard.Length; i++) if (leaderboard[i] == score) return;
+        if (leaderboard.Length == 10) leaderboard[9] = score;
+        if (leaderboard.Length < 10) leaderboard[leaderboard.Length-1] = score;
+        Array.Sort(leaderboard);
         Array.Reverse(leaderboard);
         PlayerPrefs.DeleteAll();
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < leaderboard.Length; i++)
         {
-            if (leaderboard[i] != "")
+            if(leaderboard[i] != 0)
                 lb += leaderboard[i] + ";";
-
         }
         PlayerPrefs.SetString("leaderboard", lb);
+        ShowLeaderboard();
     }
-
-    string[] GetLeaderboard()
-    {
-        var scores = PlayerPrefs.GetString("leaderboard");
-        if(scores == "") return null;
-        var scoresTab = scores.Split(';');
-        for(int i = 0;i < 10 ;i++)
-        {
-            leaderboard[i] = scoresTab[i];
-        }
-        return scoresTab;
-    }
+    
     
 }
 

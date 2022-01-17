@@ -8,8 +8,8 @@ using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
 {
-
-    public int[] leaderboard = new int[10];
+    
+    [SerializeField] private Leaderboard leaderBoard;
     
     public int score;
     
@@ -42,23 +42,11 @@ public class ScoreManager : MonoBehaviour
     private int[] noSpecialistAlarm = new int[6];
 
     [SerializeField] private int loseCharacter5SuccessCount = 1;
-    
-    
-    void Start()
-    {
-        
-        var scores = PlayerPrefs.GetString("leaderboard");
-        if(scores == "") return;
-        var scoresTab = scores.Split(';');
-        for(int i = 0;i < 10 ;i++)
-        {
-            leaderboard[i] = int.Parse(scoresTab[i]);
-        }
-    }
-    
-    private void Update()
+
+    void FinalScore()
     {
         score = moneyBag * GameController.instance.characterManager.playerTeam.Count;
+        leaderBoard.UpdateLeaderboard(score);
     }
 
     public void UpdateScore(int nodeSuccess,int gameCount,Stack<Character> team)
@@ -117,19 +105,6 @@ public class ScoreManager : MonoBehaviour
         }
         return count;
     }
-
-    void UpdateLeaderboard()
-    {
-        if (score > leaderboard[9])
-        {
-            leaderboard[9] = score;
-            Array.Reverse(leaderboard);
-        }
-        PlayerPrefs.DeleteAll();
-        foreach (var score in leaderboard)
-        {
-            PlayerPrefs.SetString("leaderboard",score+";");
-        }
-    }
+    
     
 }
