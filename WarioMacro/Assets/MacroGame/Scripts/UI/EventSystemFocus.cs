@@ -58,6 +58,5 @@ public class EventSystemFocus : MonoBehaviour
         float horizontalAxis = InputManager.GetAxis(ControllerAxis.LEFT_STICK_HORIZONTAL);
 
         Move(GetDirection(verticalAxis, horizontalAxis));
-        Debug.Log(alreadyMoved);
     }
 }
