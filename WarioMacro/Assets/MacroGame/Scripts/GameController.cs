@@ -9,20 +9,20 @@ using Random = UnityEngine.Random;
 public class GameController : Ticker
 {
     public static GameController instance;
-    public Player player;
+    [HideInSubClass] public Player player;
     
-    [SerializeField] protected internal CharacterManager characterManager;
-    [SerializeField] protected internal MiniGameResultPannel_UI resultPanel;
-    [SerializeField] protected internal GameSettingsManager settingsManager;
-    [SerializeField] private Animator macroGameCanvasAnimator;
-    [SerializeField] private Alarm alarm;
-    [SerializeField] private MapManager mapManager;
-    [SerializeField] private RecruitmentController recruitmentController;
-    [SerializeField] private Timer timer;
-    [SerializeField] private TransitionController transitionController;
-    [SerializeField] private KeywordDisplay keywordManager;
-    [SerializeField] private LifeBar lifeBar;
-    [SerializeField] private int mainMenuBuildIndex;
+    [HideInSubClass] [SerializeField] protected internal CharacterManager characterManager;
+    [HideInSubClass] [SerializeField] protected internal MiniGameResultPannel_UI resultPanel;
+    [HideInSubClass] [SerializeField] protected internal GameSettingsManager settingsManager;
+    [HideInSubClass] [SerializeField] private Animator macroGameCanvasAnimator;
+    [HideInSubClass] [SerializeField] private Alarm alarm;
+    [HideInSubClass] [SerializeField] private MapManager mapManager;
+    [HideInSubClass] [SerializeField] private RecruitmentController recruitmentController;
+    [HideInSubClass] [SerializeField] private Timer timer;
+    [HideInSubClass] [SerializeField] private TransitionController transitionController;
+    [HideInSubClass] [SerializeField] private KeywordDisplay keywordManager;
+    [HideInSubClass] [SerializeField] private LifeBar lifeBar;
+    [HideInSubClass] [SerializeField] private int mainMenuBuildIndex;
     [SerializeField] protected internal List<GameObject> macroObjects = new List<GameObject>();
     [SerializeField] public string[] sceneNames = Array.Empty<string>();
     
