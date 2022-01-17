@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "MicroGameData", menuName = "ScriptableObjects/MicroGameData/NAA_ChainedFistData", order = 2)]
-public class NAA_MicroGameData_LAC : ScriptableObject
+public class NAA3_MicroGameData_LAC : ScriptableObject
 {
     [Header("Bpm")]
     [Range(0.1f,2)]
