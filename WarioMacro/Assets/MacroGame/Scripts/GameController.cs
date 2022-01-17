@@ -13,8 +13,8 @@ public class GameController : Ticker
     
     [SerializeField] protected internal CharacterManager characterManager;
     [SerializeField] protected internal MiniGameResultPannel_UI resultPanel;
+    [SerializeField] protected internal GameSettingsManager settingsManager;
     [SerializeField] private Animator macroGameCanvasAnimator;
-    [SerializeField] private GameSettingsManager settingsManager;
     [SerializeField] private Alarm alarm;
     [SerializeField] private MapManager mapManager;
     [SerializeField] private RecruitmentController recruitmentController;
