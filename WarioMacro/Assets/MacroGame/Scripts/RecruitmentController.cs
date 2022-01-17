@@ -1,16 +1,21 @@
 using System.Collections;
+using System.Linq;
 using JetBrains.Annotations;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
 public class RecruitmentController : GameController
 {
+    [SerializeField] private GameObject alarmGO;
     [SerializeField] private Node startNode;
     [Range(0, 3)] [SerializeField] private int askedCharacterThreshold = 2;
     [Range(0, 3)] [SerializeField] private int randomSpecialistThreshold = 1;
+    
 
     public IEnumerator RecruitmentLoop()
     {
+        SetAlarmActive(false);
+        
         while(!instance.characterManager.isTeamFull)
         {
             // TODO : Change node selection and remove 2nd no MG node from prefab
@@ -40,6 +45,8 @@ public class RecruitmentController : GameController
 
             yield return null;
         }
+        
+        SetAlarmActive(true);
     }
 
     private IEnumerator NodeResults(NodeSettings node)
@@ -56,6 +63,20 @@ public class RecruitmentController : GameController
         {
             yield return instance.characterManager.AddDefaultCharacter();
         }
+    }
+
+    private void SetAlarmActive(bool state)
+    {
+        if (state)
+        {
+            instance.macroObjects.Add(alarmGO);
+        }
+        else
+        {
+            instance.macroObjects.Remove(alarmGO);
+        }
+        
+        alarmGO.SetActive(state);
     }
 
     
