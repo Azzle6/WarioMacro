@@ -1,21 +1,24 @@
+using System;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
 
 public class Map : MonoBehaviour
-{ 
-    public Node currentNode { get; private set; }
+{
+    [HideInInspector]
+    public Node currentNode;
     public Node.Path currentPath { get; private set; }
     
-    [SerializeField] private Player player;
     [SerializeField] private Node startNode;
     [SerializeField] private Node endNode;
     
     private static readonly int current = Animator.StringToHash("Current");
+    private Player player;
 
 
     public void Load()
     {
+        player = GameController.instance.player;
         gameObject.SetActive(true);
         currentNode = startNode;
         player.TeleportPlayer(currentNode.transform.position);

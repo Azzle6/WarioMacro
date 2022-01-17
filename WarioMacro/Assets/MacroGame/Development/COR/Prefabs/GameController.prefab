@@ -1,0 +1,270 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7773171079606738988
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7773171079606738978}
+  - component: {fileID: 7773171079606738979}
+  - component: {fileID: 7773171079606738981}
+  - component: {fileID: 7773171079606738976}
+  - component: {fileID: 7773171079606738977}
+  - component: {fileID: 7773171079606738983}
+  - component: {fileID: 7773171079606738982}
+  - component: {fileID: 7773171079606738980}
+  - component: {fileID: 7773171079606739035}
+  - component: {fileID: 7773171079606739034}
+  m_Layer: 0
+  m_Name: GameController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7773171079606738978
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7773171079606738988}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7773171079606738979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7773171079606738988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d71c9da22b0148188ab63c718724b728, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  characterManager: {fileID: 7773171079606739035}
+  resultPanel: {fileID: 0}
+  macroGameCanvasAnimator: {fileID: 0}
+  settingsManager: {fileID: 7773171079606738981}
+  alarm: {fileID: 0}
+  mapManager: {fileID: 7773171079606738980}
+  recruitmentController: {fileID: 7773171079606739034}
+  timer: {fileID: 7773171079606738976}
+  transitionController: {fileID: 7773171079606738977}
+  keywordManager: {fileID: 0}
+  lifeBar: {fileID: 7773171079606738982}
+  mainMenuBuildIndex: 0
+  macroObjects:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  sceneNames:
+  - MG_NOB_Scene_DOC
+  - MG_ULB_Unlock
+  - MG_NAC_QuelleCouleur
+  - MG_NAC_Scene_PanPanneau
+  - MG_NOB_Scene_PAP
+  - MG_ULC_Scene_TacticMagic
+  - MG_ULA_EscapeFromThem
+  - MG_NAA_Scene_ChainedFist
+--- !u!114 &7773171079606738981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7773171079606738988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09c158129cea9cd4f9fcddd2477def36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameControllerSO: {fileID: 11400000, guid: 3eb3fccf2c11a9347b96f0ec0c8cb566, type: 2}
+  bpmSettingsSO: {fileID: 11400000, guid: 996be0bf0d7ce5346a498077aa92f7c6, type: 2}
+--- !u!114 &7773171079606738976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7773171079606738988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22c809458cd2bd74fb82064de3a66bfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  director: {fileID: 0}
+--- !u!114 &7773171079606738977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7773171079606738988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 099982473ecba8f4aa019be946136936, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  director: {fileID: 0}
+  timerGO: {fileID: 0}
+--- !u!114 &7773171079606738983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7773171079606738988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: d142ad4c07f525748954ffa9ad18a188, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7773171079606738977}
+          m_TargetAssemblyTypeName: TransitionController, Assembly-CSharp
+          m_MethodName: TransitionPause
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 7773171079606738977}
+          m_TargetAssemblyTypeName: TransitionController, Assembly-CSharp
+          m_MethodName: StartAsyncMGOp
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
+--- !u!114 &7773171079606738982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7773171079606738988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fb748c96c40ce84d89a8416c4b4a3c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lifeBarGO: {fileID: 0}
+  life: 4
+--- !u!114 &7773171079606738980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7773171079606738988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0436ebd9d0e87b0428785dd7236251fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recruitmentMap: {fileID: 0}
+  mapsPerGame: 5
+  mapGOList:
+  - {fileID: 0}
+  - {fileID: 0}
+--- !u!114 &7773171079606739035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7773171079606738988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf041723ce897134abf20daa83b4d532, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allAvailableCharacters:
+  - type: 1
+    characters:
+    - {fileID: 11400000, guid: 6813245a9f9668e40927c37c2ef0b613, type: 2}
+    - {fileID: 11400000, guid: fcbbb6142265df64dbcd61b38e486251, type: 2}
+    - {fileID: 11400000, guid: a60e568ff32dd3a4690d82f713474ed7, type: 2}
+    - {fileID: 11400000, guid: fe9f5bb2d8b206843b079ac09788cab8, type: 2}
+  - type: 2
+    characters:
+    - {fileID: 11400000, guid: e0acc784d73fb88409d2c03004dbbd25, type: 2}
+    - {fileID: 11400000, guid: 456368261d37d4948b64d81b84ad3a96, type: 2}
+  - type: 3
+    characters:
+    - {fileID: 11400000, guid: 2cc88c4c513274942a854087b54ae5cb, type: 2}
+    - {fileID: 11400000, guid: 4f6c74c73c7fcac408a58bf74fb79d24, type: 2}
+  - type: 4
+    characters:
+    - {fileID: 11400000, guid: cba99b201908e404cb5ef396527c3938, type: 2}
+    - {fileID: 11400000, guid: f678fb664c15dd643bd828f55ff85edc, type: 2}
+  - type: 5
+    characters:
+    - {fileID: 11400000, guid: b9a3f0341780d764da14f6ae1bc3f5cd, type: 2}
+    - {fileID: 11400000, guid: d04329bdd1576674a8e239f3a3e570d5, type: 2}
+  - type: 6
+    characters:
+    - {fileID: 11400000, guid: 01ec4200a813bb4419ede033dc520621, type: 2}
+    - {fileID: 11400000, guid: 92d42a5fc307dca4092b80311ad5b812, type: 2}
+  - type: 7
+    characters:
+    - {fileID: 11400000, guid: 5e9b178d1d919ec4b82d2739a08b22de, type: 2}
+    - {fileID: 11400000, guid: 3bd127e986944cb4580b6668631e3b95, type: 2}
+  totalCharacterCount: 4
+  isTeamFull: 0
+  chooseCharacterGO: {fileID: 0}
+  buttonsParent: {fileID: 0}
+--- !u!114 &7773171079606739034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7773171079606738988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eba1bfeb32f88648aca63bfb17b6528, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  characterManager: {fileID: 0}
+  resultPanel: {fileID: 0}
+  macroGameCanvasAnimator: {fileID: 0}
+  settingsManager: {fileID: 0}
+  alarm: {fileID: 0}
+  mapManager: {fileID: 0}
+  recruitmentController: {fileID: 0}
+  timer: {fileID: 0}
+  transitionController: {fileID: 0}
+  keywordManager: {fileID: 0}
+  lifeBar: {fileID: 0}
+  mainMenuBuildIndex: 0
+  macroObjects: []
+  sceneNames: []
+  startNode: {fileID: 0}
+  askedCharacterThreshold: 2
+  randomSpecialistThreshold: 1
