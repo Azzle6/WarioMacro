@@ -2699,7 +2699,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menu: {fileID: 2136152314}
-  isActive: 0
 --- !u!1 &1765599168 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2993985442226087090, guid: 20f270314eb27384fb26c55d18c4c596, type: 3}
@@ -3039,6 +3038,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1838577186}
   - component: {fileID: 1838577185}
+  - component: {fileID: 1838577187}
   m_Layer: 0
   m_Name: PlaytestTools
   m_TagString: Untagged
@@ -3078,6 +3078,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1838577187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1838577184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4709b0743a5efb64583455898333d1fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scenesRefs: {fileID: 11400000, guid: d76fb35deef7b814f871c4671b373ba0, type: 2}
 --- !u!1 &1843691483
 GameObject:
   m_ObjectHideFlags: 0
