@@ -15,6 +15,7 @@ public class CharacterManager : MonoBehaviour
     [HideInInspector] public bool isTeamFull;
 
     [SerializeField] private GameObject chooseCharacterGO;
+    [SerializeField] private Transform buttonsParent;
     
     private readonly Stack<Character> playerTeam = new Stack<Character>();
     private GameObject[] buttonGOList;
@@ -143,10 +144,10 @@ public class CharacterManager : MonoBehaviour
 
     private void Start()
     {
-        buttonGOList = new GameObject[chooseCharacterGO.transform.childCount];
+        buttonGOList = new GameObject[buttonsParent.childCount];
         for (int i = 0; i < buttonGOList.Length; i++)
         {
-            buttonGOList[i] = chooseCharacterGO.transform.GetChild(i).gameObject;
+            buttonGOList[i] = buttonsParent.GetChild(i).gameObject;
         }
     }
 }
