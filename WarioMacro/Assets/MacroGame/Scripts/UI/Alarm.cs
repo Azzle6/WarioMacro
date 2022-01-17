@@ -23,9 +23,10 @@ public class Alarm : MonoBehaviour
 
     public void DecrementCount(bool result)
     {
-        if (isActive) return;
+        if (isActive) return; // TODO : don't decrement on recruitment phase
         
         count -= (result ? increaseOnWin : increaseOnLose) * currentFactor;
+
         if (count <= 0)
         {
             count = 0;
@@ -34,13 +35,13 @@ public class Alarm : MonoBehaviour
         }
         
         director.Play();
-        StartCoroutine(PauseAlarm((100 - count) * director.duration / 100));
+        StartCoroutine(PauseAlarm((100 - count) * director.duration * 0.01d));
         
     }
 
     private IEnumerator PauseAlarm(double time)
     {
-        yield return new WaitForSeconds((float) time);
+        yield return new WaitForSeconds((float) (time - director.initialTime));
 
         director.Pause();
         director.initialTime = time;

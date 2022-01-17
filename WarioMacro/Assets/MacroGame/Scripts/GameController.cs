@@ -12,14 +12,16 @@ public class GameController : Ticker
     public static GameController instance;
     public Player player;
     
+    [SerializeField] protected internal CharacterManager characterManager;
+    [SerializeField] protected internal MiniGameResultPannel_UI resultPanel;
     [SerializeField] private Animator macroGameCanvasAnimator;
     [SerializeField] private GameSettingsManager settingsManager;
     [SerializeField] private Alarm alarm;
     [SerializeField] private MapManager mapManager;
-    [SerializeField] private MiniGameResultPannel_UI resultPanel;
+    [SerializeField] private RecruitmentController recruitmentController;
     [SerializeField] private Timer timer;
     [SerializeField] private TransitionController transitionController;
-    [FormerlySerializedAs("KeywordControl")] [SerializeField] private KeywordDisplay keywordManager;
+    [SerializeField] private KeywordDisplay keywordManager;
     [SerializeField] private LifeBar lifeBar;
     [SerializeField] private int mainMenuBuildIndex;
     [SerializeField] private GameObject[] macroObjects = Array.Empty<GameObject>();
@@ -30,8 +32,8 @@ public class GameController : Ticker
     private static string currentScene;
     private static bool gameFinished;
     private static bool gameResult;
-    private Map map;
-    private int nodeSuccessCount;
+    protected internal Map map;
+    protected internal int nodeSuccessCount;
     private bool debugMicro;
 
 
@@ -65,7 +67,6 @@ public class GameController : Ticker
         }
     }
 
-    
     private IEnumerator ToggleEndGame(bool value)
     {
         if (value)
@@ -85,6 +86,10 @@ public class GameController : Ticker
     
     private IEnumerator GameLoop()
     {
+        map = mapManager.LoadRecruitmentMap();
+
+        yield return recruitmentController.RecruitmentLoop();
+        
         map = mapManager.LoadNextMap();
         
         while(true)
@@ -128,7 +133,7 @@ public class GameController : Ticker
         }
     }
 
-    private IEnumerator NodeWithMicroGame(NodeSettings node)
+    protected internal IEnumerator NodeWithMicroGame(NodeSettings node)
     {
         // select 3 random micro games from micro games list
         var microGamesQueue = new Queue<string>();
@@ -233,10 +238,10 @@ public class GameController : Ticker
             settingsManager.DecreaseDifficulty();
             AudioManager.MacroPlaySound("MOU_NodeFail", 0);
 
-            if (Alarm.isActive && nodeSuccessCount == 0) // TODO : && node.type in characters' types
-            {
-                lifeBar.Damage();
-            }
+            if (!Alarm.isActive || nodeSuccessCount != 0 || characterManager.SpecialistOfTypeInTeam(node.type) != 0) return;
+            
+            lifeBar.Damage();
+            characterManager.LoseCharacter();
         }
     }
 
