@@ -1,6 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.EventSystems;
+
 // ReSharper disable InconsistentNaming
 
 // ReSharper disable once CheckNamespace
@@ -72,6 +74,28 @@ public class InputManager : MonoBehaviour
     public static float GetAxisRaw(ControllerAxis axis)
     {
         return Input.GetAxisRaw(ToAxis(axis));
+    }
+
+    public static MoveDirection GetDirection()
+    {
+        float horizontalInput = GetAxis(ControllerAxis.LEFT_STICK_HORIZONTAL);
+        float verticalInput = GetAxis(ControllerAxis.LEFT_STICK_VERTICAL);
+        
+        if (horizontalInput < 0.5f && horizontalInput > -0.5f && verticalInput < 0.5f && verticalInput > -0.5f)
+            return MoveDirection.None;
+        
+        Debug.Log(verticalInput);
+        float joystickRotation =
+            Mathf.Atan2(horizontalInput, verticalInput) * 180 / Mathf.PI;
+
+        if (joystickRotation > -45 && joystickRotation <= 45)
+            return MoveDirection.Up;
+        if (joystickRotation > 45 && joystickRotation <= 135) 
+            return MoveDirection.Right;
+        if (joystickRotation > -135 && joystickRotation <= -45) 
+            return MoveDirection.Left;
+        
+        return MoveDirection.Down;
     }
 
     private static string ToButton(ControllerKey key)
