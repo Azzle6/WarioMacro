@@ -1,38 +1,43 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class LifeBar : MonoBehaviour
 {
     [SerializeField] private Transform lifeBarGO;
-    [Range(1, 4)]
+    [Range(0, 4)]
     [SerializeField] private int life;
-    
-    /*private void Start()
-    {
-        for (int i = 0; i < life; i++)
-        {
-            lifeBarGO.GetChild(i).gameObject.SetActive(true);
-        }
-    }*/
 
-    public void Damage()
+    [SerializeField] private Image[] portraits;
+    public Character charatest;
+
+    private void Start()
     {
-        life--;
-        
-        lifeBarGO.GetChild(life).gameObject.SetActive(false);
+        life = 0;
     }
+
+    /*private void Update()
+    {
+        if (InputManager.GetKeyDown(ControllerKey.B)) Imprison();
+        if (InputManager.GetKeyDown(ControllerKey.X)) RecruitCharacter(charatest);
+    }*/
 
     public void RecruitCharacter(Character chara)
     {
-        GetLife();
-        lifeBarGO.GetChild(life - 1).GetComponent<Image>().sprite = chara.lifebarSprite;
-        lifeBarGO.GetChild(life-1).gameObject.SetActive(true);
-        
+        if (life == 4) return;
+        life++;
+        portraits[life-1].sprite = chara.lifebarSprite;
+        portraits[life - 1].enabled = true;
+
+
     }
 
     public void Imprison()
     {
-        lifeBarGO.GetChild(life-1).gameObject.SetActive(false); //à remplacer par le trigger de l'animation
+        
+        lifeBarGO.GetChild(life-1).GetComponent<Animator>().SetBool("Anim", true); //à remplacer par le trigger de l'animation
+        lifeBarGO.GetChild(life-1).GetChild(0).gameObject.SetActive(true);
+        
         life--;
     }
 
