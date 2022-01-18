@@ -25,7 +25,9 @@ public class CharacterManager : MonoBehaviour
     {
         return playerTeam.Count(c => c.characterType == type);
     }
-    
+
+    public bool IsTypeAvailable(int type) => allAvailableCharacters.First(list => list.type == type).count != 0;
+
     public IEnumerator DisplayRecruitmentChoice(int charaType)
     {
         CharacterList choices = allAvailableCharacters.First(list => list.type == charaType);
