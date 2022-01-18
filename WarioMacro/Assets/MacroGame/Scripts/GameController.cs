@@ -259,7 +259,7 @@ public class GameController : Ticker
 
             if (!Alarm.isActive || nodeSuccessCount >= loseCharacterThreshold) return;
 
-            lifeBar.Damage();
+            lifeBar.Imprison();
         }
     }
 
