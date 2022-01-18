@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Linq;
-using JetBrains.Annotations;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
@@ -10,7 +8,8 @@ public class RecruitmentController : GameController
     [SerializeField] private Node startNode;
     [Range(0, 3)] [SerializeField] private int askedCharacterThreshold = 2;
     [Range(0, 3)] [SerializeField] private int randomSpecialistThreshold = 1;
-    
+
+    private Node lastNoMGNode;
 
     public IEnumerator RecruitmentLoop()
     {
@@ -18,7 +17,7 @@ public class RecruitmentController : GameController
         
         while(!instance.characterManager.isTeamFull)
         {
-            // TODO : Change node selection and remove 2nd no MG node from prefab
+            lastNoMGNode = instance.map.currentNode;
             yield return StartCoroutine(instance.map.WaitForNodeSelection());
 
             yield return StartCoroutine(instance.player.MoveToPosition(instance.map.currentPath.wayPoints));
@@ -38,6 +37,11 @@ public class RecruitmentController : GameController
                 instance.resultPanel.ToggleWindow(false);
                 
                 yield return NodeResults(nodeMicroGame);
+
+                if (!instance.characterManager.IsTypeAvailable(nodeMicroGame.type))
+                {
+                    DeletePath(instance.map.currentPath);
+                }
                 
                 instance.player.TeleportPlayer(startNode.transform.position);
                 instance.map.currentNode = startNode;
@@ -57,20 +61,30 @@ public class RecruitmentController : GameController
             AudioManager.MacroPlaySound("MOU_NodeSuccess", 0);
             
             yield return instance.characterManager.DisplayRecruitmentChoice(node.type);
+            yield break;
+        }
+        
+        instance.settingsManager.DecreaseDifficulty();
+        AudioManager.MacroPlaySound("MOU_NodeFail", 0);
+        
+        if (instance.nodeSuccessCount >= randomSpecialistThreshold)
+        {
+            yield return instance.characterManager.AddDifferentSpecialist(node.type);
         }
         else
         {
-            instance.settingsManager.DecreaseDifficulty();
-            AudioManager.MacroPlaySound("MOU_NodeFail", 0);
+            yield return instance.characterManager.AddDefaultCharacter();
+        }
+    }
+
+    private void DeletePath(Node.Path path)
+    {
+        for (var i = 0; i < lastNoMGNode.paths.Length; i++)
+        {
+            if (lastNoMGNode.paths[i] != path) continue;
             
-            if (instance.nodeSuccessCount >= randomSpecialistThreshold)
-            {
-                yield return instance.characterManager.AddDifferentSpecialist(node.type);
-            }
-            else
-            {
-                yield return instance.characterManager.AddDefaultCharacter();
-            }
+            lastNoMGNode.paths[i] = null;
+            break;
         }
     }
 

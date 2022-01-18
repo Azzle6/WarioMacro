@@ -56,7 +56,7 @@ public class Map : MonoBehaviour
             var selectedDirection = Node.GetPlayerDirection();
             
             // ReSharper disable once PossibleNullReferenceException
-            foreach (Node.Path path in currentNode.paths)
+            foreach (Node.Path path in currentNode.paths.Where(p => p != null))
             {
                 if (selectedDirection == null || path.direction != selectedDirection) continue;
                 
@@ -72,7 +72,7 @@ public class Map : MonoBehaviour
             for (var i = 0; i < arrowPrefabs.Count; i++)
             {
                 // is any path setup with arrow direction?
-                arrowPrefabs[i].gameObject.SetActive(currentNode.paths.FirstOrDefault(p => p.direction == (Node.Direction)i) != null);
+                arrowPrefabs[i].gameObject.SetActive(currentNode.paths.FirstOrDefault(p => p != null && p.direction == (Node.Direction)i) != null);
                 // is the selected direction equals to the path direction?
                 arrowPrefabs[i].transform.localScale = (selectedDirection != null && i == (int) selectedDirection) ? Vector3.one : Vector3.one * .5f;
             }
