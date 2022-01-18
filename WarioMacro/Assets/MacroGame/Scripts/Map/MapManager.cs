@@ -110,10 +110,5 @@ public class MapManager : MonoBehaviour
         }
 
         TypeCountsToPercentages(total);
-
-        foreach (var pair in typePercentages)
-        {
-            Debug.Log(pair);
-        }
     }
 }
