@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
@@ -11,7 +12,7 @@ public class Node : MonoBehaviour
 
     private void Start()
     {
-        foreach (Path path in paths)
+        foreach (Path path in paths.Where(p => p != null))
         {
             path.wayPoints.Add(path.destination.transform);
         }
@@ -42,10 +43,10 @@ public class Node : MonoBehaviour
     {
         Gizmos.color = Color.yellow;
         
-        foreach (Path path in paths)
+        foreach (Path path in paths.Where(p => p != null))
         {
             var points = new List<Vector3>();
-            if (path == null) continue;
+            
             if (path.wayPoints == null)
             {
                 if (path.destination != null)
