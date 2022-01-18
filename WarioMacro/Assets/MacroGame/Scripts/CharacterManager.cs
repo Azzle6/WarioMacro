@@ -16,6 +16,7 @@ public class CharacterManager : MonoBehaviour
 
     [SerializeField] private GameObject chooseCharacterGO;
     [SerializeField] private Transform buttonsParent;
+    [SerializeField] private LifeBar life;
     
     public readonly Stack<Character> playerTeam = new Stack<Character>();
     private GameObject[] buttonGOList;
@@ -130,6 +131,7 @@ public class CharacterManager : MonoBehaviour
         }
         
         playerTeam.Push(characterList.Get(index));
+        life.RecruitCharacter(characterList.Get(index));
         characterList.RemoveAt(index);
         currentCount++;
 
@@ -137,6 +139,8 @@ public class CharacterManager : MonoBehaviour
         {
             isTeamFull = true;
         }
+        
+        
         Debug.Log("personnage " + playerTeam.Peek() + " a été ajouté à l'équipe!");
     }
     

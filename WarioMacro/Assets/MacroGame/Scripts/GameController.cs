@@ -241,7 +241,7 @@ public class GameController : Ticker
 
             if (!Alarm.isActive || nodeSuccessCount != 0 || characterManager.SpecialistOfTypeInTeam(node.type) != 0) return;
 
-            lifeBar.Damage();
+            lifeBar.Imprison();
         }
     }
 
