@@ -9,4 +9,5 @@ public class Character : ScriptableObject
     public int characterType = 1;
     
     public Sprite cardSprite;
+    public Sprite lifebarSprite;
 }

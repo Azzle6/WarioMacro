@@ -28,6 +28,7 @@ public class RecruitmentController : GameController
             // True if node with micro games, false otherwise
             if (nodeMicroGame != null)
             {
+                nodeMicroGame.microGamesNumber = instance.gameControllerSO.defaultMGCount;
                 yield return StartCoroutine(instance.NodeWithMicroGame(nodeMicroGame));
 
                 yield return new WaitForSecondsRealtime(1f);
