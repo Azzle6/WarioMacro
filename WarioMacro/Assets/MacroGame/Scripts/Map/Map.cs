@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Map : MonoBehaviour
 {
@@ -41,7 +42,7 @@ public class Map : MonoBehaviour
         var nextPath = default(Node.Path);
         var selectedNode = default(Node);
         var selectedPath = default(Node.Path);
-        Node.Direction? lastDirectionSelected = null;
+        var lastDirectionSelected = MoveDirection.None;
         const ControllerKey validInput = ControllerKey.A;
 
         arrowPrefabs.ForEach(go => go.SetActive(true));
@@ -53,12 +54,12 @@ public class Map : MonoBehaviour
         {
             while (Ticker.lockTimescale) yield return null;
 
-            var selectedDirection = Node.GetPlayerDirection();
+            MoveDirection selectedDirection = InputManager.GetDirection();
             
             // ReSharper disable once PossibleNullReferenceException
             foreach (Node.Path path in currentNode.paths.Where(p => p != null))
             {
-                if (selectedDirection == null || path.direction != selectedDirection) continue;
+                if (selectedDirection == MoveDirection.None || path.direction != selectedDirection) continue;
                 
                 selectedNode = path.destination;
                 selectedPath = path;
@@ -68,13 +69,14 @@ public class Map : MonoBehaviour
             }
 
             selectedDirection = lastDirectionSelected;
+            
 
             for (var i = 0; i < arrowPrefabs.Count; i++)
             {
                 // is any path setup with arrow direction?
-                arrowPrefabs[i].gameObject.SetActive(currentNode.paths.FirstOrDefault(p => p != null && p.direction == (Node.Direction)i) != null);
+                arrowPrefabs[i].gameObject.SetActive(currentNode.paths.FirstOrDefault(p => p != null && p.direction == (MoveDirection) i) != null);
                 // is the selected direction equals to the path direction?
-                arrowPrefabs[i].transform.localScale = (selectedDirection != null && i == (int) selectedDirection) ? Vector3.one : Vector3.one * .5f;
+                arrowPrefabs[i].transform.localScale = (selectedDirection != MoveDirection.None && i == (int) selectedDirection) ? Vector3.one : Vector3.one * .5f;
             }
             
             if (selectedNode != null && InputManager.GetKeyDown(validInput))

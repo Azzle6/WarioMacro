@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 // ReSharper disable once CheckNamespace
 public class Node : MonoBehaviour
@@ -16,29 +17,8 @@ public class Node : MonoBehaviour
         {
             path.wayPoints.Add(path.destination.transform);
         }
-    }   
-    
-    public static Direction? GetPlayerDirection()
-    {
-        float horizontalInput = InputManager.GetAxis(ControllerAxis.LEFT_STICK_HORIZONTAL);
-        float verticalInput = InputManager.GetAxis(ControllerAxis.LEFT_STICK_VERTICAL);
-        
-        if (horizontalInput == 0 && verticalInput == 0)
-            return null;
-        
-        float joystickRotation =
-            Mathf.Atan2(horizontalInput, verticalInput) * 180 / Mathf.PI;
-
-        if (joystickRotation > -45 && joystickRotation <= 45)
-            return Direction.Up;
-        if (joystickRotation > 45 && joystickRotation <= 135) 
-            return Direction.Right;
-        if (joystickRotation > -135 && joystickRotation <= -45) 
-            return Direction.Left;
-        
-        return Direction.Down;
     }
-    
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
@@ -77,13 +57,8 @@ public class Node : MonoBehaviour
     [Serializable]
     public class Path
     {
-        public Direction direction;
+        public MoveDirection direction;
         public Node destination;
         public List<Transform> wayPoints = new List<Transform>();
-    }
-
-    public enum Direction
-    {
-        Up, Right, Down, Left
     }
 }
