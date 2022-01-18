@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class GameSettingsManager : MonoBehaviour
 {
-    [SerializeField] private GameControllerSO gameControllerSO;
+    public GameControllerSO gameControllerSO;
     [SerializeField] private BPMSettingsSO bpmSettingsSO;
 
     public void IncreaseDifficulty()

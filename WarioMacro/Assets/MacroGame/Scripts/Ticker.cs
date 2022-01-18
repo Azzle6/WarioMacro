@@ -19,7 +19,7 @@ public class Ticker : MonoBehaviour
     
     private static readonly List<ITickable> tickables = new List<ITickable>();
     private IEnumerator tickEnumerator;
-    private GameControllerSO gameControllerSO;
+    protected internal GameControllerSO gameControllerSO;
     private MusicManager musicManager;
 
     public static void Init(ITickable t)
@@ -55,8 +55,8 @@ public class Ticker : MonoBehaviour
         if (!debug)
         {
             // Reset bpm and difficulty 
-            gameControllerSO.currentGameSpeed = Resources.Load<BPMSettingsSO>("BPMSettingsSO").minBPM;
-            gameControllerSO.currentDifficulty = 1;
+            gameControllerSO.currentGameSpeed = gameControllerSO.initialGameSpeed;
+            gameControllerSO.currentDifficulty = gameControllerSO.initialDifficulty;
         }
         
         // Update BPM and difficulty
