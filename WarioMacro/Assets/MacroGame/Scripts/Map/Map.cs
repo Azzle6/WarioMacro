@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
@@ -52,6 +51,8 @@ public class Map : MonoBehaviour
         // input loop
         while (nextNode == null)
         {
+            while (Ticker.lockTimescale) yield return null;
+
             var selectedDirection = Node.GetPlayerDirection();
             
             // ReSharper disable once PossibleNullReferenceException

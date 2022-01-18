@@ -23,7 +23,7 @@ public class Alarm : MonoBehaviour
 
     public void DecrementCount(bool result)
     {
-        if (isActive) return; // TODO : don't decrement on recruitment phase
+        if (isActive || !gameObject.activeSelf) return; // TODO : don't decrement on recruitment phase
         
         count -= (result ? increaseOnWin : increaseOnLose) * currentFactor;
 

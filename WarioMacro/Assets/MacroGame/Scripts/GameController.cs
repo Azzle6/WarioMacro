@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 // ReSharper disable once CheckNamespace
@@ -14,9 +13,9 @@ public class GameController : Ticker
     
     [SerializeField] protected internal CharacterManager characterManager;
     [SerializeField] protected internal MiniGameResultPannel_UI resultPanel;
+    [SerializeField] protected internal GameSettingsManager settingsManager;
     [SerializeField] private Animator macroGameCanvasAnimator;
     [SerializeField] private ScoreManager scoreManager;
-    [SerializeField] private GameSettingsManager settingsManager;
     [SerializeField] private Alarm alarm;
     [SerializeField] private MapManager mapManager;
     [SerializeField] private RecruitmentController recruitmentController;
@@ -25,7 +24,7 @@ public class GameController : Ticker
     [SerializeField] private KeywordDisplay keywordManager;
     [SerializeField] private LifeBar lifeBar;
     [SerializeField] private int mainMenuBuildIndex;
-    [SerializeField] private GameObject[] macroObjects = Array.Empty<GameObject>();
+    [SerializeField] protected internal List<GameObject> macroObjects = new List<GameObject>();
     [SerializeField] public string[] sceneNames = Array.Empty<string>();
     
     private static readonly int victory = Animator.StringToHash("Victory");

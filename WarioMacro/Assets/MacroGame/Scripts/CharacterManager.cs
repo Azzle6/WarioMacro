@@ -48,6 +48,7 @@ public class CharacterManager : MonoBehaviour
         }
 
         yield return WaitForTeamChange();
+        AudioManager.MacroPlaySound("MOU_CharacterSelection", 0);
     }
 
     public IEnumerator AddDifferentSpecialist(int type)
