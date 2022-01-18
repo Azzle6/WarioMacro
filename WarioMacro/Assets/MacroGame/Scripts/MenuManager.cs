@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class MenuManager : MonoBehaviour
 {
     [SerializeField] private GameObject menu;
-    public static bool GameIsPaused;
+    private static bool gameIsPaused;
     
     private void Update()
     {
@@ -20,22 +20,19 @@ public class MenuManager : MonoBehaviour
 
     public void DisplayMenu()
     {
-        GameIsPaused = !GameIsPaused;
-        menu.SetActive(GameIsPaused);
+        gameIsPaused = !gameIsPaused;
+        menu.SetActive(gameIsPaused);
         menu.transform.GetChild(0).gameObject.SetActive(true);
         menu.transform.GetChild(1).gameObject.SetActive(false);
-        float lastTimeScale = 1;
-        if (GameIsPaused)
-        {
-             lastTimeScale = Time.timeScale;
-            Time.timeScale = 0;
-        }
-        else Time.timeScale = lastTimeScale;
+
+        Ticker.lockTimescale = gameIsPaused;
     }
 
-    public void SwitchScene(string SceneName)
+    public void SwitchScene(string sceneName)
     {
-        SceneManager.LoadScene(SceneName);
+        Ticker.lockTimescale = false;
+        gameIsPaused = false;
+        SceneManager.LoadScene(sceneName);
     }
 
     public void QuitGame()
