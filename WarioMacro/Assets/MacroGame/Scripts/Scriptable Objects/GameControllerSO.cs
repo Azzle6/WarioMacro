@@ -10,9 +10,12 @@ public class GameControllerSO : ScriptableObject
     [Range(1, 3)] public int initialDifficulty = 1;
     [Space]
     [Range(1, 5)] public int defaultMGCount = 3;
+    [Range(0, 5)] public int increaseDifficultyThreshold = 2;
+    [Range(0, 5)] public int decreaseDifficultyThreshold = 2;
+    [Range(0, 5)] public int loseCharacterThreshold = 0;
+    [Space]
     [Range(1, 5)] public int noSpecialistMGCount = 5;
-    [Range(1, 5)] public int increaseDifficultyThreshold = 2;
-    [Range(1, 5)] public int decreaseDifficultyThreshold = 2;
-    [Range(1, 5)] public int loseCharacterThreshold = 1;
-    [Range(1, 3)] public int specialistLoseCharacterThreshold = 1;
+    [Range(0, 5)] public int noSpecialistIncreaseDifficultyThreshold = 3;
+    [Range(0, 5)] public int noSpecialistDecreaseDifficultyThreshold = 3;
+    [Range(0, 5)] public int noSpecialistLoseCharacterThreshold = 2;
 }
