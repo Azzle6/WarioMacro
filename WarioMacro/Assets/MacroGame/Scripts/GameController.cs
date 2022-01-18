@@ -229,17 +229,19 @@ public class GameController : Ticker
     private void NodeResults(NodeSettings node)
     {
         scoreManager.UpdateScore(nodeSuccessCount,microGamesNumber,characterManager.playerTeam);
-        if (nodeSuccessCount >= microGamesNumber * 0.5f)
+        if (nodeSuccessCount >= gameControllerSO.increaseDifficultyThreshold)
         {
             settingsManager.IncreaseDifficulty();
             AudioManager.MacroPlaySound("MOU_NodeSuccess", 0);
         }
-        else
+        else if (nodeSuccessCount < gameControllerSO.decreaseDifficultyThreshold)
         {
             settingsManager.DecreaseDifficulty();
             AudioManager.MacroPlaySound("MOU_NodeFail", 0);
 
-            if (!Alarm.isActive || nodeSuccessCount != 0 || characterManager.SpecialistOfTypeInTeam(node.type) != 0) return;
+            if (!Alarm.isActive || nodeSuccessCount >= gameControllerSO.loseCharacterThreshold ||
+                characterManager.SpecialistOfTypeInTeam(node.type) >=
+                gameControllerSO.specialistLoseCharacterThreshold) return;
 
             lifeBar.Damage();
         }
