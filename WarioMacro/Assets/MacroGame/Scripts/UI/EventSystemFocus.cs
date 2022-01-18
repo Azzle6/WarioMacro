@@ -19,31 +19,20 @@ public class EventSystemFocus : MonoBehaviour
         ExecuteEvents.Execute(data.selectedObject, data, ExecuteEvents.moveHandler);
     }
 
-    private MoveDirection GetDirection(float verticalAxis, float horizontalAxis)
+    private MoveDirection GetDirection()
     {
-        
-        if (!alreadyMoved)
-        {
-            alreadyMoved = true;
-            if (verticalAxis < -0.2f)
-                return MoveDirection.Down;
-            if (verticalAxis > 0.2f)
-                return MoveDirection.Up;
-            if (horizontalAxis < -0.2f)
-                return MoveDirection.Left;
-            if (horizontalAxis > 0.2f)
-                return MoveDirection.Right;
-            alreadyMoved = false;
-            return MoveDirection.None;
-        }
-        
-        if (verticalAxis > -0.2f && verticalAxis < 0.2f && horizontalAxis > -0.2f 
-            && horizontalAxis < 0.2f)
+        MoveDirection dir = InputManager.GetDirection();
+
+        if (dir == MoveDirection.None)
         {
             alreadyMoved = false;
+            return dir;
         }
+
+        if (alreadyMoved) return MoveDirection.None;
         
-        return MoveDirection.None;
+        alreadyMoved = true;
+        return dir;
     }
 
     private void OnEnable()
@@ -54,9 +43,6 @@ public class EventSystemFocus : MonoBehaviour
  
     private void Update()
     {
-        float verticalAxis = InputManager.GetAxis(ControllerAxis.LEFT_STICK_VERTICAL);
-        float horizontalAxis = InputManager.GetAxis(ControllerAxis.LEFT_STICK_HORIZONTAL);
-
-        Move(GetDirection(verticalAxis, horizontalAxis));
+        Move(GetDirection());
     }
 }
