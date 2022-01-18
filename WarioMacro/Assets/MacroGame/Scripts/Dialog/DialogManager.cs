@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class DialogManager : MonoBehaviour
@@ -28,6 +29,8 @@ public class DialogManager : MonoBehaviour
             Debug.Log("player is already in a dialog.");
             return;
         }
+
+        Ticker.lockTimescale = true;
         isInDialog = true;
         dialogGO.SetActive(true);
         finishButton.SetActive(false);
@@ -50,18 +53,13 @@ public class DialogManager : MonoBehaviour
         else
         {
             LastDialog();
-            yield return new WaitUntil(() => InputManager.GetKeyDown(ControllerKey.A));
+            yield return new WaitUntil(() => !MenuManager.gameIsPaused && InputManager.GetKeyDown(ControllerKey.A));
             FinishDialog();
             yield break;
         }
 
-        yield return new WaitUntil(() => InputManager.GetKeyDown(ControllerKey.A));
+        yield return new WaitUntil(() => !MenuManager.gameIsPaused && InputManager.GetKeyDown(ControllerKey.A));
         
-        StartCoroutine(WriteNextSentence());
-    }
-
-    public void TriggerNextDialog()
-    {
         StartCoroutine(WriteNextSentence());
     }
 
@@ -76,6 +74,7 @@ public class DialogManager : MonoBehaviour
         dialogGO.SetActive(false);
         curIndex = 0;
         isInDialog = false;
+        Ticker.lockTimescale = false;
     }
     
 }
