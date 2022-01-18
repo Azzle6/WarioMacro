@@ -84,7 +84,6 @@ public class InputManager : MonoBehaviour
         if (horizontalInput < 0.5f && horizontalInput > -0.5f && verticalInput < 0.5f && verticalInput > -0.5f)
             return MoveDirection.None;
         
-        Debug.Log(verticalInput);
         float joystickRotation =
             Mathf.Atan2(horizontalInput, verticalInput) * 180 / Mathf.PI;
 

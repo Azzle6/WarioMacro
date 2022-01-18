@@ -69,6 +69,7 @@ public class Map : MonoBehaviour
             }
 
             selectedDirection = lastDirectionSelected;
+            
 
             for (var i = 0; i < arrowPrefabs.Count; i++)
             {
