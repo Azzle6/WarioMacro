@@ -16,8 +16,9 @@ public class CharacterManager : MonoBehaviour
 
     [SerializeField] private GameObject chooseCharacterGO;
     [SerializeField] private Transform buttonsParent;
+    [SerializeField] private LifeBar life;
     
-    private readonly Stack<Character> playerTeam = new Stack<Character>();
+    public readonly Stack<Character> playerTeam = new Stack<Character>();
     private GameObject[] buttonGOList;
     private int currentCount;
 
@@ -25,7 +26,9 @@ public class CharacterManager : MonoBehaviour
     {
         return playerTeam.Count(c => c.characterType == type);
     }
-    
+
+    public bool IsTypeAvailable(int type) => allAvailableCharacters.First(list => list.type == type).count != 0;
+
     public IEnumerator DisplayRecruitmentChoice(int charaType)
     {
         CharacterList choices = allAvailableCharacters.First(list => list.type == charaType);
@@ -48,6 +51,7 @@ public class CharacterManager : MonoBehaviour
         }
 
         yield return WaitForTeamChange();
+        AudioManager.MacroPlaySound("MOU_CharacterSelection", 0);
     }
 
     public IEnumerator AddDifferentSpecialist(int type)
@@ -127,6 +131,7 @@ public class CharacterManager : MonoBehaviour
         }
         
         playerTeam.Push(characterList.Get(index));
+        life.RecruitCharacter(characterList.Get(index));
         characterList.RemoveAt(index);
         currentCount++;
 
@@ -134,6 +139,8 @@ public class CharacterManager : MonoBehaviour
         {
             isTeamFull = true;
         }
+        
+        
         Debug.Log("personnage " + playerTeam.Peek() + " a été ajouté à l'équipe!");
     }
     
