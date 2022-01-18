@@ -17,7 +17,7 @@ public class CharacterManager : MonoBehaviour
     [SerializeField] private GameObject chooseCharacterGO;
     [SerializeField] private Transform buttonsParent;
     
-    private readonly Stack<Character> playerTeam = new Stack<Character>();
+    public readonly Stack<Character> playerTeam = new Stack<Character>();
     private GameObject[] buttonGOList;
     private int currentCount;
 
