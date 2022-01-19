@@ -129,9 +129,9 @@ public class CharacterManager : MonoBehaviour
             Debug.LogError("Character added when the team is complete.");
             return;
         }
-        
-        playerTeam.Push(characterList.Get(index));
         life.RecruitCharacter(characterList.Get(index));
+        playerTeam.Push(characterList.Get(index));
+        
         characterList.RemoveAt(index);
         currentCount++;
 

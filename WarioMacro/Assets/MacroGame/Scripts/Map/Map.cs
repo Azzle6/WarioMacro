@@ -7,7 +7,9 @@ public class Map : MonoBehaviour
 {
     [HideInInspector]
     public Node currentNode;
+    public Transform nodesParent;
     public Node.Path currentPath { get; private set; }
+
     
     [SerializeField] private Node startNode;
     [SerializeField] private Node endNode;
