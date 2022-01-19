@@ -46,7 +46,7 @@ public class MiniGameResultPannel_UI : MonoBehaviour
     {
         ClearAllNodes();
         ToggleWindow(false);
-        //SetStartingNodeNumber(5);
+        SetStartingNodeNumber(4);
         //SetCurrentNode(true, 1);
     }
 
@@ -55,7 +55,7 @@ public class MiniGameResultPannel_UI : MonoBehaviour
 
         for(int i = 0; i < pannelLayoutGroup.transform.childCount; i++)
         {
-            Destroy(pannelLayoutGroup.transform.GetChild(i));
+            Destroy(pannelLayoutGroup.transform.GetChild(i).gameObject);
         }
     }
     
