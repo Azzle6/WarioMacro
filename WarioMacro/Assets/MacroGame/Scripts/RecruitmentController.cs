@@ -1,10 +1,12 @@
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
 public class RecruitmentController : GameController
 {
     [SerializeField] private GameObject alarmGO;
+    [SerializeField] private NodePrevisualisation nodePrevisualisation;
     [SerializeField] private Node startNode;
     [Range(0, 3)] [SerializeField] private int askedCharacterThreshold = 2;
     [Range(0, 3)] [SerializeField] private int randomSpecialistThreshold = 1;
@@ -14,6 +16,7 @@ public class RecruitmentController : GameController
     public IEnumerator RecruitmentLoop()
     {
         SetAlarmActive(false);
+        nodePrevisualisation.SetTexts(instance.mapManager.typePercentages.Select(pair => pair.Value).ToArray());
         
         while(!instance.characterManager.isTeamFull)
         {
