@@ -46,7 +46,7 @@ public class MiniGameResultPannel_UI : MonoBehaviour
     {
         ClearAllNodes();
         ToggleWindow(false);
-        //SetStartingNodeNumber(5);
+        SetStartingNodeNumber(4);
         //SetCurrentNode(true, 1);
     }
 
