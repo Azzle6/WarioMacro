@@ -33,7 +33,6 @@ public class RecruitmentController : GameController
             yield return StartCoroutine(instance.map.WaitForNodeSelection());
 
             yield return StartCoroutine(instance.player.MoveToPosition(instance.map.currentPath.wayPoints));
-            AudioManager.MacroPlaySound("MOU_NodeSelect", 0);
             
             var nodeMicroGame = instance.map.currentNode.GetComponent<NodeSettings>();
 
@@ -71,15 +70,13 @@ public class RecruitmentController : GameController
         if (instance.nodeSuccessCount >= askedCharacterThreshold)
         {
             instance.settingsManager.IncreaseDifficulty();
-            AudioManager.MacroPlaySound("MOU_NodeSuccess", 0);
-            
+
             yield return instance.characterManager.DisplayRecruitmentChoice(node.type);
             yield break;
         }
         
         instance.settingsManager.DecreaseDifficulty();
-        AudioManager.MacroPlaySound("MOU_NodeFail", 0);
-        
+
         if (instance.nodeSuccessCount >= randomSpecialistThreshold)
         {
             yield return instance.characterManager.AddDifferentSpecialist(node.type);

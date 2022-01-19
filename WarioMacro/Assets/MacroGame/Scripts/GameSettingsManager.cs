@@ -7,24 +7,28 @@ public class GameSettingsManager : MonoBehaviour
 
     public void IncreaseDifficulty()
     {
+        AudioManager.MacroPlaySound("NodeSuccess", 0);
         gameControllerSO.currentDifficulty++;
         ClampDifficulty();
     }
     
     public void DecreaseDifficulty()
     {
+        AudioManager.MacroPlaySound("NodeFailure", 0);
         gameControllerSO.currentDifficulty--;
         ClampDifficulty();
     }
 
     public void IncreaseBPM()
     {
+        AudioManager.MacroPlaySound("SpeedUp", 0);
         gameControllerSO.currentGameSpeed += bpmSettingsSO.increasingBPM;
         ClampBPM();
     }
     
     public void DecreaseBPM()
     {
+        AudioManager.MacroPlaySound("SpeedDown", 0);
         gameControllerSO.currentGameSpeed -= bpmSettingsSO.decreasingBPM;
         ClampBPM();
     }

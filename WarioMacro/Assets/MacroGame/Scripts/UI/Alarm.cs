@@ -31,7 +31,7 @@ public class Alarm : MonoBehaviour
             count = 0;
             isActive = true;
             MusicManager.instance.state = Soundgroup.CurrentPhase.ESCAPE;
-            Debug.Log("Alarm mode On");
+            AudioManager.MacroPlaySound("Alarm", 0);
         }
         
         director.Play();

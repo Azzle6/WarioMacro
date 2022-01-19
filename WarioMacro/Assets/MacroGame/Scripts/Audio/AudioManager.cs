@@ -81,6 +81,12 @@ public class AudioManager : MonoBehaviour
     /// Method used to play a sound. Don't use this one during a micro game. Use PlaySound(AudioClip soundClip) instead.
     /// </summary>
     /// <param name="soundName"></param>
+    public static void MacroPlaySound(string soundName) => MacroPlaySound(soundName, 0);
+
+    /// <summary>
+    /// Method used to play a sound. Don't use this one during a micro game. Use PlaySound(AudioClip soundClip) instead.
+    /// </summary>
+    /// <param name="soundName"></param>
     /// <param name="delay"></param>
     public static void MacroPlaySound(string soundName, float delay)
     {

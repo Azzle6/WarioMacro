@@ -34,7 +34,7 @@ public class LifeBar : MonoBehaviour
 
     public void Imprison()
     {
-        
+        AudioManager.MacroPlaySound("CharacterLose", 0);
         lifeBarGO.GetChild(life-1).GetComponent<Animator>().SetBool("Anim", true); //à remplacer par le trigger de l'animation
         lifeBarGO.GetChild(life-1).GetChild(0).gameObject.SetActive(true);
         
