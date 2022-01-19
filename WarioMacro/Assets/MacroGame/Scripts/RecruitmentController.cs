@@ -24,7 +24,7 @@ public class RecruitmentController : GameController
             yield break;
         }
         
-        SetAlarmActive(false);
+        SetRecruitmentActive(true);
         nodePrevisualisation.SetTexts(instance.mapManager.typePercentages.Select(pair => pair.Value).ToArray());
         
         while(!instance.characterManager.isTeamFull)
@@ -62,7 +62,7 @@ public class RecruitmentController : GameController
             yield return null;
         }
         
-        SetAlarmActive(true);
+        SetRecruitmentActive(false);
     }
 
     private IEnumerator NodeResults(NodeSettings node)
@@ -98,18 +98,21 @@ public class RecruitmentController : GameController
         }
     }
 
-    private void SetAlarmActive(bool state)
+    private void SetRecruitmentActive(bool state)
     {
+        GameObject nodePrevisualisationGO = nodePrevisualisation.gameObject;
         if (state)
-        {
-            instance.macroObjects.Add(alarmGO);
-        }
-        else
         {
             instance.macroObjects.Remove(alarmGO);
         }
+        else
+        {
+            instance.macroObjects.Add(alarmGO);
+            instance.macroObjects.Remove(nodePrevisualisationGO);
+        }
         
-        alarmGO.SetActive(state);
+        alarmGO.SetActive(!state);
+        nodePrevisualisationGO.SetActive(state);
     }
 
     private IEnumerator SkipRecruitment()
