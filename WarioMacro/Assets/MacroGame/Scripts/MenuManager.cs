@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class MenuManager : MonoBehaviour
 {
     [SerializeField] private GameObject menu;
-    private static bool gameIsPaused;
+    public static bool gameIsPaused;
     
     private void Update()
     {
