@@ -71,12 +71,12 @@ public class GameController : Ticker
         if (value)
         {
             macroGameCanvasAnimator.SetTrigger(victory);
-            AudioManager.MacroPlaySound("MOU_GameWin", 0);
+            AudioManager.MacroPlaySound("GameWin", 0);
         }
         else
         {
             macroGameCanvasAnimator.SetTrigger(defeat);
-            AudioManager.MacroPlaySound("MOU_GameLose", 0);
+            AudioManager.MacroPlaySound("GameLose", 0);
         }
 
         while (!InputManager.GetKeyDown(ControllerKey.A)) yield return null;
@@ -87,15 +87,16 @@ public class GameController : Ticker
     {
         map = mapManager.LoadRecruitmentMap();
 
+        MusicManager.instance.state = Soundgroup.CurrentPhase.RECRUIT;
         yield return recruitmentController.RecruitmentLoop();
 
         map = mapManager.LoadNextMap();
+        MusicManager.instance.state = Soundgroup.CurrentPhase.ACTION;
         while(true)
         {
             yield return StartCoroutine(map.WaitForNodeSelection());
 
             yield return StartCoroutine(player.MoveToPosition(map.currentPath.wayPoints));
-            AudioManager.MacroPlaySound("MOU_NodeSelect", 0);
             var nodeMicroGame = map.currentNode.GetComponent<NodeSettings>();
 
             // True if node with micro games, false otherwise
@@ -127,6 +128,7 @@ public class GameController : Ticker
                     StartCoroutine(ToggleEndGame(true));
                     yield break;
                 }
+                AudioManager.MacroPlaySound("Elevator", 0);
                 map = mapManager.LoadNextMap();
             }
 
@@ -166,9 +168,6 @@ public class GameController : Ticker
 
             yield return new WaitForSeconds(1f);
 
-            // start transition UI
-            AudioManager.MacroPlaySound("MOU_MiniGameEnter", 0);
-
             // Choose next MicroGame
             currentScene = microGamesQueue.Dequeue();
             Debug.Log("Launch Micro Game:" + currentScene);
@@ -176,9 +175,9 @@ public class GameController : Ticker
             // Keyword trigger
             yield return keywordManager.KeyWordHandler(currentScene);
 
-            // start next micro game in queue
+            AudioManager.MacroPlaySound("MiniGameEnter", 0);
+            // Launch transition
             yield return StartCoroutine(transitionController.TransitionHandler(currentScene, true));
-
 
 
             // micro game start
@@ -201,13 +200,11 @@ public class GameController : Ticker
             {
                 settingsManager.IncreaseBPM();
                 alarm.DecrementCount(true);
-                AudioManager.MacroPlaySound("MOU_SpeedUp", 0);
             }
             else
             {
                 settingsManager.DecreaseBPM();
                 alarm.DecrementCount(false);
-                AudioManager.MacroPlaySound("MOU_SpeedDown", 0);
             }
 
             // display result
@@ -250,12 +247,10 @@ public class GameController : Ticker
         if (nodeSuccessCount >= increaseDifficultyThreshold)
         {
             settingsManager.IncreaseDifficulty();
-            AudioManager.MacroPlaySound("MOU_NodeSuccess", 0);
         }
         else if (nodeSuccessCount < decreaseDifficultyThreshold)
         {
             settingsManager.DecreaseDifficulty();
-            AudioManager.MacroPlaySound("MOU_NodeFail", 0);
 
             if (!Alarm.isActive || nodeSuccessCount >= loseCharacterThreshold) return;
 
