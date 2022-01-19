@@ -34,7 +34,6 @@ public class GameController : Ticker
     private static bool gameResult;
     protected internal Map map;
     protected internal int nodeSuccessCount;
-    protected internal int microGamesNumber;
     private bool debugMicro;
 
 
@@ -102,6 +101,9 @@ public class GameController : Ticker
             // True if node with micro games, false otherwise
             if (nodeMicroGame != null)
             {
+                nodeMicroGame.microGamesNumber = characterManager.SpecialistOfTypeInTeam(nodeMicroGame.type) == 0
+                    ? gameControllerSO.noSpecialistMGCount
+                    : gameControllerSO.defaultMGCount;
                 yield return StartCoroutine(NodeWithMicroGame(nodeMicroGame));
 
                 NodeResults(nodeMicroGame);
@@ -134,11 +136,10 @@ public class GameController : Ticker
 
     protected internal IEnumerator NodeWithMicroGame(NodeSettings node)
     {
-        microGamesNumber = scoreManager.CheckTeamTypes(characterManager.playerTeam) == 0 ? 5 : 3;
         // select 3 random micro games from micro games list
         var microGamesQueue = new Queue<string>();
         var microGamesList = new List<string>(sceneNames);
-        var microGamesCount = Mathf.Min(microGamesNumber, microGamesList.Count);
+        var microGamesCount = Mathf.Min(node.microGamesNumber, microGamesList.Count);
         while (microGamesCount-- > 0)
         {
             var rdIndex = Random.Range(0, microGamesList.Count);
@@ -228,20 +229,37 @@ public class GameController : Ticker
 
     private void NodeResults(NodeSettings node)
     {
-        scoreManager.UpdateScore(nodeSuccessCount,microGamesNumber,characterManager.playerTeam);
-        if (nodeSuccessCount >= microGamesNumber * 0.5f)
+        scoreManager.UpdateScore(nodeSuccessCount,node.microGamesNumber,characterManager.playerTeam);
+
+        if (characterManager.SpecialistOfTypeInTeam(node.type) == 0)
+        {
+            NodeResultsBis(gameControllerSO.noSpecialistIncreaseDifficultyThreshold,
+                gameControllerSO.noSpecialistDecreaseDifficultyThreshold,
+                gameControllerSO.noSpecialistLoseCharacterThreshold);
+        }
+        else
+        {
+            NodeResultsBis(gameControllerSO.increaseDifficultyThreshold, gameControllerSO.decreaseDifficultyThreshold,
+                gameControllerSO.loseCharacterThreshold);
+        }
+        
+    }
+
+    private void NodeResultsBis(int increaseDifficultyThreshold, int decreaseDifficultyThreshold, int loseCharacterThreshold)
+    {
+        if (nodeSuccessCount >= increaseDifficultyThreshold)
         {
             settingsManager.IncreaseDifficulty();
             AudioManager.MacroPlaySound("MOU_NodeSuccess", 0);
         }
-        else
+        else if (nodeSuccessCount < decreaseDifficultyThreshold)
         {
             settingsManager.DecreaseDifficulty();
             AudioManager.MacroPlaySound("MOU_NodeFail", 0);
 
-            if (!Alarm.isActive || nodeSuccessCount != 0 || characterManager.SpecialistOfTypeInTeam(node.type) != 0) return;
+            if (!Alarm.isActive || nodeSuccessCount >= loseCharacterThreshold) return;
 
-            lifeBar.Damage();
+            lifeBar.Imprison();
         }
     }
 
