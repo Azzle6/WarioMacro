@@ -7,18 +7,16 @@ using UnityEngine.Serialization;
 public class MusicManager : MonoBehaviour, ITickable
 {
     public static MusicManager instance;
-    
-    [Header("Visualize music Timer")] [Range(0, 1f)] public float musicTime;
-    [FormerlySerializedAs("MusicsSO")] public MusicManagerSO musicSO;
-    public AudioSource AudioS; 
-    public AudioClip currentAudioClip;
-    
+
+    [HideInInspector] public Soundgroup.CurrentPhase state = Soundgroup.CurrentPhase.RECRUIT;
+    [SerializeField] private MusicManagerSO musicSO;
+    [SerializeField] private AudioSource AudioS; 
+    private AudioClip currentAudioClip;
     private AudioClip nextAudioClip;
 
     public void OnTick()
     {
-        // TODO
-        FindMusic((int) Ticker.gameBPM * 2, Soundgroup.PhaseState.MACROGAME, Soundgroup.CurrentPhase.RECRUIT);
+        FindMusic((int) Ticker.gameBPM * 2, Soundgroup.PhaseState.MACROGAME, state);
 
         if (currentAudioClip.Equals(nextAudioClip)) return;
         
@@ -80,12 +78,6 @@ public class MusicManager : MonoBehaviour, ITickable
         AudioS.clip = currentAudioClip;
         AudioS.Play();
         AudioS.loop = true;
-    }
-
-    private void Update() // L'update est juste pour afficher le slider
-    {
-        if(AudioS.clip != null)
-            musicTime = AudioS.time / AudioS.clip.length; 
     }
 } 
  

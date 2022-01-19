@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -31,6 +30,7 @@ public class Alarm : MonoBehaviour
         {
             count = 0;
             isActive = true;
+            MusicManager.instance.state = Soundgroup.CurrentPhase.ESCAPE;
             Debug.Log("Alarm mode On");
         }
         

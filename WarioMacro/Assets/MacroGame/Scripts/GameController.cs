@@ -87,9 +87,11 @@ public class GameController : Ticker
     {
         map = mapManager.LoadRecruitmentMap();
 
+        MusicManager.instance.state = Soundgroup.CurrentPhase.RECRUIT;
         yield return recruitmentController.RecruitmentLoop();
 
         map = mapManager.LoadNextMap();
+        MusicManager.instance.state = Soundgroup.CurrentPhase.ACTION;
         while(true)
         {
             yield return StartCoroutine(map.WaitForNodeSelection());
