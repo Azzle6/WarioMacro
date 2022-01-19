@@ -357,6 +357,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Map LD3
       objectReference: {fileID: 0}
+    - target: {fileID: 5591491363261443519, guid: 3d12763b259aecf4ca435cd3d8ca091d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5896603836104564993, guid: 3d12763b259aecf4ca435cd3d8ca091d, type: 3}
       propertyPath: m_Tiles.Array.size
       value: 0
@@ -4686,8 +4690,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentNode: {fileID: 0}
+  nodesParent: {fileID: 0}
   startNode: {fileID: 0}
   endNode: {fileID: 2072289458237907189}
+  littleArrow: {fileID: 0}
+  bigArrow: {fileID: 0}
 --- !u!1001 &1013747013503332722
 PrefabInstance:
   m_ObjectHideFlags: 0
