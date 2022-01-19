@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Linq;
+using GameTypes;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
 public class RecruitmentController : GameController
 {
+    [SerializeField] private bool skipRecruitment;
     [SerializeField] private GameObject alarmGO;
     [SerializeField] private NodePrevisualisation nodePrevisualisation;
     [SerializeField] private Node startNode;
@@ -15,6 +17,13 @@ public class RecruitmentController : GameController
 
     public IEnumerator RecruitmentLoop()
     {
+        if (skipRecruitment)
+        {
+            yield return new WaitForSeconds(1f);
+            yield return SkipRecruitment();
+            yield break;
+        }
+        
         SetAlarmActive(false);
         nodePrevisualisation.SetTexts(instance.mapManager.typePercentages.Select(pair => pair.Value).ToArray());
         
@@ -104,6 +113,14 @@ public class RecruitmentController : GameController
         }
         
         alarmGO.SetActive(state);
+    }
+
+    private IEnumerator SkipRecruitment()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            yield return instance.characterManager.AddDifferentSpecialist(i + GameType.Brute);
+        }
     }
 
     
