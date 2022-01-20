@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using GameTypes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
@@ -102,7 +103,8 @@ public class GameController : Ticker
             // True if node with micro games, false otherwise
             if (nodeMicroGame != null)
             {
-                nodeMicroGame.microGamesNumber = characterManager.SpecialistOfTypeInTeam(nodeMicroGame.type) == 0
+                nodeMicroGame.microGamesNumber = nodeMicroGame.type != NodeType.None &&
+                                                 characterManager.SpecialistOfTypeInTeam(nodeMicroGame.type) == 0
                     ? gameControllerSO.noSpecialistMGCount
                     : gameControllerSO.defaultMGCount;
                 yield return StartCoroutine(NodeWithMicroGame(nodeMicroGame));
