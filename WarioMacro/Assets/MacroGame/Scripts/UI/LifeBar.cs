@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,19 +7,12 @@ public class LifeBar : MonoBehaviour
     [Range(0, 4)]
     [SerializeField] private int life;
 
-    [SerializeField] private Image[] portraits;
-    public Character charatest;
+    [SerializeField] private Image[] portraits; 
 
     private void Start()
     {
         life = 0;
     }
-
-    /*private void Update()
-    {
-        if (InputManager.GetKeyDown(ControllerKey.B)) Imprison();
-        if (InputManager.GetKeyDown(ControllerKey.X)) RecruitCharacter(charatest);
-    }*/
 
     public void RecruitCharacter(Character chara)
     {
@@ -28,8 +20,6 @@ public class LifeBar : MonoBehaviour
         life++;
         portraits[life-1].sprite = chara.lifebarSprite;
         portraits[life - 1].enabled = true;
-
-
     }
 
     public void Imprison()
