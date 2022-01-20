@@ -20,7 +20,7 @@ public class Map : MonoBehaviour
     private static readonly int current = Animator.StringToHash("Current");
     private Player player;
 
-
+    
     public void Load()
     {
         player = GameController.instance.player;
@@ -74,8 +74,8 @@ public class Map : MonoBehaviour
             }
 
             selectedDirection = lastDirectionSelected;
-            
-
+            if(selectedPath!=null)
+                currentNode.pathRenderer.CreatePathRenderer(selectedPath);
             for (var i = 0; i < arrowPrefabs.Count; i++)
             {
                 // is any path setup with arrow direction?
@@ -84,7 +84,6 @@ public class Map : MonoBehaviour
                 arrowPrefabs[i].transform.localScale = (selectedDirection != MoveDirection.None && i == (int) selectedDirection) ? Vector3.one : Vector3.one * .5f;
                 arrowPrefabs[i].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (selectedDirection != MoveDirection.None && i == (int)selectedDirection) ? bigArrow : littleArrow;
             }
-            
             if (selectedNode != null && InputManager.GetKeyDown(validInput))
             {
                 nextNode = selectedNode;
@@ -92,7 +91,8 @@ public class Map : MonoBehaviour
             }
             yield return null;
         }
-        
+
+        currentNode.pathRenderer.ClearPath();
         currentNode.animator.SetBool(current, false);
         currentNode = nextNode;
         currentPath = nextPath;
