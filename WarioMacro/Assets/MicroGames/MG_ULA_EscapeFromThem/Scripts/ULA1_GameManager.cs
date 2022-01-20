@@ -40,7 +40,7 @@ public class ULA1_GameManager : MonoBehaviour, ITickable
 
     private void Start()
     {
-        lvl = Random.Range(0, 2);
+        lvl = Random.Range(0, 3);
         result = true;
         cinematic = true;
         GameManager.Register(); //Mise en place du Input Manager, du Sound Manager et du Game Controller
