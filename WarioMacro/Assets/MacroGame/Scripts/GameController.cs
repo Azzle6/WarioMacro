@@ -230,7 +230,13 @@ public class GameController : Ticker
     {
         scoreManager.UpdateScore(nodeSuccessCount,node.microGamesNumber,characterManager.playerTeam);
 
-        if (characterManager.SpecialistOfTypeInTeam(node.type) == 0)
+        if (node.type == NodeType.None)
+        {
+            NodeResultsBis(gameControllerSO.defaultIncreaseDifficultyThreshold,
+                gameControllerSO.defaultDecreaseDifficultyThreshold, 
+                gameControllerSO.defaultLoseCharacterThreshold);
+        }
+        else if (characterManager.SpecialistOfTypeInTeam(node.type) == 0)
         {
             NodeResultsBis(gameControllerSO.noSpecialistIncreaseDifficultyThreshold,
                 gameControllerSO.noSpecialistDecreaseDifficultyThreshold,
@@ -238,8 +244,9 @@ public class GameController : Ticker
         }
         else
         {
-            NodeResultsBis(gameControllerSO.increaseDifficultyThreshold, gameControllerSO.decreaseDifficultyThreshold,
-                gameControllerSO.loseCharacterThreshold);
+            NodeResultsBis(gameControllerSO.specialistIncreaseDifficultyThreshold, 
+                gameControllerSO.specialistDecreaseDifficultyThreshold,
+                gameControllerSO.specialistLoseCharacterThreshold);
         }
         
     }
