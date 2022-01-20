@@ -2939,10 +2939,10 @@ MonoBehaviour:
   characterManager: {fileID: 1717000889}
   resultPanel: {fileID: 149216178}
   settingsManager: {fileID: 1717000888}
+  mapManager: {fileID: 1717000886}
   macroGameCanvasAnimator: {fileID: 1936919631}
   scoreManager: {fileID: 154393218}
   alarm: {fileID: 1893723174}
-  mapManager: {fileID: 1717000886}
   recruitmentController: {fileID: 1717000885}
   timer: {fileID: 1717000884}
   transitionController: {fileID: 1717000882}
@@ -2977,6 +2977,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifeBarGO: {fileID: 2106831680}
   life: 4
+  portraits: []
+  charatest: {fileID: 0}
 --- !u!114 &1717000882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3062,10 +3064,10 @@ MonoBehaviour:
   characterManager: {fileID: 0}
   resultPanel: {fileID: 0}
   settingsManager: {fileID: 0}
+  mapManager: {fileID: 0}
   macroGameCanvasAnimator: {fileID: 0}
   scoreManager: {fileID: 0}
   alarm: {fileID: 0}
-  mapManager: {fileID: 0}
   recruitmentController: {fileID: 0}
   timer: {fileID: 0}
   transitionController: {fileID: 0}
@@ -3075,6 +3077,7 @@ MonoBehaviour:
   macroObjects: []
   sceneNames: []
   alarmGO: {fileID: 1893723172}
+  nodePrevisualisation: {fileID: 0}
   startNode: {fileID: 1584109270}
   askedCharacterThreshold: 2
   randomSpecialistThreshold: 1
@@ -3171,6 +3174,7 @@ MonoBehaviour:
   isTeamFull: 0
   chooseCharacterGO: {fileID: 964520165}
   buttonsParent: {fileID: 152620992}
+  life: {fileID: 0}
 --- !u!1 &1872889471
 GameObject:
   m_ObjectHideFlags: 0
@@ -4304,6 +4308,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2117958775}
   m_CullTransparentMesh: 1
+--- !u!1001 &66071460896545987
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5101810894668790723, guid: 009c49a924310d744917b1aea9b05e83, type: 3}
+      propertyPath: m_RootOrder
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 5101810894668790723, guid: 009c49a924310d744917b1aea9b05e83, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4.697357
+      objectReference: {fileID: 0}
+    - target: {fileID: 5101810894668790723, guid: 009c49a924310d744917b1aea9b05e83, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.7499804
+      objectReference: {fileID: 0}
+    - target: {fileID: 5101810894668790723, guid: 009c49a924310d744917b1aea9b05e83, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.1380478
+      objectReference: {fileID: 0}
+    - target: {fileID: 5101810894668790723, guid: 009c49a924310d744917b1aea9b05e83, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5101810894668790723, guid: 009c49a924310d744917b1aea9b05e83, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5101810894668790723, guid: 009c49a924310d744917b1aea9b05e83, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5101810894668790723, guid: 009c49a924310d744917b1aea9b05e83, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5101810894668790723, guid: 009c49a924310d744917b1aea9b05e83, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5101810894668790723, guid: 009c49a924310d744917b1aea9b05e83, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5101810894668790723, guid: 009c49a924310d744917b1aea9b05e83, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7525729716907984764, guid: 009c49a924310d744917b1aea9b05e83, type: 3}
+      propertyPath: m_Name
+      value: Normal Post Process
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 009c49a924310d744917b1aea9b05e83, type: 3}
 --- !u!1001 &7031636517607380792
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4315,9 +4376,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Post Process Alarm
       objectReference: {fileID: 0}
+    - target: {fileID: 7031636517670238220, guid: cfaf196bace6b074d946eabecd697b26, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7031636517670238221, guid: cfaf196bace6b074d946eabecd697b26, type: 3}
+      propertyPath: weight
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7031636517670238222, guid: cfaf196bace6b074d946eabecd697b26, type: 3}
       propertyPath: m_RootOrder
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7031636517670238222, guid: cfaf196bace6b074d946eabecd697b26, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7031636517670238222, guid: cfaf196bace6b074d946eabecd697b26, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4361,3 +4434,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cfaf196bace6b074d946eabecd697b26, type: 3}
+--- !u!1 &7031636517607380793 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7031636517670238220, guid: cfaf196bace6b074d946eabecd697b26, type: 3}
+  m_PrefabInstance: {fileID: 7031636517607380792}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &7031636517607380794
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7031636517607380793}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 983bb3f5038bb06488bc4eb3508f450b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
