@@ -18,7 +18,7 @@ public class ULC5_DeathBeam : MonoBehaviour {
         float angle = Vector2.SignedAngle(Vector2.up, direction);
         
         beam = Instantiate(beamEffectPrefab, summonPoint, Quaternion.Euler(0,0,angle), transform);
-        AudioManager.PlaySound(blastKOSound,0.125f);
+        AudioManager.PlaySound(blastKOSound,0.25f);
         StartCoroutine(BeamAnimation(beam));
     }
 

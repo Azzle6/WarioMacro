@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -45,7 +46,6 @@ public class Alarm : MonoBehaviour
     {
         while (gauge.fillAmount < stop)
         {
-            Debug.Log(gauge.fillAmount + " : " + stop);
             gauge.fillAmount += speed * 0.001f;
             yield return null;
         }

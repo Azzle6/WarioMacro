@@ -12,7 +12,7 @@ public class ULC5_GameManager : MonoBehaviour, ITickable
 
     [SerializeField] private AudioClip victorySound, failureSound;
 
-    private int endTick = 10;
+    private int endTick = -1;
     
     void Awake() {
         instance = this;
@@ -29,17 +29,22 @@ public class ULC5_GameManager : MonoBehaviour, ITickable
     }
     
     public void OnTick() {
+        if (!inGame && endTick == -1) {
+            endTick = GameController.currentTick+3;
+            GameController.StopTimer();
+        }
+        
         if (GameController.currentTick == 5 && inGame) {
+            endTick = 8;
             GameController.StopTimer();
             EndGame(true);
         }
-        else if (GameController.currentTick == endTick+3) GameController.FinishGame(result);
+        else if (GameController.currentTick == endTick) GameController.FinishGame(result);
     }
 
     public void EndGame(bool result) {
         inGame = false;
         this.result = result;
-        endTick = GameController.currentTick;
         
         foreach (GameObject go in sceneObjects) go.SetActive(false);
         if (result) winImage.gameObject.SetActive(true);
