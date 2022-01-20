@@ -53,6 +53,8 @@ MonoBehaviour:
   nodesParent: {fileID: 9184609941164186305}
   startNode: {fileID: 4059492443134459431}
   endNode: {fileID: 5045198794651165143}
+  littleArrow: {fileID: 21300000, guid: 33c3ce2997a48164a9f2e94b5ccad1f7, type: 3}
+  bigArrow: {fileID: 21300000, guid: 4b8da1322b34e1246b2192835d309abb, type: 3}
 --- !u!1 &1782947023359898805
 GameObject:
   m_ObjectHideFlags: 0
@@ -2373,7 +2375,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2429407936816486491, guid: 2e18e93f4ef79104cbff7a4c6f072be4, type: 3}
       propertyPath: paths.Array.data[0].direction
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2429407936816486491, guid: 2e18e93f4ef79104cbff7a4c6f072be4, type: 3}
       propertyPath: paths.Array.data[0].destination
@@ -2452,6 +2454,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9184609941164186305}
     m_Modifications:
+    - target: {fileID: 165547987617142580, guid: 2e18e93f4ef79104cbff7a4c6f072be4, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2429407936816486491, guid: 2e18e93f4ef79104cbff7a4c6f072be4, type: 3}
       propertyPath: paths.Array.size
       value: 1
@@ -2771,6 +2777,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9184609941164186305}
     m_Modifications:
+    - target: {fileID: 2080928815248758182, guid: 0608627a4c7aea74188c4965c08dc30d, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2532502114324794213, guid: 0608627a4c7aea74188c4965c08dc30d, type: 3}
       propertyPath: m_Positions.Array.size
       value: 3
