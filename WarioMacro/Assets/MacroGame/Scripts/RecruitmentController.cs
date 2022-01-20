@@ -24,7 +24,7 @@ public class RecruitmentController : GameController
             yield break;
         }
         
-        SetAlarmActive(false);
+        SetRecruitmentActive(true);
         nodePrevisualisation.SetTexts(instance.mapManager.typePercentages.Select(pair => pair.Value).ToArray());
         
         while(!instance.characterManager.isTeamFull)
@@ -33,7 +33,6 @@ public class RecruitmentController : GameController
             yield return StartCoroutine(instance.map.WaitForNodeSelection());
 
             yield return StartCoroutine(instance.player.MoveToPosition(instance.map.currentPath.wayPoints));
-            AudioManager.MacroPlaySound("MOU_NodeSelect", 0);
             
             var nodeMicroGame = instance.map.currentNode.GetComponent<NodeSettings>();
 
@@ -63,7 +62,7 @@ public class RecruitmentController : GameController
             yield return null;
         }
         
-        SetAlarmActive(true);
+        SetRecruitmentActive(false);
     }
 
     private IEnumerator NodeResults(NodeSettings node)
@@ -71,15 +70,13 @@ public class RecruitmentController : GameController
         if (instance.nodeSuccessCount >= askedCharacterThreshold)
         {
             instance.settingsManager.IncreaseDifficulty();
-            AudioManager.MacroPlaySound("MOU_NodeSuccess", 0);
-            
+
             yield return instance.characterManager.DisplayRecruitmentChoice(node.type);
             yield break;
         }
         
         instance.settingsManager.DecreaseDifficulty();
-        AudioManager.MacroPlaySound("MOU_NodeFail", 0);
-        
+
         if (instance.nodeSuccessCount >= randomSpecialistThreshold)
         {
             yield return instance.characterManager.AddDifferentSpecialist(node.type);
@@ -101,18 +98,21 @@ public class RecruitmentController : GameController
         }
     }
 
-    private void SetAlarmActive(bool state)
+    private void SetRecruitmentActive(bool state)
     {
+        GameObject nodePrevisualisationGO = nodePrevisualisation.gameObject;
         if (state)
-        {
-            instance.macroObjects.Add(alarmGO);
-        }
-        else
         {
             instance.macroObjects.Remove(alarmGO);
         }
+        else
+        {
+            instance.macroObjects.Add(alarmGO);
+            instance.macroObjects.Remove(nodePrevisualisationGO);
+        }
         
-        alarmGO.SetActive(state);
+        alarmGO.SetActive(!state);
+        nodePrevisualisationGO.SetActive(state);
     }
 
     private IEnumerator SkipRecruitment()

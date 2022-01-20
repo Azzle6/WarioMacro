@@ -32,6 +32,7 @@ public class EventSystemFocus : MonoBehaviour
         if (alreadyMoved) return MoveDirection.None;
         
         alreadyMoved = true;
+        AudioManager.MacroPlaySound("MenusHover", 0);
         return dir;
     }
 
