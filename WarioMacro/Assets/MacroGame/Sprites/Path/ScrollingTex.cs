@@ -13,6 +13,7 @@ public class ScrollingTex : MonoBehaviour
         _renderer = GetComponent<Renderer>();
         _savedOffset = _renderer.material.mainTextureOffset;
     }
+    
 
     private void Update()
     {
@@ -23,6 +24,6 @@ public class ScrollingTex : MonoBehaviour
 
     private void OnDisable()
     {
-        _renderer.material.mainTextureOffset = _savedOffset;
+        //_renderer.material.mainTextureOffset = _savedOffset;
     }
 }

@@ -15,7 +15,7 @@ public class ULC4_GameManager : MonoBehaviour, ITickable
 
     [SerializeField] private AudioClip victorySound, failureSound;
     
-    private int endTick = 10;
+    private int endTick = -1;
     
     void Awake()
     {
@@ -27,27 +27,30 @@ public class ULC4_GameManager : MonoBehaviour, ITickable
     {
         GameManager.Register();
         GameController.Init(this);
-        result = true;
 
         if (GameController.difficulty == 1) enemy.setChanceOfDF(0);
         else if (GameController.difficulty == 2) enemy.setChanceOfDF(0.35f);
         else if (GameController.difficulty == 3) enemy.setChanceOfDF(0.7f);
-        
     }
     
     public void OnTick() {
+        if (!inGame && endTick == -1) {
+            endTick = GameController.currentTick+3;
+            GameController.StopTimer();
+        }
+        
         if (GameController.currentTick == 4) enemy.stopFire();
         else if (GameController.currentTick == 5 && inGame) {
+            endTick = 8;
             GameController.StopTimer();
             EndGame(true);
         }
-        else if (GameController.currentTick == endTick+3) GameController.FinishGame(result);
+        else if (GameController.currentTick == endTick) GameController.FinishGame(result);
     }
 
     public void EndGame(bool result) {
         inGame = false;
         this.result = result;
-        endTick = GameController.currentTick;
         
         if (result) winImg.GetComponent<Animation>().Play("ULC_TM_Win Animation");
         else loseImg.GetComponent<Animation>().Play("ULC_TM_Lose Animation");
