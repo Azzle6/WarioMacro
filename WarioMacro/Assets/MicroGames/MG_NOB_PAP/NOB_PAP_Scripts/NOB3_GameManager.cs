@@ -8,6 +8,7 @@ public class NOB3_GameManager : MonoBehaviour, ITickable
     [SerializeField] private GameObject crowbar;
     [SerializeField] private TMPro.TMP_Text tickCountText;
     [SerializeField] private GameObject victoryText, defeatText;
+    [SerializeField] private AudioClip victoryAudio, defeatAudio;
     public bool result;
     public bool gameEnded;
     private int endTick = 10;
@@ -32,11 +33,13 @@ public class NOB3_GameManager : MonoBehaviour, ITickable
             {
                 result = true;
                 victoryText.SetActive(true);
+                AudioManager.PlaySound(victoryAudio);
             }
             else
             {
                 result = false;
                 defeatText.SetActive(true);
+                AudioManager.PlaySound(defeatAudio);
             }
         }
 
