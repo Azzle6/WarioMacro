@@ -47,9 +47,9 @@ public class NodeConnectionRenderer : MonoBehaviour
 
     public void ClearPath()
     {
-        for (int i = 0;i<transform.childCount;i++)
+        for (int i = transform.childCount-1;i>-1;i--)
         {
-            Pooler.instance.DePop("path",transform.GetChild(0).gameObject);
+            Pooler.instance.DePop("path",transform.GetChild(i).gameObject);
         }
     }
     

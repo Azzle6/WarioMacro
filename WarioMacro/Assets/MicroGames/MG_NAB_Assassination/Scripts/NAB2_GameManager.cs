@@ -34,6 +34,7 @@ public class NAB2_GameManager : MonoBehaviour, ITickable
             successAnim.SetActive(true);
             ticWait = 3;
             earlyAction = true;
+            GameController.StopTimer();
         }
 
         if (shotScript.win == false && earlyAction == false && shotScript.shotFired == true)
@@ -41,6 +42,7 @@ public class NAB2_GameManager : MonoBehaviour, ITickable
             failedAnim.SetActive(true);
             ticWait = 3;
             earlyAction = true;
+            GameController.StopTimer();
         }
 
         FinishAnim();
