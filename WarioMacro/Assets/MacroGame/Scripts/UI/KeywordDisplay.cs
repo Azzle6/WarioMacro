@@ -20,7 +20,7 @@ public class KeywordDisplay : MonoBehaviour
     {
         foreach (MiniGameScriptableObject t in microGameList.MiniGames)
         {
-            if (t.MiniGameScene.name != sceneName) continue;
+            if (t.MiniGameSceneName != sceneName) continue;
                 
             PlayKeyword( t.MiniGameInput[0], t.MiniGameKeyword);
             break;
