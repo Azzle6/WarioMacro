@@ -22,7 +22,7 @@ public class ULC3_GameManager : MonoBehaviour, ITickable
     public GameObject victory;
     public GameObject loose;
 
-    private int endTick = 10;
+    private int endTick = -1;
 
     void Start()
     {
@@ -51,7 +51,6 @@ public class ULC3_GameManager : MonoBehaviour, ITickable
                 //If currentPos matches the unlock position of the pivot
                 if (currentPivot.currentPos == currentPivot.unlockPos)
                 {
-                    Debug.Log("Unlock");
                     pivotIndex++;
 
                     //If current pivot is the last pivot of the safe
@@ -70,7 +69,6 @@ public class ULC3_GameManager : MonoBehaviour, ITickable
                 else
                 {
                     ULC3_AudioManager.instance.PlaySFX("Select", 1);
-                    Debug.Log("Nope!");
                 }
             }
         }
@@ -88,19 +86,21 @@ public class ULC3_GameManager : MonoBehaviour, ITickable
     
     public void OnTick()
     {
+        if (!inGame && endTick == -1)
+        {
+            GameController.StopTimer();
+            endTick = GameController.currentTick + 3;
+        }
+        
         if (GameController.currentTick == 5 && inGame)
         {
             LooseGame();
-            //Le jeu se finit, il nous reste 3 ticks pour afficher le résultat
-            inGame = false;
-            // Stop le timer
             GameController.StopTimer();
-            endTick = 5;
+            endTick = 8;
         }
 
-        if (GameController.currentTick == endTick+3)
+        if (GameController.currentTick == endTick)
         {
-            //Le jeu se décharge
             GameController.FinishGame(result);
         }
     }
@@ -109,19 +109,17 @@ public class ULC3_GameManager : MonoBehaviour, ITickable
     {
         winGame = true;
         currentPivot.isSelected = false;
+        
         // Lance la coroutine de victoire
         StartCoroutine("SafeOpen");
-     
-        GameController.StopTimer();
-        endTick = GameController.currentTick;
+        
         inGame = false;
         result = true;
-        
-        Debug.Log("Win!!!");
     }
 
     public void LooseGame()
     {
+        inGame = false;
         currentPivot.isSelected = false;
         // Lance le feedback de défaite
         if (winGame == true)
@@ -133,7 +131,6 @@ public class ULC3_GameManager : MonoBehaviour, ITickable
             loose.SetActive(true);
             ULC3_AudioManager.instance.PlaySFX("Alarm", 1);
         }
-        Debug.Log(("GAME OVER"));
     }
 
     IEnumerator SafeOpen()

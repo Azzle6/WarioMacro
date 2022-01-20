@@ -21,7 +21,6 @@ public class ULC3_Pivot : MonoBehaviour
     void Start()
     {
         unlockPos = Random.Range(1, numberOfSteps);
-        Debug.Log(unlockPos);
     }
     
     void FixedUpdate()
