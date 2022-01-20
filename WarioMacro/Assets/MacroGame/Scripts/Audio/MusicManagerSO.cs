@@ -5,7 +5,7 @@ using UnityEngine.Serialization;
 [CreateAssetMenu(fileName = "MusicManagerSO", menuName = "MacroGame/MusicManagerSO", order = 0)]
 public class MusicManagerSO : ScriptableObject
 {
-    [FormerlySerializedAs("MusicsList")] public List<Soundgroup> MusicList = new List<Soundgroup>(2);
+    public List<Soundgroup> MusicList = new List<Soundgroup>(2);
 
 }
 
@@ -36,4 +36,6 @@ public class SoundRef
 { 
     public int BPM = 120; 
     public AudioClip Clip; 
+    [Range(0,2)]
+    public float musicVolume = 1;
 } 
