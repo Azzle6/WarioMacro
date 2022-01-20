@@ -10,6 +10,7 @@ public class NOB2_GameManager : MonoBehaviour, ITickable
 {
     public static NOB2_GameManager instance;
     [SerializeField] private GameObject victoryText, defeatText;
+    [SerializeField] private AudioClip victoryAudio, defeatAudio;
     private bool result;
     [SerializeField] private TMPro.TMP_Text tickText;
     [SerializeField] private int difficulty;
@@ -53,10 +54,12 @@ public class NOB2_GameManager : MonoBehaviour, ITickable
             if (result)
             {
                 victoryText.SetActive(true);
+                AudioManager.PlaySound(victoryAudio);
             }
             else
             {
                 defeatText.SetActive(true);
+                AudioManager.PlaySound(defeatAudio);
             }
             gameEnded = true;
             endTick = GameController.currentTick;
