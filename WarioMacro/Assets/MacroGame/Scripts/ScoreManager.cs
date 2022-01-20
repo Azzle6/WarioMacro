@@ -1,9 +1,5 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using GameTypes;
-using TreeEditor;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
@@ -31,8 +27,6 @@ public class ScoreManager : MonoBehaviour
     [SerializeField]
     private int[] twoSpecialistAlarm = new int[4];
 
-    [SerializeField] private int loseCharacter3SuccessCount = 0;
-    
     [Header("5 MicroGames")] 
     [SerializeField]
     private int[] noSpecialist = new int[6];
@@ -41,9 +35,7 @@ public class ScoreManager : MonoBehaviour
     [SerializeField]
     private int[] noSpecialistAlarm = new int[6];
 
-    [SerializeField] private int loseCharacter5SuccessCount = 1;
-
-    void FinalScore()
+    private void FinalScore()
     {
         score = moneyBag * GameController.instance.characterManager.playerTeam.Count;
         leaderBoard.UpdateLeaderboard(score);
@@ -52,6 +44,7 @@ public class ScoreManager : MonoBehaviour
     public void UpdateScore(int nodeSuccess,int gameCount,Stack<Character> team)
     {
         var type = GameController.instance.map.currentNode.GetComponent<NodeSettings>().type;
+        int bagsBeforeUpdate = moneyBag;
         switch (Alarm.isActive)
         {
             case false:
@@ -74,8 +67,6 @@ public class ScoreManager : MonoBehaviour
                     if (type == NodeType.None)
                     {
                         moneyBag += neutralAlarm[nodeSuccess];
-                        if(nodeSuccess<= loseCharacter3SuccessCount)
-                            GameController.instance.characterManager.LoseCharacter();
                     }
                     if (CheckTeamTypes(team) == 1)
                         moneyBag += oneSpecialistAlarm[nodeSuccess];
@@ -86,11 +77,11 @@ public class ScoreManager : MonoBehaviour
                 if (gameCount == 5)
                 {
                     moneyBag += noSpecialistAlarm[nodeSuccess];
-                    if(nodeSuccess<= loseCharacter5SuccessCount)
-                        GameController.instance.characterManager.LoseCharacter();
                 }
                 break;
         }
+
+        AudioManager.MacroPlaySound(moneyBag > bagsBeforeUpdate ? "CashGain" : "CashLose", 0);
     } 
     
     public int CheckTeamTypes(Stack<Character> team)

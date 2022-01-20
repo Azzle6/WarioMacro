@@ -68,8 +68,7 @@ public class Map : MonoBehaviour
                 
                 selectedNode = path.destination;
                 selectedPath = path;
-                
-                if (selectedDirection != lastDirectionSelected) AudioManager.MacroPlaySound("MOU_NodeDirection", 0);
+                if (selectedDirection != lastDirectionSelected) AudioManager.MacroPlaySound("NodeDirection", 0);
                 lastDirectionSelected = selectedDirection;
                 break;
             }

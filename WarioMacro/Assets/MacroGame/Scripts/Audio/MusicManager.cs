@@ -13,6 +13,7 @@ public class MusicManager : MonoBehaviour, ITickable
     [SerializeField] private AudioSource AudioS; 
     private AudioClip currentAudioClip;
     private AudioClip nextAudioClip;
+    private float nextVolume;
 
     public void OnTick()
     {
@@ -20,12 +21,12 @@ public class MusicManager : MonoBehaviour, ITickable
 
         if (currentAudioClip.Equals(nextAudioClip)) return;
         
-        Debug.Log("nextAudioClip: " + nextAudioClip);
         float nextTimer = ConvertMusicTimers();
 
         AudioS.clip = nextAudioClip;
         currentAudioClip = nextAudioClip;
         AudioS.time = nextTimer;
+        AudioS.volume = nextVolume;
         AudioS.Play();
     }
     
@@ -41,12 +42,11 @@ public class MusicManager : MonoBehaviour, ITickable
             foreach (SoundRef musicRef in group.sounds.Where(sounds => sounds.BPM == bpm))
             {
                 nextAudioClip = musicRef.Clip;
-                //Debug.Log("nextAudioClip: " + nextAudioClip);
+                nextVolume = musicRef.musicVolume;
                 return;
             }
         }
         
-        //Debug.Log("No music corresponding to : " + bpm + " " + gameState + " " + gamePhase);
     } 
 
     private float ConvertMusicTimers() 
@@ -76,6 +76,7 @@ public class MusicManager : MonoBehaviour, ITickable
         FindMusic(100, Soundgroup.PhaseState.MACROGAME, Soundgroup.CurrentPhase.RECRUIT);
         currentAudioClip = nextAudioClip;
         AudioS.clip = currentAudioClip;
+        AudioS.volume = nextVolume;
         AudioS.Play();
         AudioS.loop = true;
     }
