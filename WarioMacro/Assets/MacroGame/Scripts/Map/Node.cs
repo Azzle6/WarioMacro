@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -10,28 +11,15 @@ public class Node : MonoBehaviour
     public Animator animator;
     public Path[] paths = new Path[4];
     public NodeConnectionRenderer pathRenderer;
-    public MoveDirection? SelectedDirection = null;
 
-    
-    
     private void Start()
     {
         foreach (Path path in paths.Where(p => p != null))
         {
             path.wayPoints.Add(path.destination.transform);
-            path.pathRenderer = Instantiate(new GameObject(), transform.position, Quaternion.identity, transform);
-            pathRenderer.CreatePathRenderer(path);
-            //path.pathRenderer.SetActive(false);
         }
     }
 
-    private void Update()
-    {
-        foreach (Path path in paths.Where(p => p != null))
-        {
-            path.pathRenderer.SetActive(path.direction == SelectedDirection);
-        }
-    }
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
@@ -72,7 +60,6 @@ public class Node : MonoBehaviour
     {
         public MoveDirection direction;
         public Node destination;
-        public GameObject pathRenderer;
         public List<Transform> wayPoints = new List<Transform>();
     }
 }

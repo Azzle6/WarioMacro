@@ -6,43 +6,58 @@ public class NodeConnectionRenderer : MonoBehaviour
 {
     public GameObject prefab;
     private GameObject temp;
-    
+    private List<Vector3> points;
+
     public void CreatePathRenderer(Node.Path path)
     {
-        List<Vector3> points = new List<Vector3>();
+        ClearPath();
+        points = new List<Vector3>();
         points.Add(transform.position);
         foreach (var wayPoint in path.wayPoints)
         {
             points.Add(wayPoint.position);
         }
         points.Add(path.destination.transform.position);
-        Debug.Log(points);
+        //Debug.Log(points);
         if (points.Count > 1)
         {
             for (int i = 0; i < points.Count - 1; i++)
             {
-                Vector2 vec;
-                vec.x = points[i].x + (points[i+1].x - points[i].x )/2;
-                vec.y = points[i].y + (points[i+1].y - points[i].y )/2;
-                temp = Instantiate(prefab, vec, Quaternion.identity);
+
+                temp = Pooler.instance.Pop("path");
+                temp.transform.position = MidPoint(points[i], points[i + 1]);
                 temp.GetComponent<SpriteRenderer>().size = new Vector2((points[i+1]-points[i]).magnitude*1.62f, 0.62f);
+                temp.transform.GetChild(0).GetComponent<SpriteRenderer>().size = new Vector2((points[i+1]-points[i]).magnitude*1.62f, 0.62f);
                 temp.transform.right = points[i + 1] - points[i];
-                temp.transform.parent = path.pathRenderer.transform;
+                temp.transform.parent = transform;
             }
         }
         else
         {
-            Vector2 vec;
-            vec.x = transform.position.x + (path.destination.transform.position.x - transform.position.x )/2;
-            vec.y = transform.position.y + (path.destination.transform.position.y )/2;
-            temp = Instantiate(prefab, vec, Quaternion.identity);
+            temp = Pooler.instance.Pop("path");
+            temp.transform.position = MidPoint(transform.position, path.destination.transform.position);
             temp.GetComponent<SpriteRenderer>().size = new Vector2((path.destination.transform.position-transform.position).magnitude*1.62f, 0.62f);
+            temp.transform.GetChild(0).GetComponent<SpriteRenderer>().size = new Vector2((path.destination.transform.position-transform.position).magnitude*1.62f, 0.62f);
             temp.transform.right = path.destination.transform.position - transform.position;
-            temp.transform.parent = path.pathRenderer.transform;
+            temp.transform.parent = transform;
         }
-            
         points.Clear();
-        
-        
+    }
+    
+
+    public void ClearPath()
+    {
+        for (int i = 0;i<transform.childCount;i++)
+        {
+            Pooler.instance.DePop("path",transform.GetChild(0).gameObject);
+        }
+    }
+    
+    Vector2 MidPoint(Vector2 vec1,Vector2 vec2)
+    {
+        Vector2 vec;
+        vec.x = vec1.x + (vec2.x  - vec1.x)/2;
+        vec.y = vec1.y + (vec2.y - vec1.y)/2;
+        return vec;
     }
 }
