@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class PlaytestTool : MonoBehaviour
@@ -38,7 +36,7 @@ public class PlaytestTool : MonoBehaviour
         List<String> SNames = new List<string>();
         foreach (MiniGameScriptableObject MGSO in ScenesRefs.MiniGames)
         {
-            SNames.Add(MGSO.MiniGameScene.name);
+            SNames.Add(MGSO.MiniGameSceneName);
         }
 
         GameControl.sceneNames = SNames.ToArray();
