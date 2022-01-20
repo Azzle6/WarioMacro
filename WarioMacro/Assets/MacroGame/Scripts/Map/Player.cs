@@ -37,6 +37,7 @@ public class Player : MonoBehaviour
         // var tween = player.transform.DOPath((Vector3[])positions, player.moveSpeed).SetSpeedBased().SetEase(Ease.Linear);
         
         StopMove();
+        AudioManager.MacroPlaySound("NodeSelect", 0);
         //yield return new WaitForSeconds(1f);
     }
     

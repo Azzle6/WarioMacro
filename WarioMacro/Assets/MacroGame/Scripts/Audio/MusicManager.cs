@@ -7,27 +7,26 @@ using UnityEngine.Serialization;
 public class MusicManager : MonoBehaviour, ITickable
 {
     public static MusicManager instance;
-    
-    [Header("Visualize music Timer")] [Range(0, 1f)] public float musicTime;
-    [FormerlySerializedAs("MusicsSO")] public MusicManagerSO musicSO;
-    public AudioSource AudioS; 
-    public AudioClip currentAudioClip;
-    
+
+    [HideInInspector] public Soundgroup.CurrentPhase state = Soundgroup.CurrentPhase.RECRUIT;
+    [SerializeField] private MusicManagerSO musicSO;
+    [SerializeField] private AudioSource AudioS; 
+    private AudioClip currentAudioClip;
     private AudioClip nextAudioClip;
+    private float nextVolume;
 
     public void OnTick()
     {
-        // TODO
-        FindMusic((int) Ticker.gameBPM * 2, Soundgroup.PhaseState.MACROGAME, Soundgroup.CurrentPhase.RECRUIT);
+        FindMusic((int) Ticker.gameBPM * 2, Soundgroup.PhaseState.MACROGAME, state);
 
         if (currentAudioClip.Equals(nextAudioClip)) return;
         
-        Debug.Log("nextAudioClip: " + nextAudioClip);
         float nextTimer = ConvertMusicTimers();
 
         AudioS.clip = nextAudioClip;
         currentAudioClip = nextAudioClip;
         AudioS.time = nextTimer;
+        AudioS.volume = nextVolume;
         AudioS.Play();
     }
     
@@ -43,12 +42,11 @@ public class MusicManager : MonoBehaviour, ITickable
             foreach (SoundRef musicRef in group.sounds.Where(sounds => sounds.BPM == bpm))
             {
                 nextAudioClip = musicRef.Clip;
-                //Debug.Log("nextAudioClip: " + nextAudioClip);
+                nextVolume = musicRef.musicVolume;
                 return;
             }
         }
         
-        //Debug.Log("No music corresponding to : " + bpm + " " + gameState + " " + gamePhase);
     } 
 
     private float ConvertMusicTimers() 
@@ -78,14 +76,9 @@ public class MusicManager : MonoBehaviour, ITickable
         FindMusic(100, Soundgroup.PhaseState.MACROGAME, Soundgroup.CurrentPhase.RECRUIT);
         currentAudioClip = nextAudioClip;
         AudioS.clip = currentAudioClip;
+        AudioS.volume = nextVolume;
         AudioS.Play();
         AudioS.loop = true;
-    }
-
-    private void Update() // L'update est juste pour afficher le slider
-    {
-        if(AudioS.clip != null)
-            musicTime = AudioS.time / AudioS.clip.length; 
     }
 } 
  

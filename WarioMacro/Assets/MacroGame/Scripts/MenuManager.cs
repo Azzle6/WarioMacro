@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -22,6 +18,8 @@ public class MenuManager : MonoBehaviour
     {
         gameIsPaused = !gameIsPaused;
         menu.SetActive(gameIsPaused);
+        AudioManager.MacroPlaySound(gameIsPaused ? "PauseIn" : "PauseOut", 0);
+
         menu.transform.GetChild(0).gameObject.SetActive(true);
         menu.transform.GetChild(1).gameObject.SetActive(false);
 
@@ -33,10 +31,5 @@ public class MenuManager : MonoBehaviour
         Ticker.lockTimescale = false;
         gameIsPaused = false;
         SceneManager.LoadScene(sceneName);
-    }
-
-    public void QuitGame()
-    {
-        Application.Quit();
     }
 }

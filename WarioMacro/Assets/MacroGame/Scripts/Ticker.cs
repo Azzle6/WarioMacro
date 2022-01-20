@@ -51,6 +51,7 @@ public class Ticker : MonoBehaviour
     private protected void TickerStart(bool debug)
     {
         musicManager = MusicManager.instance;
+        musicManager.state = Soundgroup.CurrentPhase.RECRUIT;
         
         if (!debug)
         {
