@@ -6,7 +6,7 @@ using UnityEngine;
 // ReSharper disable once CheckNamespace
 public class RecruitmentController : GameController
 {
-    [SerializeField] private bool skipRecruitment;
+    public bool skipRecruitment;
     [SerializeField] private GameObject alarmGO;
     [SerializeField] private NodePrevisualisation nodePrevisualisation;
     [SerializeField] private Node startNode;
@@ -114,9 +114,11 @@ public class RecruitmentController : GameController
         alarmGO.SetActive(!state);
         nodePrevisualisationGO.SetActive(state);
     }
+    
 
-    private IEnumerator SkipRecruitment()
+    public IEnumerator SkipRecruitment()
     {
+        Debug.Log("Skip Recruit");
         for (int i = 0; i < 4; i++)
         {
             yield return instance.characterManager.AddDifferentSpecialist(i + GameType.Brute);
