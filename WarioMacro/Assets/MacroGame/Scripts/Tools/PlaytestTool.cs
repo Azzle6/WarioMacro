@@ -14,6 +14,7 @@ public class PlaytestTool : MonoBehaviour
     private List<Toggle> TogglesList;
     [SerializeField] private GameController GameControl;
     [SerializeField] private ScenesReferencesSO ScenesRefs;
+    [SerializeField] private RecruitmentController RecruitControl;
 
     private void Start()
     {
@@ -46,7 +47,7 @@ public class PlaytestTool : MonoBehaviour
         for (int i = 0; i < ScenesList.Length; i++)
         {
             GameObject go = Instantiate(ToggleTemplate, ScrollContent.transform);
-            go.GetComponentInChildren<Text>().text = ScenesList[i];
+            go.GetComponentInChildren<Text>().text = ScenesList[i].Substring(13, ScenesList[i].Length - 13);
 
             var i1 = i;
             go.GetComponentInChildren<Toggle>().onValueChanged.AddListener((value) =>
@@ -94,7 +95,19 @@ public class PlaytestTool : MonoBehaviour
         
         
     }
-    
+    public void SelectAll()
+    {
+        foreach (Toggle tog in TogglesList)
+        {
+            tog.isOn = !tog.isOn;
+        }
+    }
+
+    public void SkipRecruitPhase()
+    {
+        StartCoroutine(RecruitControl.SkipRecruitment());
+        StopCoroutine(RecruitControl.RecruitmentLoop());
+    }
     
     
     /*
