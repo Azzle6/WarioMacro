@@ -8,14 +8,14 @@ public class ULC1_Phatass_PinceController : MonoBehaviour, ITickable
 {   
     [SerializeField] private float speed = 5f;
     private Vector2 joystickInput;
-    [SerializeField] private bool canTakeKey = false, hasPinched = false, bestEnding, canInput;
+    [SerializeField] private bool canTakeKey = false, hasPinched = false, bestEnding, canInput, canStop = false;
     public bool phatassSuccess;
     [SerializeField] Sprite neutralPince, readyPince;
     [SerializeField] private SpriteRenderer thisSpriteRenderer;
     [SerializeField] private PlayableDirector soundDirector;
     [SerializeField] private Animator phatassAnimator;
     // Fail Audio Clips
-    [SerializeField] AudioClip screamingSquirel, wilhelmScream, yameteKudasai, uCantTouchThis, theWhoYeah;
+    [SerializeField] AudioClip screamingSquirel, wilhelmScream, yameteKudasai, uCantTouchThis, theWhoYeah, weGotEm;
     // Success Audio Clips
     [SerializeField] AudioClip gotchaBitch;
     [SerializeField] private PlayableDirector gtaMissionPassed, jojoReference;
@@ -42,7 +42,7 @@ public class ULC1_Phatass_PinceController : MonoBehaviour, ITickable
             if (InputManager.GetKeyDown(ControllerKey.A) && canTakeKey && !hasPinched) 
             {
                 phatassSuccess = true;
-                
+                canStop = true;
                 /*if (bestEnding)
                 {
                 phatassAnimator.SetTrigger("RespecMaDude");
@@ -51,7 +51,7 @@ public class ULC1_Phatass_PinceController : MonoBehaviour, ITickable
                 hasPinched = true;
                 soundDirector.enabled = false;
                 }*/
-                int randomValue = UnityEngine.Random.Range(1, 3);
+                int randomValue = UnityEngine.Random.Range(1, 4);
                 if (randomValue == 1)
                 {
                     phatassAnimator.SetTrigger("SnipTheKey");
@@ -72,12 +72,22 @@ public class ULC1_Phatass_PinceController : MonoBehaviour, ITickable
                     soundDirector.enabled = false;
                     StartCoroutine(HolupALilBit(2.5f));
                 }
+                else if (randomValue == 3)
+                {
+                    phatassAnimator.SetTrigger("SnipTheKey");
+                    ahhhhSource.clip = weGotEm;
+                    ahhhhSource.Play();
+                    thisSpriteRenderer.enabled = false;
+                    hasPinched = true;
+                    soundDirector.enabled = false;
+                    StartCoroutine(HolupALilBit(2f));
+                }
                  
             }
         else if (InputManager.GetKeyDown(ControllerKey.A) && !canTakeKey && !hasPinched)
         {
             phatassSuccess = false;
-            
+            canStop = true;
             /*if (bestEnding)
             {
                 phatassAnimator.SetTrigger("ToBeContinued");
@@ -119,7 +129,7 @@ public class ULC1_Phatass_PinceController : MonoBehaviour, ITickable
                 thisSpriteRenderer.enabled = false;
                 hasPinched = true;
                 soundDirector.enabled = false;
-                StartCoroutine(HolupALilBit(1f));
+                StartCoroutine(HolupALilBit(.75f));
             }
             else if(randomValue == 4)
             {
@@ -129,7 +139,7 @@ public class ULC1_Phatass_PinceController : MonoBehaviour, ITickable
                 thisSpriteRenderer.enabled = false;
                 hasPinched = true;
                 soundDirector.enabled = false;
-                StartCoroutine(HolupALilBit(1.8f));
+                StartCoroutine(HolupALilBit(1.3f));
             }
         }
         } 
@@ -168,10 +178,17 @@ public class ULC1_Phatass_PinceController : MonoBehaviour, ITickable
         
         if (GameController.currentTick == 5) //NO MORE INPUT
         {
+            GameController.StopTimer();
             soundDirector.enabled = false;
             canInput = false;
             phatassAnimator.SetTrigger("WalkAway");
             Debug.Log("No more Input");
+        }
+        
+        if (canStop)
+        {
+            GameController.StopTimer();
+            canStop = false;
         }
 
         if (GameController.currentTick == 8) //FINISH GAME

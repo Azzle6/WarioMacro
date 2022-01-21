@@ -672,7 +672,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7828056267887566318, guid: 4e0231904b977784b96f645c12c31c3f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7828056267887566319, guid: 4e0231904b977784b96f645c12c31c3f, type: 3}
       propertyPath: m_SceneBindings.Array.size
@@ -1737,7 +1737,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -1857,6 +1857,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4929716204541184136, guid: c85fb967c8ac3a840a5602f2d08eb275, type: 3}
+      propertyPath: sharedProfile
+      value: 
+      objectReference: {fileID: 11400000, guid: e58327062e9f46849a1ca42004f04279, type: 2}
     - target: {fileID: 4929716204541184138, guid: c85fb967c8ac3a840a5602f2d08eb275, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -2792,10 +2796,10 @@ MonoBehaviour:
   characterManager: {fileID: 1749864769}
   resultPanel: {fileID: 135660540}
   settingsManager: {fileID: 1749864766}
+  mapManager: {fileID: 1749864767}
   macroGameCanvasAnimator: {fileID: 2008032679}
   scoreManager: {fileID: 1923970708}
   alarm: {fileID: 432299754}
-  mapManager: {fileID: 1749864767}
   recruitmentController: {fileID: 1749864768}
   timer: {fileID: 1749864763}
   transitionController: {fileID: 1749864762}
@@ -2914,6 +2918,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifeBarGO: {fileID: 1530905172}
   life: 4
+  portraits: []
 --- !u!114 &1749864766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2961,10 +2966,10 @@ MonoBehaviour:
   characterManager: {fileID: 0}
   resultPanel: {fileID: 0}
   settingsManager: {fileID: 0}
+  mapManager: {fileID: 0}
   macroGameCanvasAnimator: {fileID: 0}
   scoreManager: {fileID: 0}
   alarm: {fileID: 0}
-  mapManager: {fileID: 0}
   recruitmentController: {fileID: 0}
   timer: {fileID: 0}
   transitionController: {fileID: 0}
@@ -2973,7 +2978,9 @@ MonoBehaviour:
   mainMenuBuildIndex: 0
   macroObjects: []
   sceneNames: []
+  skipRecruitment: 0
   alarmGO: {fileID: 432299753}
+  nodePrevisualisation: {fileID: 0}
   startNode: {fileID: 2039753416}
   askedCharacterThreshold: 2
   randomSpecialistThreshold: 1
@@ -3061,7 +3068,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2056309721574369033, guid: 61c30988b7ee7fe4f8e1f4f5d7dd1872, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2056309722358240079, guid: 61c30988b7ee7fe4f8e1f4f5d7dd1872, type: 3}
       propertyPath: m_Pivot.x
@@ -3427,7 +3434,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1156184967029394194, guid: 90f899e0f87d274438150ff1df241653, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1156184967029394195, guid: 90f899e0f87d274438150ff1df241653, type: 3}
       propertyPath: m_Pivot.x
@@ -3642,10 +3649,8 @@ MonoBehaviour:
   neutralAlarm: 00000000000000000000000000000000
   oneSpecialistAlarm: 00000000000000000000000000000000
   twoSpecialistAlarm: 00000000000000000000000000000000
-  loseCharacter3SuccessCount: 0
   noSpecialist: 000000000000000000000000000000000000000000000000
   noSpecialistAlarm: 000000000000000000000000000000000000000000000000
-  loseCharacter5SuccessCount: 1
 --- !u!1 &1931179087
 GameObject:
   m_ObjectHideFlags: 0
@@ -4259,6 +4264,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Alarm_UI
       objectReference: {fileID: 0}
+    - target: {fileID: 6572662532676194462, guid: 749a95dde076fcb45bfd245db0394d36, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6572662532676194463, guid: 749a95dde076fcb45bfd245db0394d36, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -4341,6 +4350,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6572662532676194463, guid: 749a95dde076fcb45bfd245db0394d36, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6572662533489465180, guid: 749a95dde076fcb45bfd245db0394d36, type: 3}
+      propertyPath: m_FillAmount
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

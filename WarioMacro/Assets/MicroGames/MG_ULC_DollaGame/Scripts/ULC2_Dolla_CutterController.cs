@@ -16,10 +16,10 @@ public class ULC2_Dolla_CutterController : MonoBehaviour, ITickable
     [SerializeField] private List<GameObject> dollaBills;
     private AudioSource audioSource;
     [SerializeField] private AudioClip cutSound, katching, mmmWhatchuSay;
+    private bool canStop = false;
 
     private void Start()
     {
-        
         //Intégration au Macro Jeu
         GameManager.Register(); //Mise en place du Input Manager, du Sound Manager et du Game Controller
         GameController.Init(this); //Permet a ce script d'utiliser le OnTick
@@ -66,6 +66,7 @@ public class ULC2_Dolla_CutterController : MonoBehaviour, ITickable
             }
             else if (InputManager.GetKeyDown(ControllerKey.A) && !canCut)
             {
+                canStop = true;
                 hasFinishedGame = true;
                 success = false;
                 failScreen.SetActive(true);
@@ -87,6 +88,7 @@ public class ULC2_Dolla_CutterController : MonoBehaviour, ITickable
 
         if (billsToCut == 0 && !hasFinishedGame)
         {
+            canStop = true;
             hasFinishedGame = true;
             success = true;
             victoryScreen.SetActive(true);
@@ -114,9 +116,16 @@ public class ULC2_Dolla_CutterController : MonoBehaviour, ITickable
     {
         if (GameController.currentTick == 5 && !hasFinishedGame)
         {
+            canStop = true;
             hasFinishedGame = true;
             success = false;
             failScreen.SetActive(true);
+        }
+
+        if (canStop)
+        {
+            GameController.StopTimer();
+            canStop = false;
         }
 
         if (GameController.currentTick == 8)

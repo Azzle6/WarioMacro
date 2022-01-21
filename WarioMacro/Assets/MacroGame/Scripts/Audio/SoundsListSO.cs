@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "SoundList", menuName = "MacroGame/SoundList", order = 0)]
 public class SoundsListSO : ScriptableObject
 {
-    [FormerlySerializedAs("Sounds")] public SoundInfo[] sounds;
+    public SoundInfo[] sounds;
+    public SoundInfoList[] randomSounds;
 
     public SoundInfo FindSound(string soundName)
     {
@@ -14,7 +12,19 @@ public class SoundsListSO : ScriptableObject
         {
             if (s.clipName == soundName) return s;
         }
+        
         Debug.Log("No sound named " + soundName + ".");
+        return null;
+    }
+
+    public SoundInfo FindRandomSound(string categoryName)
+    {
+        foreach (SoundInfoList soundList in randomSounds)
+        {
+            if (soundList.categoryName == categoryName) return soundList.sounds[Random.Range(0, soundList.sounds.Length)];
+        }
+        
+        Debug.Log("No category named " + categoryName + ".");
         return null;
     }
 }
@@ -24,8 +34,15 @@ public class SoundInfo
 {
     public string clipName;
     public AudioClip clip;
-    [Range(0,2)]
+    [Range(0,1)]
     public float clipVolume = 1;
+}
+
+[System.Serializable]
+public class SoundInfoList
+{
+    public string categoryName;
+    public SoundInfo[] sounds;
 }
 
 

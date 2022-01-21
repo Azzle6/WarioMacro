@@ -2,11 +2,15 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.UI;
 
 public class Alarm : MonoBehaviour
 {
     public static bool isActive { get; private set; }
-    [SerializeField] private PlayableDirector director;
+    [SerializeField] private GameObject actionPostProcess;
+    [SerializeField] private GameObject alarmPostProcess;
+    [SerializeField] private Image gauge;
+    [SerializeField] private float speed;
     [Range(0.1f, 15f)]
     [SerializeField] private float increaseOnWin = 2;
     [Range(0.1f, 15f)]
@@ -23,7 +27,8 @@ public class Alarm : MonoBehaviour
 
     public void DecrementCount(bool result)
     {
-        if (isActive || !gameObject.activeSelf) return; // TODO : don't decrement on recruitment phase
+        // Don't decrement on recruitment phase
+        if (isActive || !gameObject.activeSelf) return; 
         
         count -= (result ? increaseOnWin : increaseOnLose) * currentFactor;
 
@@ -31,20 +36,25 @@ public class Alarm : MonoBehaviour
         {
             count = 0;
             isActive = true;
-            Debug.Log("Alarm mode On");
+            actionPostProcess.SetActive(false);
+            GameController.instance.macroObjects.Remove(actionPostProcess);
+            alarmPostProcess.SetActive(true);
+            GameController.instance.macroObjects.Add(alarmPostProcess);
+            MusicManager.instance.state = Soundgroup.CurrentPhase.ESCAPE;
+            AudioManager.MacroPlaySound("Alarm", 0);
         }
         
-        director.Play();
-        StartCoroutine(PauseAlarm((100 - count) * director.duration * 0.01d));
+        StartCoroutine(DecreaseAlarm((100 - count) * 0.01f));
         
     }
 
-    private IEnumerator PauseAlarm(double time)
+    private IEnumerator DecreaseAlarm(float stop)
     {
-        yield return new WaitForSeconds((float) (time - director.initialTime));
-
-        director.Pause();
-        director.initialTime = time;
+        while (gauge.fillAmount < stop)
+        {
+            gauge.fillAmount += speed * 0.001f;
+            yield return null;
+        }
     }
 
     private void Update()

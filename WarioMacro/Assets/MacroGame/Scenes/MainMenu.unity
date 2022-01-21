@@ -251,7 +251,7 @@ GameObject:
   - component: {fileID: 625378659}
   - component: {fileID: 625378661}
   - component: {fileID: 625378662}
-  - component: {fileID: 625378663}
+  - component: {fileID: 625378660}
   m_Layer: 0
   m_Name: MenuManager
   m_TagString: Untagged
@@ -273,6 +273,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &625378660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 625378658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e22ed4c0b7152314f839d58b4b470177, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &625378661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297,19 +309,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d23dc6b8003524d41abee3b7c841fd0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &625378663
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 625378658}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33603f2830f4a874e994308bada2a95f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  menu: {fileID: 0}
 --- !u!1 &634634772
 GameObject:
   m_ObjectHideFlags: 0
@@ -1098,10 +1097,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 625378663}
-        m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
-        m_MethodName: SwitchScene
-        m_Mode: 5
+      - m_Target: {fileID: 625378660}
+        m_TargetAssemblyTypeName: TitleScreenMenuManager, Assembly-CSharp
+        m_MethodName: Play
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1232,9 +1231,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 625378663}
-        m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
-        m_MethodName: QuitGame
+      - m_Target: {fileID: 625378660}
+        m_TargetAssemblyTypeName: TitleScreenMenuManager, Assembly-CSharp
+        m_MethodName: Quit
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1339,7 +1338,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 7d2ce98c7721bf948b98473bc02858e7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: af9f171619676894f927546cb474e190, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

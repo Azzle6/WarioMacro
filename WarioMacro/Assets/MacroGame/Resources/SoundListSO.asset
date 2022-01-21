@@ -13,36 +13,348 @@ MonoBehaviour:
   m_Name: SoundListSO
   m_EditorClassIdentifier: 
   sounds:
-  - clipName: MOU_CharacterLose
+  - clipName: Alarm
+    clip: {fileID: 8300000, guid: 54e3ee03b6d9fe74a8cde20d21c8766c, type: 3}
+    clipVolume: 1
+  - clipName: CashGain
+    clip: {fileID: 8300000, guid: 2e1e1bccd38d81441a92edeb381dcc58, type: 3}
+    clipVolume: 1
+  - clipName: CashLose
+    clip: {fileID: 8300000, guid: 3a503e8f0125b914aa51bab71bd6b39f, type: 3}
+    clipVolume: 1
+  - clipName: CharacterLose
     clip: {fileID: 8300000, guid: d6568cc649815054a94fde2d7cfbac6c, type: 3}
     clipVolume: 1
-  - clipName: MOU_CharacterSelection
+  - clipName: CharacterSelection
     clip: {fileID: 8300000, guid: 47c3069caec10a74bb075e9dd701ac15, type: 3}
     clipVolume: 1
-  - clipName: MOU_GameLose
+  - clipName: Elevator
+    clip: {fileID: 8300000, guid: 1264d9ec659db7d42bf35e8d9eeccae5, type: 3}
+    clipVolume: 1
+  - clipName: GameLose
     clip: {fileID: 8300000, guid: cd3308c8975180a45b1acf20b42ab4a3, type: 3}
     clipVolume: 1
-  - clipName: MOU_GameWin
+  - clipName: GameWin
     clip: {fileID: 8300000, guid: 3524cca9ffc49a546bb232d6f2c98652, type: 3}
     clipVolume: 1
-  - clipName: MOU_MiniGameEnter
-    clip: {fileID: 8300000, guid: 6ead3253d7e85964b9b4efe060d77c9b, type: 3}
+  - clipName: MenusBack
+    clip: {fileID: 8300000, guid: 25cb1bf60dd9a5d448f2d7045e1d3e08, type: 3}
     clipVolume: 1
-  - clipName: MOU_NodeDirection
-    clip: {fileID: 8300000, guid: be5004665083b7c45a8bfc3e65192ed7, type: 3}
+  - clipName: MenusHover
+    clip: {fileID: 8300000, guid: 876a5039f913132498f88a82ada2a2ad, type: 3}
+    clipVolume: 0.5
+  - clipName: MenusValidation
+    clip: {fileID: 8300000, guid: 00c9acd84a2771e41bc14349fdadabf0, type: 3}
     clipVolume: 1
-  - clipName: MOU_NodeFail
-    clip: {fileID: 8300000, guid: ef3a774596261364e9cfdfc23a0a684c, type: 3}
-    clipVolume: 1
-  - clipName: MOU_NodeSuccess
-    clip: {fileID: 8300000, guid: 8132e6e1801df5e4fac9e6fdd8ce73ee, type: 3}
-    clipVolume: 1
-  - clipName: MOU_NodeSelect
+  - clipName: MiniGameEnter
     clip: {fileID: 8300000, guid: 1d84fb2f3fd90f645b3b3a583c370dbe, type: 3}
     clipVolume: 1
-  - clipName: MOU_SpeedDown
+  - clipName: NodeDirection
+    clip: {fileID: 8300000, guid: be5004665083b7c45a8bfc3e65192ed7, type: 3}
+    clipVolume: 0.35
+  - clipName: NodeFailure
+    clip: {fileID: 8300000, guid: ef3a774596261364e9cfdfc23a0a684c, type: 3}
+    clipVolume: 1
+  - clipName: NodeSelect
+    clip: {fileID: 8300000, guid: 6ead3253d7e85964b9b4efe060d77c9b, type: 3}
+    clipVolume: 1
+  - clipName: NodeSuccess
+    clip: {fileID: 8300000, guid: 8132e6e1801df5e4fac9e6fdd8ce73ee, type: 3}
+    clipVolume: 1
+  - clipName: PauseIn
+    clip: {fileID: 8300000, guid: c48e3c77a8ecf2a43b212caadd5713d9, type: 3}
+    clipVolume: 1
+  - clipName: PauseOut
+    clip: {fileID: 8300000, guid: a1263c263d3a85946b95a89e795aaecf, type: 3}
+    clipVolume: 1
+  - clipName: SpeedDown
     clip: {fileID: 8300000, guid: d325dbe658bd4b54bad5e61ab0275b5a, type: 3}
     clipVolume: 1
-  - clipName: MOU_SpeedUp
+  - clipName: SpeedUp
     clip: {fileID: 8300000, guid: b4b9ee4164db1b04a9064ff9585ebaca, type: 3}
-    clipVolume: 1
+    clipVolume: 0.4
+  randomSounds:
+  - categoryName: HighLimitVoices
+    sounds:
+    - clipName: 
+      clip: {fileID: 8300000, guid: 8a58274b7337b9b428773a5c71b4ec4d, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 195891e5515c7ce4193321d27915e2f0, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 8dc0d8ee4b802ea4794faabe9dcd964a, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: cdd6c13935e92134b97e981a01879433, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: d3bc24c471f71924f816767dc3861909, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 440d879a19e080f48bfa4a2dd35d391f, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 8d55a74413823f948a2ccf45fde1ee9c, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 9bae4857332059747956116336e50b5e, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 6b19eb62c912c86419c8e22881dde82c, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 4541a66388b9a9b4caf0803aabb7d8b8, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: ee74ca5324c14944bb3dc99221033654, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 59f6b3fd97622d34891c247d914bfa1a, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 73bce7fb3d3bbd04c9b471434636075f, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 73bce7fb3d3bbd04c9b471434636075f, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 01471f49e0a1fd640a312a4b91079954, type: 3}
+      clipVolume: 1
+  - categoryName: LowLimitVoices
+    sounds:
+    - clipName: 
+      clip: {fileID: 8300000, guid: 3545e6c5f0e47304a882250a20eddeac, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: e78015d5b0ef357459fb5e155e4cb2e7, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 23abd6b61298a3344a4d26f88125bd8e, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 1bf99a4e4a7144849967f5cbf52fec2e, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: edc3167072e164f44b7836506b9cf264, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: df11572cebaae644d89975b007e0fe92, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: b43faf9cb5ab82941b7348f5f275add1, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 5ddd069d3bf86ee468512919b186cb94, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: c2e1f0bfa9d7be646baba0f541e6051d, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 55f21e4c00736cc40b7a1aa52693c679, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: f61e00a7c0de8de46ab7668187998565, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: f58b3fb4a52129e43b545789246ab81e, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 4f582c32c38fa3d4788f2b94b62a4381, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 1a3f79a7527588a4fb8f589f09c2d567, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: dfb59d6e5ef642c42abfe7e1a4b8fd6f, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 41ad7d73e1560e040a1cf76c5b32900b, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 2b05949c1ac51d14e9117b208a0e0dcf, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 26e1750ef99b744488712a178d1a4800, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 2a96f0df421d66b42bc7db3cfd9755a3, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: a46aeed43c9e8b64cac9d5a77d2b1eae, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: de7e2b353aff4204e93a9eef30211faf, type: 3}
+      clipVolume: 1
+  - categoryName: SpeedDownVoices
+    sounds:
+    - clipName: 
+      clip: {fileID: 8300000, guid: 400f5bc537a72034e9e645a8fa762291, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 52c24a82e4f2491489726fc12ba014b0, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: d9069de05c427b94587dce0ec6132c0f, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: df8b5b9c650ade24c9e37ee4162623ac, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 8604ef12ccef8a048a722a62d5dd92c1, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: e7bf6899796446246a832ff29020fd6d, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 4ef42f06226128f458ff37bfde86e17b, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 212033cb0aeddab4db1b1f7818bc85b9, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: a8517f6f57a8ecd4e8007a4d85987588, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: bc2c863bca414ff4e866f570c24aebea, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: aabc943a99d1afa4a8331c05e3ba5818, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: a35ed552ca607e741862564c37edcc5d, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: a7fd39b7a6bc95f43820dda95ffb8b3a, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: c61beb8300b1eca419f7018e333a7ee4, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 6eedb567a42763245bf5a0cd36a0ccfb, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 5210ca7c102e943449ee87f3f13356d5, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 0ce39806f5c04aa49891bf11997107a4, type: 3}
+      clipVolume: 1
+  - categoryName: SpeedUpVoices
+    sounds:
+    - clipName: 
+      clip: {fileID: 8300000, guid: 6f49451eec855f04dbf96a94209b7453, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: c83ad1fa7abb48b47aae228a86aeadfe, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 12d3889bda27ed349804d25dce8248f4, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 57f47282e8e5cc34fbac6f0bfc334988, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: e84f6d80863588b459ba88450fb4925f, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 0ee2709db959a94458fe5c5d8983a817, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 6677b0578c240d547ad22aaf142dfca0, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 4dbc7c41934ef9445863942453a94aad, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 76c2bb63c4abf7e41a0428171d0eb983, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: f4208f920fa9eb04b85fc35f7cce88bb, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: d4f15530fba91d94d871f0551143791f, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: b35382608090bb548800a8cda0d4b6ea, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: d735a954e5ae71b498dbcc38565901a6, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 9b625de56554a6c4a8e7e5d844f966ec, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: e31ff077fc495ae4ebb5ab216e2fe782, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 41d54ef2ef2122e4f99be5034cd17a61, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 4d3c98b74c48a264bb3a33bcd7391ff0, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 0655b7b2e9565284d9328421b44c6010, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: cd662b80449583d43bb94643afce260a, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: aba9f3d118d39784082200da8a43c770, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 35b4e429a2f3f6e4ca3a37bd35c65780, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 730cf5b3f9e52d447971366a75dfa120, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 38641dffc9e9f944f805b0df4851446e, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 58b7bf5a952a6494db62f6bcd486e31a, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 62197e5471602134da654a1eb95288ab, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: aaf6be49dd1c84b4b940fe532911480f, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: a4ebc32b7808fa54ab1b4c8e2f8febf6, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 3b8aa45f642924a4386acf7d74647200, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: a54c5f4d89a60c04db4a2cf6c0a1f193, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 111ab77ae6f3be9489012e4b4be038d7, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 5a2076e9605b59f46b53135e8557caeb, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: d3d48d2601f2266449e6ef606d422dcd, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 40164e6747596244c8cba2f871d9c971, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 8f204d955c8436c4482caefbd354493e, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: f79591348299bdd4c9b81df3f4071b12, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 09b3828eb69ddbd498e9b49401901c71, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 44776f8331b3d0648b59af3c7b6376e5, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: c09ce90c572797f4aa1e4583af50f718, type: 3}
+      clipVolume: 1
+    - clipName: 
+      clip: {fileID: 8300000, guid: 883f1ae6f7966ab4c86a75f04350f81c, type: 3}
+      clipVolume: 1
