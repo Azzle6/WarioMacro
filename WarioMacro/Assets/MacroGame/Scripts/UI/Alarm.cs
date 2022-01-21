@@ -48,6 +48,13 @@ public class Alarm : MonoBehaviour
         
     }
 
+    public void FillAllAlarm()
+    {
+        gauge.fillAmount = 100;
+        count = 0;
+        DecrementCount(false);
+    }
+
     private IEnumerator DecreaseAlarm(float stop)
     {
         while (gauge.fillAmount < stop)
