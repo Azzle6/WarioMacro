@@ -7,7 +7,8 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public GameObject[] arrowPrefabs = new GameObject[4];
-    
+
+    [SerializeField] private Transform puppetMainCharacter;
     [SerializeField] private Animator animator;
     [SerializeField] private float moveSpeed = 1f;
     private static readonly int move = Animator.StringToHash("Move");
@@ -20,35 +21,38 @@ public class Player : MonoBehaviour
     
     public IEnumerator MoveToPosition(List<Transform> positions)
     {
-        //yield return new WaitForSeconds(1f);
-        //map.player.transform.DOPunchScale(Vector3.one * .25f, 1f);
-        //yield return new WaitForSeconds(1f);
         StartMove();
-        // TODO : animate with (DOTween?)
-        //map.player.transform.position = map.currentNode.transform.position;
-        for (int i = 0; i < positions.Count; i++)
+        foreach (Vector3 position in positions.Select(t => t.position))
         {
-            var tween = transform.DOMove(positions[i].position, moveSpeed).SetSpeedBased().SetEase(Ease.Linear);
+            FlipSpriteX(position.x < transform.position.x);
+            var tween = transform.DOMove(position, moveSpeed).SetSpeedBased().SetEase(Ease.Linear);
+
             while (tween.IsPlaying()) yield return null;
         }
-        
 
-        // var positions = map.currentPath.GetPositions();
-        // var tween = player.transform.DOPath((Vector3[])positions, player.moveSpeed).SetSpeedBased().SetEase(Ease.Linear);
-        
         StopMove();
-        AudioManager.MacroPlaySound("NodeSelect", 0);
-        //yield return new WaitForSeconds(1f);
     }
+
     
+
     private void StartMove()
     {
         animator.SetTrigger(move);
+        AudioManager.MacroPlaySound("NodeSelect", 0);
     }
 
     private void StopMove()
     {
         animator.SetTrigger(idle);
+        FlipSpriteX(false);
+    }
+    
+    private void FlipSpriteX(bool flip)
+    {
+        for (int i = 0; i < puppetMainCharacter.childCount; i++)
+        {
+            puppetMainCharacter.GetChild(i).GetComponent<SpriteRenderer>().flipX = flip;
+        }
     }
     
     private void Awake()
