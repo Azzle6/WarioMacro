@@ -37,7 +37,7 @@ public class GameSettingsManager : MonoBehaviour
     public void DecreaseBPM()
     {
         AudioManager.MacroPlaySound("SpeedDown", 0);
-        if (gameControllerSO.currentGameSpeed == bpmSettingsSO.maxBPM)
+        if (gameControllerSO.currentGameSpeed == bpmSettingsSO.minBPM)
         {
             AudioManager.MacroPlayRandomSound("LowLimitVoices", 0);
         }
