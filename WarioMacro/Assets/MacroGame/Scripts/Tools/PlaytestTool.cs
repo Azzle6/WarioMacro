@@ -15,6 +15,7 @@ public class PlaytestTool : MonoBehaviour
     [SerializeField] private GameController GameControl;
     [SerializeField] private ScenesReferencesSO ScenesRefs;
     [SerializeField] private RecruitmentController RecruitControl;
+    [SerializeField] private MapManager MapMana;
 
     private void Start()
     {
@@ -106,7 +107,6 @@ public class PlaytestTool : MonoBehaviour
     public void SkipRecruitPhase()
     {
         StartCoroutine(RecruitControl.SkipRecruitment());
-        StopCoroutine(RecruitControl.RecruitmentLoop());
     }
     
     

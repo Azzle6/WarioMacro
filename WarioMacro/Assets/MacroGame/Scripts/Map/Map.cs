@@ -10,7 +10,7 @@ public class Map : MonoBehaviour
     public Transform nodesParent;
     public Node.Path currentPath { get; private set; }
 
-    [SerializeField] private Node startNode;
+    [SerializeField] public Node startNode;
     [SerializeField] private Node endNode;
     
     private static readonly int current = Animator.StringToHash("Current");
