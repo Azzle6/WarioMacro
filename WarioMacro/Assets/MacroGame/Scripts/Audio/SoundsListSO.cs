@@ -34,7 +34,7 @@ public class SoundInfo
 {
     public string clipName;
     public AudioClip clip;
-    [Range(0,2)]
+    [Range(0,1)]
     public float clipVolume = 1;
 }
 

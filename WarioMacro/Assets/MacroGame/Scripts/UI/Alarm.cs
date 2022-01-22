@@ -7,6 +7,8 @@ using UnityEngine.UI;
 public class Alarm : MonoBehaviour
 {
     public static bool isActive { get; private set; }
+    [SerializeField] private GameObject actionPostProcess;
+    [SerializeField] private GameObject alarmPostProcess;
     [SerializeField] private Image gauge;
     [SerializeField] private float speed;
     [Range(0.1f, 15f)]
@@ -34,12 +36,23 @@ public class Alarm : MonoBehaviour
         {
             count = 0;
             isActive = true;
+            actionPostProcess.SetActive(false);
+            GameController.instance.macroObjects.Remove(actionPostProcess);
+            alarmPostProcess.SetActive(true);
+            GameController.instance.macroObjects.Add(alarmPostProcess);
             MusicManager.instance.state = Soundgroup.CurrentPhase.ESCAPE;
             AudioManager.MacroPlaySound("Alarm", 0);
         }
         
         StartCoroutine(DecreaseAlarm((100 - count) * 0.01f));
         
+    }
+
+    public void FillAllAlarm()
+    {
+        gauge.fillAmount = 100;
+        count = 0;
+        DecrementCount(false);
     }
 
     private IEnumerator DecreaseAlarm(float stop)

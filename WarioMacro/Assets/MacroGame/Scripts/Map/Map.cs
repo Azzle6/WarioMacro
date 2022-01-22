@@ -10,12 +10,8 @@ public class Map : MonoBehaviour
     public Transform nodesParent;
     public Node.Path currentPath { get; private set; }
 
-    
     [SerializeField] private Node startNode;
     [SerializeField] private Node endNode;
-
-    [SerializeField] private Sprite littleArrow;
-    [SerializeField] private Sprite bigArrow;
     
     private static readonly int current = Animator.StringToHash("Current");
     private Player player;
@@ -57,9 +53,9 @@ public class Map : MonoBehaviour
         // input loop
         while (nextNode == null)
         {
-            while (Ticker.lockTimescale) yield return null;
+            //while (Ticker.lockTimescale) yield return null;
 
-            MoveDirection selectedDirection = InputManager.GetDirection();
+            MoveDirection selectedDirection = InputManager.GetDirection(false, false);
             
             // ReSharper disable once PossibleNullReferenceException
             foreach (Node.Path path in currentNode.paths.Where(p => p != null))
@@ -81,8 +77,19 @@ public class Map : MonoBehaviour
                 // is any path setup with arrow direction?
                 arrowPrefabs[i].gameObject.SetActive(currentNode.paths.FirstOrDefault(p => p != null && p.direction == (MoveDirection) i) != null);
                 // is the selected direction equals to the path direction?
-                arrowPrefabs[i].transform.localScale = (selectedDirection != MoveDirection.None && i == (int) selectedDirection) ? Vector3.one : Vector3.one * .5f;
-                arrowPrefabs[i].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (selectedDirection != MoveDirection.None && i == (int)selectedDirection) ? bigArrow : littleArrow;
+                if (selectedDirection != MoveDirection.None && i == (int) selectedDirection)
+                {
+                    arrowPrefabs[i].transform.localScale = Vector3.one;
+                    arrowPrefabs[i].transform.GetChild(0).gameObject.SetActive(false);
+                    arrowPrefabs[i].transform.GetChild(1).gameObject.SetActive(true);
+                }
+                else
+                {
+                    arrowPrefabs[i].transform.localScale = Vector3.one * .5f;
+                    arrowPrefabs[i].transform.GetChild(0).gameObject.SetActive(true);
+                    arrowPrefabs[i].transform.GetChild(1).gameObject.SetActive(false);
+                }
+                
             }
             if (selectedNode != null && InputManager.GetKeyDown(validInput))
             {

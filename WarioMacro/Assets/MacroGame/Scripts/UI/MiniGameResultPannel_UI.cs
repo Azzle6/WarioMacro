@@ -39,6 +39,8 @@ public class MiniGameResultPannel_UI : MonoBehaviour
     [SerializeField] private GameObject moneyBagGO;
     [SerializeField] private TMP_Text moneyTextField; 
     [SerializeField] private PlayableDirector director;
+    [SerializeField] private PlayableAsset moneyGain;
+    [SerializeField] private PlayableAsset moneyLose;
 
     public GameObject[] nodeArray = new GameObject[10];
 
@@ -161,8 +163,14 @@ public class MiniGameResultPannel_UI : MonoBehaviour
         pannel.gameObject.SetActive(toogle);
     }
 
-    public void TriggerResult()
+    public void TriggerResult(bool result)
     {
+        if (!result)
+        {
+            director.playableAsset = moneyLose;
+        }
+        else director.playableAsset = moneyGain;
+
         animator.SetTrigger("Result");
         StartCoroutine(CascadingNodeAnim());
         
