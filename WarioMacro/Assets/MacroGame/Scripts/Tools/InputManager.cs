@@ -34,19 +34,21 @@ public enum ControllerAxis
 
 public class InputManager : MonoBehaviour
 {
-    private static InputManager inputManager;
+    private static InputManager instance;
+
+    public static bool lockInput;
 
     public static void Register()
     {
-        if (inputManager != null) return;
+        if (instance != null) return;
         
-        inputManager = new GameObject("InputManager").AddComponent<InputManager>();
-        inputManager.gameObject.AddComponent<EventSystemBehaviour>();
+        instance = new GameObject("InputManager").AddComponent<InputManager>();
+        instance.gameObject.AddComponent<EventSystemBehaviour>();
     }
 
-    public static bool GetKey(ControllerKey key, bool unscaledTime = false)
+    public static bool GetKey(ControllerKey key, bool unlockedInput = false, bool unscaledTime = false)
     {
-        if (Ticker.lockTimescale && !unscaledTime)
+        if (Ticker.lockTimescale && !unscaledTime || lockInput && !unlockedInput)
             return false;
         
         if (IsNotDPad(key))
@@ -59,41 +61,41 @@ public class InputManager : MonoBehaviour
             DPadToBool(key, ButtonState.DOWN);
     }
 
-    public static bool GetKeyDown(ControllerKey key, bool unscaledTime = false)
+    public static bool GetKeyDown(ControllerKey key, bool unlockedInput = false, bool unscaledTime = false)
     {
-        if (Ticker.lockTimescale && !unscaledTime)
+        if (Ticker.lockTimescale && !unscaledTime || lockInput && !unlockedInput)
             return false;
         return IsNotDPad(key) ? Input.GetButtonDown(ToButton(key)) : DPadToBool(key, ButtonState.DOWN);
     }
 
-    public static bool GetKeyUp(ControllerKey key, bool unscaledTime = false)
+    public static bool GetKeyUp(ControllerKey key, bool unlockedInput = false, bool unscaledTime = false)
     {
-        if (Ticker.lockTimescale && !unscaledTime)
+        if (Ticker.lockTimescale && !unscaledTime || lockInput && !unlockedInput)
             return false;
         return IsNotDPad(key) ? Input.GetButtonUp(ToButton(key)) : DPadToBool(key, ButtonState.UP);
     }
 
-    public static float GetAxis(ControllerAxis axis, bool unscaledTime = false)
+    public static float GetAxis(ControllerAxis axis, bool unlockedInput = false, bool unscaledTime = false)
     {
-        if (Ticker.lockTimescale && !unscaledTime)
+        if (Ticker.lockTimescale && !unscaledTime || lockInput && !unlockedInput)
             return 0;
         return Input.GetAxis(ToAxis(axis));
     }
 
-    public static float GetAxisRaw(ControllerAxis axis, bool unscaledTime = false)
+    public static float GetAxisRaw(ControllerAxis axis, bool unlockedInput = false, bool unscaledTime = false)
     {
-        if (Ticker.lockTimescale && !unscaledTime)
+        if (Ticker.lockTimescale && !unscaledTime || lockInput && !unlockedInput)
             return 0;
         return Input.GetAxisRaw(ToAxis(axis));
     }
 
-    public static MoveDirection GetDirection(bool unscaledTime)
+    public static MoveDirection GetDirection(bool unlockedInput, bool unscaledTime)
     {
-        if (Ticker.lockTimescale && !unscaledTime)
-            return MoveDirection.Down;
+        if (Ticker.lockTimescale && !unscaledTime || lockInput && !unlockedInput)
+            return MoveDirection.None;
         
-        float horizontalInput = GetAxis(ControllerAxis.LEFT_STICK_HORIZONTAL, unscaledTime);
-        float verticalInput = GetAxis(ControllerAxis.LEFT_STICK_VERTICAL, unscaledTime);
+        float horizontalInput = GetAxis(ControllerAxis.LEFT_STICK_HORIZONTAL, unlockedInput, unscaledTime);
+        float verticalInput = GetAxis(ControllerAxis.LEFT_STICK_VERTICAL, unlockedInput, unscaledTime);
         
         if (horizontalInput < 0.5f && horizontalInput > -0.5f && verticalInput < 0.5f && verticalInput > -0.5f)
             return MoveDirection.None;

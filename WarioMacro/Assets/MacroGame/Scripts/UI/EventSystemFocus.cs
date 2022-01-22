@@ -7,9 +7,13 @@ public class EventSystemFocus : MonoBehaviour
     [SerializeField] private GameObject firstSelected;
     private EventSystem eventSys;
     private bool alreadyMoved;
-
+    
     private void Move(MoveDirection direction)
     {
+        if (!eventSys.currentSelectedGameObject.activeInHierarchy)
+        {
+            eventSys.SetSelectedGameObject(firstSelected);
+        }
         var data = new AxisEventData(eventSys)
         {
             moveDir = direction,
@@ -22,7 +26,7 @@ public class EventSystemFocus : MonoBehaviour
     private MoveDirection GetDirection()
     {
         // Get Player input
-        MoveDirection dir = InputManager.GetDirection(true);
+        MoveDirection dir = InputManager.GetDirection(true, true);
 
         // Reset possibility to move
         if (dir == MoveDirection.None)
@@ -40,12 +44,13 @@ public class EventSystemFocus : MonoBehaviour
         return dir;
     }
 
+    
     private void OnEnable()
     {
         eventSys = EventSystem.current;
         eventSys.SetSelectedGameObject(firstSelected);
     }
- 
+
     private void Update()
     {
         Move(GetDirection());

@@ -17,6 +17,7 @@ public class RecruitmentController : GameController
 
     public IEnumerator RecruitmentLoop()
     {
+        // For Debug purposes
         if (skipRecruitment)
         {
             yield return new WaitForSeconds(1f);
@@ -24,11 +25,13 @@ public class RecruitmentController : GameController
             yield break;
         }
         
+        // Initialise recruitment
         SetRecruitmentActive(true);
         nodePrevisualisation.SetTexts(instance.mapManager.typePercentages.Select(pair => pair.Value).ToArray());
         
         while(!instance.characterManager.isTeamFull)
         {
+            // Select path and move
             lastNoMGNode = instance.map.currentNode;
             yield return StartCoroutine(instance.map.WaitForNodeSelection());
 
@@ -40,23 +43,35 @@ public class RecruitmentController : GameController
             if (nodeMicroGame != null)
             {
                 nodeMicroGame.microGamesNumber = instance.gameControllerSO.defaultMGCount;
+                
+                if (nodePrevisualisation.onScreen)
+                {
+                    nodePrevisualisation.Show();
+                }
+                nodePrevisualisation.enabled = false;
+                
+                // Launch micro game loop
                 yield return StartCoroutine(instance.NodeWithMicroGame(nodeMicroGame));
 
                 yield return new WaitForSecondsRealtime(1f);
                 
-                // dispose
+                // Dispose result panel
                 instance.resultPanel.PopWindowDown();
                 instance.resultPanel.ToggleWindow(false);
                 
+                // Wait for results
                 yield return NodeResults(nodeMicroGame);
 
+                // Lock path if there is no character left
                 if (!instance.characterManager.IsTypeAvailable(nodeMicroGame.type))
                 {
                     DeletePath(instance.map.currentPath);
                 }
                 
+                // Return on start node
                 instance.player.TeleportPlayer(startNode.transform.position);
                 instance.map.currentNode = startNode;
+                nodePrevisualisation.enabled = true;
             }
 
             yield return null;
@@ -67,6 +82,7 @@ public class RecruitmentController : GameController
 
     private IEnumerator NodeResults(NodeSettings node)
     {
+        // If player won enough, let him choice a character
         if (instance.nodeSuccessCount >= askedCharacterThreshold)
         {
             instance.settingsManager.IncreaseDifficulty();
@@ -77,10 +93,12 @@ public class RecruitmentController : GameController
         
         instance.settingsManager.DecreaseDifficulty();
 
+        // Partial lost, give him a random character
         if (instance.nodeSuccessCount >= randomSpecialistThreshold)
         {
             yield return instance.characterManager.AddDifferentSpecialist(node.type);
         }
+        // Completely lost, give him a scoundrel
         else
         {
             yield return instance.characterManager.AddDefaultCharacter();
