@@ -1,26 +1,46 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 // ReSharper disable once CheckNamespace
 public class EventSystemFocus : MonoBehaviour
 {
+    private static readonly List<EventSystemFocus> instances = new List<EventSystemFocus>();
+    
     [SerializeField] private GameObject firstSelected;
     private EventSystem eventSys;
+    private EventSystemFocus previouslyActive;
     private bool alreadyMoved;
     
     private void Move(MoveDirection direction)
     {
+        if (direction == MoveDirection.None) return;
+        
+        /*
         if (!eventSys.currentSelectedGameObject.activeInHierarchy)
         {
             eventSys.SetSelectedGameObject(firstSelected);
         }
+        */
+
+        GameObject currentlySelected = eventSys.currentSelectedGameObject;
+        
+        // Move using unity's navigation system
         var data = new AxisEventData(eventSys)
         {
             moveDir = direction,
-            selectedObject = eventSys.currentSelectedGameObject
+            selectedObject = currentlySelected
         };
 
         ExecuteEvents.Execute(data.selectedObject, data, ExecuteEvents.moveHandler);
+
+        // Play sound if selected button has changed
+        if (currentlySelected != data.selectedObject)
+        {
+            AudioManager.MacroPlaySound("MenusHover", 0);
+        }
     }
 
     private MoveDirection GetDirection()
@@ -40,15 +60,32 @@ public class EventSystemFocus : MonoBehaviour
         
         // Return new direction
         alreadyMoved = true;
-        AudioManager.MacroPlaySound("MenusHover", 0);
         return dir;
     }
 
-    
+    private void Awake()
+    {
+        instances.Add(this);
+    }
+
     private void OnEnable()
     {
         eventSys = EventSystem.current;
         eventSys.SetSelectedGameObject(firstSelected);
+
+        foreach (EventSystemFocus instance in instances.Where(instance => instance != this && instance.isActiveAndEnabled))
+        {
+            instance.enabled = false;
+            previouslyActive = instance;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (previouslyActive == null) return;
+        
+        previouslyActive.enabled = true;
+        previouslyActive = null;
     }
 
     private void Update()
