@@ -48,7 +48,7 @@ public class NAC3_Laser : MonoBehaviour
         if (Physics.Raycast(transform.position, transform.right * laserLength, out hit, laserLength))
         {
             lineRenderer.SetPosition(1, new Vector3(transform.InverseTransformPoint(hit.point).x+ 0.2f, 0, 0));
-            if (hit.collider.transform.CompareTag("Player")) 
+            if (hit.collider.transform.CompareTag("Player") && !erController.hasEnded) 
             {
                 erController.CheckEndGame(false);
             }
