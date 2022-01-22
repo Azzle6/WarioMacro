@@ -17,13 +17,6 @@ public class EventSystemFocus : MonoBehaviour
     private void Move(MoveDirection direction)
     {
         if (direction == MoveDirection.None) return;
-        
-        /*
-        if (!eventSys.currentSelectedGameObject.activeInHierarchy)
-        {
-            eventSys.SetSelectedGameObject(firstSelected);
-        }
-        */
 
         GameObject currentlySelected = eventSys.currentSelectedGameObject;
         

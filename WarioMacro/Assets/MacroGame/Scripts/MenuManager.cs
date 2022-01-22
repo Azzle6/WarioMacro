@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 public class MenuManager : MonoBehaviour
 {
     [SerializeField] private GameObject menu;
+    [SerializeField] private GameObject defaultMenu;
+    [SerializeField] private GameObject settingsMenu;
     private List<MonoBehaviour> mgScripts = new List<MonoBehaviour>();
     public static bool gameIsPaused;
     
@@ -39,6 +41,27 @@ public class MenuManager : MonoBehaviour
         */
     }
 
+    public void DisplaySettings()
+    {
+        defaultMenu.SetActive(false);
+        settingsMenu.SetActive(true);
+        AudioManager.MacroPlaySound("MenusValidation");
+    }
+
+    public void DisposeSettings()
+    {
+        settingsMenu.SetActive(false);
+        defaultMenu.SetActive(true);
+        AudioManager.MacroPlaySound("MenusBack");
+    }
+    
+    public void SwitchScene(string sceneName)
+    {
+        Ticker.lockTimescale = false;
+        gameIsPaused = false;
+        SceneManager.LoadScene(sceneName);
+    }
+
     /*
     private void UnlockMGScripts()
     {
@@ -64,17 +87,10 @@ public class MenuManager : MonoBehaviour
     }
     */
 
-    private IEnumerator RestoreTimeScale(bool lockTimeScale)
+    private static IEnumerator RestoreTimeScale(bool lockTimeScale)
     {
         yield return new WaitForEndOfFrame();
         Ticker.lockTimescale = lockTimeScale;
         
-    }
-
-    public void SwitchScene(string sceneName)
-    {
-        Ticker.lockTimescale = false;
-        gameIsPaused = false;
-        SceneManager.LoadScene(sceneName);
     }
 }
