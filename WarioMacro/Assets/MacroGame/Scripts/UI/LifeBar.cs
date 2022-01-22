@@ -22,10 +22,10 @@ public class LifeBar : MonoBehaviour
         portraits[life].enabled = true;
         keyChains[life].sprite = Resources.Load<SpriteListSO>("KeyChainSprites")
             .nodeSprites[chara.characterType - CharacterType.Scoundrel];
-        var keyChainT = (RectTransform) keyChains[life].transform;
+        /*var keyChainT = (RectTransform) keyChains[life].transform;
         keyChainT.anchorMin = new Vector2(0.6f, 0.285f);
         keyChainT.anchorMax = new Vector2(0.6f, 0.285f);
-        keyChainT.sizeDelta = Vector2.one * 100;
+        keyChainT.sizeDelta = Vector2.one * 100;*/
         life++;
     }
 
