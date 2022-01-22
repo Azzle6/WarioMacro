@@ -67,8 +67,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Header
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 4f3247de42c40384abe3b3447d33d661, type: 2}
-  m_sharedMaterial: {fileID: -8126084813207962825, guid: 4f3247de42c40384abe3b3447d33d661, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 16fa56177c5012b4faa1ee6a2b624a11, type: 2}
+  m_sharedMaterial: {fileID: 5640497177822817446, guid: 16fa56177c5012b4faa1ee6a2b624a11, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -201,8 +201,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Header
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 4f3247de42c40384abe3b3447d33d661, type: 2}
-  m_sharedMaterial: {fileID: -8126084813207962825, guid: 4f3247de42c40384abe3b3447d33d661, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 16fa56177c5012b4faa1ee6a2b624a11, type: 2}
+  m_sharedMaterial: {fileID: 5640497177822817446, guid: 16fa56177c5012b4faa1ee6a2b624a11, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -406,8 +406,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Header
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 4f3247de42c40384abe3b3447d33d661, type: 2}
-  m_sharedMaterial: {fileID: -8126084813207962825, guid: 4f3247de42c40384abe3b3447d33d661, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 16fa56177c5012b4faa1ee6a2b624a11, type: 2}
+  m_sharedMaterial: {fileID: 5640497177822817446, guid: 16fa56177c5012b4faa1ee6a2b624a11, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -546,8 +546,10 @@ MonoBehaviour:
   successCheckMark: {fileID: 21300000, guid: 08a4a74b4815edc449891ffc624f671b, type: 3}
   failureCheckMark: {fileID: 21300000, guid: 98fc2e127a12b844a9bd45f47ec1d851, type: 3}
   moneyBagGO: {fileID: 3264958532136324271}
-  moneyTextField: {fileID: 0}
+  moneyTextField: {fileID: 524728039142279774}
   director: {fileID: 3925044168248859241}
+  moneyGain: {fileID: 11400000, guid: a6570f17bd3f9f64894606e815af34bd, type: 2}
+  moneyLose: {fileID: 11400000, guid: 79fb28bae9d78f3439ce2910d19406ca, type: 2}
   nodeArray: []
 --- !u!95 &4702885631582602875
 Animator:
@@ -749,6 +751,10 @@ PrefabInstance:
       propertyPath: m_fontColor32.rgba
       value: 4294967295
       objectReference: {fileID: 0}
+    - target: {fileID: 5298626919020860542, guid: d11daeb82b05b0b4e83c3f4cb8693e4a, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7174166309864805007, guid: d11daeb82b05b0b4e83c3f4cb8693e4a, type: 3}
       propertyPath: m_Name
       value: MoneyBags
@@ -862,3 +868,14 @@ PlayableDirector:
   m_CorrespondingSourceObject: {fileID: 8698767152045212745, guid: d11daeb82b05b0b4e83c3f4cb8693e4a, type: 3}
   m_PrefabInstance: {fileID: 5674733730632883744}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &524728039142279774 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5298626919020860542, guid: d11daeb82b05b0b4e83c3f4cb8693e4a, type: 3}
+  m_PrefabInstance: {fileID: 5674733730632883744}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

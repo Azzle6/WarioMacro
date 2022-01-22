@@ -18,7 +18,7 @@ public class NodeSettings : MonoBehaviour
         
         int rdType = Random.Range(0, 6);
         type = rdType + 2;
-        sRenderer.sprite = Resources.Load<NodeRandomSO>("NodeSprites").nodeSprites[rdType];
+        sRenderer.sprite = Resources.Load<SpriteListSO>("NodeSprites").nodeSprites[rdType];
     }
 
     private void Start()
