@@ -10,6 +10,7 @@ using Random = UnityEngine.Random;
 public class GameController : Ticker
 {
     public static GameController instance;
+    [HideInInspector] public string currentScene;
     [HideInSubClass] public Player player;
 
     [HideInSubClass] [SerializeField] protected internal CharacterManager characterManager;
@@ -31,7 +32,6 @@ public class GameController : Ticker
 
     private static readonly int victory = Animator.StringToHash("Victory");
     private static readonly int defeat = Animator.StringToHash("Defeat");
-    public string currentScene;
     private static bool gameFinished;
     private static bool gameResult;
     protected internal Map map;

@@ -1,36 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 
 public class RecrutementCardPannel_UI : MonoBehaviour
 {
 
-    [SerializeField] RectTransform allPannels;
+    [SerializeField] private RectTransform allPanels;
 
     [Header("Card One")]
-    [SerializeField] Image cardOneBorder;
-    [SerializeField] Image cardOnePortrait;
+    [SerializeField] private Button cardOneButton;
+    [SerializeField] private Image cardOneBorder;
+    [SerializeField] private Image cardOnePortrait;
 
     [Header("Card Two")]
-    [SerializeField] Image cardTwoBorder;
-    [SerializeField] Image cardTwoPortrait;
-
-    bool recruitmentActive = false;
-    private int counter = 0;
-    private void Update()
-    {
-
-    }
-    public void ActivateRecruitement()
-    {
-        recruitmentActive = true;
-    }
+    [SerializeField] private Button cardTwoButton;
+    [SerializeField] private Image cardTwoBorder;
+    [SerializeField] private Image cardTwoPortrait;
 
     public void ToggleWindow(bool toggle)
     {
-        allPannels.gameObject.SetActive(toggle);
+        allPanels.gameObject.SetActive(toggle);
     }
 
     public void SetCards(Character cardOne, Character cardTwo)
@@ -38,5 +28,30 @@ public class RecrutementCardPannel_UI : MonoBehaviour
         cardOnePortrait.sprite = cardOne.cardSprite;
         cardTwoPortrait.sprite = cardTwo.cardSprite;
 
+    }
+    
+    public void ShowCharacterCard(UnityAction call, Character character, int cardIndex)
+    {
+        Button button;
+        Image portrait;
+        if (cardIndex == 0)
+        {
+            button = cardOneButton;
+            portrait = cardOnePortrait;
+        }
+        else
+        {
+            button = cardTwoButton;
+            portrait = cardTwoPortrait;
+        }
+        
+        // Reset Button
+        button.gameObject.SetActive(true);
+        portrait.sprite = character.cardSprite;
+        button.onClick.RemoveAllListeners();
+            
+        //Ajoute un listener au bouton pour qu'il ajoute le bon personnage
+        button.onClick.AddListener(() => gameObject.SetActive(false));
+        button.onClick.AddListener(call);
     }
 }
