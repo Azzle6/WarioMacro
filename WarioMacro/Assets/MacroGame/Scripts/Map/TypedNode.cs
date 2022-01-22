@@ -10,6 +10,7 @@ public class TypedNode : MonoBehaviour
     public int type;
     
     [SerializeField] private SpriteRenderer sRenderer;
+    [SerializeField] private SpriteRenderer logoSpriteRenderer;
 
     public void SetRandomType()
     {
@@ -18,6 +19,7 @@ public class TypedNode : MonoBehaviour
         int rdType = Random.Range(0, 6);
         type = rdType + 2;
         sRenderer.sprite = Resources.Load<SpriteListSO>("NodeSprites").nodeSprites[rdType];
+        logoSpriteRenderer.sprite = Resources.Load<SpriteListSO>("NodeLogoSprites").nodeSprites[rdType];
     }
 
     private void Start()
