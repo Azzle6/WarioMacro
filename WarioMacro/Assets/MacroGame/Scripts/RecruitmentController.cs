@@ -70,7 +70,7 @@ public class RecruitmentController : GameController
                 // Lock path if there is no character left
                 if (!instance.characterManager.IsTypeAvailable(typedNode.type))
                 {
-                    DeletePath(instance.map.currentPath);
+                    DeletePath(instance.map.currentPath, typedNode);
                 }
                 
                 // Return on start node
@@ -110,7 +110,7 @@ public class RecruitmentController : GameController
         }
     }
 
-    private void DeletePath(Node.Path path)
+    private void DeletePath(Node.Path path, TypedNode node)
     {
         for (var i = 0; i < lastNoMGNode.paths.Length; i++)
         {
@@ -119,6 +119,8 @@ public class RecruitmentController : GameController
             lastNoMGNode.paths[i] = null;
             break;
         }
+        
+        node.DisableNode();
     }
 
     private void SetRecruitmentActive(bool state)

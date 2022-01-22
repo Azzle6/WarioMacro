@@ -2057,6 +2057,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1064654660 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7520839062701822090, guid: 4f24120b376c64e418ae5f425ba27d2b, type: 3}
+  m_PrefabInstance: {fileID: 1203847785471866140}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1067155199
 GameObject:
   m_ObjectHideFlags: 0
@@ -3246,6 +3257,7 @@ MonoBehaviour:
   - MG_ULC_Scene_TacticMagic
   - MG_ULA_EscapeFromThem
   - MG_NAA_Scene_ChainedFist
+  currentScene: 
 --- !u!4 &1749864761
 Transform:
   m_ObjectHideFlags: 0
@@ -3334,6 +3346,7 @@ MonoBehaviour:
   mainMenuBuildIndex: 0
   macroObjects: []
   sceneNames: []
+  currentScene: 
   skipRecruitment: 0
   alarmGO: {fileID: 2023252415}
   nodePrevisualisation: {fileID: 2064585279}
@@ -3825,7 +3838,8 @@ MonoBehaviour:
   GameControl: {fileID: 1749864760}
   ScenesRefs: {fileID: 11400000, guid: d76fb35deef7b814f871c4671b373ba0, type: 2}
   RecruitControl: {fileID: 1749864768}
-  MapMana: {fileID: 0}
+  MapMana: {fileID: 1749864767}
+  MiniGameInfoText: {fileID: 1064654660}
 --- !u!4 &1838577186
 Transform:
   m_ObjectHideFlags: 0

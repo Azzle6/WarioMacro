@@ -104,7 +104,7 @@ public class GameController : Ticker
             // True if node with micro games, false otherwise
             if (nodeMicroGame != null)
             {
-                if (nodeMicroGame.type == GameTypes.NodeType.None)
+                if (nodeMicroGame.type == NodeType.None)
                 {
                     nodeMicroGame.microGamesNumber = gameControllerSO.defaultMGCount;
                 }
@@ -119,6 +119,7 @@ public class GameController : Ticker
                 yield return StartCoroutine(NodeWithMicroGame(nodeMicroGame));
 
                 NodeResults(nodeMicroGame);
+                nodeMicroGame.DisableNode();
 
                 yield return new WaitForSecondsRealtime(1f);
 
@@ -147,7 +148,7 @@ public class GameController : Ticker
         }
     }
 
-    protected internal IEnumerator NodeWithMicroGame(TypedNode typedNode)
+    private IEnumerator NodeWithMicroGame(TypedNode typedNode)
     {
         // select 3 random micro games from micro games list
         var microGamesQueue = new Queue<string>();
@@ -243,7 +244,7 @@ public class GameController : Ticker
     {
         scoreManager.UpdateScore(nodeSuccessCount,typedNode.microGamesNumber,characterManager.playerTeam);
 
-        if (typedNode.type == GameTypes.NodeType.None)
+        if (typedNode.type == NodeType.None)
         {
             NodeResultsBis(gameControllerSO.defaultIncreaseDifficultyThreshold,
                 gameControllerSO.defaultDecreaseDifficultyThreshold, 
