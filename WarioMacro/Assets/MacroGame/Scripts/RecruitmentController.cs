@@ -35,7 +35,11 @@ public class RecruitmentController : GameController
             lastNoMGNode = instance.map.currentNode;
             yield return StartCoroutine(instance.map.WaitForNodeSelection());
 
-            if (instance.characterManager.isTeamFull) yield break;
+            if (instance.characterManager.isTeamFull)
+            {
+                SetRecruitmentActive(false);
+                yield break;
+            }
 
             yield return StartCoroutine(instance.player.MoveToPosition(instance.map.currentPath.wayPoints));
             
