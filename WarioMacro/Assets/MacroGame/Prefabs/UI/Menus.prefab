@@ -68,7 +68,7 @@ MonoBehaviour:
   m_text: Main menu
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 16fa56177c5012b4faa1ee6a2b624a11, type: 2}
-  m_sharedMaterial: {fileID: -8126084813207962825, guid: 16fa56177c5012b4faa1ee6a2b624a11, type: 2}
+  m_sharedMaterial: {fileID: 5640497177822817446, guid: 16fa56177c5012b4faa1ee6a2b624a11, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -201,8 +201,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Back
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 4f3247de42c40384abe3b3447d33d661, type: 2}
-  m_sharedMaterial: {fileID: -8126084813207962825, guid: 4f3247de42c40384abe3b3447d33d661, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 16fa56177c5012b4faa1ee6a2b624a11, type: 2}
+  m_sharedMaterial: {fileID: 5640497177822817446, guid: 16fa56177c5012b4faa1ee6a2b624a11, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -610,40 +610,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2080272510518713637}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
+        m_MethodName: DisposeSettings
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 2080272510134420081}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 2949228387764871880, guid: 345568c2769e9544fafcdb73f9bbdc74, type: 3}
-        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
-        m_MethodName: MacroPlaySound
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: MenusBack
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &2080272510952921448
@@ -879,40 +855,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2080272510134420081}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
+        m_MethodName: DisplaySettings
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 2080272510518713637}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 2949228387764871880, guid: 345568c2769e9544fafcdb73f9bbdc74, type: 3}
-        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
-        m_MethodName: MacroPlaySound
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: MenusValidation
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &2080272511197984869
@@ -947,8 +899,8 @@ RectTransform:
   m_Father: {fileID: 2080272511346795751}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1023,7 +975,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1632,16 +1584,16 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 2949228387764871880, guid: 345568c2769e9544fafcdb73f9bbdc74, type: 3}
-        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
-        m_MethodName: MacroPlaySound
-        m_Mode: 5
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
+        m_MethodName: DisplayMenu
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: MenusBack
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &2080272512234930489
@@ -1791,7 +1743,7 @@ MonoBehaviour:
   m_text: Resume
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 16fa56177c5012b4faa1ee6a2b624a11, type: 2}
-  m_sharedMaterial: {fileID: -8126084813207962825, guid: 16fa56177c5012b4faa1ee6a2b624a11, type: 2}
+  m_sharedMaterial: {fileID: 5640497177822817446, guid: 16fa56177c5012b4faa1ee6a2b624a11, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1924,8 +1876,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Options
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 4f3247de42c40384abe3b3447d33d661, type: 2}
-  m_sharedMaterial: {fileID: -8126084813207962825, guid: 4f3247de42c40384abe3b3447d33d661, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 16fa56177c5012b4faa1ee6a2b624a11, type: 2}
+  m_sharedMaterial: {fileID: 5640497177822817446, guid: 16fa56177c5012b4faa1ee6a2b624a11, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2058,8 +2010,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Options
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 4f3247de42c40384abe3b3447d33d661, type: 2}
-  m_sharedMaterial: {fileID: -8126084813207962825, guid: 4f3247de42c40384abe3b3447d33d661, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 16fa56177c5012b4faa1ee6a2b624a11, type: 2}
+  m_sharedMaterial: {fileID: 5640497177822817446, guid: 16fa56177c5012b4faa1ee6a2b624a11, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2192,8 +2144,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Settings
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 4f3247de42c40384abe3b3447d33d661, type: 2}
-  m_sharedMaterial: {fileID: -8126084813207962825, guid: 4f3247de42c40384abe3b3447d33d661, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 16fa56177c5012b4faa1ee6a2b624a11, type: 2}
+  m_sharedMaterial: {fileID: 5640497177822817446, guid: 16fa56177c5012b4faa1ee6a2b624a11, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2326,8 +2278,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Settings
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 4f3247de42c40384abe3b3447d33d661, type: 2}
-  m_sharedMaterial: {fileID: -8126084813207962825, guid: 4f3247de42c40384abe3b3447d33d661, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 16fa56177c5012b4faa1ee6a2b624a11, type: 2}
+  m_sharedMaterial: {fileID: 5640497177822817446, guid: 16fa56177c5012b4faa1ee6a2b624a11, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2538,7 +2490,7 @@ MonoBehaviour:
   m_text: Settings
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 16fa56177c5012b4faa1ee6a2b624a11, type: 2}
-  m_sharedMaterial: {fileID: -8126084813207962825, guid: 16fa56177c5012b4faa1ee6a2b624a11, type: 2}
+  m_sharedMaterial: {fileID: 5640497177822817446, guid: 16fa56177c5012b4faa1ee6a2b624a11, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2672,7 +2624,7 @@ MonoBehaviour:
   m_text: Volume
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 16fa56177c5012b4faa1ee6a2b624a11, type: 2}
-  m_sharedMaterial: {fileID: -8126084813207962825, guid: 16fa56177c5012b4faa1ee6a2b624a11, type: 2}
+  m_sharedMaterial: {fileID: 5640497177822817446, guid: 16fa56177c5012b4faa1ee6a2b624a11, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

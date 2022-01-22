@@ -10,7 +10,7 @@ public class Map : MonoBehaviour
     public Transform nodesParent;
     public Node.Path currentPath { get; private set; }
 
-    [SerializeField] private Node startNode;
+    [SerializeField] public Node startNode;
     [SerializeField] private Node endNode;
     
     private static readonly int current = Animator.StringToHash("Current");
@@ -53,9 +53,9 @@ public class Map : MonoBehaviour
         // input loop
         while (nextNode == null)
         {
-            while (Ticker.lockTimescale) yield return null;
+            //while (Ticker.lockTimescale) yield return null;
 
-            MoveDirection selectedDirection = InputManager.GetDirection();
+            MoveDirection selectedDirection = InputManager.GetDirection(false, false);
             
             // ReSharper disable once PossibleNullReferenceException
             foreach (Node.Path path in currentNode.paths.Where(p => p != null))

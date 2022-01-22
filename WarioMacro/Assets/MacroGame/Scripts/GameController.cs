@@ -21,6 +21,7 @@ public class GameController : Ticker
     [HideInSubClass] [SerializeField] private Alarm alarm;
     [HideInSubClass] [SerializeField] private RecruitmentController recruitmentController;
     [HideInSubClass] [SerializeField] private Timer timer;
+    [HideInSubClass] [SerializeField] private MenuManager menu;
     [HideInSubClass] [SerializeField] private TransitionController transitionController;
     [HideInSubClass] [SerializeField] private KeywordDisplay keywordManager;
     [HideInSubClass] [SerializeField] private LifeBar lifeBar;
@@ -185,8 +186,11 @@ public class GameController : Ticker
             // Keyword trigger
             yield return keywordManager.KeyWordHandler(currentScene);
 
-            AudioManager.MacroPlaySound("MiniGameEnter", 0);
+            // Disable menu
+            menu.enabled = false;
+            
             // Launch transition
+            AudioManager.MacroPlaySound("MiniGameEnter", 0);
             yield return StartCoroutine(transitionController.TransitionHandler(currentScene, true));
 
 
@@ -200,8 +204,9 @@ public class GameController : Ticker
 
             timer.StopTimer();
             yield return StartCoroutine(transitionController.TransitionHandler(currentScene, false));
-
+            
             // switch back to macro state
+            menu.enabled = true;
             ResetTickables();
             ResetTick();
 
