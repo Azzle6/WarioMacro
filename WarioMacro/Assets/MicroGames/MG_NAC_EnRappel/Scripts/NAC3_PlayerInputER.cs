@@ -32,7 +32,7 @@ public class NAC3_PlayerInputER : MonoBehaviour
 
     private void MovePlayer() 
     {
-        rb.velocity = new Vector3(xAxis*rightSpeed, -(1 - rightTriggerAxis) * fallSpeed, 0);
+        rb.velocity = new Vector3(xAxis*rightSpeed, -(rightTriggerAxis) * fallSpeed, 0);
     }
 
     private void OnCollisionEnter(Collision collision)
