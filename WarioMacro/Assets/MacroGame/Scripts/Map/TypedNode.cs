@@ -1,10 +1,9 @@
-using System;
 using GameTypes;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 // ReSharper disable once CheckNamespace
-public class NodeSettings : MonoBehaviour
+public class TypedNode : MonoBehaviour
 {
     [HideInInspector] public int microGamesNumber;
     [GameType(typeof(NodeType))]

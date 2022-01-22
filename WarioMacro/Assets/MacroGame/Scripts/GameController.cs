@@ -99,12 +99,12 @@ public class GameController : Ticker
             yield return StartCoroutine(map.WaitForNodeSelection());
 
             yield return StartCoroutine(player.MoveToPosition(map.currentPath.wayPoints));
-            var nodeMicroGame = map.currentNode.GetComponent<NodeSettings>();
+            var nodeMicroGame = map.currentNode.GetComponent<TypedNode>();
 
             // True if node with micro games, false otherwise
             if (nodeMicroGame != null)
             {
-                if (nodeMicroGame.type == NodeType.None)
+                if (nodeMicroGame.type == GameTypes.NodeType.None)
                 {
                     nodeMicroGame.microGamesNumber = gameControllerSO.defaultMGCount;
                 }
@@ -147,12 +147,12 @@ public class GameController : Ticker
         }
     }
 
-    protected internal IEnumerator NodeWithMicroGame(NodeSettings node)
+    protected internal IEnumerator NodeWithMicroGame(TypedNode typedNode)
     {
         // select 3 random micro games from micro games list
         var microGamesQueue = new Queue<string>();
         var microGamesList = new List<string>(sceneNames);
-        var microGamesCount = Mathf.Min(node.microGamesNumber, microGamesList.Count);
+        var microGamesCount = Mathf.Min(typedNode.microGamesNumber, microGamesList.Count);
         while (microGamesCount-- > 0)
         {
             var rdIndex = Random.Range(0, microGamesList.Count);
@@ -239,17 +239,17 @@ public class GameController : Ticker
 
     }
 
-    private void NodeResults(NodeSettings node)
+    private void NodeResults(TypedNode typedNode)
     {
-        scoreManager.UpdateScore(nodeSuccessCount,node.microGamesNumber,characterManager.playerTeam);
+        scoreManager.UpdateScore(nodeSuccessCount,typedNode.microGamesNumber,characterManager.playerTeam);
 
-        if (node.type == NodeType.None)
+        if (typedNode.type == GameTypes.NodeType.None)
         {
             NodeResultsBis(gameControllerSO.defaultIncreaseDifficultyThreshold,
                 gameControllerSO.defaultDecreaseDifficultyThreshold, 
                 gameControllerSO.defaultLoseCharacterThreshold);
         }
-        else if (characterManager.SpecialistOfTypeInTeam(node.type) == 0)
+        else if (characterManager.SpecialistOfTypeInTeam(typedNode.type) == 0)
         {
             NodeResultsBis(gameControllerSO.noSpecialistIncreaseDifficultyThreshold,
                 gameControllerSO.noSpecialistDecreaseDifficultyThreshold,

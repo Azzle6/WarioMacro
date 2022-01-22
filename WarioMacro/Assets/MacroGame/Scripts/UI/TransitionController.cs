@@ -75,9 +75,4 @@ public class TransitionController : MonoBehaviour
             }
         };
     }
-
-    private void Awake()
-    {
-        GameController.Register();
-    }
 }

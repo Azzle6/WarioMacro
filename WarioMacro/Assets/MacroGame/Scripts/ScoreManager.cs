@@ -1,11 +1,15 @@
 using System.Collections.Generic;
 using GameTypes;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class ScoreManager : MonoBehaviour
 {
     
     [SerializeField] private Leaderboard leaderBoard;
+    [SerializeField] private PlayableDirector moneyBagsDirector;
+    [SerializeField] private TextMeshProUGUI moneyBagsText;
     
     public int score;
     
@@ -43,14 +47,14 @@ public class ScoreManager : MonoBehaviour
 
     public void UpdateScore(int nodeSuccess,int gameCount,Stack<Character> team)
     {
-        var type = GameController.instance.map.currentNode.GetComponent<NodeSettings>().type;
+        var type = GameController.instance.map.currentNode.GetComponent<TypedNode>().type;
         int bagsBeforeUpdate = moneyBag;
         switch (Alarm.isActive)
         {
             case false:
                 if (gameCount == 3)
                 {
-                    if ( type == NodeType.None)
+                    if ( type == GameTypes.NodeType.None)
                         moneyBag += neutral[nodeSuccess];
                     if (CheckTeamTypes(team) == 1)
                         moneyBag += oneSpecialist[nodeSuccess];
@@ -64,7 +68,7 @@ public class ScoreManager : MonoBehaviour
             case true:
                 if (gameCount == 3)
                 {
-                    if (type == NodeType.None)
+                    if (type == GameTypes.NodeType.None)
                     {
                         moneyBag += neutralAlarm[nodeSuccess];
                     }
@@ -81,6 +85,8 @@ public class ScoreManager : MonoBehaviour
                 break;
         }
 
+        moneyBagsText.text = moneyBag.ToString();
+        moneyBagsDirector.Play();
         AudioManager.MacroPlaySound(moneyBag > bagsBeforeUpdate ? "CashGain" : "CashLose", 0);
     } 
     
@@ -89,7 +95,7 @@ public class ScoreManager : MonoBehaviour
         var count = 0;
         foreach (var character in team)
         {
-            if (character.characterType == GameController.instance.map.currentNode.GetComponent<NodeSettings>().type)
+            if (character.characterType == GameController.instance.map.currentNode.GetComponent<TypedNode>().type)
             {
                 count++;
             }
