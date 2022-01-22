@@ -53,9 +53,9 @@ public class Map : MonoBehaviour
         // input loop
         while (nextNode == null)
         {
-            while (Ticker.lockTimescale) yield return null;
+            //while (Ticker.lockTimescale) yield return null;
 
-            MoveDirection selectedDirection = InputManager.GetDirection();
+            MoveDirection selectedDirection = InputManager.GetDirection(false);
             
             // ReSharper disable once PossibleNullReferenceException
             foreach (Node.Path path in currentNode.paths.Where(p => p != null))

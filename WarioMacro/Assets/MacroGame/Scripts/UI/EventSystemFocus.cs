@@ -21,16 +21,20 @@ public class EventSystemFocus : MonoBehaviour
 
     private MoveDirection GetDirection()
     {
-        MoveDirection dir = InputManager.GetDirection();
+        // Get Player input
+        MoveDirection dir = InputManager.GetDirection(true);
 
+        // Reset possibility to move
         if (dir == MoveDirection.None)
         {
             alreadyMoved = false;
             return dir;
         }
 
+        // Don't move if done already to avoid skipping buttons
         if (alreadyMoved) return MoveDirection.None;
         
+        // Return new direction
         alreadyMoved = true;
         AudioManager.MacroPlaySound("MenusHover", 0);
         return dir;

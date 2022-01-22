@@ -44,8 +44,11 @@ public class InputManager : MonoBehaviour
         inputManager.gameObject.AddComponent<EventSystemBehaviour>();
     }
 
-    public static bool GetKey(ControllerKey key)
+    public static bool GetKey(ControllerKey key, bool unscaledTime = false)
     {
+        if (Ticker.lockTimescale && !unscaledTime)
+            return false;
+        
         if (IsNotDPad(key))
         {
             return Input.GetButton(ToButton(key));
@@ -56,30 +59,41 @@ public class InputManager : MonoBehaviour
             DPadToBool(key, ButtonState.DOWN);
     }
 
-    public static bool GetKeyDown(ControllerKey key)
+    public static bool GetKeyDown(ControllerKey key, bool unscaledTime = false)
     {
+        if (Ticker.lockTimescale && !unscaledTime)
+            return false;
         return IsNotDPad(key) ? Input.GetButtonDown(ToButton(key)) : DPadToBool(key, ButtonState.DOWN);
     }
 
-    public static bool GetKeyUp(ControllerKey key)
+    public static bool GetKeyUp(ControllerKey key, bool unscaledTime = false)
     {
+        if (Ticker.lockTimescale && !unscaledTime)
+            return false;
         return IsNotDPad(key) ? Input.GetButtonUp(ToButton(key)) : DPadToBool(key, ButtonState.UP);
     }
 
-    public static float GetAxis(ControllerAxis axis)
+    public static float GetAxis(ControllerAxis axis, bool unscaledTime = false)
     {
+        if (Ticker.lockTimescale && !unscaledTime)
+            return 0;
         return Input.GetAxis(ToAxis(axis));
     }
 
-    public static float GetAxisRaw(ControllerAxis axis)
+    public static float GetAxisRaw(ControllerAxis axis, bool unscaledTime = false)
     {
+        if (Ticker.lockTimescale && !unscaledTime)
+            return 0;
         return Input.GetAxisRaw(ToAxis(axis));
     }
 
-    public static MoveDirection GetDirection()
+    public static MoveDirection GetDirection(bool unscaledTime)
     {
-        float horizontalInput = GetAxis(ControllerAxis.LEFT_STICK_HORIZONTAL);
-        float verticalInput = GetAxis(ControllerAxis.LEFT_STICK_VERTICAL);
+        if (Ticker.lockTimescale && !unscaledTime)
+            return MoveDirection.Down;
+        
+        float horizontalInput = GetAxis(ControllerAxis.LEFT_STICK_HORIZONTAL, unscaledTime);
+        float verticalInput = GetAxis(ControllerAxis.LEFT_STICK_VERTICAL, unscaledTime);
         
         if (horizontalInput < 0.5f && horizontalInput > -0.5f && verticalInput < 0.5f && verticalInput > -0.5f)
             return MoveDirection.None;
