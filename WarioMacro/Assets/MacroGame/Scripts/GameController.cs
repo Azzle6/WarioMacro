@@ -31,7 +31,7 @@ public class GameController : Ticker
 
     private static readonly int victory = Animator.StringToHash("Victory");
     private static readonly int defeat = Animator.StringToHash("Defeat");
-    private static string currentScene;
+    public string currentScene;
     private static bool gameFinished;
     private static bool gameResult;
     protected internal Map map;
