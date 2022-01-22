@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,6 +17,7 @@ public class PlaytestTool : MonoBehaviour
     [SerializeField] private ScenesReferencesSO ScenesRefs;
     [SerializeField] private RecruitmentController RecruitControl;
     [SerializeField] private MapManager MapMana;
+    [SerializeField] private TMP_Text MiniGameInfoText;
 
     private void Start()
     {
@@ -28,6 +30,11 @@ public class PlaytestTool : MonoBehaviour
         {
             panelIsActive = !panelIsActive;
             PlaytestPanel.SetActive(panelIsActive);
+        }
+
+        if (GameController.instance.currentScene != null)
+        {
+            if(GameController.instance.currentScene.ToString().Length > 0 )MiniGameInfoText.text = "Current MiniGame : " + GameController.instance.currentScene.ToString();
         }
     }
 
