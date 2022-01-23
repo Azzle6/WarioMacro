@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -10,19 +11,28 @@ public class DialogManager : MonoBehaviour
 {
     public static DialogManager instance;
     [SerializeField]private GameObject dialogGO;
+    [SerializeField] private GameObject ButtonsParent;
     [SerializeField] private TMP_Text textZone;
     private int curIndex;
-    [SerializeField]private DialogSO curDial;
+    [SerializeField]private DialogConstructor curDial;
     [SerializeField] private GameObject continueButton;
     [SerializeField] private GameObject finishButton;
+    [SerializeField] private GameObject ButtonTemplate;
     private bool isInDialog;
+    private GameObject[] Buttons;
 
     private void Awake()
     {
         instance = this;
+        
     }
 
-    public void StartDialog(DialogSO currentDial)
+    private void Start()
+    {
+        StartDialog(curDial);
+    }
+
+    public void StartDialog(DialogConstructor currentDial)
     {
         if (isInDialog)
         {
@@ -30,11 +40,15 @@ public class DialogManager : MonoBehaviour
             return;
         }
 
-        Ticker.lockTimescale = true;
+        curDial = currentDial;
         isInDialog = true;
         dialogGO.SetActive(true);
         finishButton.SetActive(false);
         continueButton.SetActive(true);
+        
+        
+        Buttons = SetupButtons();
+        
         StartCoroutine(WriteNextSentence());
     }
 
@@ -58,6 +72,7 @@ public class DialogManager : MonoBehaviour
             yield break;
         }
 
+        
         yield return new WaitUntil(() => !MenuManager.gameIsPaused && InputManager.GetKeyDown(ControllerKey.A));
         
         StartCoroutine(WriteNextSentence());
@@ -67,6 +82,7 @@ public class DialogManager : MonoBehaviour
     {
         continueButton.SetActive(false);
         finishButton.SetActive(true);
+        ButtonsParent.SetActive(true);
     }
 
     void FinishDialog()
@@ -75,6 +91,39 @@ public class DialogManager : MonoBehaviour
         curIndex = 0;
         isInDialog = false;
         Ticker.lockTimescale = false;
+    }
+
+    GameObject[] SetupButtons()
+    {
+        List<GameObject> buttons = new List<GameObject>();
+        foreach (Response resp in curDial.Responses)
+        {
+            //GameObject but = ButtonTemplate;
+            
+            GameObject but = Instantiate(ButtonTemplate, ButtonsParent.transform);
+            
+            Button butComponent = but.GetComponent<Button>();
+            butComponent.onClick = resp.ButtonEvent;
+            butComponent.onClick.AddListener(delegate { FinishDialog(); });
+            
+            
+            buttons.Add(but);
+            
+        }
+
+        if (curDial.Responses.Length == 0)
+        {
+            GameObject but = Instantiate(ButtonTemplate, ButtonsParent.transform);
+            Button butComponent = but.GetComponent<Button>();
+            butComponent.onClick.AddListener(delegate { FinishDialog(); });
+            buttons.Add(but);
+            ButtonsParent.SetActive(false);
+            return buttons.ToArray();
+        }
+        
+        ButtonsParent.SetActive(false);
+        ButtonsParent.GetComponent<EventSystemFocus>().firstSelected = buttons[0];
+        return buttons.ToArray();
     }
     
 }
