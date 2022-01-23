@@ -12,7 +12,6 @@ public class RecruitmentController : GameController
     [SerializeField] private NodeVisual startNode;
     [Range(0, 3)] [SerializeField] private int askedCharacterThreshold = 2;
     [Range(0, 3)] [SerializeField] private int randomSpecialistThreshold = 1;
-
     private NodeVisual lastNoMGNode;
 
     public IEnumerator RecruitmentLoop()
@@ -34,6 +33,8 @@ public class RecruitmentController : GameController
             // Select path and move
             lastNoMGNode = instance.map.currentNode;
             yield return StartCoroutine(instance.map.WaitForNodeSelection());
+            
+            
 
             if (instance.characterManager.isTeamFull)
             {
@@ -82,6 +83,8 @@ public class RecruitmentController : GameController
                 instance.map.currentNode = startNode;
                 nodePrevisualisation.enabled = true;
             }
+            
+            
 
             yield return null;
         }
@@ -153,6 +156,11 @@ public class RecruitmentController : GameController
         {
             yield return instance.characterManager.AddDifferentSpecialist(i + SpecialistType.Brute);
         }
+    }
+
+    public void InteractiveEventEnd()
+    {
+        isInActionEvent = false;
     }
 
     
