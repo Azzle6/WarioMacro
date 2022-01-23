@@ -9,11 +9,11 @@ public class RecruitmentController : GameController
     public bool skipRecruitment;
     [SerializeField] private GameObject alarmGO;
     [SerializeField] private NodePrevisualisation nodePrevisualisation;
-    [SerializeField] private Node startNode;
+    [SerializeField] private NodeVisual startNode;
     [Range(0, 3)] [SerializeField] private int askedCharacterThreshold = 2;
     [Range(0, 3)] [SerializeField] private int randomSpecialistThreshold = 1;
 
-    private Node lastNoMGNode;
+    private NodeVisual lastNoMGNode;
 
     public IEnumerator RecruitmentLoop()
     {
@@ -43,7 +43,7 @@ public class RecruitmentController : GameController
 
             yield return StartCoroutine(instance.player.MoveToPosition(instance.map.currentPath.wayPoints));
             
-            var typedNode = instance.map.currentNode.GetComponent<TypedNode>();
+            var typedNode = instance.map.currentNode.GetComponent<RecruitmentNode>();
 
             // True if node is typed, false otherwise
             if (typedNode != null)
@@ -89,14 +89,14 @@ public class RecruitmentController : GameController
         SetRecruitmentActive(false);
     }
 
-    private IEnumerator NodeResults(TypedNode typedNode)
+    private IEnumerator NodeResults(RecruitmentNode recruitmentNode)
     {
         // If player won enough, let him choice a character
         if (instance.nodeSuccessCount >= askedCharacterThreshold)
         {
             instance.settingsManager.IncreaseDifficulty();
 
-            yield return instance.characterManager.DisplayRecruitmentChoice(typedNode.type);
+            yield return instance.characterManager.DisplayRecruitmentChoice(recruitmentNode.type);
             yield break;
         }
         
@@ -105,16 +105,16 @@ public class RecruitmentController : GameController
         // Partial lost, give him a random character
         if (instance.nodeSuccessCount >= randomSpecialistThreshold)
         {
-            yield return instance.characterManager.AddDifferentSpecialist(typedNode.type);
+            yield return instance.characterManager.AddDifferentSpecialist(recruitmentNode.type);
         }
         // Completely lost, give him a scoundrel
         else
         {
-            yield return instance.characterManager.AddDefaultCharacter();
+            //yield return instance.characterManager.AddDefaultCharacter();
         }
     }
 
-    private void DeletePath(Node.Path path, TypedNode node)
+    private void DeletePath(NodeVisual.Path path, RecruitmentNode node)
     {
         for (var i = 0; i < lastNoMGNode.paths.Length; i++)
         {
@@ -151,7 +151,7 @@ public class RecruitmentController : GameController
         Debug.Log("Skip Recruit");
         for (int i = 0; i < 4; i++)
         {
-            yield return instance.characterManager.AddDifferentSpecialist(i + GameType.Brute);
+            yield return instance.characterManager.AddDifferentSpecialist(i + SpecialistType.Brute);
         }
     }
 

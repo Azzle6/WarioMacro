@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 // ReSharper disable once CheckNamespace
-public class Node : MonoBehaviour
+public class NodeVisual : MonoBehaviour
 {
     public Animator animator;
     public Path[] paths = new Path[4];
@@ -59,7 +58,7 @@ public class Node : MonoBehaviour
     public class Path
     {
         public MoveDirection direction;
-        public Node destination;
+        public NodeVisual destination;
         public List<Transform> wayPoints = new List<Transform>();
     }
 }

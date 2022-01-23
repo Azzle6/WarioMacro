@@ -3125,6 +3125,7 @@ MonoBehaviour:
   resultPanel: {fileID: 135660540}
   settingsManager: {fileID: 1749864766}
   mapManager: {fileID: 1749864767}
+  rewardChart: {fileID: 11400000, guid: 31f9c011cc2e92a4da053ecac09c96e3, type: 2}
   macroGameCanvasAnimator: {fileID: 2008032679}
   scoreManager: {fileID: 1923970708}
   alarm: {fileID: 2023252417}
@@ -3139,6 +3140,7 @@ MonoBehaviour:
   - {fileID: 2053484114}
   - {fileID: 219098538}
   - {fileID: 2023252415}
+  - {fileID: 1874063624}
   - {fileID: 799551919}
   - {fileID: 1227695570}
   sceneNames:
@@ -3227,6 +3229,7 @@ MonoBehaviour:
   resultPanel: {fileID: 0}
   settingsManager: {fileID: 0}
   mapManager: {fileID: 0}
+  rewardChart: {fileID: 0}
   macroGameCanvasAnimator: {fileID: 0}
   scoreManager: {fileID: 0}
   alarm: {fileID: 0}
@@ -3776,6 +3779,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8154368987904517164, guid: d642b058e2301ba43964855ade71aeab, type: 3}
   m_PrefabInstance: {fileID: 8154368989397635712}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1874063624 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4633293152434012581, guid: d885208160eb0ce4e857b5d06d735208, type: 3}
+  m_PrefabInstance: {fileID: 2100103766}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1885254380
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4040,19 +4048,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60baed0a3f598864c8037cba0b6cd755, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scoreMultiplier: 1
   leaderBoard: {fileID: 0}
   moneyBagsDirector: {fileID: 1018517684}
   moneyBagsText: {fileID: 1906668102}
-  score: 0
-  moneyBag: 0
-  neutral: 00000000000000000000000000000000
-  oneSpecialist: 00000000000000000000000000000000
-  twoSpecialist: 00000000000000000000000000000000
-  neutralAlarm: 00000000000000000000000000000000
-  oneSpecialistAlarm: 00000000000000000000000000000000
-  twoSpecialistAlarm: 00000000000000000000000000000000
-  noSpecialist: 000000000000000000000000000000000000000000000000
-  noSpecialistAlarm: 000000000000000000000000000000000000000000000000
 --- !u!1 &1931179087 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1203847785253405011, guid: 4f24120b376c64e418ae5f425ba27d2b, type: 3}
@@ -4565,7 +4564,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4633293152434012581, guid: d885208160eb0ce4e857b5d06d735208, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d885208160eb0ce4e857b5d06d735208, type: 3}

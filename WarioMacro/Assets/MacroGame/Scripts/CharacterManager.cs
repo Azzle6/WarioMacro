@@ -55,7 +55,7 @@ public class CharacterManager : MonoBehaviour
     public IEnumerator AddDifferentSpecialist(int type)
     {
         var choices = allAvailableCharacters
-            .Where(cList => cList.type != CharacterType.Scoundrel && cList.type != type && !cList.IsEmpty()).ToList();
+            .Where(cList => cList.type != type && !cList.IsEmpty()).ToList();
 
         CharacterList charaList = choices[Random.Range(0, choices.Count)];
         
@@ -70,7 +70,7 @@ public class CharacterManager : MonoBehaviour
         yield return WaitForTeamChange();
     }
 
-    public IEnumerator AddDefaultCharacter()
+    /*public IEnumerator AddDefaultCharacter()
     {
         CharacterList choices = allAvailableCharacters.First(list => list.type == CharacterType.Scoundrel);
         int charaLeft = choices.count;
@@ -90,7 +90,7 @@ public class CharacterManager : MonoBehaviour
         recruitmentPanel.ShowCharacterCard(delegate { AddCharacter(choices, randomN); }, choices.Get(randomN), 0);
 
         yield return WaitForTeamChange();
-    }
+    }*/
 
     private void ResetUI()
     {
