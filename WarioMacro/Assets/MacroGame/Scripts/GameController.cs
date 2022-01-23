@@ -173,7 +173,7 @@ public class GameController : Ticker
         var microGamesQueue = new Queue<string>();
         var microGamesList = new List<string>(sceneNames);
 
-        for (int i = 0; i < Mathf.Min(behaviourNode.microGamesNumber, microGamesList.Count); i++)
+        for (int i = Mathf.Min(behaviourNode.microGamesNumber, microGamesList.Count) - 1; i >= 0; i--)
         {
             var rdIndex = Random.Range(0, microGamesList.Count);
             microGamesQueue.Enqueue(microGamesList[rdIndex]);
