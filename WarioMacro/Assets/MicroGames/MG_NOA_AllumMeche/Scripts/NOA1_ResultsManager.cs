@@ -40,7 +40,7 @@ public class NOA1_ResultsManager : MonoBehaviour, ITickable
 
     private void MiniGameLose()
     {
-        AudioManager.PlaySound(sfx[1],1f);
+        AudioManager.PlaySound(sfx[1],0.3f);
         isFinished = true;
         camAnimator.SetBool("Go",true);
         StartCoroutine(WaitLoseAnim());
@@ -56,10 +56,10 @@ public class NOA1_ResultsManager : MonoBehaviour, ITickable
     {
         if (other.name == "Match(Clone)")
         {
-            if (other.GetComponent<NOA1_Matches>().isOnFire)
+            if ((other.GetComponent<NOA1_Matches>().isOnFire) && (!isFinished))
             {
-                AudioManager.PlaySound(sfx[0],1f);
-                AudioManager.PlaySound(sfx[2],1f,1.4f);
+                AudioManager.PlaySound(sfx[0],0.3f);
+                AudioManager.PlaySound(sfx[2],0.3f,1.4f);
                 isFinished = true;
                 results = true;
                 camAnimator.SetBool("Win",true);

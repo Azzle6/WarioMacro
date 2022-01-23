@@ -15,9 +15,12 @@ public class NAA3_ArmController_LAC : MonoBehaviour
 
     public enum ArmType { RIGHT, LEFT}
     public ArmType armType;
-
+    [Header("Visual")]
     public SpriteRenderer hand;
     public Sprite loseHand, winHand;
+
+    [SerializeField] SpriteRenderer crystal;
+    [SerializeField] Sprite brokenCrystal;
 
     float moveCheckTime, moveCheckFreq = 0.8f;
     int lastMvtCount;
@@ -47,8 +50,10 @@ public class NAA3_ArmController_LAC : MonoBehaviour
 
         if (!MC_Controller.isPlaying)
         {
-        
             armPlace.transform.localEulerAngles = Vector3.zero;
+
+            if (MC_Controller.result)
+                crystal.sprite = brokenCrystal;
 
             hand.sprite = (MC_Controller.result) ? winHand : loseHand;
         }
