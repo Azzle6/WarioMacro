@@ -17,6 +17,8 @@ public class CharacterList : IEnumerable<Character>
     public Character Get(int i) => characters[i];
 
     public void Add(Character character) => characters.Add(character);
+    
+    public void Remove(Character character) => characters.Remove(character);
     public void RemoveAt(int index) => characters.RemoveAt(index);
 
     public bool IsEmpty() => count == 0;
