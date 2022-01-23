@@ -81,6 +81,11 @@ public class EventSystemFocus : MonoBehaviour
         previouslyActive = null;
     }
 
+    private void OnDestroy()
+    {
+        instances.Remove(this);
+    }
+
     private void Update()
     {
         Move(GetDirection());
