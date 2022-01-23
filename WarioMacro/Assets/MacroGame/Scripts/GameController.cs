@@ -128,7 +128,6 @@ public class GameController : Ticker
 
                 yield return StartCoroutine(NodeWithMicroGame(nodeMicroGame));
 
-                NodeResults(nodeMicroGame);
                 nodeMicroGame.DisableNode();
 
                 yield return new WaitForSecondsRealtime(1f);
@@ -189,7 +188,6 @@ public class GameController : Ticker
 
         // play each micro games one by one
         int gameCount = 0;
-        nodeSuccessCount = 0;
         while (microGamesQueue.Count > 0)
         {
             yield return new WaitForSecondsRealtime(1f);
@@ -229,21 +227,17 @@ public class GameController : Ticker
             ResetTickables();
             ResetTick();
 
-            // change BPM
+            // change BPM and alarm or money
             if (gameResult)
             {
                 settingsManager.IncreaseBPM();
-                alarm.DecrementCount(true);
+                scoreManager.AddMoney(rewardChart.GetMoneyBags(MapManager.phase, behaviourNode.behaviour));
             }
             else
             {
                 settingsManager.DecreaseBPM();
-                alarm.DecrementCount(false);
+                alarm.DecrementCount(MapManager.phase, behaviourNode.behaviour);
             }
-
-            // display result
-            //Debug.Log("MicroGame Finished: " + (gameResult ? "SUCCESS" : "FAILURE"));
-            if (gameResult) nodeSuccessCount++;
 
             resultPanel.PopWindowUp();
             resultPanel.SetHeaderText(gameResult
@@ -256,48 +250,6 @@ public class GameController : Ticker
         }
 
 
-    }
-
-    private void NodeResults(BehaviourNode recruitmentNode)
-    {
-        scoreManager.AddMoney(rewardChart.GetMoneyBags(MapManager.phase, recruitmentNode.behaviour));
-
-        /*
-        if (typedNode.type == NodeType.None)
-        {
-            NodeResultsBis(gameControllerSO.defaultIncreaseDifficultyThreshold,
-                gameControllerSO.defaultDecreaseDifficultyThreshold, 
-                gameControllerSO.defaultLoseCharacterThreshold);
-        }
-        else if (characterManager.SpecialistOfTypeInTeam(typedNode.type) == 0)
-        {
-            NodeResultsBis(gameControllerSO.noSpecialistIncreaseDifficultyThreshold,
-                gameControllerSO.noSpecialistDecreaseDifficultyThreshold,
-                gameControllerSO.noSpecialistLoseCharacterThreshold);
-        }
-        else
-        {
-            NodeResultsBis(gameControllerSO.specialistIncreaseDifficultyThreshold, 
-                gameControllerSO.specialistDecreaseDifficultyThreshold,
-                gameControllerSO.specialistLoseCharacterThreshold);
-        }
-        */
-    }
-
-    private void NodeResultsBis(int increaseDifficultyThreshold, int decreaseDifficultyThreshold, int loseCharacterThreshold)
-    {
-        if (nodeSuccessCount >= increaseDifficultyThreshold)
-        {
-            settingsManager.IncreaseDifficulty();
-        }
-        else if (nodeSuccessCount < decreaseDifficultyThreshold)
-        {
-            settingsManager.DecreaseDifficulty();
-
-            if (!Alarm.isActive || nodeSuccessCount >= loseCharacterThreshold) return;
-
-            lifeBar.Imprison();
-        }
     }
 
     private void Awake()
