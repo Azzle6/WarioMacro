@@ -9,7 +9,7 @@ public class EventSystemFocus : MonoBehaviour
 {
     private static readonly List<EventSystemFocus> instances = new List<EventSystemFocus>();
     
-    [SerializeField] private GameObject firstSelected;
+    [SerializeField] public GameObject firstSelected;
     private EventSystem eventSys;
     private EventSystemFocus previouslyActive;
     private bool alreadyMoved;

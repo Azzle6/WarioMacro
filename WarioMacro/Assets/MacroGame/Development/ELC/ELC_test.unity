@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &14311674 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2080272510134420081, guid: 1f60270574141a24f9cd34fb14d33bc4, type: 3}
+  m_PrefabInstance: {fileID: 2080272510918435512}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &28795099 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8017427237854514160, guid: f702278e98ab21a4d86b5cff00024012, type: 3}
@@ -618,6 +623,55 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &692350792
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 692350794}
+  - component: {fileID: 692350793}
+  m_Layer: 0
+  m_Name: Dialog Object
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &692350793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 692350792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f327dcea77dba1446bba7de7985d744c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: lo
+  dialogs:
+  - oui
+  - Alors
+  - "\xE7a va aller"
+  Responses: []
+--- !u!4 &692350794
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 692350792}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &804555649 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8017427238198219572, guid: f702278e98ab21a4d86b5cff00024012, type: 3}
@@ -864,15 +918,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 847000498}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: be7cd37b1fc2b0342a86107ea1601c38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  musicTime: 0
+  state: 0
   musicSO: {fileID: 11400000, guid: 2f2a2a6d2ea52be4fba8c5d2abe3804b, type: 2}
   AudioS: {fileID: 841156580}
-  currentAudioClip: {fileID: 0}
 --- !u!4 &847000500
 Transform:
   m_ObjectHideFlags: 0
@@ -895,7 +948,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 847000498}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cf041723ce897134abf20daa83b4d532, type: 3}
   m_Name: 
@@ -903,8 +956,9 @@ MonoBehaviour:
   allAvailableCharacters: []
   totalCharacterCount: 4
   isTeamFull: 0
-  chooseCharacterGO: {fileID: 0}
+  recruitmentPanelGO: {fileID: 0}
   buttonsParent: {fileID: 0}
+  recruitmentPanel: {fileID: 0}
   life: {fileID: 0}
 --- !u!114 &847000502
 MonoBehaviour:
@@ -919,6 +973,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menu: {fileID: 1441133954}
+  defaultMenu: {fileID: 962823228}
+  settingsMenu: {fileID: 14311674}
 --- !u!114 &847000503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -932,10 +988,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogGO: {fileID: 804555649}
+  ButtonsParent: {fileID: 2043581376}
   textZone: {fileID: 488600256}
-  curDial: {fileID: 11400000, guid: 29453595e4bc0eb4e9b81a602e0e5bf9, type: 2}
+  curDial: {fileID: 692350793}
   continueButton: {fileID: 28795099}
   finishButton: {fileID: 472858052}
+  ButtonTemplate: {fileID: 1729914725550930027, guid: 2e314a7ede8c705409e51ce5004e945a, type: 3}
+--- !u!1 &962823228 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2080272510518713637, guid: 1f60270574141a24f9cd34fb14d33bc4, type: 3}
+  m_PrefabInstance: {fileID: 2080272510918435512}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1031636506
 GameObject:
   m_ObjectHideFlags: 0
@@ -1852,6 +1915,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1811179011}
   m_CullTransparentMesh: 1
+--- !u!1 &2043581376 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2361698433858959229, guid: f702278e98ab21a4d86b5cff00024012, type: 3}
+  m_PrefabInstance: {fileID: 8017427236842534749}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2145055945
 GameObject:
   m_ObjectHideFlags: 0
