@@ -1,35 +1,36 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class GameSettingsManager : MonoBehaviour
 {
-    public GameControllerSO gameControllerSO;
+    [FormerlySerializedAs("gameControllerSO")] public GameConfig gameConfig;
     [SerializeField] private BPMSettingsSO bpmSettingsSO;
 
     public void IncreaseDifficulty()
     {
         AudioManager.MacroPlaySound("NodeSuccess", 0);
-        gameControllerSO.currentDifficulty++;
+        gameConfig.currentDifficulty++;
         ClampDifficulty();
     }
     
     public void DecreaseDifficulty()
     {
         AudioManager.MacroPlaySound("NodeFailure", 0);
-        gameControllerSO.currentDifficulty--;
+        gameConfig.currentDifficulty--;
         ClampDifficulty();
     }
 
     public void IncreaseBPM()
     {
         AudioManager.MacroPlaySound("SpeedUp", 0);
-        if (gameControllerSO.currentGameSpeed == bpmSettingsSO.maxBPM)
+        if (gameConfig.currentGameSpeed == bpmSettingsSO.maxBPM)
         {
             AudioManager.MacroPlayRandomSound("HighLimitVoices", 0);
         }
         else
         {
-            gameControllerSO.currentGameSpeed =
-                Mathf.Min(gameControllerSO.currentGameSpeed + bpmSettingsSO.increasingBPM, bpmSettingsSO.maxBPM);
+            gameConfig.currentGameSpeed =
+                Mathf.Min(gameConfig.currentGameSpeed + bpmSettingsSO.increasingBPM, bpmSettingsSO.maxBPM);
             AudioManager.MacroPlayRandomSound("SpeedUpVoices", 0);
         }
     }
@@ -37,20 +38,20 @@ public class GameSettingsManager : MonoBehaviour
     public void DecreaseBPM()
     {
         AudioManager.MacroPlaySound("SpeedDown", 0);
-        if (gameControllerSO.currentGameSpeed == bpmSettingsSO.minBPM)
+        if (gameConfig.currentGameSpeed == bpmSettingsSO.minBPM)
         {
             AudioManager.MacroPlayRandomSound("LowLimitVoices", 0);
         }
         else
         {
-            gameControllerSO.currentGameSpeed =
-                Mathf.Max(gameControllerSO.currentGameSpeed - bpmSettingsSO.decreasingBPM, bpmSettingsSO.minBPM);
+            gameConfig.currentGameSpeed =
+                Mathf.Max(gameConfig.currentGameSpeed - bpmSettingsSO.decreasingBPM, bpmSettingsSO.minBPM);
             AudioManager.MacroPlayRandomSound("SpeedDownVoices", 0);
         }
     }
 
     private void ClampDifficulty()
     {
-        gameControllerSO.currentDifficulty = Mathf.Clamp(gameControllerSO.currentDifficulty, 1, 3);
+        gameConfig.currentDifficulty = Mathf.Clamp(gameConfig.currentDifficulty, 1, 3);
     }
 }

@@ -34,6 +34,11 @@ public class MapManager : MonoBehaviour
         currentMap.Load();
         floor++;
         
+        foreach (BehaviourNode node in currentMap.nodesParent.GetComponentsInChildren<BehaviourNode>())
+        {
+            node.SetRandomDomain(SpecialistType.Brute, new []{SpecialistType.Acrobat, SpecialistType.Ghost}); // TODO : replace with current phase domains
+        }
+        
         return currentMap;
     }
 
@@ -42,6 +47,7 @@ public class MapManager : MonoBehaviour
         return mapGoQueue.Count == 0;
     }
 
+    /*
     private void TypeCountsToPercentages(int total)
     {
         int farthestUpperKey = 0;
@@ -79,37 +85,18 @@ public class MapManager : MonoBehaviour
             typePercentages[farthestLowerKey] += 100 - totalPercentage;
         }
     }
+    */
 
     private void OnEnable()
     {
         var rd = new Random();
         mapGoQueue = new Queue<GameObject>(mapGOList.OrderBy(go => rd.Next())
             .Take(mapGOList.Length < mapsPerGame ? mapGOList.Length : mapsPerGame));
-
-        int total = 0;
         
+        // TODO : Obsolete, delete after merging
         foreach (FieldInfo field in typeof(SpecialistType).GetFields())
         {
             typePercentages.Add((int) field.GetValue(null), 0f);
         }
-
-        foreach (BehaviourNode node in mapGoQueue.SelectMany(mapGO =>
-            mapGO.GetComponent<Map>().nodesParent.GetComponentsInChildren<BehaviourNode>()))
-        {
-            /*switch (node.type)
-            {
-                case GameTypes.NodeDomainType.None:
-                    continue;
-                case GameTypes.NodeDomainType.Random:
-                    node.SetRandomType();
-                    break;
-            }*/
-
-            typePercentages[2]++;
-            total++;
-
-        }
-
-        TypeCountsToPercentages(total);
     }
 }

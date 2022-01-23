@@ -1,5 +1,194 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3794600795168089540
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3794600795168089543}
+  - component: {fileID: 3794600795168089546}
+  - component: {fileID: 3794600795168089544}
+  - component: {fileID: 3794600795168089542}
+  - component: {fileID: 3794600795168089541}
+  - component: {fileID: 3794600795168089545}
+  m_Layer: 0
+  m_Name: UI Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3794600795168089543
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3794600795168089540}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7773171079606738978}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3794600795168089546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3794600795168089540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22c809458cd2bd74fb82064de3a66bfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  director: {fileID: 0}
+--- !u!114 &3794600795168089544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3794600795168089540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 099982473ecba8f4aa019be946136936, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  director: {fileID: 0}
+  timerGO: {fileID: 0}
+--- !u!114 &3794600795168089542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3794600795168089540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: d142ad4c07f525748954ffa9ad18a188, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 3794600795168089544}
+          m_TargetAssemblyTypeName: TransitionController, Assembly-CSharp
+          m_MethodName: TransitionPause
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 3794600795168089544}
+          m_TargetAssemblyTypeName: TransitionController, Assembly-CSharp
+          m_MethodName: StartAsyncMGOp
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
+--- !u!114 &3794600795168089541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3794600795168089540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fb748c96c40ce84d89a8416c4b4a3c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lifeBarGO: {fileID: 0}
+  portraits:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  keyChains:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+--- !u!114 &3794600795168089545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3794600795168089540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33603f2830f4a874e994308bada2a95f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menu: {fileID: 0}
+  defaultMenu: {fileID: 0}
+  settingsMenu: {fileID: 0}
+--- !u!1 &3794600796302399746
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3794600796302399747}
+  - component: {fileID: 3794600796302399748}
+  m_Layer: 0
+  m_Name: ScoreManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3794600796302399747
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3794600796302399746}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7773171079606738978}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3794600796302399748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3794600796302399746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60baed0a3f598864c8037cba0b6cd755, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreMultiplier: 1
+  leaderBoard: {fileID: 0}
+  moneyBagsDirector: {fileID: 0}
+  moneyBagsText: {fileID: 0}
 --- !u!1 &7773171079606738988
 GameObject:
   m_ObjectHideFlags: 0
@@ -11,10 +200,6 @@ GameObject:
   - component: {fileID: 7773171079606738978}
   - component: {fileID: 7773171079606738979}
   - component: {fileID: 7773171079606738981}
-  - component: {fileID: 7773171079606738976}
-  - component: {fileID: 7773171079606738977}
-  - component: {fileID: 7773171079606738983}
-  - component: {fileID: 7773171079606738982}
   - component: {fileID: 7773171079606738980}
   - component: {fileID: 7773171079606739035}
   - component: {fileID: 7773171079606739034}
@@ -35,7 +220,9 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 3794600796302399747}
+  - {fileID: 3794600795168089543}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -51,20 +238,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d71c9da22b0148188ab63c718724b728, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentScene: 
   player: {fileID: 0}
   characterManager: {fileID: 7773171079606739035}
   resultPanel: {fileID: 0}
-  macroGameCanvasAnimator: {fileID: 0}
   settingsManager: {fileID: 7773171079606738981}
-  alarm: {fileID: 0}
   mapManager: {fileID: 7773171079606738980}
+  rewardChart: {fileID: 11400000, guid: 31f9c011cc2e92a4da053ecac09c96e3, type: 2}
+  macroGameCanvasAnimator: {fileID: 0}
+  scoreManager: {fileID: 3794600796302399748}
+  alarm: {fileID: 0}
   recruitmentController: {fileID: 7773171079606739034}
-  timer: {fileID: 7773171079606738976}
-  transitionController: {fileID: 7773171079606738977}
+  timer: {fileID: 3794600795168089546}
+  menu: {fileID: 3794600795168089545}
+  transitionController: {fileID: 3794600795168089544}
   keywordManager: {fileID: 0}
-  lifeBar: {fileID: 7773171079606738982}
+  lifeBar: {fileID: 3794600795168089541}
   mainMenuBuildIndex: 0
   macroObjects:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -89,91 +283,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09c158129cea9cd4f9fcddd2477def36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameControllerSO: {fileID: 11400000, guid: 3eb3fccf2c11a9347b96f0ec0c8cb566, type: 2}
+  gameConfig: {fileID: 11400000, guid: 3eb3fccf2c11a9347b96f0ec0c8cb566, type: 2}
   bpmSettingsSO: {fileID: 11400000, guid: 996be0bf0d7ce5346a498077aa92f7c6, type: 2}
---- !u!114 &7773171079606738976
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7773171079606738988}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22c809458cd2bd74fb82064de3a66bfd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  director: {fileID: 0}
---- !u!114 &7773171079606738977
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7773171079606738988}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 099982473ecba8f4aa019be946136936, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  director: {fileID: 0}
-  timerGO: {fileID: 0}
---- !u!114 &7773171079606738983
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7773171079606738988}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Events:
-    m_Signals:
-    - {fileID: 11400000, guid: d142ad4c07f525748954ffa9ad18a188, type: 2}
-    m_Events:
-    - m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 7773171079606738977}
-          m_TargetAssemblyTypeName: TransitionController, Assembly-CSharp
-          m_MethodName: TransitionPause
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-        - m_Target: {fileID: 7773171079606738977}
-          m_TargetAssemblyTypeName: TransitionController, Assembly-CSharp
-          m_MethodName: StartAsyncMGOp
-          m_Mode: 6
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 1
-          m_CallState: 2
---- !u!114 &7773171079606738982
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7773171079606738988}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fb748c96c40ce84d89a8416c4b4a3c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lifeBarGO: {fileID: 0}
-  life: 4
 --- !u!114 &7773171079606738980
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -189,6 +300,18 @@ MonoBehaviour:
   recruitmentMap: {fileID: 0}
   mapsPerGame: 5
   mapGOList:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
 --- !u!114 &7773171079606739035
@@ -236,8 +359,10 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 3bd127e986944cb4580b6668631e3b95, type: 2}
   totalCharacterCount: 4
   isTeamFull: 0
-  chooseCharacterGO: {fileID: 0}
+  recruitmentPanelGO: {fileID: 0}
   buttonsParent: {fileID: 0}
+  recruitmentPanel: {fileID: 0}
+  life: {fileID: 3794600795168089541}
 --- !u!114 &7773171079606739034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -250,21 +375,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eba1bfeb32f88648aca63bfb17b6528, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentScene: 
   player: {fileID: 0}
   characterManager: {fileID: 0}
   resultPanel: {fileID: 0}
-  macroGameCanvasAnimator: {fileID: 0}
   settingsManager: {fileID: 0}
-  alarm: {fileID: 0}
   mapManager: {fileID: 0}
+  rewardChart: {fileID: 0}
+  macroGameCanvasAnimator: {fileID: 0}
+  scoreManager: {fileID: 0}
+  alarm: {fileID: 0}
   recruitmentController: {fileID: 0}
   timer: {fileID: 0}
+  menu: {fileID: 0}
   transitionController: {fileID: 0}
   keywordManager: {fileID: 0}
   lifeBar: {fileID: 0}
   mainMenuBuildIndex: 0
   macroObjects: []
   sceneNames: []
+  skipRecruitment: 0
+  alarmGO: {fileID: 0}
+  nodePrevisualisation: {fileID: 0}
   startNode: {fileID: 0}
   askedCharacterThreshold: 2
   randomSpecialistThreshold: 1
