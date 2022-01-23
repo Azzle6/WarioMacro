@@ -93,19 +93,19 @@ public class MapManager : MonoBehaviour
             typePercentages.Add((int) field.GetValue(null), 0f);
         }
 
-        foreach (TypedNode node in mapGoQueue.SelectMany(mapGO =>
-            mapGO.GetComponent<Map>().nodesParent.GetComponentsInChildren<TypedNode>()))
+        foreach (BehaviourNode node in mapGoQueue.SelectMany(mapGO =>
+            mapGO.GetComponent<Map>().nodesParent.GetComponentsInChildren<BehaviourNode>()))
         {
-            switch (node.type)
+            /*switch (node.type)
             {
                 case GameTypes.NodeDomainType.None:
                     continue;
                 case GameTypes.NodeDomainType.Random:
                     node.SetRandomType();
                     break;
-            }
+            }*/
 
-            typePercentages[node.type]++;
+            typePercentages[2]++;
             total++;
 
         }

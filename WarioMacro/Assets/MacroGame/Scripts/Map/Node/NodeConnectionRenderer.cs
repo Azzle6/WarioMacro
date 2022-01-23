@@ -8,7 +8,7 @@ public class NodeConnectionRenderer : MonoBehaviour
     private GameObject temp;
     private List<Vector3> points;
 
-    public void CreatePathRenderer(Node.Path path)
+    public void CreatePathRenderer(NodeVisual.Path path)
     {
         ClearPath();
         points = new List<Vector3>();
