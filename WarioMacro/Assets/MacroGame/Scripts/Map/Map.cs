@@ -6,12 +6,12 @@ using UnityEngine.EventSystems;
 public class Map : MonoBehaviour
 {
     [HideInInspector]
-    public Node currentNode;
+    public NodeVisual currentNode;
     public Transform nodesParent;
-    public Node.Path currentPath { get; private set; }
+    public NodeVisual.Path currentPath { get; private set; }
 
-    [SerializeField] public Node startNode;
-    [SerializeField] private Node endNode;
+    [SerializeField] public NodeVisual startNode;
+    [SerializeField] private NodeVisual endNode;
     
     private static readonly int current = Animator.StringToHash("Current");
     private Player player;
@@ -39,10 +39,10 @@ public class Map : MonoBehaviour
     {
         // init
         var arrowPrefabs = player.arrowPrefabs.ToList();
-        var nextNode = default(Node);
-        var nextPath = default(Node.Path);
-        var selectedNode = default(Node);
-        var selectedPath = default(Node.Path);
+        var nextNode = default(NodeVisual);
+        var nextPath = default(NodeVisual.Path);
+        var selectedNode = default(NodeVisual);
+        var selectedPath = default(NodeVisual.Path);
         var lastDirectionSelected = MoveDirection.None;
         const ControllerKey validInput = ControllerKey.A;
 
@@ -58,7 +58,7 @@ public class Map : MonoBehaviour
             MoveDirection selectedDirection = InputManager.GetDirection(false, false);
             
             // ReSharper disable once PossibleNullReferenceException
-            foreach (Node.Path path in currentNode.paths.Where(p => p != null))
+            foreach (NodeVisual.Path path in currentNode.paths.Where(p => p != null))
             {
                 if (selectedDirection == MoveDirection.None || path.direction != selectedDirection) continue;
                 

@@ -21,7 +21,7 @@ public class LifeBar : MonoBehaviour
         portraits[life].sprite = chara.lifebarSprite;
         portraits[life].enabled = true;
         keyChains[life].sprite = Resources.Load<SpriteListSO>("KeyChainSprites")
-            .nodeSprites[chara.characterType - CharacterType.Scoundrel];
+            .nodeSprites[chara.characterType - SpecialistType.Brute];
         life++;
     }
 

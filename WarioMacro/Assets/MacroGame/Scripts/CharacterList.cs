@@ -7,7 +7,7 @@ using UnityEngine;
 [Serializable]
 public class CharacterList : IEnumerable<Character>
 {
-    [GameType(typeof(CharacterType))] public int type = 1;
+    [GameType(typeof(SpecialistType))] public int type = 2;
     public int count => characters.Count;
     
     [SerializeField] private List<Character> characters;

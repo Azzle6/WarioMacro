@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using GameTypes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
@@ -17,6 +16,7 @@ public class GameController : Ticker
     [HideInSubClass] [SerializeField] protected internal MiniGameResultPannel_UI resultPanel;
     [HideInSubClass] [SerializeField] protected internal GameSettingsManager settingsManager;
     [HideInSubClass] [SerializeField] protected internal MapManager mapManager;
+    [HideInSubClass] [SerializeField] private RewardChart rewardChart;
     [HideInSubClass] [SerializeField] private Animator macroGameCanvasAnimator;
     [HideInSubClass] [SerializeField] private ScoreManager scoreManager;
     [HideInSubClass] [SerializeField] private Alarm alarm;
@@ -99,23 +99,13 @@ public class GameController : Ticker
             yield return StartCoroutine(map.WaitForNodeSelection());
 
             yield return StartCoroutine(player.MoveToPosition(map.currentPath.wayPoints));
-            var nodeMicroGame = map.currentNode.GetComponent<TypedNode>();
+            var nodeMicroGame = map.currentNode.GetComponent<BehaviourNode>();
 
             // True if node with micro games, false otherwise
             if (nodeMicroGame != null)
             {
-                if (nodeMicroGame.type == NodeType.None)
-                {
-                    nodeMicroGame.microGamesNumber = gameControllerSO.defaultMGCount;
-                }
-                else
-                {
-                    nodeMicroGame.microGamesNumber = characterManager.SpecialistOfTypeInTeam(nodeMicroGame.type) == 0
-                        ? gameControllerSO.noSpecialistMGCount
-                        : gameControllerSO.specialistMGCount;
-                    Debug.Log(nodeMicroGame.microGamesNumber);
-                }
-                
+                nodeMicroGame.microGamesNumber = rewardChart.GetMGNumber(MapManager.phase, nodeMicroGame.behaviour);
+
                 yield return StartCoroutine(NodeWithMicroGame(nodeMicroGame));
 
                 NodeResults(nodeMicroGame);
@@ -148,12 +138,12 @@ public class GameController : Ticker
         }
     }
 
-    private IEnumerator NodeWithMicroGame(TypedNode typedNode)
+    private IEnumerator NodeWithMicroGame(BehaviourNode recruitmentNode)
     {
         // select 3 random micro games from micro games list
         var microGamesQueue = new Queue<string>();
         var microGamesList = new List<string>(sceneNames);
-        var microGamesCount = Mathf.Min(typedNode.microGamesNumber, microGamesList.Count);
+        var microGamesCount = Mathf.Min(recruitmentNode.microGamesNumber, microGamesList.Count);
         while (microGamesCount-- > 0)
         {
             var rdIndex = Random.Range(0, microGamesList.Count);
@@ -240,10 +230,11 @@ public class GameController : Ticker
 
     }
 
-    private void NodeResults(TypedNode typedNode)
+    private void NodeResults(BehaviourNode recruitmentNode)
     {
-        scoreManager.UpdateScore(nodeSuccessCount,typedNode.microGamesNumber,characterManager.playerTeam);
+        scoreManager.AddMoney(rewardChart.GetMoneyBags(MapManager.phase, recruitmentNode.behaviour));
 
+        /*
         if (typedNode.type == NodeType.None)
         {
             NodeResultsBis(gameControllerSO.defaultIncreaseDifficultyThreshold,
@@ -262,7 +253,7 @@ public class GameController : Ticker
                 gameControllerSO.specialistDecreaseDifficultyThreshold,
                 gameControllerSO.specialistLoseCharacterThreshold);
         }
-        
+        */
     }
 
     private void NodeResultsBis(int increaseDifficultyThreshold, int decreaseDifficultyThreshold, int loseCharacterThreshold)
