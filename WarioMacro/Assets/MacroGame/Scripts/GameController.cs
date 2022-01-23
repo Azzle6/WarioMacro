@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
@@ -40,6 +41,14 @@ public class GameController : Ticker
     protected internal int nodeSuccessCount;
     private bool debugMicro;
 
+    public delegate void InteractEvent();
+    public static InteractEvent OnInteractionEnd;
+    public static bool isInActionEvent;
+
+    private void OnEnable()
+    {
+        OnInteractionEnd += instance.InteractiveEventEnd;
+    }
 
     public static void Register()
     {
@@ -48,6 +57,7 @@ public class GameController : Ticker
         instance.TickerStart(true);
         instance.debugMicro = true;
         Debug.Log("macro registered");
+        
     }
 
     public static void StopTimer()
@@ -132,6 +142,15 @@ public class GameController : Ticker
                     StartCoroutine(ToggleEndGame(false));
                 }
             }
+
+            var nodeInteract = map.currentNode.GetComponent<InteractibleNode>();
+            if (nodeInteract != null && !isInActionEvent)
+            {
+                nodeInteract.EventInteractible.Invoke();
+                isInActionEvent = true;
+                yield return new WaitWhile(() => isInActionEvent);
+            }
+            
 
             if (map.OnLastNode())
             {
@@ -308,5 +327,10 @@ public class GameController : Ticker
     private void Update()
     {
         TickerUpdate();
+    }
+
+    public void InteractiveEventEnd()
+    {
+        isInActionEvent = false;
     }
 }

@@ -15,8 +15,8 @@ public class DialogManager : MonoBehaviour
     [SerializeField] private TMP_Text textZone;
     private int curIndex;
     [SerializeField]private DialogConstructor curDial;
-    [SerializeField] private GameObject continueButton;
-    [SerializeField] private GameObject finishButton;
+    //[SerializeField] private GameObject continueButton;
+    //[SerializeField] private GameObject finishButton;
     [SerializeField] private GameObject ButtonTemplate;
     private bool isInDialog;
     private GameObject[] Buttons;
@@ -26,11 +26,12 @@ public class DialogManager : MonoBehaviour
         instance = this;
         
     }
-
-    private void Start()
+    
+    //Pour tester
+    /*private void Start()
     {
         StartDialog(curDial);
-    }
+    }*/
 
     public void StartDialog(DialogConstructor currentDial)
     {
@@ -43,8 +44,8 @@ public class DialogManager : MonoBehaviour
         curDial = currentDial;
         isInDialog = true;
         dialogGO.SetActive(true);
-        finishButton.SetActive(false);
-        continueButton.SetActive(true);
+        //finishButton.SetActive(false);
+        //continueButton.SetActive(true);
         
         
         Buttons = SetupButtons();
@@ -55,8 +56,12 @@ public class DialogManager : MonoBehaviour
     IEnumerator WriteNextSentence()
     {
         textZone.text = "";
-        
-        
+
+        if (curDial.dialogs.Length == 0)
+        {
+            Debug.Log("Dialogues vides !");
+            yield break;
+        }
         for (int i = 0; i < curDial.dialogs[curIndex].Length; i++)
         {
             textZone.text = string.Concat(textZone.text, curDial.dialogs[curIndex][i]);
@@ -80,8 +85,8 @@ public class DialogManager : MonoBehaviour
 
     void LastDialog()
     {
-        continueButton.SetActive(false);
-        finishButton.SetActive(true);
+        //continueButton.SetActive(false);
+        //finishButton.SetActive(true);
         ButtonsParent.SetActive(true);
     }
 
@@ -91,6 +96,7 @@ public class DialogManager : MonoBehaviour
         curIndex = 0;
         isInDialog = false;
         Ticker.lockTimescale = false;
+        GameController.OnInteractionEnd();
     }
 
     GameObject[] SetupButtons()
