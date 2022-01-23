@@ -110,7 +110,7 @@ public class RecruitmentController : GameController
         // Completely lost, give him a scoundrel
         else
         {
-            yield return instance.characterManager.AddDefaultCharacter();
+            //yield return instance.characterManager.AddDefaultCharacter();
         }
     }
 
@@ -151,7 +151,7 @@ public class RecruitmentController : GameController
         Debug.Log("Skip Recruit");
         for (int i = 0; i < 4; i++)
         {
-            yield return instance.characterManager.AddDifferentSpecialist(i + GameType.Brute);
+            yield return instance.characterManager.AddDifferentSpecialist(i + SpecialistType.Brute);
         }
     }
 

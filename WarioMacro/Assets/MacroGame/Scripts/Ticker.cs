@@ -19,7 +19,7 @@ public class Ticker : MonoBehaviour
     
     private static readonly List<ITickable> tickables = new List<ITickable>();
     private IEnumerator tickEnumerator;
-    protected internal GameControllerSO gameControllerSO;
+    protected GameControllerSO gameControllerSO;
     private MusicManager musicManager;
 
     public static void Init(ITickable t)

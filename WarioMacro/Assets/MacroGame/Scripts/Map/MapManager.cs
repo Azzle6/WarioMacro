@@ -8,6 +8,7 @@ using Random = System.Random;
 // ReSharper disable once CheckNamespace
 public class MapManager : MonoBehaviour
 {
+    public static int phase = 0;
     public static int floor { get; private set; } = -1;
     public Dictionary<int, float> typePercentages = new Dictionary<int, float>();
 
@@ -87,7 +88,7 @@ public class MapManager : MonoBehaviour
 
         int total = 0;
         
-        foreach (FieldInfo field in typeof(GameType).GetFields())
+        foreach (FieldInfo field in typeof(SpecialistType).GetFields())
         {
             typePercentages.Add((int) field.GetValue(null), 0f);
         }
@@ -97,9 +98,9 @@ public class MapManager : MonoBehaviour
         {
             switch (node.type)
             {
-                case GameTypes.NodeType.None:
+                case GameTypes.NodeDomainType.None:
                     continue;
-                case GameTypes.NodeType.Random:
+                case GameTypes.NodeDomainType.Random:
                     node.SetRandomType();
                     break;
             }

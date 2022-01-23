@@ -17,6 +17,7 @@ public class GameController : Ticker
     [HideInSubClass] [SerializeField] protected internal MiniGameResultPannel_UI resultPanel;
     [HideInSubClass] [SerializeField] protected internal GameSettingsManager settingsManager;
     [HideInSubClass] [SerializeField] protected internal MapManager mapManager;
+    [HideInSubClass] [SerializeField] private RewardChart rewardChart;
     [HideInSubClass] [SerializeField] private Animator macroGameCanvasAnimator;
     [HideInSubClass] [SerializeField] private ScoreManager scoreManager;
     [HideInSubClass] [SerializeField] private Alarm alarm;
@@ -104,18 +105,8 @@ public class GameController : Ticker
             // True if node with micro games, false otherwise
             if (nodeMicroGame != null)
             {
-                if (nodeMicroGame.type == NodeType.None)
-                {
-                    nodeMicroGame.microGamesNumber = gameControllerSO.defaultMGCount;
-                }
-                else
-                {
-                    nodeMicroGame.microGamesNumber = characterManager.SpecialistOfTypeInTeam(nodeMicroGame.type) == 0
-                        ? gameControllerSO.noSpecialistMGCount
-                        : gameControllerSO.specialistMGCount;
-                    Debug.Log(nodeMicroGame.microGamesNumber);
-                }
-                
+                nodeMicroGame.microGamesNumber = rewardChart.GetMGNumber(MapManager.phase, nodeMicroGame.behaviour);
+
                 yield return StartCoroutine(NodeWithMicroGame(nodeMicroGame));
 
                 NodeResults(nodeMicroGame);
@@ -242,8 +233,9 @@ public class GameController : Ticker
 
     private void NodeResults(TypedNode typedNode)
     {
-        scoreManager.UpdateScore(nodeSuccessCount,typedNode.microGamesNumber,characterManager.playerTeam);
+        scoreManager.AddMoney(rewardChart.GetMoneyBags(MapManager.phase, typedNode.behaviour));
 
+        /*
         if (typedNode.type == NodeType.None)
         {
             NodeResultsBis(gameControllerSO.defaultIncreaseDifficultyThreshold,
@@ -262,7 +254,7 @@ public class GameController : Ticker
                 gameControllerSO.specialistDecreaseDifficultyThreshold,
                 gameControllerSO.specialistLoseCharacterThreshold);
         }
-        
+        */
     }
 
     private void NodeResultsBis(int increaseDifficultyThreshold, int decreaseDifficultyThreshold, int loseCharacterThreshold)

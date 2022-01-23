@@ -6,7 +6,8 @@ using Random = UnityEngine.Random;
 public class TypedNode : MonoBehaviour
 {
     [HideInInspector] public int microGamesNumber;
-    [GameType(typeof(NodeType))]
+    public NodeBehaviour behaviour;
+    [GameType(typeof(NodeDomainType))]
     public int type;
 
     [SerializeField] private GameObject hologramGO;
@@ -15,7 +16,7 @@ public class TypedNode : MonoBehaviour
 
     public void SetRandomType()
     {
-        if (type != NodeType.Random) return;
+        if (type != NodeDomainType.Random) return;
         
         int rdType = Random.Range(1, 7);
         type = rdType + 1;
