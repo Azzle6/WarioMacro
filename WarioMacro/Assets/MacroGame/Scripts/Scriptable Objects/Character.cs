@@ -7,7 +7,12 @@ public class Character : ScriptableObject
 {
     [GameType(typeof(SpecialistType))]
     public int characterType = 2;
-    
+    public enum Level
+    {
+        Novice, Expert
+    }
+    public Level mastery = Level.Expert;
     public Sprite cardSprite;
     public Sprite lifebarSprite;
+    
 }

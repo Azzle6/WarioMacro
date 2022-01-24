@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using GameTypes;
 using UnityEngine;
 
@@ -9,11 +10,15 @@ public class CharacterList : IEnumerable<Character>
 {
     [GameType(typeof(SpecialistType))] public int type = 2;
     public int count => characters.Count;
+    //public int exp => characters.ForEach(t => t.mastery == Character.Level.Expert);
     
     [SerializeField] private List<Character> characters;
 
     public Character Get(int i) => characters[i];
 
+    public void Add(Character character) => characters.Add(character);
+    
+    public void Remove(Character character) => characters.Remove(character);
     public void RemoveAt(int index) => characters.RemoveAt(index);
 
     public bool IsEmpty() => count == 0;
