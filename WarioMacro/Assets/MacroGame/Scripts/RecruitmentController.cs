@@ -104,9 +104,8 @@ public class RecruitmentController : GameController
         Debug.Log("Skip Recruit");
         for (int i = 0; i < 4; i++)
         {
-            instance.characterManager.Recruit(instance.characterManager.recruitableCharacters[Random.Range(0, instance.characterManager.recruitableCharacters.Count)]);
+            instance.characterManager.Recruit(instance.characterManager.recruitableCharacters[Random.Range(0,instance.characterManager.recruitableCharacters.Count)]);
         }
-
         yield return null;
     }
 
