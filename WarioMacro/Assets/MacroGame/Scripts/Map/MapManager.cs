@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using GameTypes;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 // ReSharper disable once CheckNamespace
@@ -10,16 +11,18 @@ public class MapManager : MonoBehaviour
 {
     public static int currentPhase { get; private set; }
     public static int floor { get; private set; }
-    public Map currentMap { get; private set; }
+    public GameObject currentMapGO { get; private set; }
+    
     public readonly Dictionary<int, float> typePercentages = new Dictionary<int, float>();
 
     [SerializeField] private GameSettingsManager settingsManager;
+    [SerializeField] private Transform mapParent;
     [SerializeField] private Map recruitmentMap;
     [SerializeField] private Map astralPathMap;
-    [SerializeField] private int mapsPerGame = 5;
-    [SerializeField] private GameObject[] mapGOList;
-    private Queue<GameObject> mapGoQueue;
+    [SerializeField] private GameObject[] mapPrefabList;
+    private Queue<GameObject> mapPrefabQueue;
     private IPhaseDomains[] phaseDomainsArray;
+    private Map currentMap;
     private int[] phaseFloorThresholds = new int[2] {5, 8}; // TODO : replace with right values
     
 
@@ -42,8 +45,15 @@ public class MapManager : MonoBehaviour
     public Map LoadNextMap()
     {
         currentMap.Unload();
+        Destroy(currentMapGO);
 
-        currentMap = mapGoQueue.Dequeue().GetComponent<Map>();
+        if (mapPrefabQueue.Count < 6)
+        {
+            RefillMapQueue();
+        }
+
+        currentMapGO = Instantiate(mapPrefabQueue.Dequeue(), mapParent);
+        currentMap = currentMapGO.GetComponent<Map>();
         currentMap.Load();
         floor++;
 
@@ -185,11 +195,37 @@ public class MapManager : MonoBehaviour
         settingsManager.IncreaseDifficulty();
     }
 
+    private void RefillMapQueue()
+    {
+        var rd = new System.Random();
+        var currentList = new List<GameObject>(mapPrefabQueue);
+
+        foreach (GameObject go in mapPrefabList.OrderBy(go => rd.Next()))
+        {
+            if (!AlreadyIn(ref currentList, go))
+            {
+                mapPrefabQueue.Enqueue(go);
+            }
+        }
+    }
+
+    private static bool AlreadyIn(ref List<GameObject> goList, Object go)
+    {
+        for (var i = 0; i < goList.Count; i++)
+        {
+            if (go != goList[i]) continue;
+                
+            goList.RemoveAt(i);
+            return true;
+        }
+
+        return false;
+    }
+
     private void OnEnable()
     {
         var rd = new System.Random();
-        mapGoQueue = new Queue<GameObject>(mapGOList.OrderBy(go => rd.Next())
-            .Take(mapGOList.Length < mapsPerGame ? mapGOList.Length : mapsPerGame));
+        mapPrefabQueue = new Queue<GameObject>(mapPrefabList.OrderBy(go => rd.Next()));
         
         // TODO : Obsolete, delete after merging
         foreach (FieldInfo field in typeof(SpecialistType).GetFields())

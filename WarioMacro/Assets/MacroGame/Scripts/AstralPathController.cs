@@ -49,7 +49,7 @@ public class AstralPathController : GameController
         StartCoroutine(instance.ToggleEndGame(true));
     }
 
-    protected override bool MGResults(BehaviourNode behaviourNode, bool result)
+    protected override bool MGResults(BehaviourNode behaviourNode, int mgNumber, bool result)
     {
         if (result)
         {
