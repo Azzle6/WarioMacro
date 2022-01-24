@@ -6,16 +6,12 @@ using UnityEngine.EventSystems;
 public class Map : MonoBehaviour
 {
     [HideInInspector]
-    public Node currentNode;
+    public NodeVisual currentNode;
     public Transform nodesParent;
-    public Node.Path currentPath { get; private set; }
+    public NodeVisual.Path currentPath { get; private set; }
 
-    
-    [SerializeField] private Node startNode;
-    [SerializeField] private Node endNode;
-
-    [SerializeField] private Sprite littleArrow;
-    [SerializeField] private Sprite bigArrow;
+    [SerializeField] public NodeVisual startNode;
+    [SerializeField] private NodeVisual endNode;
     
     private static readonly int current = Animator.StringToHash("Current");
     private Player player;
@@ -43,10 +39,10 @@ public class Map : MonoBehaviour
     {
         // init
         var arrowPrefabs = player.arrowPrefabs.ToList();
-        var nextNode = default(Node);
-        var nextPath = default(Node.Path);
-        var selectedNode = default(Node);
-        var selectedPath = default(Node.Path);
+        var nextNode = default(NodeVisual);
+        var nextPath = default(NodeVisual.Path);
+        var selectedNode = default(NodeVisual);
+        var selectedPath = default(NodeVisual.Path);
         var lastDirectionSelected = MoveDirection.None;
         const ControllerKey validInput = ControllerKey.A;
 
@@ -57,12 +53,12 @@ public class Map : MonoBehaviour
         // input loop
         while (nextNode == null)
         {
-            while (Ticker.lockTimescale) yield return null;
+            //while (Ticker.lockTimescale) yield return null;
 
-            MoveDirection selectedDirection = InputManager.GetDirection();
+            MoveDirection selectedDirection = InputManager.GetDirection(false, false);
             
             // ReSharper disable once PossibleNullReferenceException
-            foreach (Node.Path path in currentNode.paths.Where(p => p != null))
+            foreach (NodeVisual.Path path in currentNode.paths.Where(p => p != null))
             {
                 if (selectedDirection == MoveDirection.None || path.direction != selectedDirection) continue;
                 
@@ -81,13 +77,31 @@ public class Map : MonoBehaviour
                 // is any path setup with arrow direction?
                 arrowPrefabs[i].gameObject.SetActive(currentNode.paths.FirstOrDefault(p => p != null && p.direction == (MoveDirection) i) != null);
                 // is the selected direction equals to the path direction?
-                arrowPrefabs[i].transform.localScale = (selectedDirection != MoveDirection.None && i == (int) selectedDirection) ? Vector3.one : Vector3.one * .5f;
-                arrowPrefabs[i].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = (selectedDirection != MoveDirection.None && i == (int)selectedDirection) ? bigArrow : littleArrow;
+                if (selectedDirection != MoveDirection.None && i == (int) selectedDirection)
+                {
+                    arrowPrefabs[i].transform.localScale = Vector3.one;
+                    arrowPrefabs[i].transform.GetChild(0).gameObject.SetActive(false);
+                    arrowPrefabs[i].transform.GetChild(1).gameObject.SetActive(true);
+                }
+                else
+                {
+                    arrowPrefabs[i].transform.localScale = Vector3.one * .5f;
+                    arrowPrefabs[i].transform.GetChild(0).gameObject.SetActive(true);
+                    arrowPrefabs[i].transform.GetChild(1).gameObject.SetActive(false);
+                }
+                
             }
             if (selectedNode != null && InputManager.GetKeyDown(validInput))
             {
                 nextNode = selectedNode;
                 nextPath = selectedPath;
+            }
+            var nodeInteract = GameController.instance.map.currentNode.GetComponent<InteractibleNode>();
+            if (nodeInteract != null && !GameController.isInActionEvent && InputManager.GetKeyDown(ControllerKey.Y))
+            {
+                nodeInteract.EventInteractible.Invoke();
+                GameController.isInActionEvent = true;
+                yield return new WaitWhile(() => GameController.isInActionEvent);
             }
             yield return null;
         }

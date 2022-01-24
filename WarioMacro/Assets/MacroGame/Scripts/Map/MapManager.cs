@@ -8,10 +8,12 @@ using Random = System.Random;
 // ReSharper disable once CheckNamespace
 public class MapManager : MonoBehaviour
 {
+    public static int phase = 0;
     public static int floor { get; private set; } = -1;
     public Dictionary<int, float> typePercentages = new Dictionary<int, float>();
 
     [SerializeField] private Map recruitmentMap;
+    [SerializeField] private Map astralPathMap;
     [SerializeField] private int mapsPerGame = 5;
     [SerializeField] private GameObject[] mapGOList;
     private Queue<GameObject> mapGoQueue;
@@ -25,6 +27,14 @@ public class MapManager : MonoBehaviour
         return currentMap;
     }
     
+    public Map LoadAstralPath()
+    {
+        currentMap.Unload();
+        currentMap = astralPathMap;
+        currentMap.Load();
+        return currentMap;
+    }
+    
     public Map LoadNextMap()
     {
         currentMap.Unload();
@@ -32,6 +42,11 @@ public class MapManager : MonoBehaviour
         currentMap = mapGoQueue.Dequeue().GetComponent<Map>();
         currentMap.Load();
         floor++;
+        
+        foreach (BehaviourNode node in currentMap.nodesParent.GetComponentsInChildren<BehaviourNode>())
+        {
+            node.SetRandomDomain(SpecialistType.Brute, new []{SpecialistType.Acrobat, SpecialistType.Ghost}); // TODO : replace with current phase domains
+        }
         
         return currentMap;
     }
@@ -41,6 +56,7 @@ public class MapManager : MonoBehaviour
         return mapGoQueue.Count == 0;
     }
 
+    /*
     private void TypeCountsToPercentages(int total)
     {
         int farthestUpperKey = 0;
@@ -78,37 +94,18 @@ public class MapManager : MonoBehaviour
             typePercentages[farthestLowerKey] += 100 - totalPercentage;
         }
     }
+    */
 
     private void OnEnable()
     {
         var rd = new Random();
         mapGoQueue = new Queue<GameObject>(mapGOList.OrderBy(go => rd.Next())
             .Take(mapGOList.Length < mapsPerGame ? mapGOList.Length : mapsPerGame));
-
-        int total = 0;
         
-        foreach (FieldInfo field in typeof(GameType).GetFields())
+        // TODO : Obsolete, delete after merging
+        foreach (FieldInfo field in typeof(SpecialistType).GetFields())
         {
             typePercentages.Add((int) field.GetValue(null), 0f);
         }
-
-        foreach (NodeSettings node in mapGoQueue.SelectMany(mapGO =>
-            mapGO.GetComponent<Map>().nodesParent.GetComponentsInChildren<NodeSettings>()))
-        {
-            switch (node.type)
-            {
-                case NodeType.None:
-                    continue;
-                case NodeType.Random:
-                    node.SetRandomType();
-                    break;
-            }
-
-            typePercentages[node.type]++;
-            total++;
-
-        }
-
-        TypeCountsToPercentages(total);
     }
 }

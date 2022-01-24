@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +13,9 @@ public class CharacterManager : MonoBehaviour
     public int totalCharacterCount = 4;
     [HideInInspector] public bool isTeamFull;
 
-    [SerializeField] private GameObject chooseCharacterGO;
+    [SerializeField] private GameObject recruitmentPanelGO;
     [SerializeField] private Transform buttonsParent;
+    [SerializeField] private RecrutementCardPannel_UI recruitmentPanel;
     [SerializeField] private LifeBar life;
     
     public readonly Stack<Character> playerTeam = new Stack<Character>();
@@ -41,13 +41,11 @@ public class CharacterManager : MonoBehaviour
         }
         
         ResetUI();
-        
-        //Re-positionnement automatique
-        chooseCharacterGO.transform.localPosition = new Vector3(-200 * (choicesCount - 1), 0, 0);
 
         for (int i = 0; i < choicesCount; i++)
         {
-            ShowCharacterCard(choices, i, i);
+            var i1 = i;
+            recruitmentPanel.ShowCharacterCard(delegate { AddCharacter(choices, i1); }, choices.Get(i), i);
         }
 
         yield return WaitForTeamChange();
@@ -57,21 +55,22 @@ public class CharacterManager : MonoBehaviour
     public IEnumerator AddDifferentSpecialist(int type)
     {
         var choices = allAvailableCharacters
-            .Where(cList => cList.type != CharacterType.Scoundrel && cList.type != type && !cList.IsEmpty()).ToList();
+            .Where(cList => cList.type != type && !cList.IsEmpty()).ToList();
 
         CharacterList charaList = choices[Random.Range(0, choices.Count)];
         
         ResetUI();
         
         //Re-positionnement automatique
-        chooseCharacterGO.transform.localPosition = new Vector3(0, 0, 0);
+        recruitmentPanelGO.transform.localPosition = new Vector3(0, 0, 0);
 
-        ShowCharacterCard(charaList, Random.Range(0, charaList.count), 0);
+        int rd = Random.Range(0, charaList.count);
+        recruitmentPanel.ShowCharacterCard(delegate { AddCharacter(charaList, rd); }, charaList.Get(rd), 0);
 
         yield return WaitForTeamChange();
     }
 
-    public IEnumerator AddDefaultCharacter()
+    /*public IEnumerator AddDefaultCharacter()
     {
         CharacterList choices = allAvailableCharacters.First(list => list.type == CharacterType.Scoundrel);
         int charaLeft = choices.count;
@@ -86,33 +85,21 @@ public class CharacterManager : MonoBehaviour
         ResetUI();
         
         //Re-positionnement automatique
-        chooseCharacterGO.transform.localPosition = new Vector3(0, 0, 0);
+        recruitmentPanelGO.transform.localPosition = new Vector3(0, 0, 0);
 
-        ShowCharacterCard(choices, randomN, 0);
+        recruitmentPanel.ShowCharacterCard(delegate { AddCharacter(choices, randomN); }, choices.Get(randomN), 0);
 
         yield return WaitForTeamChange();
-    }
+    }*/
 
     private void ResetUI()
     {
-        chooseCharacterGO.SetActive(true);
+        recruitmentPanelGO.SetActive(true);
 
         foreach (GameObject go in buttonGOList)
         {
             go.SetActive(false);
         }
-    }
-    
-    private void ShowCharacterCard(CharacterList list, int charaIndex, int buttonIndex)
-    {
-        // Reset Button
-        buttonGOList[buttonIndex].SetActive(true);
-        buttonGOList[buttonIndex].GetComponent<Image>().sprite = list.Get(charaIndex).cardSprite;
-        buttonGOList[buttonIndex].GetComponent<Button>().onClick.RemoveAllListeners();
-            
-        //Ajoute un listener au bouton pour qu'il ajoute le bon personnage
-        buttonGOList[buttonIndex].GetComponent<Button>().onClick.AddListener(() => chooseCharacterGO.SetActive(false));
-        buttonGOList[buttonIndex].GetComponent<Button>().onClick.AddListener(delegate { AddCharacter(list, charaIndex); });
     }
 
     private IEnumerator WaitForTeamChange()

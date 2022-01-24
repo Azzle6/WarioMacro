@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using GameTypes;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
@@ -10,33 +10,40 @@ using Random = UnityEngine.Random;
 public class GameController : Ticker
 {
     public static GameController instance;
+    [HideInInspector] public string currentScene;
     [HideInSubClass] public Player player;
 
     [HideInSubClass] [SerializeField] protected internal CharacterManager characterManager;
     [HideInSubClass] [SerializeField] protected internal MiniGameResultPannel_UI resultPanel;
     [HideInSubClass] [SerializeField] protected internal GameSettingsManager settingsManager;
     [HideInSubClass] [SerializeField] protected internal MapManager mapManager;
+    [HideInSubClass] [SerializeField] protected internal LifeBar lifeBar;
+    [HideInSubClass] [SerializeField] private TextMeshProUGUI resultPanelPlaceholder;
+    [HideInSubClass] [SerializeField] private RewardChart rewardChart;
     [HideInSubClass] [SerializeField] private Animator macroGameCanvasAnimator;
     [HideInSubClass] [SerializeField] private ScoreManager scoreManager;
     [HideInSubClass] [SerializeField] private Alarm alarm;
     [HideInSubClass] [SerializeField] private RecruitmentController recruitmentController;
+    [HideInSubClass] [SerializeField] private AstralPathController astralPathController;
     [HideInSubClass] [SerializeField] private Timer timer;
+    [HideInSubClass] [SerializeField] private MenuManager menu;
     [HideInSubClass] [SerializeField] private TransitionController transitionController;
     [HideInSubClass] [SerializeField] private KeywordDisplay keywordManager;
-    [HideInSubClass] [SerializeField] private LifeBar lifeBar;
     [HideInSubClass] [SerializeField] private int mainMenuBuildIndex;
     [SerializeField] protected internal List<GameObject> macroObjects = new List<GameObject>();
     [SerializeField] public string[] sceneNames = Array.Empty<string>();
 
     private static readonly int victory = Animator.StringToHash("Victory");
     private static readonly int defeat = Animator.StringToHash("Defeat");
-    private static string currentScene;
     private static bool gameFinished;
     private static bool gameResult;
+    private bool stopLoop = false;
     protected internal Map map;
-    protected internal int nodeSuccessCount;
     private bool debugMicro;
 
+    public delegate void InteractEvent();
+    public static InteractEvent OnInteractionEnd;
+    public static bool isInActionEvent;
 
     public static void Register()
     {
@@ -45,6 +52,7 @@ public class GameController : Ticker
         instance.TickerStart(true);
         instance.debugMicro = true;
         Debug.Log("macro registered");
+        
     }
 
     public static void StopTimer()
@@ -54,7 +62,7 @@ public class GameController : Ticker
 
     public static void FinishGame(bool result)
     {
-        Debug.Log("FinishGame: " + result);
+        // Debug.Log("FinishGame: " + result);
         gameFinished = true;
         gameResult = result;
     }
@@ -67,7 +75,7 @@ public class GameController : Ticker
         }
     }
 
-    private IEnumerator ToggleEndGame(bool value)
+    internal IEnumerator ToggleEndGame(bool value)
     {
         if (value)
         {
@@ -86,6 +94,7 @@ public class GameController : Ticker
 
     private IEnumerator GameLoop()
     {
+        stopLoop = false;
         map = mapManager.LoadRecruitmentMap();
 
         MusicManager.instance.state = Soundgroup.CurrentPhase.RECRUIT;
@@ -98,26 +107,24 @@ public class GameController : Ticker
             yield return StartCoroutine(map.WaitForNodeSelection());
 
             yield return StartCoroutine(player.MoveToPosition(map.currentPath.wayPoints));
-            var nodeMicroGame = map.currentNode.GetComponent<NodeSettings>();
+            var nodeMicroGame = map.currentNode.GetComponent<BehaviourNode>();
+            
 
             // True if node with micro games, false otherwise
-            if (nodeMicroGame != null)
+            if (nodeMicroGame != null && nodeMicroGame.enabled)
             {
-                if (nodeMicroGame.type == NodeType.None)
-                {
-                    nodeMicroGame.microGamesNumber = gameControllerSO.defaultMGCount;
-                }
-                else
-                {
-                    nodeMicroGame.microGamesNumber = characterManager.SpecialistOfTypeInTeam(nodeMicroGame.type) == 0
-                        ? gameControllerSO.noSpecialistMGCount
-                        : gameControllerSO.specialistMGCount;
-                    Debug.Log(nodeMicroGame.microGamesNumber);
-                }
-                
-                yield return StartCoroutine(NodeWithMicroGame(nodeMicroGame));
+                nodeMicroGame.microGamesNumber = rewardChart.GetMGNumber(MapManager.phase, nodeMicroGame.behaviour);
+                int[] mgDomains = nodeMicroGame.GetMGDomains();
+                resultPanelPlaceholder.text = mgDomains[0].ToString(); // TODO : remove placeholder
 
-                NodeResults(nodeMicroGame);
+                for (int i = 1; i < mgDomains.Length; i++)
+                {
+                    resultPanelPlaceholder.text += ", " + mgDomains[i];
+                }
+
+                yield return StartCoroutine(NodeWithMicroGame(this, nodeMicroGame));
+
+                nodeMicroGame.DisableNode();
 
                 yield return new WaitForSecondsRealtime(1f);
 
@@ -125,51 +132,50 @@ public class GameController : Ticker
                 resultPanel.PopWindowDown();
                 resultPanel.ToggleWindow(false);
 
-                if (lifeBar.GetLife() == 0)
+                if (stopLoop)
                 {
-                    StartCoroutine(ToggleEndGame(false));
+                    break;
                 }
             }
 
+            var nodeInteract = map.currentNode.GetComponent<InteractibleNode>();
+            if (nodeInteract != null && !isInActionEvent)
+            {
+                nodeInteract.EventInteractible.Invoke();
+                isInActionEvent = true;
+                yield return new WaitWhile(() => isInActionEvent);
+            }
+            
+
             if (map.OnLastNode())
             {
-                if (mapManager.OnLastMap())
-                {
-                    StartCoroutine(ToggleEndGame(true));
-                    yield break;
-                }
                 AudioManager.MacroPlaySound("Elevator", 0);
                 map = mapManager.LoadNextMap();
             }
 
             yield return null;
         }
+
+        yield return astralPathController.EscapeLoop();
     }
 
-    protected internal IEnumerator NodeWithMicroGame(NodeSettings node)
+    internal IEnumerator NodeWithMicroGame(GameController controller, BehaviourNode behaviourNode)
     {
         // select 3 random micro games from micro games list
         var microGamesQueue = new Queue<string>();
         var microGamesList = new List<string>(sceneNames);
-        var microGamesCount = Mathf.Min(node.microGamesNumber, microGamesList.Count);
-        while (microGamesCount-- > 0)
+
+        for (int i = Mathf.Min(behaviourNode.microGamesNumber, microGamesList.Count) - 1; i >= 0; i--)
         {
             var rdIndex = Random.Range(0, microGamesList.Count);
-            var pickedMicroGame = microGamesList[rdIndex];
+            microGamesQueue.Enqueue(microGamesList[rdIndex]);
             microGamesList.RemoveAt(rdIndex);
-            microGamesQueue.Enqueue(pickedMicroGame);
         }
 
         // init result panel
-        resultPanel.ToggleWindow(true);
-        resultPanel.SetHeaderText(MiniGameResultPannel_UI.HeaderType.GetReady);
-        resultPanel.ClearAllNodes();
-        resultPanel.SetStartingNodeNumber(microGamesQueue.Count);
-        resultPanel.PopWindowUp();
+        resultPanel.Init(microGamesQueue.Count);
 
         // play each micro games one by one
-        int gameCount = 0;
-        nodeSuccessCount = 0;
         while (microGamesQueue.Count > 0)
         {
             yield return new WaitForSecondsRealtime(1f);
@@ -185,8 +191,11 @@ public class GameController : Ticker
             // Keyword trigger
             yield return keywordManager.KeyWordHandler(currentScene);
 
-            AudioManager.MacroPlaySound("MiniGameEnter", 0);
+            // Disable menu
+            menu.enabled = false;
+            
             // Launch transition
+            AudioManager.MacroPlaySound("MiniGameEnter", 0);
             yield return StartCoroutine(transitionController.TransitionHandler(currentScene, true));
 
 
@@ -200,79 +209,48 @@ public class GameController : Ticker
 
             timer.StopTimer();
             yield return StartCoroutine(transitionController.TransitionHandler(currentScene, false));
-
+            
             // switch back to macro state
+            menu.enabled = true;
             ResetTickables();
             ResetTick();
 
-            // change BPM
-            if (gameResult)
-            {
-                settingsManager.IncreaseBPM();
-                alarm.DecrementCount(true);
-            }
-            else
-            {
-                settingsManager.DecreaseBPM();
-                alarm.DecrementCount(false);
-            }
-
-            // display result
-            //Debug.Log("MicroGame Finished: " + (gameResult ? "SUCCESS" : "FAILURE"));
-            if (gameResult) nodeSuccessCount++;
+            if (controller.MGResults(behaviourNode, gameResult)) 
+                yield break;
 
             resultPanel.PopWindowUp();
-            resultPanel.SetHeaderText(gameResult
-                ? MiniGameResultPannel_UI.HeaderType.Success
-                : MiniGameResultPannel_UI.HeaderType.Failure);
+            resultPanel.SetHeaderText(gameResult);
             yield return new WaitForSeconds(1f);
-
-            resultPanel.SetCurrentNode(gameResult, gameCount+=1);
+        
+            resultPanel.SetCurrentNode(gameResult);
             yield return new WaitForSeconds(1f);
         }
-
-
     }
 
-    private void NodeResults(NodeSettings node)
+    protected virtual bool MGResults(BehaviourNode behaviourNode, bool result)
     {
-        scoreManager.UpdateScore(nodeSuccessCount,node.microGamesNumber,characterManager.playerTeam);
-
-        if (node.type == NodeType.None)
+        // change BPM and alarm or money
+        if (result)
         {
-            NodeResultsBis(gameControllerSO.defaultIncreaseDifficultyThreshold,
-                gameControllerSO.defaultDecreaseDifficultyThreshold, 
-                gameControllerSO.defaultLoseCharacterThreshold);
-        }
-        else if (characterManager.SpecialistOfTypeInTeam(node.type) == 0)
-        {
-            NodeResultsBis(gameControllerSO.noSpecialistIncreaseDifficultyThreshold,
-                gameControllerSO.noSpecialistDecreaseDifficultyThreshold,
-                gameControllerSO.noSpecialistLoseCharacterThreshold);
+            settingsManager.IncreaseBPM();
+            scoreManager.AddMoney(rewardChart.GetMoneyBags(MapManager.phase, behaviourNode.behaviour));
         }
         else
         {
-            NodeResultsBis(gameControllerSO.specialistIncreaseDifficultyThreshold, 
-                gameControllerSO.specialistDecreaseDifficultyThreshold,
-                gameControllerSO.specialistLoseCharacterThreshold);
+            settingsManager.DecreaseBPM();
+            alarm.DecrementCount(MapManager.phase, behaviourNode.behaviour);
         }
+
+        if (!Alarm.isActive) return false;
         
+        map = mapManager.LoadAstralPath();
+        stopLoop = true;
+        return true;
     }
-
-    private void NodeResultsBis(int increaseDifficultyThreshold, int decreaseDifficultyThreshold, int loseCharacterThreshold)
+    
+    private void OnEnable()
     {
-        if (nodeSuccessCount >= increaseDifficultyThreshold)
-        {
-            settingsManager.IncreaseDifficulty();
-        }
-        else if (nodeSuccessCount < decreaseDifficultyThreshold)
-        {
-            settingsManager.DecreaseDifficulty();
-
-            if (!Alarm.isActive || nodeSuccessCount >= loseCharacterThreshold) return;
-
-            lifeBar.Imprison();
-        }
+        OnInteractionEnd += instance.InteractiveEventEnd;
     }
 
     private void Awake()
@@ -302,5 +280,10 @@ public class GameController : Ticker
     private void Update()
     {
         TickerUpdate();
+    }
+
+    public void InteractiveEventEnd()
+    {
+        isInActionEvent = false;
     }
 }

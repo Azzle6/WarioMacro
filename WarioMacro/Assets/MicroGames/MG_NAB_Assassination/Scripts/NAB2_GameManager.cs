@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NAB2_GameManager : MonoBehaviour, ITickable
 {
-    public GameControllerSO gameController;
+    public GameConfig gameController;
     public NAB2_Shot shotScript;
     public NAB2_TICCounter ticCounter;
 

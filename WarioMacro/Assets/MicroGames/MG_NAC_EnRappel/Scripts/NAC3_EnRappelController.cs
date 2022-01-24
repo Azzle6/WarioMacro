@@ -11,7 +11,7 @@ public class NAC3_EnRappelController : MonoBehaviour, ITickable
     [SerializeField] private GameObject victoryCanvas;
     [SerializeField] private GameObject defeatCanvas;
 
-    private bool hasEnded;
+    public bool hasEnded;
     private bool result;
     private int tickEnd;
 
@@ -53,12 +53,12 @@ public class NAC3_EnRappelController : MonoBehaviour, ITickable
         hasEnded = true;
         if (result)
         {
-            result = true;
+            this.result = true;
             Victory();
         }
         else 
         {
-            result = false;
+            this.result = false;
             Defeat();
         }
     }
@@ -90,7 +90,7 @@ public class NAC3_EnRappelController : MonoBehaviour, ITickable
         }
         if (GameController.currentTick == 8 || GameController.currentTick == tickEnd) 
         {
-            Debug.Log("Finish");
+            Debug.Log("Result : " + result);
             GameController.FinishGame(result);
         }
     }
