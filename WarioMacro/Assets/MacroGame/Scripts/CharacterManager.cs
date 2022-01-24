@@ -73,7 +73,7 @@ public class CharacterManager : MonoBehaviour
             }
             else if (list.count == 1)
             {
-                if (rand == 0)
+                if (rand == 1)
                     recruitableCharacters.Add(novices.First(t => t.characterType == list.type));
                 else
                 {
