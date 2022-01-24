@@ -18,6 +18,13 @@ public class AstralPathController : GameController
             if (nodeMicroGame != null && nodeMicroGame.enabled)
             {
                 nodeMicroGame.microGamesNumber = GameConfig.instance.astralMGCount;
+                int[] mgDomains = nodeMicroGame.GetMGDomains();
+                instance.resultPanelPlaceholder.text = mgDomains[0].ToString(); // TODO : remove placeholder
+
+                for (int i = 1; i < mgDomains.Length; i++)
+                {
+                    instance.resultPanelPlaceholder.text += ", " + mgDomains[i];
+                }
 
                 yield return StartCoroutine(instance.NodeWithMicroGame(this, nodeMicroGame));
 
