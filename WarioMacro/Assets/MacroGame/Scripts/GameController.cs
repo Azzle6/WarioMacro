@@ -18,7 +18,7 @@ public class GameController : Ticker
     [HideInSubClass] [SerializeField] protected internal GameSettingsManager settingsManager;
     [HideInSubClass] [SerializeField] protected internal MapManager mapManager;
     [HideInSubClass] [SerializeField] protected internal LifeBar lifeBar;
-    [HideInSubClass] [SerializeField] private TextMeshProUGUI resultPanelPlaceholder;
+    [HideInSubClass] [SerializeField] protected internal TextMeshProUGUI resultPanelPlaceholder;
     [HideInSubClass] [SerializeField] private RewardChart rewardChart;
     [HideInSubClass] [SerializeField] private Animator macroGameCanvasAnimator;
     [HideInSubClass] [SerializeField] private ScoreManager scoreManager;
@@ -113,7 +113,7 @@ public class GameController : Ticker
             // True if node with micro games, false otherwise
             if (nodeMicroGame != null && nodeMicroGame.enabled)
             {
-                nodeMicroGame.microGamesNumber = rewardChart.GetMGNumber(MapManager.phase, nodeMicroGame.behaviour);
+                nodeMicroGame.microGamesNumber = rewardChart.GetMGNumber(MapManager.currentPhase, nodeMicroGame.behaviour);
                 int[] mgDomains = nodeMicroGame.GetMGDomains();
                 resultPanelPlaceholder.text = mgDomains[0].ToString(); // TODO : remove placeholder
 
@@ -233,12 +233,12 @@ public class GameController : Ticker
         if (result)
         {
             settingsManager.IncreaseBPM();
-            scoreManager.AddMoney(rewardChart.GetMoneyBags(MapManager.phase, behaviourNode.behaviour));
+            scoreManager.AddMoney(rewardChart.GetMoneyBags(MapManager.currentPhase, behaviourNode.behaviour));
         }
         else
         {
             settingsManager.DecreaseBPM();
-            alarm.DecrementCount(MapManager.phase, behaviourNode.behaviour);
+            alarm.DecrementCount(MapManager.currentPhase, behaviourNode.behaviour);
         }
 
         if (!Alarm.isActive) return false;
