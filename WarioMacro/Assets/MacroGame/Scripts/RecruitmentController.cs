@@ -27,13 +27,13 @@ public class RecruitmentController : GameController
         //while (GameController.instance.characterManager.playerTeam.Count < 4) yield return null;
         nodePrevisualisation.SetTexts(instance.mapManager.typePercentages.Select(pair => pair.Value).ToArray());
         
-        /*while(!instance.characterManager.isTeamFull)
+        while(GameController.instance.characterManager.playerTeam.Count < 4)
         {
             // Select path and move
             lastNoMGNode = instance.map.currentNode;
             yield return StartCoroutine(instance.map.WaitForNodeSelection());
 
-            if (instance.characterManager.isTeamFull)
+            if (GameController.instance.characterManager.playerTeam.Count >= 4)
             {
                 SetRecruitmentActive(false);
                 yield break;
@@ -64,7 +64,6 @@ public class RecruitmentController : GameController
                 instance.resultPanel.PopWindowDown();
                 instance.resultPanel.ToggleWindow(false);
                 
-                #1#
                 // Wait for results
                 yield return instance.characterManager.DisplayRecruitmentChoice(typedNode.type);
                 //yield return NodeResults(nodeMicroGame);
@@ -73,7 +72,7 @@ public class RecruitmentController : GameController
                 if (!instance.characterManager.IsTypeAvailable(typedNode.type))
                 {
                     DeletePath(instance.map.currentPath, typedNode);
-                }
+                }*/
                 
                 // Return on start node
                 instance.player.TeleportPlayer(startNode.transform.position);
@@ -84,7 +83,7 @@ public class RecruitmentController : GameController
             
 
             yield return null;
-        }*/
+        }
         
         SetRecruitmentActive(false);
     }
