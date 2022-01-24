@@ -164,6 +164,7 @@ public class GameController : Ticker
         // select 3 random micro games from micro games list
         var microGamesQueue = new Queue<string>();
         var microGamesList = new List<string>(sceneNames);
+        int currentMG = 0;
 
         for (int i = Mathf.Min(behaviourNode.microGamesNumber, microGamesList.Count) - 1; i >= 0; i--)
         {
@@ -215,7 +216,7 @@ public class GameController : Ticker
             ResetTickables();
             ResetTick();
 
-            if (controller.MGResults(behaviourNode, gameResult)) 
+            if (controller.MGResults(behaviourNode, currentMG, gameResult)) 
                 yield break;
 
             resultPanel.PopWindowUp();
@@ -223,17 +224,19 @@ public class GameController : Ticker
             yield return new WaitForSeconds(1f);
         
             resultPanel.SetCurrentNode(gameResult);
+            currentMG++;
             yield return new WaitForSeconds(1f);
         }
     }
 
-    protected virtual bool MGResults(BehaviourNode behaviourNode, bool result)
+    protected virtual bool MGResults(BehaviourNode behaviourNode, int mgNumber, bool result)
     {
         // change BPM and alarm or money
         if (result)
         {
             settingsManager.IncreaseBPM();
-            scoreManager.AddMoney(rewardChart.GetMoneyBags(MapManager.currentPhase, behaviourNode.behaviour));
+            scoreManager.AddMoney(rewardChart.GetMoneyBags(MapManager.currentPhase, behaviourNode.behaviour) *
+                                  (characterManager.SpecialistOfTypeInTeam(behaviourNode.GetMGDomain(mgNumber)) > 0 ? 2 : 1));
         }
         else
         {

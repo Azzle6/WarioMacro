@@ -42,6 +42,19 @@ public class BehaviourNode : Node
         }
     }
 
+    public int GetMGDomain(int index)
+    {
+        if (index >= microGamesNumber)
+        {
+            Debug.LogError("Index out of range");
+        }
+        
+        if (mgDomains == null)
+            GetMGDomains();
+
+        return mgDomains[index];
+    }
+
     public int[] GetMGDomains()
     {
         if (mgDomains != null) return mgDomains;

@@ -36,13 +36,14 @@ public class PlaytestTool : MonoBehaviour
 
         if (GameController.instance.currentScene != null)
         {
-            if(GameController.instance.currentScene.Length > 0 )MiniGameInfoText.text = "Current MiniGame : " + GameController.instance.currentScene;
+            string sceneName = GameController.instance.currentScene;
+            if(sceneName.Length > 0 )MiniGameInfoText.text = "Current MiniGame : " + sceneName.Substring(13, sceneName.Length - 13);
         }
         
-        if (mapManager.currentMap != null)
+        if (mapManager.currentMapGO != null)
         {
-            string mapName = mapManager.currentMap.gameObject.name;
-            if(mapName.Length > 0 ) mapNameText.text = "Current Level : " + mapName;
+            string mapName = mapManager.currentMapGO.name;
+            if(mapName.Length > 0 ) mapNameText.text = "Current Level : " + mapName.Substring(0, mapName.Length - 7);;
         }
     }
 
