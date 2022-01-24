@@ -46,7 +46,10 @@ public class CharacterNode : MonoBehaviour
 
         
         NodeEventScript.EventInteractible.RemoveAllListeners();
-        NodeEventScript.EventInteractible.AddListener(() => DialogManager.instance.StartDialog(AlreadyRecruitDialog));
+        UnityEvent NewEvent = new UnityEvent();
+        NewEvent.AddListener(() => DialogManager.instance.StartDialog(AlreadyRecruitDialog));
+        //NodeEventScript.EventInteractible.AddListener(() => DialogManager.instance.StartDialog(AlreadyRecruitDialog));
+        NodeEventScript.EventInteractible = NewEvent;
     }
 
 }
