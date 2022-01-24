@@ -9,7 +9,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6102864330239635029, guid: 0608627a4c7aea74188c4965c08dc30d, type: 3}
       propertyPath: m_Name
-      value: Node White
+      value: Node Interact
       objectReference: {fileID: 0}
     - target: {fileID: 8465403085796528754, guid: 0608627a4c7aea74188c4965c08dc30d, type: 3}
       propertyPath: m_RootOrder
@@ -75,18 +75,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d13cd75f9897d584bac7f8095315017e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InteractEvent:
+  EventInteractible:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &3839740401953144346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3155302701556424545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f327dcea77dba1446bba7de7985d744c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: 
+  dialogs: []
+  Responses: []
