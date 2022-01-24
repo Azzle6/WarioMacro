@@ -13,6 +13,7 @@ public class MapManager : MonoBehaviour
     public Dictionary<int, float> typePercentages = new Dictionary<int, float>();
 
     [SerializeField] private Map recruitmentMap;
+    [SerializeField] private Map astralPathMap;
     [SerializeField] private int mapsPerGame = 5;
     [SerializeField] private GameObject[] mapGOList;
     private Queue<GameObject> mapGoQueue;
@@ -22,6 +23,14 @@ public class MapManager : MonoBehaviour
     public Map LoadRecruitmentMap()
     {
         currentMap = recruitmentMap;
+        currentMap.Load();
+        return currentMap;
+    }
+    
+    public Map LoadAstralPath()
+    {
+        currentMap.Unload();
+        currentMap = astralPathMap;
         currentMap.Load();
         return currentMap;
     }

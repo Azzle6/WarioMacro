@@ -53,7 +53,14 @@ public class BehaviourNode : Node
             return secondaryDomain != NodeDomainType.None ? MGDomainsDoubleDomain() : MGDomainsSingleDomain(primaryDomain);
         }
 
-        return MGDomainsSingleDomain(secondaryDomain);
+        if (secondaryDomain != NodeDomainType.None)
+        {
+            return MGDomainsSingleDomain(secondaryDomain);
+        }
+        
+        mgDomains = new int[microGamesNumber];
+        Debug.Log(mgDomains[0]);
+        return mgDomains;
     }
 
     private int[] MGDomainsSingleDomain(int concernedDomain)
@@ -129,4 +136,6 @@ public class BehaviourNode : Node
 
         return mgDomains;
     }
+    
+    
 }
