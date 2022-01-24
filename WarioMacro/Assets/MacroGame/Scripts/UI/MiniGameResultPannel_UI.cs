@@ -44,6 +44,8 @@ public class MiniGameResultPannel_UI : MonoBehaviour
 
     public GameObject[] nodeArray = new GameObject[10];
 
+    private int currentNode;
+
     private void Start()
     {
         ClearAllNodes();
@@ -86,21 +88,22 @@ public class MiniGameResultPannel_UI : MonoBehaviour
         }
     }
 
-    public void SetCurrentNode(bool result, int currentNodeNbr)
+    public void SetCurrentNode(bool result)
     {
-        Image checkMarkImage = nodeArray[currentNodeNbr - 1].transform.GetChild(0).GetComponent<Image>(); //Get the child Image Component of the current node
+        Image checkMarkImage = nodeArray[currentNode].transform.GetChild(0).GetComponent<Image>(); //Get the child Image Component of the current node
         if (result) checkMarkImage.sprite = successCheckMark; 
         else checkMarkImage.sprite = failureCheckMark;  
 
         checkMarkImage.enabled = true;
 
-        Image remanentImage = nodeArray[currentNodeNbr - 1].transform.GetChild(1).GetComponent<Image>(); //Repeat For the Remanent Image
+        Image remanentImage = nodeArray[currentNode].transform.GetChild(1).GetComponent<Image>(); //Repeat For the Remanent Image
         if (result) remanentImage.sprite = successCheckMark;
         else remanentImage.sprite = failureCheckMark;
 
         remanentImage.enabled = true;
 
-        nodeArray[currentNodeNbr - 1].gameObject.GetComponent<Animator>().SetTrigger("Anim"); //Get the anim, start the animation
+        nodeArray[currentNode].gameObject.GetComponent<Animator>().SetTrigger("Anim"); //Get the anim, start the animation
+        currentNode++;
     }
 
     public void SetHeaderText(bool result)
@@ -119,7 +122,7 @@ public class MiniGameResultPannel_UI : MonoBehaviour
         }
     }
 
-    public void SetHeaderText(HeaderType headerType)
+    private void SetHeaderText(HeaderType headerType)
     {
         var keyword = headerType == HeaderType.Success ? successKeyword
             : headerType == HeaderType.Failure ? failureKeyword
@@ -161,6 +164,16 @@ public class MiniGameResultPannel_UI : MonoBehaviour
     public void ToggleWindow(bool toogle)
     {
         pannel.gameObject.SetActive(toogle);
+    }
+
+    public void Init(int microGameCount)
+    {
+        ToggleWindow(true);
+        SetHeaderText(HeaderType.GetReady);
+        ClearAllNodes();
+        SetStartingNodeNumber(microGameCount);
+        PopWindowUp();
+        currentNode = 0;
     }
 
     public void TriggerResult(bool result)

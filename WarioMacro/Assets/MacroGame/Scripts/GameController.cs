@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
@@ -18,17 +17,18 @@ public class GameController : Ticker
     [HideInSubClass] [SerializeField] protected internal MiniGameResultPannel_UI resultPanel;
     [HideInSubClass] [SerializeField] protected internal GameSettingsManager settingsManager;
     [HideInSubClass] [SerializeField] protected internal MapManager mapManager;
+    [HideInSubClass] [SerializeField] protected internal LifeBar lifeBar;
     [HideInSubClass] [SerializeField] private TextMeshProUGUI resultPanelPlaceholder;
     [HideInSubClass] [SerializeField] private RewardChart rewardChart;
     [HideInSubClass] [SerializeField] private Animator macroGameCanvasAnimator;
     [HideInSubClass] [SerializeField] private ScoreManager scoreManager;
     [HideInSubClass] [SerializeField] private Alarm alarm;
     [HideInSubClass] [SerializeField] private RecruitmentController recruitmentController;
+    [HideInSubClass] [SerializeField] private AstralPathController astralPathController;
     [HideInSubClass] [SerializeField] private Timer timer;
     [HideInSubClass] [SerializeField] private MenuManager menu;
     [HideInSubClass] [SerializeField] private TransitionController transitionController;
     [HideInSubClass] [SerializeField] private KeywordDisplay keywordManager;
-    [HideInSubClass] [SerializeField] private LifeBar lifeBar;
     [HideInSubClass] [SerializeField] private int mainMenuBuildIndex;
     [SerializeField] protected internal List<GameObject> macroObjects = new List<GameObject>();
     [SerializeField] public string[] sceneNames = Array.Empty<string>();
@@ -37,18 +37,13 @@ public class GameController : Ticker
     private static readonly int defeat = Animator.StringToHash("Defeat");
     private static bool gameFinished;
     private static bool gameResult;
+    private bool stopLoop = false;
     protected internal Map map;
-    protected internal int nodeSuccessCount;
     private bool debugMicro;
 
     public delegate void InteractEvent();
     public static InteractEvent OnInteractionEnd;
     public static bool isInActionEvent;
-
-    private void OnEnable()
-    {
-        OnInteractionEnd += instance.InteractiveEventEnd;
-    }
 
     public static void Register()
     {
@@ -67,7 +62,7 @@ public class GameController : Ticker
 
     public static void FinishGame(bool result)
     {
-        Debug.Log("FinishGame: " + result);
+        // Debug.Log("FinishGame: " + result);
         gameFinished = true;
         gameResult = result;
     }
@@ -80,7 +75,7 @@ public class GameController : Ticker
         }
     }
 
-    private IEnumerator ToggleEndGame(bool value)
+    internal IEnumerator ToggleEndGame(bool value)
     {
         if (value)
         {
@@ -99,6 +94,7 @@ public class GameController : Ticker
 
     private IEnumerator GameLoop()
     {
+        stopLoop = false;
         map = mapManager.LoadRecruitmentMap();
 
         MusicManager.instance.state = Soundgroup.CurrentPhase.RECRUIT;
@@ -126,7 +122,7 @@ public class GameController : Ticker
                     resultPanelPlaceholder.text += ", " + mgDomains[i];
                 }
 
-                yield return StartCoroutine(NodeWithMicroGame(nodeMicroGame));
+                yield return StartCoroutine(NodeWithMicroGame(this, nodeMicroGame));
 
                 nodeMicroGame.DisableNode();
 
@@ -136,9 +132,9 @@ public class GameController : Ticker
                 resultPanel.PopWindowDown();
                 resultPanel.ToggleWindow(false);
 
-                if (lifeBar.GetLife() == 0)
+                if (stopLoop)
                 {
-                    StartCoroutine(ToggleEndGame(false));
+                    break;
                 }
             }
 
@@ -153,20 +149,17 @@ public class GameController : Ticker
 
             if (map.OnLastNode())
             {
-                if (mapManager.OnLastMap())
-                {
-                    StartCoroutine(ToggleEndGame(true));
-                    yield break;
-                }
                 AudioManager.MacroPlaySound("Elevator", 0);
                 map = mapManager.LoadNextMap();
             }
 
             yield return null;
         }
+
+        yield return astralPathController.EscapeLoop();
     }
 
-    private IEnumerator NodeWithMicroGame(BehaviourNode behaviourNode)
+    internal IEnumerator NodeWithMicroGame(GameController controller, BehaviourNode behaviourNode)
     {
         // select 3 random micro games from micro games list
         var microGamesQueue = new Queue<string>();
@@ -180,14 +173,9 @@ public class GameController : Ticker
         }
 
         // init result panel
-        resultPanel.ToggleWindow(true);
-        resultPanel.SetHeaderText(MiniGameResultPannel_UI.HeaderType.GetReady);
-        resultPanel.ClearAllNodes();
-        resultPanel.SetStartingNodeNumber(microGamesQueue.Count);
-        resultPanel.PopWindowUp();
+        resultPanel.Init(microGamesQueue.Count);
 
         // play each micro games one by one
-        int gameCount = 0;
         while (microGamesQueue.Count > 0)
         {
             yield return new WaitForSecondsRealtime(1f);
@@ -227,29 +215,42 @@ public class GameController : Ticker
             ResetTickables();
             ResetTick();
 
-            // change BPM and alarm or money
-            if (gameResult)
-            {
-                settingsManager.IncreaseBPM();
-                scoreManager.AddMoney(rewardChart.GetMoneyBags(MapManager.phase, behaviourNode.behaviour));
-            }
-            else
-            {
-                settingsManager.DecreaseBPM();
-                alarm.DecrementCount(MapManager.phase, behaviourNode.behaviour);
-            }
+            if (controller.MGResults(behaviourNode, gameResult)) 
+                yield break;
 
             resultPanel.PopWindowUp();
-            resultPanel.SetHeaderText(gameResult
-                ? MiniGameResultPannel_UI.HeaderType.Success
-                : MiniGameResultPannel_UI.HeaderType.Failure);
+            resultPanel.SetHeaderText(gameResult);
             yield return new WaitForSeconds(1f);
-
-            resultPanel.SetCurrentNode(gameResult, gameCount+=1);
+        
+            resultPanel.SetCurrentNode(gameResult);
             yield return new WaitForSeconds(1f);
         }
+    }
 
+    protected virtual bool MGResults(BehaviourNode behaviourNode, bool result)
+    {
+        // change BPM and alarm or money
+        if (result)
+        {
+            settingsManager.IncreaseBPM();
+            scoreManager.AddMoney(rewardChart.GetMoneyBags(MapManager.phase, behaviourNode.behaviour));
+        }
+        else
+        {
+            settingsManager.DecreaseBPM();
+            alarm.DecrementCount(MapManager.phase, behaviourNode.behaviour);
+        }
 
+        if (!Alarm.isActive) return false;
+        
+        map = mapManager.LoadAstralPath();
+        stopLoop = true;
+        return true;
+    }
+    
+    private void OnEnable()
+    {
+        OnInteractionEnd += instance.InteractiveEventEnd;
     }
 
     private void Awake()
