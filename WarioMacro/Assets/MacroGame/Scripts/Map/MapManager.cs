@@ -16,10 +16,10 @@ public class MapManager : MonoBehaviour
     public readonly Dictionary<int, float> typePercentages = new Dictionary<int, float>();
 
     [SerializeField] private GameSettingsManager settingsManager;
-    [SerializeField] private Transform mapsParent;
+    [SerializeField] private Transform mapParent;
     [SerializeField] private Map recruitmentMap;
     [SerializeField] private Map astralPathMap;
-    [FormerlySerializedAs("mapGOList")] [SerializeField] private GameObject[] mapPrefabList;
+    [SerializeField] private GameObject[] mapPrefabList;
     private Queue<GameObject> mapPrefabQueue;
     private IPhaseDomains[] phaseDomainsArray;
     private Map currentMap;
@@ -52,7 +52,7 @@ public class MapManager : MonoBehaviour
             RefillMapQueue();
         }
 
-        currentMapGO = Instantiate(mapPrefabQueue.Dequeue(), mapsParent);
+        currentMapGO = Instantiate(mapPrefabQueue.Dequeue(), mapParent);
         currentMap = currentMapGO.GetComponent<Map>();
         currentMap.Load();
         floor++;
