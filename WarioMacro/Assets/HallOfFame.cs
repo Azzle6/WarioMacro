@@ -16,6 +16,17 @@ public class HallOfFame : MonoBehaviour
         public float score;
         public float time;
         public Character[] team = new Character[4];
+
+        public override string ToString()
+        {
+            var toString =  score + "," + time + ",";
+            foreach (var character in team)
+            {
+                toString += character.ToString()+":";
+            }
+            toString = toString.Substring(0, toString.Length - 1);
+            return toString;
+        }
     }
 
     void Start()
@@ -74,16 +85,10 @@ public class HallOfFame : MonoBehaviour
         var save = "";
         foreach (var r in hall)
         {
-            save += r.score+","+r.time + ",";
-            foreach (var character in r.team)
-            {
-                save += character.ToString()+":";
-            }
-            save = save.Substring(0, save.Length - 1);
+            save += r.ToString();
             save += ";";
         }
         save = save.Substring(0, save.Length - 1);
         PlayerPrefs.SetString("hallOfFame",save);
-        
     }
 }
