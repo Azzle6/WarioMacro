@@ -35,7 +35,7 @@ public class DialogManager : MonoBehaviour
 
     public void StartDialog(DialogConstructor currentDial)
     {
-        if (isInDialog)
+        if (instance.isInDialog)
         {
             Debug.Log("player is already in a dialog.");
             return;
@@ -65,7 +65,7 @@ public class DialogManager : MonoBehaviour
         for (int i = 0; i < curDial.dialogs[curIndex].Length; i++)
         {
             textZone.text = string.Concat(textZone.text, curDial.dialogs[curIndex][i]);
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.02f);
         }
         
         if(curIndex < curDial.dialogs.Length - 1) curIndex++;
@@ -97,6 +97,11 @@ public class DialogManager : MonoBehaviour
         isInDialog = false;
         Ticker.lockTimescale = false;
         GameController.OnInteractionEnd();
+        foreach (GameObject but in Buttons)
+        {
+            Destroy(but);
+        }
+
     }
 
     GameObject[] SetupButtons()

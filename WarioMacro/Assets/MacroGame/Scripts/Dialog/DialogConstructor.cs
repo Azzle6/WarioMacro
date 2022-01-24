@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class DialogConstructor : MonoBehaviour
 {
+    public Sprite chara;
     public string name;
     [Space]
     public string[] dialogs;
