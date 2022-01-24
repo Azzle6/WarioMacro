@@ -5,9 +5,15 @@ using UnityEngine;
 // ReSharper disable once CheckNamespace
 public class Character : ScriptableObject
 {
-    [GameType(typeof(CharacterType))]
-    public int characterType = 1;
-    
+    [GameType(typeof(SpecialistType))]
+    public int characterType = 2;
+    public enum Level
+    {
+        Novice, Expert
+    }
+    public Level mastery = Level.Expert;
     public Sprite cardSprite;
     public Sprite lifebarSprite;
+    public GameObject PuppetPrefab;
+
 }

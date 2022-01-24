@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class NodePrevisualisation : MonoBehaviour
 {
+    public bool onScreen { get; private set; }
+    
     [SerializeField] private Vector3 showPos;
     [SerializeField] private Vector3 hidePos;
     [SerializeField] private TextMeshProUGUI[] texts;
-
-    private bool onScreen = true;
+    
     private bool buttonPressed;
 
     public void SetTexts(float[] percentages)
@@ -23,16 +24,22 @@ public class NodePrevisualisation : MonoBehaviour
             texts[i].text = percentages[i] + "%";
         }
     }
-    
+
     public void Show()
     {
-        ((RectTransform) transform).localPosition = onScreen ? hidePos : showPos;
         onScreen = !onScreen;
+        ((RectTransform) transform).localPosition = onScreen ? showPos : hidePos;
+        InputManager.lockInput = onScreen;
+    }
+
+    private void Start()
+    {
+        Show();
     }
 
     private void Update()
     {
-        float input = InputManager.GetAxis(ControllerAxis.RIGHT_TRIGGER);
+        float input = InputManager.GetAxis(ControllerAxis.RIGHT_TRIGGER, true);
 
         if (input < 0.5f)
         {

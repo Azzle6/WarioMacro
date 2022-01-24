@@ -1,13 +1,13 @@
+using GameTypes;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class LifeBar : MonoBehaviour
 {
     [SerializeField] private Transform lifeBarGO;
-    [Range(0, 4)]
-    [SerializeField] private int life;
-
-    [SerializeField] private Image[] portraits; 
+    [SerializeField] private Image[] portraits;
+    [SerializeField] private Image[] keyChains;
+    private int life;
 
     private void Start()
     {
@@ -17,9 +17,12 @@ public class LifeBar : MonoBehaviour
     public void RecruitCharacter(Character chara)
     {
         if (life == 4) return;
+        
+        portraits[life].sprite = chara.lifebarSprite;
+        portraits[life].enabled = true;
+        keyChains[life].sprite = Resources.Load<SpriteListSO>("KeyChainSprites")
+            .nodeSprites[chara.characterType - SpecialistType.Brute];
         life++;
-        portraits[life-1].sprite = chara.lifebarSprite;
-        portraits[life - 1].enabled = true;
     }
 
     public void Imprison()
