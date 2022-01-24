@@ -15,6 +15,7 @@ public class Map : MonoBehaviour
     
     private static readonly int current = Animator.StringToHash("Current");
     private Player player;
+    private bool selectLast;
 
     
     public void Load()
@@ -53,7 +54,13 @@ public class Map : MonoBehaviour
         // input loop
         while (nextNode == null)
         {
-            //while (Ticker.lockTimescale) yield return null;
+            if (selectLast)
+            {
+                nextNode = endNode;
+                nextPath = currentNode.paths[0];
+                selectLast = false;
+                break;
+            }
 
             MoveDirection selectedDirection = InputManager.GetDirection(false, false);
             
@@ -113,6 +120,11 @@ public class Map : MonoBehaviour
 
         // dispose
         arrowPrefabs.ForEach(go => go.SetActive(false));
+    }
+
+    public void SelectLastNode()
+    {
+        selectLast = true;
     }
 
     private void Awake()

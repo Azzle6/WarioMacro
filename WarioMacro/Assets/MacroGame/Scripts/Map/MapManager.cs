@@ -8,8 +8,9 @@ using Random = UnityEngine.Random;
 // ReSharper disable once CheckNamespace
 public class MapManager : MonoBehaviour
 {
-    public static int currentPhase { get; private set; } = 0;
-    public static int floor { get; private set; } = 0;
+    public static int currentPhase { get; private set; }
+    public static int floor { get; private set; }
+    public Map currentMap { get; private set; }
     public readonly Dictionary<int, float> typePercentages = new Dictionary<int, float>();
 
     [SerializeField] private GameSettingsManager settingsManager;
@@ -20,7 +21,7 @@ public class MapManager : MonoBehaviour
     private Queue<GameObject> mapGoQueue;
     private IPhaseDomains[] phaseDomainsArray;
     private int[] phaseFloorThresholds = new int[2] {5, 8}; // TODO : replace with right values
-    private Map currentMap;
+    
 
     public Map LoadRecruitmentMap()
     {
@@ -66,6 +67,11 @@ public class MapManager : MonoBehaviour
         }
         GenerateLastPhaseDomains(notUsedDomains);
         
+    }
+
+    public void SkipToNextMap()
+    {
+        currentMap.SelectLastNode();
     }
 
     private void GenerateNormalPhaseDomains(int phase, ref List<int> notUsedDomains)

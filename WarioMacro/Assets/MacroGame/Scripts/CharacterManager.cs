@@ -55,7 +55,8 @@ public class CharacterManager : MonoBehaviour
     public IEnumerator AddDifferentSpecialist(int type)
     {
         var choices = allAvailableCharacters
-            .Where(cList => cList.type != type && cList.type != 2 && !cList.IsEmpty()).ToList();
+            .Where(cList => cList.type != type && !cList.IsEmpty()).ToList();
+        choices.RemoveAt(0);
 
         CharacterList charaList = choices[Random.Range(0, choices.Count)];
         

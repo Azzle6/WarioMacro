@@ -3981,12 +3981,13 @@ MonoBehaviour:
   ScenesList: []
   ScrollContent: {fileID: 1931179087}
   ToggleTemplate: {fileID: 50701862}
-  PlaytestPanel: {fileID: 1843691483}
+  playTestPanel: {fileID: 1843691483}
   GameControl: {fileID: 1749864760}
   ScenesRefs: {fileID: 11400000, guid: d76fb35deef7b814f871c4671b373ba0, type: 2}
   RecruitControl: {fileID: 1749864768}
-  MapMana: {fileID: 1749864767}
+  mapManager: {fileID: 1749864767}
   MiniGameInfoText: {fileID: 1064654660}
+  mapNameText: {fileID: 1203847785471866141}
 --- !u!4 &1838577186
 Transform:
   m_ObjectHideFlags: 0
@@ -4847,6 +4848,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2008032678}
     m_Modifications:
+    - target: {fileID: 861328884366211564, guid: 4f24120b376c64e418ae5f425ba27d2b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1749864767}
+    - target: {fileID: 861328884366211564, guid: 4f24120b376c64e418ae5f425ba27d2b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SkipToNextMap
+      objectReference: {fileID: 0}
+    - target: {fileID: 861328884366211564, guid: 4f24120b376c64e418ae5f425ba27d2b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MapManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 861328884366211564, guid: 4f24120b376c64e418ae5f425ba27d2b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 1203847785147042496, guid: 4f24120b376c64e418ae5f425ba27d2b, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -5125,6 +5142,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4f24120b376c64e418ae5f425ba27d2b, type: 3}
+--- !u!114 &1203847785471866141 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2752238865775462444, guid: 4f24120b376c64e418ae5f425ba27d2b, type: 3}
+  m_PrefabInstance: {fileID: 1203847785471866140}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &3168047895905239956 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 334812243614822947, guid: a5c8c710ed2e09941b2ac9927623953b, type: 3}
