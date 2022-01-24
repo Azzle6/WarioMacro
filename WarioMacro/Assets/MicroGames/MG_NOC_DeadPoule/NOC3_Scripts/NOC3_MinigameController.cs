@@ -25,7 +25,7 @@ namespace MiniGame.DeadPoule
     [DefaultExecutionOrder(1)]
     public class NOC3_MinigameController : MonoBehaviour
     {
-        [SerializeField] private GameControllerSO gameConfig;
+        [SerializeField] private GameConfig gameConfig;
         [SerializeField] private GameObject winVFX;
 
         [SerializeField] private Sound winSound;

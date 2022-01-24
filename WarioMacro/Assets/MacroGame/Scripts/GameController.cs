@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
@@ -16,6 +18,7 @@ public class GameController : Ticker
     [HideInSubClass] [SerializeField] protected internal MiniGameResultPannel_UI resultPanel;
     [HideInSubClass] [SerializeField] protected internal GameSettingsManager settingsManager;
     [HideInSubClass] [SerializeField] protected internal MapManager mapManager;
+    [HideInSubClass] [SerializeField] private TextMeshProUGUI resultPanelPlaceholder;
     [HideInSubClass] [SerializeField] private RewardChart rewardChart;
     [HideInSubClass] [SerializeField] private Animator macroGameCanvasAnimator;
     [HideInSubClass] [SerializeField] private ScoreManager scoreManager;
@@ -38,6 +41,14 @@ public class GameController : Ticker
     protected internal int nodeSuccessCount;
     private bool debugMicro;
 
+    public delegate void InteractEvent();
+    public static InteractEvent OnInteractionEnd;
+    public static bool isInActionEvent;
+
+    private void OnEnable()
+    {
+        OnInteractionEnd += instance.InteractiveEventEnd;
+    }
 
     public static void Register()
     {
@@ -46,6 +57,7 @@ public class GameController : Ticker
         instance.TickerStart(true);
         instance.debugMicro = true;
         Debug.Log("macro registered");
+        
     }
 
     public static void StopTimer()
@@ -100,11 +112,19 @@ public class GameController : Ticker
 
             yield return StartCoroutine(player.MoveToPosition(map.currentPath.wayPoints));
             var nodeMicroGame = map.currentNode.GetComponent<BehaviourNode>();
+            
 
             // True if node with micro games, false otherwise
-            if (nodeMicroGame != null)
+            if (nodeMicroGame != null && nodeMicroGame.enabled)
             {
                 nodeMicroGame.microGamesNumber = rewardChart.GetMGNumber(MapManager.phase, nodeMicroGame.behaviour);
+                int[] mgDomains = nodeMicroGame.GetMGDomains();
+                resultPanelPlaceholder.text = mgDomains[0].ToString(); // TODO : remove placeholder
+
+                for (int i = 1; i < mgDomains.Length; i++)
+                {
+                    resultPanelPlaceholder.text += ", " + mgDomains[i];
+                }
 
                 yield return StartCoroutine(NodeWithMicroGame(nodeMicroGame));
 
@@ -123,6 +143,15 @@ public class GameController : Ticker
                 }
             }
 
+            var nodeInteract = map.currentNode.GetComponent<InteractibleNode>();
+            if (nodeInteract != null && !isInActionEvent)
+            {
+                nodeInteract.EventInteractible.Invoke();
+                isInActionEvent = true;
+                yield return new WaitWhile(() => isInActionEvent);
+            }
+            
+
             if (map.OnLastNode())
             {
                 if (mapManager.OnLastMap())
@@ -138,18 +167,17 @@ public class GameController : Ticker
         }
     }
 
-    private IEnumerator NodeWithMicroGame(BehaviourNode recruitmentNode)
+    private IEnumerator NodeWithMicroGame(BehaviourNode behaviourNode)
     {
         // select 3 random micro games from micro games list
         var microGamesQueue = new Queue<string>();
         var microGamesList = new List<string>(sceneNames);
-        var microGamesCount = Mathf.Min(recruitmentNode.microGamesNumber, microGamesList.Count);
-        while (microGamesCount-- > 0)
+
+        for (int i = Mathf.Min(behaviourNode.microGamesNumber, microGamesList.Count) - 1; i >= 0; i--)
         {
             var rdIndex = Random.Range(0, microGamesList.Count);
-            var pickedMicroGame = microGamesList[rdIndex];
+            microGamesQueue.Enqueue(microGamesList[rdIndex]);
             microGamesList.RemoveAt(rdIndex);
-            microGamesQueue.Enqueue(pickedMicroGame);
         }
 
         // init result panel
@@ -299,5 +327,10 @@ public class GameController : Ticker
     private void Update()
     {
         TickerUpdate();
+    }
+
+    public void InteractiveEventEnd()
+    {
+        isInActionEvent = false;
     }
 }

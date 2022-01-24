@@ -96,6 +96,13 @@ public class Map : MonoBehaviour
                 nextNode = selectedNode;
                 nextPath = selectedPath;
             }
+            var nodeInteract = GameController.instance.map.currentNode.GetComponent<InteractibleNode>();
+            if (nodeInteract != null && !GameController.isInActionEvent && InputManager.GetKeyDown(ControllerKey.Y))
+            {
+                nodeInteract.EventInteractible.Invoke();
+                GameController.isInActionEvent = true;
+                yield return new WaitWhile(() => GameController.isInActionEvent);
+            }
             yield return null;
         }
 

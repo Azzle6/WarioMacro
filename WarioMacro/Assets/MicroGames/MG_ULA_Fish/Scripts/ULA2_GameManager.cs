@@ -8,7 +8,7 @@ public class ULA2_GameManager : MonoBehaviour, ITickable
 
     public ULA2_ArmScript armScript;
 
-    public GameControllerSO gameController;
+    public GameConfig gameController;
 
     public GameObject victoryImage;
     public GameObject defeatImage;
