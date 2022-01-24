@@ -1,4 +1,6 @@
+using System.Reflection;
 using JetBrains.Annotations;
+using UnityEngine;
 
 // ReSharper disable once CheckNamespace
 namespace GameTypes
@@ -19,6 +21,26 @@ namespace GameTypes
         public static int DropdownAsRealValue(int dropdownValue) => dropdownValue + 2;
         
         public static int RealValueAsDropdown(int value) => value - 2;
+
+        public static int[] GetTypes()
+        {
+            var fields = typeof(SpecialistType).GetFields();
+            int[] types = new int[fields.Length];
+            for (int i = 0; i < fields.Length; i++)
+            {
+                types[i] = (int) fields[i].GetValue(null);
+            }
+
+            return types;
+        }
+
+        public static int GetRandomSpecialistType()
+        {
+            var fields = typeof(SpecialistType).GetFields();
+            return (int) fields[Random.Range(0, fields.Length)].GetValue(null);
+        }
+        
+        public static int GetSpecialistCount() => typeof(SpecialistType).GetFields().Length;
     }
 
     [UsedImplicitly(ImplicitUseTargetFlags.Members)]
