@@ -14,7 +14,7 @@ public class CharacterManager : MonoBehaviour
     public List<Character> playerTeam = new List<Character>();
     public List<Character> recruitableCharacters = new List<Character>();
     public CharacterList[] allAvailableCharacters = new CharacterList[6];
-    public Character[] scoundrels = new Character[6];
+    public Character[] novices = new Character[6];
     public List<Imprisoned> imprisonedCharacters = new List<Imprisoned>();
     
     public delegate void RecruitCharacter();
@@ -76,11 +76,11 @@ public class CharacterManager : MonoBehaviour
             }
             else if (list.count == 1)
             {
-                recruitableCharacters.Add(rand == 0 ? list.Get(rand) : scoundrels.First(t => t.characterType == list.type)); 
+                recruitableCharacters.Add(rand == 0 ? list.Get(rand) : novices.First(t => t.characterType == list.type)); 
             }
             else
             {
-                recruitableCharacters.Add(scoundrels.First(t => t.characterType == list.type));
+                recruitableCharacters.Add(novices.First(t => t.characterType == list.type));
             }
         }
 

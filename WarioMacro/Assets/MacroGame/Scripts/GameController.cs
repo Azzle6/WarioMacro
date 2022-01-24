@@ -101,7 +101,7 @@ public class GameController : Ticker
         MusicManager.instance.state = Soundgroup.CurrentPhase.RECRUIT;
         yield return recruitmentController.RecruitmentLoop();
 
-        //map = mapManager.LoadNextMap();
+        map = mapManager.LoadNextMap();
         MusicManager.instance.state = Soundgroup.CurrentPhase.ACTION;
         while(true)
         {
