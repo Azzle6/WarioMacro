@@ -10,8 +10,6 @@ public class RecruitmentController : GameController
     [SerializeField] private GameObject alarmGO;
     [SerializeField] private NodePrevisualisation nodePrevisualisation;
     [SerializeField] private NodeVisual startNode;
-    [Range(0, 3)] [SerializeField] private int askedCharacterThreshold = 2;
-    [Range(0, 3)] [SerializeField] private int randomSpecialistThreshold = 1;
     private NodeVisual lastNoMGNode;
 
     public IEnumerator RecruitmentLoop()
@@ -33,8 +31,6 @@ public class RecruitmentController : GameController
             // Select path and move
             lastNoMGNode = instance.map.currentNode;
             yield return StartCoroutine(instance.map.WaitForNodeSelection());
-            
-            
 
             if (instance.characterManager.isTeamFull)
             {
@@ -90,31 +86,6 @@ public class RecruitmentController : GameController
         }
         
         SetRecruitmentActive(false);
-    }
-
-    private IEnumerator NodeResults(RecruitmentNode recruitmentNode)
-    {
-        // If player won enough, let him choice a character
-        if (instance.nodeSuccessCount >= askedCharacterThreshold)
-        {
-            instance.settingsManager.IncreaseDifficulty();
-
-            yield return instance.characterManager.DisplayRecruitmentChoice(recruitmentNode.type);
-            yield break;
-        }
-        
-        instance.settingsManager.DecreaseDifficulty();
-
-        // Partial lost, give him a random character
-        if (instance.nodeSuccessCount >= randomSpecialistThreshold)
-        {
-            yield return instance.characterManager.AddDifferentSpecialist(recruitmentNode.type);
-        }
-        // Completely lost, give him a scoundrel
-        else
-        {
-            //yield return instance.characterManager.AddDefaultCharacter();
-        }
     }
 
     private void DeletePath(NodeVisual.Path path, RecruitmentNode node)

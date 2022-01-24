@@ -19,29 +19,40 @@ public class BehaviourNode : Node
     private int primaryDomain = NodeDomainType.None;
     private int secondaryDomain = NodeDomainType.None;
 
-    public void SetRandomDomain(int primaryDomain, int[] secondaryDomains)
+    public void SetRandomDomain(IPhaseDomains phaseDomains)
     {
         if (behaviour == NodeBehaviour.White) return;
 
         if (Random.Range(0f, 100f) < primaryDomainPercentage)
         {
-            this.primaryDomain = primaryDomain;
+            primaryDomain = phaseDomains.GetRandomPrimaryDomain();
             //sRenderer.sprite = Resources.Load<SpriteListSO>("NodeSprites").nodeSprites[primaryDomain - 1];
             logoSpriteRenderer.sprite = Resources.Load<SpriteListSO>("NodeLogoSprites").nodeSprites[primaryDomain - 2];
 
             if (Random.Range(0f, 100f) < doubleDomainPercentage)
             {
-                secondaryDomain = secondaryDomains[Random.Range(0, secondaryDomains.Length)];
+                secondaryDomain = phaseDomains.GetRandomSecondaryDomain();
             }
         }
         else
         {
-            secondaryDomain = secondaryDomains[Random.Range(0, secondaryDomains.Length)];
+            secondaryDomain = phaseDomains.GetRandomSecondaryDomain();
             //sRenderer.sprite = Resources.Load<SpriteListSO>("NodeSprites").nodeSprites[secondaryDomain - 1];
             logoSpriteRenderer.sprite = Resources.Load<SpriteListSO>("NodeLogoSprites").nodeSprites[secondaryDomain - 2];
         }
+    }
+
+    public int GetMGDomain(int index)
+    {
+        if (index >= microGamesNumber)
+        {
+            Debug.LogError("Index out of range");
+        }
         
-        Debug.Log($"{this.primaryDomain} : {secondaryDomain}");
+        if (mgDomains == null)
+            GetMGDomains();
+
+        return mgDomains[index];
     }
 
     public int[] GetMGDomains()
@@ -53,7 +64,14 @@ public class BehaviourNode : Node
             return secondaryDomain != NodeDomainType.None ? MGDomainsDoubleDomain() : MGDomainsSingleDomain(primaryDomain);
         }
 
-        return MGDomainsSingleDomain(secondaryDomain);
+        if (secondaryDomain != NodeDomainType.None)
+        {
+            return MGDomainsSingleDomain(secondaryDomain);
+        }
+        
+        mgDomains = new int[microGamesNumber];
+        Debug.Log(mgDomains[0]);
+        return mgDomains;
     }
 
     private int[] MGDomainsSingleDomain(int concernedDomain)
@@ -129,4 +147,6 @@ public class BehaviourNode : Node
 
         return mgDomains;
     }
+    
+    
 }

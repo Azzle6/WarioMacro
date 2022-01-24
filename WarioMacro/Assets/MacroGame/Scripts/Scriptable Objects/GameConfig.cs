@@ -10,6 +10,15 @@ public class GameConfig : ScriptableObject
     [Space]
     [BPMRange] public int initialGameSpeed = 50;
     [Range(1, 3)] public int initialDifficulty = 1;
+
+    [Space] [Header("Astral Path")] 
+    [Range(1, 7)] public int astralMGCount = 3;
+    [Range(0, 6)] public int loseCharacterThreshold = 1;
+    
+    [Space] [Header("Phase Security Domain")]
+    [Range(0f, 100f)] public float phaseDoubleDomainPercentage = 50;
+    [Range(0f, 100f)] public float lastPhaseSecondaryDomainPercentage = 50;
+    
     [Space] [Header("Node Security Domain")]
     [Range(0f, 100f)] public float nodePrimaryDomainPercentage = 70;
     [Range(0f, 100f)] public float nodeDoubleDomainPercentage = 50;

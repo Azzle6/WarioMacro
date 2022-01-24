@@ -56,6 +56,7 @@ public class CharacterManager : MonoBehaviour
     {
         var choices = allAvailableCharacters
             .Where(cList => cList.type != type && !cList.IsEmpty()).ToList();
+        choices.RemoveAt(0);
 
         CharacterList charaList = choices[Random.Range(0, choices.Count)];
         
