@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class PlaytestTool : MonoBehaviour
@@ -10,14 +11,15 @@ public class PlaytestTool : MonoBehaviour
     [SerializeField] private string[] ScenesList = null;
     [SerializeField] private GameObject ScrollContent;
     [SerializeField] private GameObject ToggleTemplate;
-    [SerializeField] private GameObject PlaytestPanel;
-    private bool panelIsActive = false;
-    private List<Toggle> TogglesList;
+    [SerializeField] private GameObject playTestPanel;
     [SerializeField] private GameController GameControl;
     [SerializeField] private ScenesReferencesSO ScenesRefs;
     [SerializeField] private RecruitmentController RecruitControl;
-    [SerializeField] private MapManager MapMana;
+    [SerializeField] private MapManager mapManager;
     [SerializeField] private TMP_Text MiniGameInfoText;
+    [SerializeField] private TextMeshProUGUI mapNameText;
+    private List<Toggle> TogglesList;
+    private bool panelIsActive;
 
     private void Start()
     {
@@ -29,12 +31,19 @@ public class PlaytestTool : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.P))
         {
             panelIsActive = !panelIsActive;
-            PlaytestPanel.SetActive(panelIsActive);
+            playTestPanel.SetActive(panelIsActive);
         }
 
         if (GameController.instance.currentScene != null)
         {
-            if(GameController.instance.currentScene.ToString().Length > 0 )MiniGameInfoText.text = "Current MiniGame : " + GameController.instance.currentScene.ToString();
+            string sceneName = GameController.instance.currentScene;
+            if(sceneName.Length > 0 )MiniGameInfoText.text = "Current MiniGame : " + sceneName.Substring(13, sceneName.Length - 13);
+        }
+        
+        if (mapManager.currentMapGO != null)
+        {
+            string mapName = mapManager.currentMapGO.name;
+            if(mapName.Length > 0 ) mapNameText.text = "Current Level : " + mapName.Substring(0, mapName.Length - 7);;
         }
     }
 

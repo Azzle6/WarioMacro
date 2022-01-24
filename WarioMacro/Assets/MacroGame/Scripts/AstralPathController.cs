@@ -7,6 +7,7 @@ public class AstralPathController : GameController
 
     public IEnumerator EscapeLoop()
     {
+        GameConfig.instance.currentDifficulty = 3;
         while (!instance.map.OnLastNode())
         {
             mgFailed = 0;
@@ -18,6 +19,13 @@ public class AstralPathController : GameController
             if (nodeMicroGame != null && nodeMicroGame.enabled)
             {
                 nodeMicroGame.microGamesNumber = GameConfig.instance.astralMGCount;
+                int[] mgDomains = nodeMicroGame.GetMGDomains();
+                instance.resultPanelPlaceholder.text = mgDomains[0].ToString(); // TODO : remove placeholder
+
+                for (int i = 1; i < mgDomains.Length; i++)
+                {
+                    instance.resultPanelPlaceholder.text += ", " + mgDomains[i];
+                }
 
                 yield return StartCoroutine(instance.NodeWithMicroGame(this, nodeMicroGame));
 
@@ -41,7 +49,7 @@ public class AstralPathController : GameController
         StartCoroutine(instance.ToggleEndGame(true));
     }
 
-    protected override bool MGResults(BehaviourNode behaviourNode, bool result)
+    protected override bool MGResults(BehaviourNode behaviourNode, int mgNumber, bool result)
     {
         if (result)
         {

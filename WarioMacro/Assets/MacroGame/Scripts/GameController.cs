@@ -13,15 +13,16 @@ public class GameController : Ticker
     [HideInInspector] public string currentScene;
     [HideInSubClass] public Player player;
 
+    
+    [HideInSubClass] public ScoreManager scoreManager;
     [HideInSubClass] [SerializeField] protected internal CharacterManager characterManager;
     [HideInSubClass] [SerializeField] protected internal MiniGameResultPannel_UI resultPanel;
     [HideInSubClass] [SerializeField] protected internal GameSettingsManager settingsManager;
     [HideInSubClass] [SerializeField] protected internal MapManager mapManager;
     [HideInSubClass] [SerializeField] protected internal LifeBar lifeBar;
-    [HideInSubClass] [SerializeField] private TextMeshProUGUI resultPanelPlaceholder;
+    [HideInSubClass] [SerializeField] protected internal TextMeshProUGUI resultPanelPlaceholder;
     [HideInSubClass] [SerializeField] private RewardChart rewardChart;
     [HideInSubClass] [SerializeField] private Animator macroGameCanvasAnimator;
-    [HideInSubClass] [SerializeField] private ScoreManager scoreManager;
     [HideInSubClass] [SerializeField] private Alarm alarm;
     [HideInSubClass] [SerializeField] private RecruitmentController recruitmentController;
     [HideInSubClass] [SerializeField] private AstralPathController astralPathController;
@@ -113,7 +114,7 @@ public class GameController : Ticker
             // True if node with micro games, false otherwise
             if (nodeMicroGame != null && nodeMicroGame.enabled)
             {
-                nodeMicroGame.microGamesNumber = rewardChart.GetMGNumber(MapManager.phase, nodeMicroGame.behaviour);
+                nodeMicroGame.microGamesNumber = rewardChart.GetMGNumber(MapManager.currentPhase, nodeMicroGame.behaviour);
                 int[] mgDomains = nodeMicroGame.GetMGDomains();
                 resultPanelPlaceholder.text = mgDomains[0].ToString(); // TODO : remove placeholder
 
@@ -164,6 +165,7 @@ public class GameController : Ticker
         // select 3 random micro games from micro games list
         var microGamesQueue = new Queue<string>();
         var microGamesList = new List<string>(sceneNames);
+        int currentMG = 0;
 
         for (int i = Mathf.Min(behaviourNode.microGamesNumber, microGamesList.Count) - 1; i >= 0; i--)
         {
@@ -215,7 +217,7 @@ public class GameController : Ticker
             ResetTickables();
             ResetTick();
 
-            if (controller.MGResults(behaviourNode, gameResult)) 
+            if (controller.MGResults(behaviourNode, currentMG, gameResult)) 
                 yield break;
 
             resultPanel.PopWindowUp();
@@ -223,22 +225,24 @@ public class GameController : Ticker
             yield return new WaitForSeconds(1f);
         
             resultPanel.SetCurrentNode(gameResult);
+            currentMG++;
             yield return new WaitForSeconds(1f);
         }
     }
 
-    protected virtual bool MGResults(BehaviourNode behaviourNode, bool result)
+    protected virtual bool MGResults(BehaviourNode behaviourNode, int mgNumber, bool result)
     {
         // change BPM and alarm or money
         if (result)
         {
             settingsManager.IncreaseBPM();
-            scoreManager.AddMoney(rewardChart.GetMoneyBags(MapManager.phase, behaviourNode.behaviour));
+            scoreManager.AddMoney(rewardChart.GetMoneyBags(MapManager.currentPhase, behaviourNode.behaviour) *
+                                  (characterManager.SpecialistOfTypeInTeam(behaviourNode.GetMGDomain(mgNumber)) > 0 ? 2 : 1));
         }
         else
         {
             settingsManager.DecreaseBPM();
-            alarm.DecrementCount(MapManager.phase, behaviourNode.behaviour);
+            alarm.DecrementCount(MapManager.currentPhase, behaviourNode.behaviour);
         }
 
         if (!Alarm.isActive) return false;
