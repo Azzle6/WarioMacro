@@ -17,6 +17,11 @@ public class CharacterManager : MonoBehaviour
     public Character[] scoundrels = new Character[6];
     public List<Imprisoned> imprisonedCharacters = new List<Imprisoned>();
     
+    
+    public int SpecialistOfTypeInTeam(int type)
+    {
+        return playerTeam.Count(c => c.characterType == type);
+    }
     [Serializable]
     public class Imprisoned
     {
@@ -188,10 +193,7 @@ public class CharacterManager : MonoBehaviour
     private GameObject[] buttonGOList;
     private int currentCount;
 
-    public int SpecialistOfTypeInTeam(int type)
-    {
-        return playerTeam.Count(c => c.characterType == type);
-    }
+    
 
     public bool IsTypeAvailable(int type) => allAvailableCharacters.First(list => list.type == type).count != 0;
 

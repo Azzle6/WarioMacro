@@ -24,7 +24,7 @@ public class RecruitmentController : GameController
         
         
         SetRecruitmentActive(true);
-        while (characterManager.playerTeam.Count < 4) yield return null;
+        while (GameController.instance.characterManager.playerTeam.Count < 4) yield return null;
         nodePrevisualisation.SetTexts(instance.mapManager.typePercentages.Select(pair => pair.Value).ToArray());
         
         /*while(!instance.characterManager.isTeamFull)
