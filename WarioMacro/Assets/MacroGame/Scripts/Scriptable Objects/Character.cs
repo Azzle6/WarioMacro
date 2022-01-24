@@ -14,5 +14,6 @@ public class Character : ScriptableObject
     public Level mastery = Level.Expert;
     public Sprite cardSprite;
     public Sprite lifebarSprite;
-    
+    public GameObject PuppetPrefab;
+
 }

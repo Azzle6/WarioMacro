@@ -1,7 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using GameTypes;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class CharacterNode : MonoBehaviour
 {
@@ -10,8 +13,40 @@ public class CharacterNode : MonoBehaviour
 
     public Character currentChara;
 
-    public bool HasBeenRecruit;
+    [SerializeField] private GameObject CharacterEmplacement;
+    [SerializeField] private DialogConstructor AlreadyRecruitDialog;
+    [SerializeField] private InteractibleNode NodeEventScript;
+    private bool HasBeenRecruit;
+
+    private void Awake()
+    {
+        CharacterManager.RecruitableCharaFinished += Setup;
+        HasBeenRecruit = false;
+    }
+
     
-    
+
+    private void Setup()
+    {
+        foreach (Character chara in CharacterManager.instance.recruitableCharacters)
+        {
+            if (chara.characterType == type)
+            {
+                currentChara = chara;
+                //Instantiate(currentChara.PuppetPrefab, CharacterEmplacement.transform);
+                return;
+            }
+        }
+    }
+
+    public void Recruit()
+    {
+        HasBeenRecruit = true;
+        CharacterManager.instance.Recruit(currentChara);
+
+        
+        NodeEventScript.EventInteractible.RemoveAllListeners();
+        NodeEventScript.EventInteractible.AddListener(() => DialogManager.instance.StartDialog(AlreadyRecruitDialog));
+    }
 
 }

@@ -10,14 +10,22 @@ using Random = UnityEngine.Random;
 // ReSharper disable once CheckNamespace
 public class CharacterManager : MonoBehaviour
 {
-    
+    public static CharacterManager instance;
     public List<Character> playerTeam = new List<Character>();
     public List<Character> recruitableCharacters = new List<Character>();
     public CharacterList[] allAvailableCharacters = new CharacterList[6];
     public Character[] scoundrels = new Character[6];
     public List<Imprisoned> imprisonedCharacters = new List<Imprisoned>();
     
-    
+    public delegate void RecruitCharacter();
+    public static RecruitCharacter RecruitableCharaFinished;
+
+    private void Awake()
+    {
+        if (instance != null) return;
+        instance = this;
+    }
+
     public int SpecialistOfTypeInTeam(int type)
     {
         return playerTeam.Count(c => c.characterType == type);
@@ -75,6 +83,8 @@ public class CharacterManager : MonoBehaviour
                 recruitableCharacters.Add(scoundrels.First(t => t.characterType == list.type));
             }
         }
+
+        RecruitableCharaFinished();
     }
 
 
