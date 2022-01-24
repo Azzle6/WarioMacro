@@ -8,8 +8,6 @@ public class RecruitmentController : GameController
 {
     public bool skipRecruitment;
     [SerializeField] private GameObject alarmGO;
-    [SerializeField] private NodePrevisualisation nodePrevisualisation;
-    [SerializeField] private NodeVisual startNode;
     private NodeVisual lastNoMGNode;
 
     public IEnumerator RecruitmentLoop()
@@ -24,20 +22,12 @@ public class RecruitmentController : GameController
         
         
         SetRecruitmentActive(true);
-        while (GameController.instance.characterManager.playerTeam.Count < 4) yield return null;
-        nodePrevisualisation.SetTexts(instance.mapManager.typePercentages.Select(pair => pair.Value).ToArray());
         
-        /*while(!instance.characterManager.isTeamFull)
+        while(instance.characterManager.playerTeam.Count < 4)
         {
             // Select path and move
             lastNoMGNode = instance.map.currentNode;
             yield return StartCoroutine(instance.map.WaitForNodeSelection());
-
-            if (instance.characterManager.isTeamFull)
-            {
-                SetRecruitmentActive(false);
-                yield break;
-            }
 
             yield return StartCoroutine(instance.player.MoveToPosition(instance.map.currentPath.wayPoints));
             
@@ -47,13 +37,7 @@ public class RecruitmentController : GameController
             if (typedNode != null)
             {
                 //nodeMicroGame.microGamesNumber = instance.gameControllerSO.defaultMGCount;
-                
-                if (nodePrevisualisation.onScreen)
-                {
-                    nodePrevisualisation.Show();
-                }
-                nodePrevisualisation.enabled = false;
-                
+
                 /*
                 // Launch micro game loop
                 yield return StartCoroutine(instance.NodeWithMicroGame(nodeMicroGame));
@@ -64,7 +48,6 @@ public class RecruitmentController : GameController
                 instance.resultPanel.PopWindowDown();
                 instance.resultPanel.ToggleWindow(false);
                 
-                #1#
                 // Wait for results
                 yield return instance.characterManager.DisplayRecruitmentChoice(typedNode.type);
                 //yield return NodeResults(nodeMicroGame);
@@ -77,14 +60,11 @@ public class RecruitmentController : GameController
                 
                 // Return on start node
                 instance.player.TeleportPlayer(startNode.transform.position);
-                instance.map.currentNode = startNode;
-                nodePrevisualisation.enabled = true;
+                instance.map.currentNode = startNode;*/
             }
-            
-            
 
             yield return null;
-        }*/
+        }
         
         SetRecruitmentActive(false);
     }
@@ -104,7 +84,6 @@ public class RecruitmentController : GameController
 
     private void SetRecruitmentActive(bool state)
     {
-        GameObject nodePrevisualisationGO = nodePrevisualisation.gameObject;
         /*
         if (state)
         {
@@ -117,7 +96,6 @@ public class RecruitmentController : GameController
         }*/
         
         alarmGO.SetActive(!state);
-        nodePrevisualisationGO.SetActive(state);
     }
     
 
@@ -126,7 +104,7 @@ public class RecruitmentController : GameController
         Debug.Log("Skip Recruit");
         for (int i = 0; i < 4; i++)
         {
-            characterManager.Recruit(characterManager.recruitableCharacters[Random.Range(0,characterManager.recruitableCharacters.Count)]);
+            instance.characterManager.Recruit(instance.characterManager.recruitableCharacters[Random.Range(0, instance.characterManager.recruitableCharacters.Count)]);
         }
 
         yield return null;

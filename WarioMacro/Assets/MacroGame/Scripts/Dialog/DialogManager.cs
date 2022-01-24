@@ -35,7 +35,7 @@ public class DialogManager : MonoBehaviour
 
     public void StartDialog(DialogConstructor currentDial)
     {
-        if (isInDialog)
+        if (instance.isInDialog)
         {
             Debug.Log("player is already in a dialog.");
             return;

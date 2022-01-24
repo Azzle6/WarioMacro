@@ -12,8 +12,6 @@ public class MapManager : MonoBehaviour
     public static int currentPhase { get; private set; }
     public static int floor { get; private set; }
     public GameObject currentMapGO { get; private set; }
-    
-    public readonly Dictionary<int, float> typePercentages = new Dictionary<int, float>();
 
     [SerializeField] private GameSettingsManager settingsManager;
     [SerializeField] private Transform mapParent;
@@ -226,11 +224,5 @@ public class MapManager : MonoBehaviour
     {
         var rd = new System.Random();
         mapPrefabQueue = new Queue<GameObject>(mapPrefabList.OrderBy(go => rd.Next()));
-        
-        // TODO : Obsolete, delete after merging
-        foreach (FieldInfo field in typeof(SpecialistType).GetFields())
-        {
-            typePercentages.Add((int) field.GetValue(null), 0f);
-        }
     }
 }
