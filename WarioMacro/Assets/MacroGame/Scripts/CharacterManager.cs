@@ -1,10 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using GameTypes;
 using UnityEngine;
-using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 // ReSharper disable once CheckNamespace
