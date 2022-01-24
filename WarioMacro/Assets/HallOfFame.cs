@@ -6,8 +6,8 @@ using UnityEngine;
 
 public class HallOfFame : MonoBehaviour
 {
-    public Run[] hall = new Run[10];
-    public CharacterManagerTest characterManagerTest;
+    public Run[] hall;
+    public CharacterManager characterManager;
     public Run runTest;
     
     [Serializable]
@@ -22,14 +22,15 @@ public class HallOfFame : MonoBehaviour
             var toString =  score + "," + time + ",";
             foreach (var character in team)
             {
-                toString += character.ToString()+":";
+                toString += character+":";
             }
             toString = toString.Substring(0, toString.Length - 1);
+            Debug.Log(toString);
             return toString;
         }
     }
 
-    void Start()
+    void Awake()
     {
         SetHallOfFame();
     }
@@ -44,23 +45,28 @@ public class HallOfFame : MonoBehaviour
     }
     public void SetHallOfFame()
     {
-        var i = 0;
+        var j = 0;
         var temp = PlayerPrefs.GetString("hallOfFame");
         if (temp == "") return;
         var hallOfFame = temp.Split(';');
-        hall = new Run[Mathf.Clamp(hallOfFame.Length,0,10)];
+        hall = new Run[hallOfFame.Length];
         foreach (var item in hallOfFame)
         {
             Run run = new Run();
             var temp2 = item.Split(',');
+            
             var team = temp2[2].Split(':');
             run.score = float.Parse(temp2[0]);
             run.time = float.Parse(temp2[1]);
-            foreach (var character in team)
+            Debug.Log(temp2[2]);
+            for (int i = 0;i<4;i++)
             {
-                run.team[i] = characterManagerTest.GetCharacter(character);
-                i++;
+                run.team[i] = characterManager.GetCharacter(team[i]);
             }
+
+            hall[j] = run;
+            j++;
+
         }
     }
 
@@ -90,5 +96,6 @@ public class HallOfFame : MonoBehaviour
         }
         save = save.Substring(0, save.Length - 1);
         PlayerPrefs.SetString("hallOfFame",save);
+        Debug.Log(save);
     }
 }

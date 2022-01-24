@@ -13,6 +13,8 @@ public class GameController : Ticker
     [HideInInspector] public string currentScene;
     [HideInSubClass] public Player player;
 
+    
+    [HideInSubClass] public ScoreManager scoreManager;
     [HideInSubClass] [SerializeField] protected internal CharacterManager characterManager;
     [HideInSubClass] [SerializeField] protected internal MiniGameResultPannel_UI resultPanel;
     [HideInSubClass] [SerializeField] protected internal GameSettingsManager settingsManager;
@@ -21,7 +23,6 @@ public class GameController : Ticker
     [HideInSubClass] [SerializeField] private TextMeshProUGUI resultPanelPlaceholder;
     [HideInSubClass] [SerializeField] private RewardChart rewardChart;
     [HideInSubClass] [SerializeField] private Animator macroGameCanvasAnimator;
-    [HideInSubClass] [SerializeField] private ScoreManager scoreManager;
     [HideInSubClass] [SerializeField] private Alarm alarm;
     [HideInSubClass] [SerializeField] private RecruitmentController recruitmentController;
     [HideInSubClass] [SerializeField] private AstralPathController astralPathController;

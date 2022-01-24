@@ -22,11 +22,12 @@ public class RecruitmentController : GameController
             yield break;
         }
         
-        // Initialise recruitment
+        
         SetRecruitmentActive(true);
+        while (characterManager.playerTeam.Count < 4) yield return null;
         nodePrevisualisation.SetTexts(instance.mapManager.typePercentages.Select(pair => pair.Value).ToArray());
         
-        while(!instance.characterManager.isTeamFull)
+        /*while(!instance.characterManager.isTeamFull)
         {
             // Select path and move
             lastNoMGNode = instance.map.currentNode;
@@ -63,7 +64,7 @@ public class RecruitmentController : GameController
                 instance.resultPanel.PopWindowDown();
                 instance.resultPanel.ToggleWindow(false);
                 
-                */
+                #1#
                 // Wait for results
                 yield return instance.characterManager.DisplayRecruitmentChoice(typedNode.type);
                 //yield return NodeResults(nodeMicroGame);
@@ -83,7 +84,7 @@ public class RecruitmentController : GameController
             
 
             yield return null;
-        }
+        }*/
         
         SetRecruitmentActive(false);
     }
@@ -125,8 +126,10 @@ public class RecruitmentController : GameController
         Debug.Log("Skip Recruit");
         for (int i = 0; i < 4; i++)
         {
-            yield return instance.characterManager.AddDifferentSpecialist(i + SpecialistType.Brute);
+            characterManager.Recruit(characterManager.recruitableCharacters[Random.Range(0,characterManager.recruitableCharacters.Count)]);
         }
+
+        yield return null;
     }
 
     public void InteractiveEventEnd()
