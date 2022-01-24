@@ -103,6 +103,7 @@ public class CharacterManager : MonoBehaviour
     public void LoseCharacter()
     {
         var rand = Random.Range(0, 4);
+        life.Imprison(rand);
         imprisonedCharacters.Add(new Imprisoned(playerTeam[rand],3,25000));
         playerTeam.Remove(playerTeam[rand]);
     }
