@@ -14,6 +14,8 @@ public class CharacterManager : MonoBehaviour
     public Character[] novices = new Character[6];
     public List<Imprisoned> imprisonedCharacters = new List<Imprisoned>();
     
+    [SerializeField] private LifeBar life;
+    
     public delegate void RecruitCharacter();
     public static RecruitCharacter RecruitableCharaFinished;
 
@@ -73,14 +75,19 @@ public class CharacterManager : MonoBehaviour
             }
             else if (list.count == 1)
             {
-                recruitableCharacters.Add(rand == 0 ? list.Get(rand) : novices.First(t => t.characterType == list.type)); 
+                if (rand == 1)
+                    recruitableCharacters.Add(novices.First(t => t.characterType == list.type));
+                else
+                {
+                    recruitableCharacters.Add(list.Get(rand));
+                    list.RemoveAt(rand);
+                }
             }
             else
             {
                 recruitableCharacters.Add(novices.First(t => t.characterType == list.type));
             }
         }
-
         RecruitableCharaFinished();
     }
 
@@ -88,6 +95,7 @@ public class CharacterManager : MonoBehaviour
     public void Recruit(Character character)
     {
         playerTeam.Add(character);
+        life.RecruitCharacter(character);
         recruitableCharacters.Remove(character);
     }
 

@@ -65,7 +65,7 @@ public class DialogManager : MonoBehaviour
         for (int i = 0; i < curDial.dialogs[curIndex].Length; i++)
         {
             textZone.text = string.Concat(textZone.text, curDial.dialogs[curIndex][i]);
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.02f);
         }
         
         if(curIndex < curDial.dialogs.Length - 1) curIndex++;
@@ -97,6 +97,11 @@ public class DialogManager : MonoBehaviour
         isInDialog = false;
         Ticker.lockTimescale = false;
         GameController.OnInteractionEnd();
+        foreach (GameObject but in Buttons)
+        {
+            Destroy(but);
+        }
+
     }
 
     GameObject[] SetupButtons()
@@ -109,6 +114,7 @@ public class DialogManager : MonoBehaviour
             GameObject but = Instantiate(ButtonTemplate, ButtonsParent.transform);
             
             Button butComponent = but.GetComponent<Button>();
+            but.GetComponentInChildren<TMP_Text>().text = resp.ButtonResponse;
             butComponent.onClick = resp.ButtonEvent;
             butComponent.onClick.AddListener(delegate { FinishDialog(); });
             
@@ -121,6 +127,7 @@ public class DialogManager : MonoBehaviour
         {
             GameObject but = Instantiate(ButtonTemplate, ButtonsParent.transform);
             Button butComponent = but.GetComponent<Button>();
+            but.GetComponentInChildren<TMP_Text>().text = "Quit";
             butComponent.onClick.AddListener(delegate { FinishDialog(); });
             buttons.Add(but);
             ButtonsParent.SetActive(false);
