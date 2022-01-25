@@ -15,6 +15,7 @@ public class GameController : Ticker
 
     
     [HideInSubClass] public ScoreManager scoreManager;
+    [HideInSubClass] public HallOfFame hallOfFame;
     [HideInSubClass] [SerializeField] protected internal CharacterManager characterManager;
     [HideInSubClass] [SerializeField] protected internal MiniGameResultPannel_UI resultPanel;
     [HideInSubClass] [SerializeField] protected internal GameSettingsManager settingsManager;

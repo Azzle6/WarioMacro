@@ -112,6 +112,7 @@ public class CharacterManager : MonoBehaviour
     {
         Character rdCharacter = playerTeam[Random.Range(0, playerTeam.Count)];
         life.Imprison(rdCharacter);
+        GameController.instance.hallOfFame.SetCharacterToJail(rdCharacter);
         imprisonedCharacters.Add(new Imprisoned(rdCharacter, 3, 25000));
         playerTeam.Remove(rdCharacter);
         UpdateAvailable();
@@ -172,6 +173,7 @@ public class CharacterManager : MonoBehaviour
         foreach (var c in playerTeam)
         {
             if (imprisonedCharacters.Any(i =>i.character == c)) continue;
+            if (novices.Any(n => n == c)) continue;
             foreach (var list in allAvailableCharacters.Where(list => c.characterType == list.type))
             {
                 list.Add(c);
