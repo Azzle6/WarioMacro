@@ -11,11 +11,11 @@ public class BehaviourNode : Node
     [SerializeField] private Image primaryLogo;
     [SerializeField] private Image secondaryLogo;
 
-    private static float primaryDomainPercentage => GameConfig.instance.nodePrimaryDomainPercentage;
-    private static float doubleDomainPercentage => GameConfig.instance.nodeDoubleDomainPercentage;
-    private static float mgSingleDomainPercentage => GameConfig.instance.mgSingleDomainPercentage;
-    private static float mgPrimaryDomainPercentage => GameConfig.instance.mgPrimaryDomainPercentage;
-    private static float mgSecondaryDomainPercentage => GameConfig.instance.mgSecondaryDomainPercentage;
+    private static float primaryDomainPercentage => GameControllerSO.instance.nodePrimaryDomainPercentage;
+    private static float doubleDomainPercentage => GameControllerSO.instance.nodeDoubleDomainPercentage;
+    private static float mgSingleDomainPercentage => GameControllerSO.instance.mgSingleDomainPercentage;
+    private static float mgPrimaryDomainPercentage => GameControllerSO.instance.mgPrimaryDomainPercentage;
+    private static float mgSecondaryDomainPercentage => GameControllerSO.instance.mgSecondaryDomainPercentage;
 
     private int[] mgDomains;
     private int primaryDomain = NodeDomainType.None;

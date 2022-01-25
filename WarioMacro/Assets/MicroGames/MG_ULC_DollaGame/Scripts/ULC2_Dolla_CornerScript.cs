@@ -12,6 +12,20 @@ public class ULC2_Dolla_CornerScript : MonoBehaviour
         if (other.CompareTag("CornerBill"))
         {
             cutterController.cornersReached++;
+            /*if(cutterController.canDeleteCorners == true)
+            {
+                other.GetComponent<BoxCollider2D>().enabled = false;
+                cutterController.canDeleteCorners = false;
+            }*/
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.CompareTag("CornerBill") && cutterController.canDeleteCorners == true)
+        {
+            collision.GetComponent<BoxCollider2D>().enabled = false;
+            cutterController.canDeleteCorners = false;
         }
     }
 

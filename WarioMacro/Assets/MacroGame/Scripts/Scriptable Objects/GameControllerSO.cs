@@ -1,9 +1,9 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Game Config", menuName = "MacroGame/Game Config", order = 0)]
-public class GameConfig : ScriptableObject
+public class GameControllerSO : ScriptableObject
 {
-    public static GameConfig instance;
+    public static GameControllerSO instance;
     
     [BPMRange] public int currentGameSpeed = 50;
     [Range(1, 3)] public int currentDifficulty = 1;

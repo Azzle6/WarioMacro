@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GameTypes;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 // ReSharper disable once CheckNamespace
@@ -15,7 +16,7 @@ public class MapManager : MonoBehaviour
     [HideInInspector] public int[] phaseFloorThresholds = new int[2];
 
     [SerializeField] private GameSettingsManager settingsManager;
-    [SerializeField] private GameConfig config;
+    [FormerlySerializedAs("config")] [SerializeField] private GameControllerSO controllerSO;
     [SerializeField] private Transform mapParent;
     [SerializeField] private Map recruitmentMap;
     [SerializeField] private Map astralPathMap;
@@ -70,8 +71,8 @@ public class MapManager : MonoBehaviour
 
     public void GeneratePhaseFloorCount()
     {
-        phaseFloorThresholds[0] = Random.Range(config.firstPhaseMinFloorCount, config.firstPhaseMaxFloorCount + 1);
-        phaseFloorThresholds[1] = Random.Range(config.secondPhaseMinFloorCount, config.secondPhaseMaxFloorCount + 1);
+        phaseFloorThresholds[0] = Random.Range(controllerSO.firstPhaseMinFloorCount, controllerSO.firstPhaseMaxFloorCount + 1);
+        phaseFloorThresholds[1] = Random.Range(controllerSO.secondPhaseMinFloorCount, controllerSO.secondPhaseMaxFloorCount + 1);
     }
 
     private void GeneratePhasesDomains()
@@ -100,7 +101,7 @@ public class MapManager : MonoBehaviour
         
         secondaryDomains.Add(GetDomainFromList(ref domains, ref notUsedDomains));
 
-        if (Random.Range(0f, 100f) < config.phaseDoubleDomainPercentage)
+        if (Random.Range(0f, 100f) < controllerSO.phaseDoubleDomainPercentage)
         {
             secondaryDomains.Add(GetDomainFromList(ref domains, ref notUsedDomains));
         }
@@ -145,7 +146,7 @@ public class MapManager : MonoBehaviour
         }
 
         // 3rd is completely random
-        if (Random.Range(0f, 100f) < config.lastPhaseSecondaryDomainPercentage)
+        if (Random.Range(0f, 100f) < controllerSO.lastPhaseSecondaryDomainPercentage)
         {
             secondaryDomain = GetDomainFromList(ref domains);
         }

@@ -16,36 +16,24 @@ public class ULC1_Phatass_DificultyManager : MonoBehaviour
         if (GameController. difficulty == 1)
         {
             phatassAnimator.SetTrigger("IsEasy");
-
             emptyLeftPocket.enabled = false;
             keyRightPocket.enabled = false;
             rightKeyCollider.enabled = false;
-
-            Debug.Log("Easy Mode Active");
         }
         else if (GameController. difficulty == 2)
         {
             phatassAnimator.SetTrigger("IsNormal");
-            
-            
-            
             emptyRightPocket.enabled = false;
             keyLeftPocket.enabled = false;
             tagKeyLeftPocket.enabled = false;
             leftKeyCollider.enabled = false;
-            
-            Debug.Log("Normal Mode Active");
         }
         else if (GameController. difficulty == 3)
         {
             phatassAnimator.SetTrigger("IsHard");
-
             emptyLeftPocket.enabled = false;
             keyRightPocket.enabled = false;
             rightKeyCollider.enabled = false;
-            
-            Debug.Log("Hard Mode Active");
-
         }
     }
 }

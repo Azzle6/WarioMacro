@@ -7,17 +7,19 @@ public class NAC1_MiniGameController : MonoBehaviour, ITickable
     [SerializeField] private NAC1_UIManager uiManager;
     //[SerializeField] private SoundManager soundManager;
 
+   public AudioClip Vic;
+
     //[SerializeField] private int difficulty;
     //[SerializeField] private float tickTime;
     private int nbButtonPerSign;
     private int nbTickMax;
 
-    private int winTick = 10;
+    private int winTick = -1;
     [SerializeField] private List<GameObject> signs;
     [SerializeField] private Sprite[] xboxButtonSprites = new Sprite[4];
     [SerializeField] private string[] inputs = new string[] { "A", "B", "X", "Y" };
     [SerializeField] private GameObject buttonPrefab;
-   
+
     private GameObject button;
     public string[,] trueInputs;
     public int[] inputStreak;
@@ -30,22 +32,10 @@ public class NAC1_MiniGameController : MonoBehaviour, ITickable
     private bool hasEnded;
     private bool result;
 
-    public GameObject body, def,end;
+    public GameObject body, def, end;
     private int tick;
 
-
-    /*private void Awake()
-    {
-        hasStarted = false;
-
-        SetDifficulty();
-
-        InitializeArray();
-
-        CreateSigns();
-    }*/
-
-    public void Start() 
+    public void Start()
     {
         GameManager.Register();
         GameController.Init(this);
@@ -60,10 +50,10 @@ public class NAC1_MiniGameController : MonoBehaviour, ITickable
         uiManager.UpdateTimer(nbTickMax - GameController.currentTick);
         hasStarted = true;
         Debug.Log(result);
-       
+
     }
 
-    
+
     private void SetDifficulty()
     {
         Debug.Log(GameController.difficulty);
@@ -113,29 +103,29 @@ public class NAC1_MiniGameController : MonoBehaviour, ITickable
                 buttonSpriteRenderer = sign.transform.GetChild(i).GetComponent<SpriteRenderer>();
                 rand = Random.Range(0, xboxButtonSprites.Length);
                 buttonSpriteRenderer.sprite = xboxButtonSprites[rand];
-                trueInputs[s,i] = inputs[rand];
+                trueInputs[s, i] = inputs[rand];
             }
             s++;
         }
     }
 
-    public void CheckInputsOrder(string input) 
+    public void CheckInputsOrder(string input)
     {
         if (trueInputs[trueSign, inputStreak[trueSign]].Equals(input))
         {
             //soundManager.PlayShotSound();
-            if (++inputStreak[trueSign] == nbButtonPerSign) 
+            if (++inputStreak[trueSign] == nbButtonPerSign)
             {
                 EndGame(true);
             }
         }
-        else 
+        else
         {
             EndGame(false);
         }
     }
 
-    private void EndGame(bool result) 
+    private void EndGame(bool result)
     {
         StopAllCoroutines();
         this.hasEnded = true;
@@ -143,7 +133,7 @@ public class NAC1_MiniGameController : MonoBehaviour, ITickable
         uiManager.EnableEndScreen(result);
     }
 
-    private void DebugInputStreak() 
+    private void DebugInputStreak()
     {
         Debug.Log("_________________");
         for (int i = 0; i < inputStreak.Length; i++)
@@ -152,83 +142,87 @@ public class NAC1_MiniGameController : MonoBehaviour, ITickable
         }
     }
 
-    public int GetTrueSign() 
+    public int GetTrueSign()
     {
         return this.trueSign;
     }
 
-    public bool HasStarted() 
+    public bool HasStarted()
     {
         return this.hasStarted;
     }
 
-    public int GetNbTick() 
+    public int GetNbTick()
     {
         return GameController.currentTick;
     }
 
-    public int GetNbTickMax() 
+    public int GetNbTickMax()
     {
         return this.nbTickMax;
     }
 
-    public bool GetHasEnded() 
+    public bool GetHasEnded()
     {
         return hasEnded;
     }
 
     public void OnTick()
     {
-        Debug.Log(GameController.difficulty);
-        if (!hasEnded) 
+        if (GameController.currentTick == winTick || GameController.currentTick == 8)
+        {
+            Debug.Log("Entered the last function");
+            GameController.FinishGame(result);
+        }
+        Debug.Log(GameController.currentTick);
+        Debug.Log("winTick : " + winTick);
+        if (!hasEnded)
         {
             uiManager.UpdateTimer(nbTickMax - GameController.currentTick);
         }
-        if (GameController.currentTick == nbTickMax && !hasEnded) EndGame(false);
+        //if (GameController.currentTick == nbTickMax && !hasEnded) EndGame(false);
 
 
-        if (uiManager.win == true&& GameController.currentTick<=5)
+        if (hasEnded && winTick == -1)
         {
-            winTick = GameController.currentTick;
-         //   winTick = GameController.currentTick + 3;
+            Debug.Log("has ended before end");
+            winTick = GameController.currentTick + 3;
+            //   winTick = GameController.currentTick + 3;
             GameController.StopTimer();
-            Debug.Log(winTick);
+
         }
 
-       
 
-        if(uiManager.over == true && GameController.currentTick <=5)
+
+        /*if(uiManager.over == true && GameController.currentTick <=5)
         {
             winTick = 5;
           //  winTick = GameController.currentTick+5;
             GameController.StopTimer();
-        }
+        }*/
 
-        if (GameController.currentTick == 5)
+        if (!hasEnded && GameController.currentTick == 5)
         {
-            
+            winTick = 8;
             if (result == false)
             {
+                AudioManager.PlaySound(Vic, 1);
                 body.SetActive(true);
                 def.SetActive(true);
                 end.SetActive(true);
             }
-            GameController.StopTimer(); 
-            Debug.Log("coucou");
+            GameController.StopTimer();
         }
-      /*  if (GameController.currentTick == winTick)
+        /*  if (GameController.currentTick == winTick)
+          {
+              GameController.FinishGame(result);
+          }
+        */
+        /*if (GameController.currentTick == 8)
         {
             GameController.FinishGame(result);
-        }
-      */
-        if (GameController.currentTick == 8)
-        {
-            GameController.FinishGame(result);
-        }
+        }*/
 
-        if(GameController.currentTick == winTick+3)
-        {
-            GameController.FinishGame(result);
-        }
+
     }
 }
