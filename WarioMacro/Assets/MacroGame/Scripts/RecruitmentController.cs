@@ -20,20 +20,15 @@ public class RecruitmentController : GameController
             yield break;
         }
 
-        StartCoroutine(MoveLoop());
+        IEnumerator moveLoop = MoveLoop();
+        StartCoroutine(moveLoop);
         
         
         SetRecruitmentActive(true);
         
-        while(!canFinishRecruitment)
-        {
-            // Select path and move
-            var typedNode = instance.map.currentNode.GetComponent<RecruitmentNode>();
-
-
-            yield return null;
-        }
-        StopCoroutine(MoveLoop());
+        while(!canFinishRecruitment) yield return null;
+        
+        StopCoroutine(moveLoop);
     }
 
     private IEnumerator MoveLoop()

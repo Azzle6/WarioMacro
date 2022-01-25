@@ -101,7 +101,7 @@ public class GameController : Ticker
 
         MusicManager.instance.state = Soundgroup.CurrentPhase.RECRUIT;
         yield return recruitmentController.RecruitmentLoop();
-
+        Debug.Log("Phase braquage");
         map = mapManager.LoadNextMap();
         MusicManager.instance.state = Soundgroup.CurrentPhase.ACTION;
         while(true)
@@ -253,16 +253,14 @@ public class GameController : Ticker
         return true;
     }
     
-    private void OnEnable()
-    {
-        OnInteractionEnd += instance.InteractiveEventEnd;
-    }
 
     private void Awake()
     {
+        
         if (instance == null)
         {
             instance = this;
+            OnInteractionEnd += instance.InteractiveEventEnd;
         }
         else
         {
