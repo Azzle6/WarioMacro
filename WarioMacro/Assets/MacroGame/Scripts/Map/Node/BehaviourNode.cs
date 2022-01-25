@@ -1,13 +1,15 @@
 using System.Collections.Generic;
 using GameTypes;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BehaviourNode : Node
 {
     [HideInInspector] public int microGamesNumber;
     public NodeBehaviour behaviour;
     
-    [SerializeField] private SpriteRenderer logoSpriteRenderer;
+    [SerializeField] private Image primaryLogo;
+    [SerializeField] private Image secondaryLogo;
 
     private static float primaryDomainPercentage => GameConfig.instance.nodePrimaryDomainPercentage;
     private static float doubleDomainPercentage => GameConfig.instance.nodeDoubleDomainPercentage;
@@ -27,19 +29,23 @@ public class BehaviourNode : Node
         {
             primaryDomain = phaseDomains.GetRandomPrimaryDomain();
             //sRenderer.sprite = Resources.Load<SpriteListSO>("NodeSprites").nodeSprites[primaryDomain - 1];
-            logoSpriteRenderer.sprite = Resources.Load<SpriteListSO>("NodeLogoSprites").nodeSprites[primaryDomain - 2];
+            primaryLogo.sprite = Resources.Load<SpriteListSO>("NodeLogoSprites").nodeSprites[primaryDomain - 2];
 
             if (Random.Range(0f, 100f) < doubleDomainPercentage)
             {
                 secondaryDomain = phaseDomains.GetRandomSecondaryDomain();
+                secondaryLogo.sprite = Resources.Load<SpriteListSO>("NodeLogoSprites").nodeSprites[secondaryDomain - 2];
+                secondaryLogo.transform.parent.gameObject.SetActive(true);
             }
         }
         else
         {
             secondaryDomain = phaseDomains.GetRandomSecondaryDomain();
             //sRenderer.sprite = Resources.Load<SpriteListSO>("NodeSprites").nodeSprites[secondaryDomain - 1];
-            logoSpriteRenderer.sprite = Resources.Load<SpriteListSO>("NodeLogoSprites").nodeSprites[secondaryDomain - 2];
+            primaryLogo.sprite = Resources.Load<SpriteListSO>("NodeLogoSprites").nodeSprites[secondaryDomain - 2];
         }
+        primaryLogo.transform.parent.gameObject.SetActive(true);
+        
     }
 
     public int GetMGDomain(int index)
@@ -147,6 +153,20 @@ public class BehaviourNode : Node
 
         return mgDomains;
     }
-    
-    
+
+    public override void DisableNode()
+    {
+        base.DisableNode();
+        if (primaryLogo != null)
+        {
+            primaryLogo.transform.parent.gameObject.SetActive(false);
+        }
+
+        if (secondaryLogo != null)
+        {
+            secondaryLogo.transform.parent.gameObject.SetActive(false);
+        }
+        
+        
+    }
 }

@@ -165,7 +165,18 @@ public class GameController : Ticker
             yield return null;
         }
 
+        yield return new WaitForSecondsRealtime(2f);
+
+        yield return player.EnterPortal();
+
+        map = mapManager.LoadAstralPath();
         yield return astralPathController.EscapeLoop();
+    }
+
+    public void NextMap()
+    {
+        AudioManager.MacroPlaySound("Elevator", 0);
+        map = mapManager.LoadNextMap();
     }
 
     internal IEnumerator NodeWithMicroGame(GameController controller, BehaviourNode behaviourNode)
@@ -255,7 +266,6 @@ public class GameController : Ticker
 
         if (!Alarm.isActive) return false;
         
-        map = mapManager.LoadAstralPath();
         stopLoop = true;
         return true;
     }
