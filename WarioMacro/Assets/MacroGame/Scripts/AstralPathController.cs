@@ -9,6 +9,8 @@ public class AstralPathController : GameController
     public IEnumerator EscapeLoop()
     {
         GameConfig.instance.currentDifficulty = 3;
+        yield return instance.player.ExitPortal();
+        
         while (!instance.map.OnLastNode())
         {
             mgFailed = 0;

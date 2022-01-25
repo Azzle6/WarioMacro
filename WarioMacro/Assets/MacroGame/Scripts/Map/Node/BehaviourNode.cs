@@ -157,7 +157,16 @@ public class BehaviourNode : Node
     public override void DisableNode()
     {
         base.DisableNode();
-        primaryLogo.transform.parent.gameObject.SetActive(false);
-        secondaryLogo.transform.parent.gameObject.SetActive(false);
+        if (primaryLogo != null)
+        {
+            primaryLogo.transform.parent.gameObject.SetActive(false);
+        }
+
+        if (secondaryLogo != null)
+        {
+            secondaryLogo.transform.parent.gameObject.SetActive(false);
+        }
+        
+        
     }
 }

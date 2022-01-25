@@ -165,6 +165,11 @@ public class GameController : Ticker
             yield return null;
         }
 
+        yield return new WaitForSecondsRealtime(2f);
+
+        yield return player.EnterPortal();
+
+        map = mapManager.LoadAstralPath();
         yield return astralPathController.EscapeLoop();
     }
 
@@ -255,7 +260,6 @@ public class GameController : Ticker
 
         if (!Alarm.isActive) return false;
         
-        map = mapManager.LoadAstralPath();
         stopLoop = true;
         return true;
     }
