@@ -14,22 +14,10 @@ public class PlanManager : MonoBehaviour
     [SerializeField] private Button startGameButton;
     [SerializeField] private SpriteListSO domainsVisu;
     [SerializeField] private ScoreMultiplier[] multiplierList;
-    
+
+    private Vector2[] potentialFloorCounts = new Vector2[2];
     private ScoreMultiplier currentSelectedMultiplier;
     private bool isOpen;
-
-    private void Start()
-    {
-        if(multiplierList != null) currentSelectedMultiplier = multiplierList[0];
-        scoreManager.scoreMultiplier = currentSelectedMultiplier.multiplierValue;
-        UpdateGOButton();
-    }
-
-    private void Update()
-    {
-        if(InputManager.GetKeyDown(ControllerKey.B, true) && isOpen) ClosePlan();
-        
-    }
 
     public void OpenPlan()
     {
@@ -45,6 +33,18 @@ public class PlanManager : MonoBehaviour
         InputManager.lockInput = false;
         GameController.OnInteractionEnd();
         DisableDomains();
+    }
+    
+    public void SelectMultiplier(int selectedMultIndex )
+    {
+        currentSelectedMultiplier = multiplierList[selectedMultIndex];
+        scoreManager.scoreMultiplier = currentSelectedMultiplier.multiplierValue;
+        UpdateGOButton();
+    }
+
+    private void GenerateFloorCounts()
+    {
+        
     }
 
     private void UpdateDomains()
@@ -86,14 +86,6 @@ public class PlanManager : MonoBehaviour
         }
     }
 
-
-    public void SelectMultiplier(int selectedMultIndex )
-    {
-        currentSelectedMultiplier = multiplierList[selectedMultIndex];
-        scoreManager.scoreMultiplier = currentSelectedMultiplier.multiplierValue;
-        UpdateGOButton();
-    }
-
     private void SetDomain(int domainIndex, int childIndex, Sprite sprite)
     {
         DomainsPlaces[domainIndex].GetChild(childIndex).GetChild(0).GetComponent<Image>().sprite = sprite;
@@ -113,6 +105,19 @@ public class PlanManager : MonoBehaviour
             // "Price : " + currentSelectedMultiplier.boostPrice + "\n You can go !";
             startGameButton.interactable = true;
         }
+    }
+    
+    private void Start()
+    {
+        if(multiplierList != null) currentSelectedMultiplier = multiplierList[0];
+        scoreManager.scoreMultiplier = currentSelectedMultiplier.multiplierValue;
+        UpdateGOButton();
+    }
+
+    private void Update()
+    {
+        if(InputManager.GetKeyDown(ControllerKey.B, true) && isOpen) ClosePlan();
+        
     }
 
 }
