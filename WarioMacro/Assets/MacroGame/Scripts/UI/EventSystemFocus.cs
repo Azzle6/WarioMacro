@@ -9,7 +9,7 @@ public class EventSystemFocus : MonoBehaviour
 {
     private static readonly List<EventSystemFocus> instances = new List<EventSystemFocus>();
     
-    [SerializeField] private GameObject firstSelected;
+    [SerializeField] public GameObject firstSelected;
     private EventSystem eventSys;
     private EventSystemFocus previouslyActive;
     private bool alreadyMoved;
@@ -79,6 +79,11 @@ public class EventSystemFocus : MonoBehaviour
         
         previouslyActive.enabled = true;
         previouslyActive = null;
+    }
+
+    private void OnDestroy()
+    {
+        instances.Remove(this);
     }
 
     private void Update()
