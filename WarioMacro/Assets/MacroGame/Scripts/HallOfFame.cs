@@ -9,6 +9,10 @@ public class HallOfFame : MonoBehaviour
 {
     public Run[] hall;
     public Run currentRun;
+    public GameObject hallPanel;
+    public RankElementHoF[] ranks = new RankElementHoF[10]; 
+    
+    private bool isOpen;
     
     [Serializable]
     public class Run
@@ -16,7 +20,6 @@ public class HallOfFame : MonoBehaviour
         public float score;
         public float time;
         public Dictionary<Character,bool> team = new Dictionary<Character,bool>();
-
         public Run(){}
 
         public Run(float s, float t, Dictionary<Character,bool> team)
@@ -37,11 +40,6 @@ public class HallOfFame : MonoBehaviour
             Debug.Log(toString);
             return toString;
         }
-    }
-
-    void Awake()
-    {
-        SetHallOfFame();
     }
 
     public void StartRun(Character[] team)
@@ -81,7 +79,6 @@ public class HallOfFame : MonoBehaviour
             }
             hall[j] = run;
             j++;
-
         }
     }
 
@@ -114,5 +111,38 @@ public class HallOfFame : MonoBehaviour
         save = save.Substring(0, save.Length - 1);
         PlayerPrefs.SetString("hallOfFame",save);
         Debug.Log(save);
+
+    }
+
+
+    public void setRanksUI()
+    {
+        var i = 0;
+        foreach (var rank in hall)
+        {
+            ranks[i].gameObject.SetActive(true);
+            ranks[i].SetRank(rank);
+            i++;
+        }
+    }
+    
+    private void Update()
+    {
+        if(InputManager.GetKeyDown(ControllerKey.B, true) && isOpen) CloseHall();
+        
+    }
+    public void OpenHall()
+    {
+        hallPanel.SetActive(true);
+        isOpen = true;
+        InputManager.lockInput = true;
+        setRanksUI();
+    }
+
+    public void CloseHall()
+    {
+        hallPanel.SetActive(false);
+        InputManager.lockInput = false;
+        GameController.OnInteractionEnd();
     }
 }

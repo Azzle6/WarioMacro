@@ -46,6 +46,7 @@ public class CharacterManager : MonoBehaviour
     
     private void Start()
     {
+        GameController.instance.hallOfFame.SetHallOfFame();
         LoadAvailable();
         SetRecruitable();
     }
