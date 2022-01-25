@@ -96,7 +96,7 @@ public class DialogManager : MonoBehaviour
         curIndex = 0;
         isInDialog = false;
         Ticker.lockTimescale = false;
-        GameController.OnInteractionEnd();
+        if(curDial.InteractionEndWhenDialogEnd) GameController.OnInteractionEnd();
         foreach (GameObject but in Buttons)
         {
             Destroy(but);
@@ -114,6 +114,7 @@ public class DialogManager : MonoBehaviour
             GameObject but = Instantiate(ButtonTemplate, ButtonsParent.transform);
             
             Button butComponent = but.GetComponent<Button>();
+            but.GetComponentInChildren<TMP_Text>().text = resp.ButtonResponse;
             butComponent.onClick = resp.ButtonEvent;
             butComponent.onClick.AddListener(delegate { FinishDialog(); });
             
@@ -126,6 +127,7 @@ public class DialogManager : MonoBehaviour
         {
             GameObject but = Instantiate(ButtonTemplate, ButtonsParent.transform);
             Button butComponent = but.GetComponent<Button>();
+            but.GetComponentInChildren<TMP_Text>().text = "Quit";
             butComponent.onClick.AddListener(delegate { FinishDialog(); });
             buttons.Add(but);
             ButtonsParent.SetActive(false);

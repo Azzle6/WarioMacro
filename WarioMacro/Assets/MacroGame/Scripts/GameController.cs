@@ -89,8 +89,9 @@ public class GameController : Ticker
             AudioManager.MacroPlaySound("GameLose", 0);
         }
 
+        PlayerPrefs.Save();
         while (!InputManager.GetKeyDown(ControllerKey.A)) yield return null;
-        SceneManager.LoadScene(mainMenuBuildIndex);
+        SceneManager.LoadScene(1);
     }
 
     private IEnumerator GameLoop()
@@ -139,13 +140,13 @@ public class GameController : Ticker
                 }
             }
 
-            var nodeInteract = map.currentNode.GetComponent<InteractibleNode>();
+            /*var nodeInteract = map.currentNode.GetComponent<InteractibleNode>();
             if (nodeInteract != null && !isInActionEvent)
             {
                 nodeInteract.EventInteractible.Invoke();
                 isInActionEvent = true;
                 yield return new WaitWhile(() => isInActionEvent);
-            }
+            }*/
             
 
             if (map.OnLastNode())

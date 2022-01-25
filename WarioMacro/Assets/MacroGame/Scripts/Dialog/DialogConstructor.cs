@@ -13,6 +13,7 @@ public class DialogConstructor : MonoBehaviour
     public string[] dialogs;
 
     public Response[] Responses;
+    public bool InteractionEndWhenDialogEnd = true;
 }
 
 [System.Serializable]

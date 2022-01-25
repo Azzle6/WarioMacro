@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
+// ReSharper disable once CheckNamespace
 public class AstralPathController : GameController
 {
     private int mgFailed;
@@ -62,8 +63,7 @@ public class AstralPathController : GameController
 
             if (mgFailed >= GameConfig.instance.loseCharacterThreshold)
             {
-                // TODO : lose character in Character Manager
-                instance.lifeBar.Imprison();
+                instance.characterManager.LoseCharacter();
                 return true;
             }
         }

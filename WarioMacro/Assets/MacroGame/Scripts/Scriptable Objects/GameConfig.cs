@@ -14,8 +14,12 @@ public class GameConfig : ScriptableObject
     [Space] [Header("Astral Path")] 
     [Range(1, 7)] public int astralMGCount = 3;
     [Range(0, 6)] public int loseCharacterThreshold = 1;
-    
-    [Space] [Header("Phase Security Domain")]
+
+    [Space] [Header("Phase Security Domain and Floor Count")] 
+    [Range(0, 15)] public int firstPhaseMinFloorCount = 4;
+    [Range(0, 15)] public int firstPhaseMaxFloorCount = 7;
+    [Range(0, 15)] public int secondPhaseMinFloorCount = 6;
+    [Range(0, 15)] public int secondPhaseMaxFloorCount = 8;
     [Range(0f, 100f)] public float phaseDoubleDomainPercentage = 50;
     [Range(0f, 100f)] public float lastPhaseSecondaryDomainPercentage = 50;
     
