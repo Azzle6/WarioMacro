@@ -39,7 +39,8 @@ public class ULC4_GameManager : MonoBehaviour, ITickable
             GameController.StopTimer();
         }
         
-        if (GameController.currentTick == 5 && inGame) {
+        if (GameController.currentTick == 4) enemy.stopFire();
+        else if (GameController.currentTick == 5 && inGame) {
             endTick = 8;
             GameController.StopTimer();
             EndGame(true);
@@ -54,6 +55,6 @@ public class ULC4_GameManager : MonoBehaviour, ITickable
         if (result) winImg.GetComponent<Animation>().Play("ULC_TM_Win Animation");
         else loseImg.GetComponent<Animation>().Play("ULC_TM_Lose Animation");
         foreach (GameObject go in sceneObjects) go.SetActive(false);
-        AudioManager.PlaySound(result ? victorySound : failureSound, 0.75f);
+        AudioManager.PlaySound(result ? victorySound : failureSound, 0.5f);
     }
 }

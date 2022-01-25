@@ -19,16 +19,13 @@ public class ULC5_MultiBullets : MonoBehaviour {
         StartCoroutine(EnlargeCoroutine());
     }
 
+    void Update() {
+        transform.localScale += Vector3.one*0.005f;
+        transform.Rotate(transform.forward, 1.5f);
+    }
+
     private IEnumerator EnlargeCoroutine() {
-        Vector3 scaleFactor = Vector3.one*2f*Time.deltaTime;
-        while (timeBeforeExplosion > 0) {
-            transform.localScale += scaleFactor;
-            transform.Rotate(transform.forward, 1.5f);
-            timeBeforeExplosion -= Time.deltaTime;
-            yield return new WaitForSeconds(Time.deltaTime);
-        }
-        Debug.Log(transform.localScale);
-        
+        yield return new WaitForSeconds(timeBeforeExplosion);
         Explode();
         Destroy(gameObject);
     }

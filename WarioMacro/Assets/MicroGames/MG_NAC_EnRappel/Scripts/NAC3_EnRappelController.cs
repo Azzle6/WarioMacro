@@ -19,12 +19,14 @@ public class NAC3_EnRappelController : MonoBehaviour, ITickable
     {
         tickEnd = -1;
         hasEnded = false;
+        //AudioManager.Register();
+        //GameController.Register();
+        GameManager.Register();
+        GameController.Init(this);
     }
 
     private void Start()
     {
-        GameManager.Register();
-        GameController.Init(this);
         SetDifficulty();
     }
 
@@ -40,6 +42,8 @@ public class NAC3_EnRappelController : MonoBehaviour, ITickable
                 break;
             case 3:
                 hardLayouts[Random.Range(0, hardLayouts.Length)].SetActive(true);
+                break;
+            default:
                 break;
         }
     }
@@ -74,26 +78,21 @@ public class NAC3_EnRappelController : MonoBehaviour, ITickable
     {
         Debug.Log("Tick end" + tickEnd);
         Debug.Log("Tick" + GameController.currentTick);
-        
         if (hasEnded && tickEnd == -1) 
         {
             GameController.StopTimer();
             tickEnd = GameController.currentTick + 3;
         }
-        
         if (GameController.currentTick == 5 && !hasEnded) 
         {
-            tickEnd = GameController.currentTick + 3;
             GameController.StopTimer();
             CheckEndGame(false);
         }
-        
-        if (GameController.currentTick == tickEnd) 
+        if (GameController.currentTick == 8 || GameController.currentTick == tickEnd) 
         {
             Debug.Log("Result : " + result);
-            GameController.FinishGame(true);
+            GameController.FinishGame(result);
         }
-        
     }
 
     public bool getHasEnded() 

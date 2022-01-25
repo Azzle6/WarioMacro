@@ -39,7 +39,6 @@ public class NAC3_PlayerInputER : MonoBehaviour
     {
         if (collision.transform.CompareTag("Finish")) 
         {
-            Debug.Log("test");
             erController.CheckEndGame(true);
         }
     }

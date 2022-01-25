@@ -49,6 +49,6 @@ public class ULC5_GameManager : MonoBehaviour, ITickable
         foreach (GameObject go in sceneObjects) go.SetActive(false);
         if (result) winImage.gameObject.SetActive(true);
         else loseImage.gameObject.SetActive(true);
-        AudioManager.PlaySound(result ? victorySound : failureSound, 0.75f);
+        AudioManager.PlaySound(result ? victorySound : failureSound, 0.5f);
     }
 }
