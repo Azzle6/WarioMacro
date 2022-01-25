@@ -89,8 +89,9 @@ public class GameController : Ticker
             AudioManager.MacroPlaySound("GameLose", 0);
         }
 
+        PlayerPrefs.Save();
         while (!InputManager.GetKeyDown(ControllerKey.A)) yield return null;
-        SceneManager.LoadScene(mainMenuBuildIndex);
+        SceneManager.LoadScene(1);
     }
 
     private IEnumerator GameLoop()
