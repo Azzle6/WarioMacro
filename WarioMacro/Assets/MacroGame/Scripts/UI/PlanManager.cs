@@ -10,26 +10,14 @@ public class PlanManager : MonoBehaviour
     [SerializeField] private MapManager MapMana;
     [SerializeField] private GameObject PlanObject;
     [SerializeField] private Transform[] DomainsPlaces;
-    [SerializeField] private GameObject GoButtonPriceObject;
+    [SerializeField] private TextMeshProUGUI priceText;
     [SerializeField] private Button startGameButton;
     [SerializeField] private SpriteListSO domainsVisu;
-    [FormerlySerializedAs("MultiplicatorsList")] [SerializeField]private ScoreMultiplier[] multiplierList;
-    
+    [SerializeField] private ScoreMultiplier[] multiplierList;
+
+    private Vector2[] potentialFloorCounts = new Vector2[2];
     private ScoreMultiplier currentSelectedMultiplier;
     private bool isOpen;
-
-    private void Start()
-    {
-        if(multiplierList != null) currentSelectedMultiplier = multiplierList[0];
-        scoreManager.scoreMultiplier = currentSelectedMultiplier.multiplierValue;
-        UpdateGOButton();
-    }
-
-    private void Update()
-    {
-        if(InputManager.GetKeyDown(ControllerKey.B, true) && isOpen) ClosePlan();
-        
-    }
 
     public void OpenPlan()
     {
@@ -44,6 +32,19 @@ public class PlanManager : MonoBehaviour
         PlanObject.SetActive(false);
         InputManager.lockInput = false;
         GameController.OnInteractionEnd();
+        DisableDomains();
+    }
+    
+    public void SelectMultiplier(int selectedMultIndex )
+    {
+        currentSelectedMultiplier = multiplierList[selectedMultIndex];
+        scoreManager.scoreMultiplier = currentSelectedMultiplier.multiplierValue;
+        UpdateGOButton();
+    }
+
+    private void GenerateFloorCounts()
+    {
+        
     }
 
     private void UpdateDomains()
@@ -52,12 +53,12 @@ public class PlanManager : MonoBehaviour
         {
             var normPhase = (NormalPhaseDomains) MapMana.phaseDomainsArray[i];
             
+            SetDomain(i, 0, domainsVisu.nodeSprites[normPhase.primaryDomain - SpecialistType.Brute]);
+            
             for (int j = 0; j < normPhase.secondaryDomains.Length; j++)
             {
-                SetDomain(i, 1 - j, domainsVisu.nodeSprites[normPhase.secondaryDomains[j] - SpecialistType.Brute]);
+                SetDomain(i, 1 + j, domainsVisu.nodeSprites[normPhase.secondaryDomains[j] - SpecialistType.Brute]);
             }
-
-            SetDomain(i, 2, domainsVisu.nodeSprites[normPhase.primaryDomain - SpecialistType.Brute]);
         }
         
         
@@ -65,12 +66,12 @@ public class PlanManager : MonoBehaviour
 
         for (var i = 0; i < lastPhase.primaryDomains.Length; i++)
         {
-            SetDomain(2, 2 - i, domainsVisu.nodeSprites[lastPhase.primaryDomains[i] - SpecialistType.Brute]);
+            SetDomain(2, i, domainsVisu.nodeSprites[lastPhase.primaryDomains[i] - SpecialistType.Brute]);
         }
 
         if (lastPhase.secondaryDomain != 0)
         {
-            SetDomain(2, 0, domainsVisu.nodeSprites[lastPhase.secondaryDomain - SpecialistType.Brute]);
+            SetDomain(2, 2, domainsVisu.nodeSprites[lastPhase.secondaryDomain - SpecialistType.Brute]);
         }
     }
 
@@ -85,33 +86,38 @@ public class PlanManager : MonoBehaviour
         }
     }
 
-
-    public void SelectMultiplicator(int selectedMultIndex )
-    {
-        currentSelectedMultiplier = multiplierList[selectedMultIndex];
-        scoreManager.scoreMultiplier = currentSelectedMultiplier.multiplierValue;
-        UpdateGOButton();
-    }
-
     private void SetDomain(int domainIndex, int childIndex, Sprite sprite)
     {
-        DomainsPlaces[domainIndex].GetChild(childIndex).GetComponent<Image>().sprite = sprite;
+        DomainsPlaces[domainIndex].GetChild(childIndex).GetChild(0).GetComponent<Image>().sprite = sprite;
         DomainsPlaces[domainIndex].GetChild(childIndex).gameObject.SetActive(true);
     }
 
     private void UpdateGOButton()
     {
-        
+        priceText.text = currentSelectedMultiplier.boostPrice + "$";
         if (scoreManager.currentMoney < currentSelectedMultiplier.boostPrice)
         {
-            GoButtonPriceObject.GetComponentInChildren<TMP_Text>().text = "Price : " + currentSelectedMultiplier.boostPrice + "\n Too expensive !";
+             // "Price : " + currentSelectedMultiplier.boostPrice + "\n Too expensive !"; // TODO : change start button text
             startGameButton.interactable = false;
         }
         else
         {
-            GoButtonPriceObject.GetComponentInChildren<TMP_Text>().text = "Price : " + currentSelectedMultiplier.boostPrice + "\n You can go !";
+            // "Price : " + currentSelectedMultiplier.boostPrice + "\n You can go !";
             startGameButton.interactable = true;
         }
+    }
+    
+    private void Start()
+    {
+        if(multiplierList != null) currentSelectedMultiplier = multiplierList[0];
+        scoreManager.scoreMultiplier = currentSelectedMultiplier.multiplierValue;
+        UpdateGOButton();
+    }
+
+    private void Update()
+    {
+        if(InputManager.GetKeyDown(ControllerKey.B, true) && isOpen) ClosePlan();
+        
     }
 
 }
