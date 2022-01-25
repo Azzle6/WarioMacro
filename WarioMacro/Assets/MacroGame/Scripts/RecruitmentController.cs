@@ -19,16 +19,31 @@ public class RecruitmentController : GameController
             SetRecruitmentActive(false);
             yield break;
         }
+
+        StartCoroutine(MoveLoop());
         
-        while(instance.characterManager.playerTeam.Count < 4)
+        
+        SetRecruitmentActive(true);
+        
+        while(!canFinishRecruitment)
         {
             // Select path and move
-            yield return StartCoroutine(instance.map.WaitForNodeSelection());
-            yield return StartCoroutine(instance.player.MoveToPosition(instance.map.currentPath.wayPoints));
+            var typedNode = instance.map.currentNode.GetComponent<RecruitmentNode>();
+
 
             yield return null;
         }
+        StopCoroutine(MoveLoop());
+    }
 
+    private IEnumerator MoveLoop()
+    {
+        while (instance.characterManager.playerTeam.Count < 4 || !canFinishRecruitment)
+        {
+            yield return StartCoroutine(instance.map.WaitForNodeSelection());
+
+            yield return StartCoroutine(instance.player.MoveToPosition(instance.map.currentPath.wayPoints));
+        }
     }
 
     private void SetRecruitmentActive(bool state)
