@@ -13,9 +13,14 @@ public class CharacterManager : MonoBehaviour
     public CharacterList[] allAvailableCharacters = new CharacterList[6];
     public Character[] novices = new Character[6];
     public List<Imprisoned> imprisonedCharacters = new List<Imprisoned>();
+
+    public OutOfJailElement[] jailedUI = new OutOfJailElement[12];
     
     [SerializeField] private LifeBar life;
-    
+
+    public bool isOpen;
+    public GameObject jailPanel;
+    private GameObject go;
     public delegate void RecruitCharacter();
     public static RecruitCharacter RecruitableCharaFinished;
 
@@ -24,6 +29,7 @@ public class CharacterManager : MonoBehaviour
         if (instance != null) return;
         instance = this;
     }
+
 
     public int SpecialistOfTypeInTeam(int type)
     {
@@ -43,26 +49,49 @@ public class CharacterManager : MonoBehaviour
             price = i1;
         }
     }
-    
+
+
+    public void SetJailed()
+    {
+        foreach (var element in jailedUI)
+        {
+            if(imprisonedCharacters.Any(i =>i.character == element.character))
+            {
+                element.gameObject.SetActive(true);
+                element.SetJail(imprisonedCharacters.First(i =>i.character == element.character));
+            }
+            else
+            {
+                element.gameObject.SetActive(false);
+            }
+        }    
+    }
     private void Start()
     {
+        GameController.instance.hallOfFame.SetHallOfFame();
         LoadAvailable();
         SetRecruitable();
     }
-
-    void Update()
+    private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            LoseCharacter();
-        }
+        if(InputManager.GetKeyDown(ControllerKey.B, true) && isOpen) CloseJail();
 
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            UpdateAvailable();
-        }
+    }
+    public void OpenJail()
+    {
+        jailPanel.SetActive(true);
+        isOpen = true;
+        InputManager.lockInput = true;
+        SetJailed();
     }
 
+    public void CloseJail()
+    {
+        jailPanel.SetActive(false);
+        InputManager.lockInput = false;
+        GameController.OnInteractionEnd();
+    }
+    
     private void SetRecruitable()
     {
         foreach (var list in allAvailableCharacters)
@@ -92,6 +121,14 @@ public class CharacterManager : MonoBehaviour
     }
 
 
+    public void ResetEndGame()
+    {
+        UpdateImprisoned();
+        ResetList();
+        UpdateAvailable();
+        SetRecruitable();
+    }
+
     public void Recruit(Character character)
     {
         playerTeam.Add(character);
@@ -102,9 +139,12 @@ public class CharacterManager : MonoBehaviour
     
     public void LoseCharacter()
     {
-        var rand = Random.Range(0, 4);
-        imprisonedCharacters.Add(new Imprisoned(playerTeam[rand],3,25000));
-        playerTeam.Remove(playerTeam[rand]);
+        Character rdCharacter = playerTeam[Random.Range(0, playerTeam.Count)];
+        life.Imprison(rdCharacter);
+        GameController.instance.hallOfFame.SetCharacterToJail(rdCharacter);
+        imprisonedCharacters.Add(new Imprisoned(rdCharacter, 3, 25000));
+        playerTeam.Remove(rdCharacter);
+        UpdateAvailable();
     }
 
     public void LoadAvailable()
@@ -146,6 +186,7 @@ public class CharacterManager : MonoBehaviour
     
     public void UpdateAvailable()
     {
+        if (!imprisonedCharacters.Any()) return;
         var save = "";
         PlayerPrefs.DeleteKey("imprisoned");
         foreach (var imprisoned in imprisonedCharacters)
@@ -162,6 +203,7 @@ public class CharacterManager : MonoBehaviour
         foreach (var c in playerTeam)
         {
             if (imprisonedCharacters.Any(i =>i.character == c)) continue;
+            if (novices.Any(n => n == c)) continue;
             foreach (var list in allAvailableCharacters.Where(list => c.characterType == list.type))
             {
                 list.Add(c);
@@ -170,9 +212,10 @@ public class CharacterManager : MonoBehaviour
         playerTeam.Clear();
         SetRecruitable();
     }
-
+    
     public void FreeImprisoned(Imprisoned imp)
     {
+        if (!imprisonedCharacters.Contains(imp)) return;
         if (!GameController.instance.scoreManager.Pay((int)imp.price)) return;
         foreach (var list in allAvailableCharacters.Where(list => imp.character.characterType == list.type))
         {
@@ -195,137 +238,4 @@ public class CharacterManager : MonoBehaviour
         }
         return (from i in imprisonedCharacters where i.character.ToString() == character select i.character).FirstOrDefault();
     }
-    /*public CharacterList[] allAvailableCharacters;
-    public int totalCharacterCount = 4;
-    [HideInInspector] public bool isTeamFull;
-
-    [SerializeField] private GameObject recruitmentPanelGO;
-    [SerializeField] private Transform buttonsParent;
-    [SerializeField] private RecrutementCardPannel_UI recruitmentPanel;
-    [SerializeField] private LifeBar life;
-    
-    public readonly Stack<Character> playerTeam = new Stack<Character>();
-    private GameObject[] buttonGOList;
-    private int currentCount;
-
-    
-
-    public bool IsTypeAvailable(int type) => allAvailableCharacters.First(list => list.type == type).count != 0;
-
-    public IEnumerator DisplayRecruitmentChoice(int charaType)
-    {
-        CharacterList choices = allAvailableCharacters.First(list => list.type == charaType);
-        int choicesCount = buttonGOList.Length < choices.count ? buttonGOList.Length : choices.count;
-
-        if (choices.count == 0)
-        {
-            Debug.LogError("Plus de persos "+ charaType +" disponibles.");
-            yield break;
-        }
-        
-        ResetUI();
-
-        for (int i = 0; i < choicesCount; i++)
-        {
-            var i1 = i;
-            recruitmentPanel.ShowCharacterCard(delegate { AddCharacter(choices, i1); }, choices.Get(i), i);
-        }
-
-        yield return WaitForTeamChange();
-        AudioManager.MacroPlaySound("CharacterSelection", 0);
-    }
-
-    public IEnumerator AddDifferentSpecialist(int type)
-    {
-        var choices = allAvailableCharacters
-            .Where(cList => cList.type != type && !cList.IsEmpty()).ToList();
-        choices.RemoveAt(0);
-
-        CharacterList charaList = choices[Random.Range(0, choices.Count)];
-        
-        ResetUI();
-        
-        //Re-positionnement automatique
-        recruitmentPanelGO.transform.localPosition = new Vector3(0, 0, 0);
-
-        int rd = Random.Range(0, charaList.count);
-        recruitmentPanel.ShowCharacterCard(delegate { AddCharacter(charaList, rd); }, charaList.Get(rd), 0);
-
-        yield return WaitForTeamChange();
-    }
-
-    /*public IEnumerator AddDefaultCharacter()
-    {
-        CharacterList choices = allAvailableCharacters.First(list => list.type == CharacterType.Scoundrel);
-        int charaLeft = choices.count;
-
-        if (charaLeft == 0)
-        {
-            Debug.LogWarning("Plus de persos par défaut disponibles.");
-            yield break;
-        }
-        int randomN = Random.Range(0, charaLeft);
-        
-        ResetUI();
-        
-        //Re-positionnement automatique
-        recruitmentPanelGO.transform.localPosition = new Vector3(0, 0, 0);
-
-        recruitmentPanel.ShowCharacterCard(delegate { AddCharacter(choices, randomN); }, choices.Get(randomN), 0);
-
-        yield return WaitForTeamChange();
-    }#1#
-
-    private void ResetUI()
-    {
-        recruitmentPanelGO.SetActive(true);
-
-        foreach (GameObject go in buttonGOList)
-        {
-            go.SetActive(false);
-        }
-    }
-
-    private IEnumerator WaitForTeamChange()
-    {
-        int currentTeamCount = playerTeam.Count;
-
-        while (currentTeamCount == playerTeam.Count) yield return null;
-    }
-
-    private void AddCharacter(CharacterList characterList, int index)
-    {
-        if (isTeamFull)
-        {
-            Debug.LogError("Character added when the team is complete.");
-            return;
-        }
-        life.RecruitCharacter(characterList.Get(index));
-        playerTeam.Push(characterList.Get(index));
-        
-        characterList.RemoveAt(index);
-        currentCount++;
-
-        if (currentCount == totalCharacterCount)
-        {
-            isTeamFull = true;
-        }
-        
-        
-        Debug.Log("personnage " + playerTeam.Peek() + " a été ajouté à l'équipe!");
-    }
-    
-    public void LoseCharacter()
-    {
-        playerTeam.Pop();
-    }
-
-    private void Start()
-    {
-        buttonGOList = new GameObject[buttonsParent.childCount];
-        for (int i = 0; i < buttonGOList.Length; i++)
-        {
-            buttonGOList[i] = buttonsParent.GetChild(i).gameObject;
-        }
-    }*/
 }

@@ -15,6 +15,7 @@ public class GameController : Ticker
 
     
     [HideInSubClass] public ScoreManager scoreManager;
+    [HideInSubClass] public HallOfFame hallOfFame;
     [HideInSubClass] [SerializeField] protected internal CharacterManager characterManager;
     [HideInSubClass] [SerializeField] protected internal MiniGameResultPannel_UI resultPanel;
     [HideInSubClass] [SerializeField] protected internal GameSettingsManager settingsManager;
@@ -42,6 +43,9 @@ public class GameController : Ticker
     protected internal Map map;
     private bool debugMicro;
 
+
+    public bool runChronometer = false;
+    public float chronometer;
     public delegate void InteractEvent();
     public static InteractEvent OnInteractionEnd;
     public static bool isInActionEvent;
@@ -81,6 +85,7 @@ public class GameController : Ticker
         if (value)
         {
             macroGameCanvasAnimator.SetTrigger(victory);
+            scoreManager.AddToCurrentMoney();
             AudioManager.MacroPlaySound("GameWin", 0);
         }
         else
@@ -88,9 +93,12 @@ public class GameController : Ticker
             macroGameCanvasAnimator.SetTrigger(defeat);
             AudioManager.MacroPlaySound("GameLose", 0);
         }
-
+        hallOfFame.UpdateHallOfFame(scoreManager.currentMoney,chronometer);
+        characterManager.ResetEndGame();
+        runChronometer = false;
+        PlayerPrefs.Save();
         while (!InputManager.GetKeyDown(ControllerKey.A)) yield return null;
-        SceneManager.LoadScene(mainMenuBuildIndex);
+        SceneManager.LoadScene(1);
     }
 
     private IEnumerator GameLoop()
@@ -100,7 +108,7 @@ public class GameController : Ticker
 
         MusicManager.instance.state = Soundgroup.CurrentPhase.RECRUIT;
         yield return recruitmentController.RecruitmentLoop();
-
+        Debug.Log("Phase braquage");
         map = mapManager.LoadNextMap();
         MusicManager.instance.state = Soundgroup.CurrentPhase.ACTION;
         while(true)
@@ -139,13 +147,13 @@ public class GameController : Ticker
                 }
             }
 
-            var nodeInteract = map.currentNode.GetComponent<InteractibleNode>();
+            /*var nodeInteract = map.currentNode.GetComponent<InteractibleNode>();
             if (nodeInteract != null && !isInActionEvent)
             {
                 nodeInteract.EventInteractible.Invoke();
                 isInActionEvent = true;
                 yield return new WaitWhile(() => isInActionEvent);
-            }
+            }*/
             
 
             if (map.OnLastNode())
@@ -157,7 +165,18 @@ public class GameController : Ticker
             yield return null;
         }
 
+        yield return new WaitForSecondsRealtime(2f);
+
+        yield return player.EnterPortal();
+
+        map = mapManager.LoadAstralPath();
         yield return astralPathController.EscapeLoop();
+    }
+
+    public void NextMap()
+    {
+        AudioManager.MacroPlaySound("Elevator", 0);
+        map = mapManager.LoadNextMap();
     }
 
     internal IEnumerator NodeWithMicroGame(GameController controller, BehaviourNode behaviourNode)
@@ -247,21 +266,18 @@ public class GameController : Ticker
 
         if (!Alarm.isActive) return false;
         
-        map = mapManager.LoadAstralPath();
         stopLoop = true;
         return true;
     }
     
-    private void OnEnable()
-    {
-        OnInteractionEnd += instance.InteractiveEventEnd;
-    }
 
     private void Awake()
     {
+        
         if (instance == null)
         {
             instance = this;
+            OnInteractionEnd += instance.InteractiveEventEnd;
         }
         else
         {
@@ -284,6 +300,11 @@ public class GameController : Ticker
     private void Update()
     {
         TickerUpdate();
+        if (runChronometer)
+            chronometer += Time.unscaledTime - Time.time;
+        else
+            chronometer = 0;
+
     }
 
     public void InteractiveEventEnd()

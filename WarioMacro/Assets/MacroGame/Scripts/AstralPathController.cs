@@ -1,13 +1,16 @@
 using System.Collections;
 using UnityEngine;
 
+// ReSharper disable once CheckNamespace
 public class AstralPathController : GameController
 {
     private int mgFailed;
 
     public IEnumerator EscapeLoop()
     {
-        GameConfig.instance.currentDifficulty = 3;
+        GameControllerSO.instance.currentDifficulty = 3;
+        yield return instance.player.ExitPortal();
+        
         while (!instance.map.OnLastNode())
         {
             mgFailed = 0;
@@ -18,7 +21,7 @@ public class AstralPathController : GameController
             
             if (nodeMicroGame != null && nodeMicroGame.enabled)
             {
-                nodeMicroGame.microGamesNumber = GameConfig.instance.astralMGCount;
+                nodeMicroGame.microGamesNumber = GameControllerSO.instance.astralMGCount;
                 int[] mgDomains = nodeMicroGame.GetMGDomains();
                 instance.resultPanelPlaceholder.text = mgDomains[0].ToString(); // TODO : remove placeholder
 
@@ -60,10 +63,9 @@ public class AstralPathController : GameController
             instance.settingsManager.DecreaseBPM();
             mgFailed++;
 
-            if (mgFailed >= GameConfig.instance.loseCharacterThreshold)
+            if (mgFailed >= GameControllerSO.instance.loseCharacterThreshold)
             {
-                // TODO : lose character in Character Manager
-                instance.lifeBar.Imprison();
+                instance.characterManager.LoseCharacter();
                 return true;
             }
         }

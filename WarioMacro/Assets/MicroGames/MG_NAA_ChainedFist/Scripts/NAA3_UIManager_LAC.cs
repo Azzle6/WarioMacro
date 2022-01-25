@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 
 public class NAA3_UIManager_LAC : MonoBehaviour
 {
     public NAA3_MicroGameController_LAC MC_Controller;
+    [SerializeField] Image electricBar;
     public uiStick rightStick, leftStick;
 
     public float stickAmp;
@@ -23,9 +25,9 @@ public class NAA3_UIManager_LAC : MonoBehaviour
 
     private void Update()
     {
-
+        // Electric Bar
+        electricBar.fillAmount = (MC_Controller.currentBpm()/ (MC_Controller.minimumBpmRequire/0.75f));
         // right stick 
-        
         if (Time.unscaledTime - (rightStick.moveRefreshTime) > stickMoveRefresh)
         {
             rightStick.isMoving = rightStick.CheckStickMove();
