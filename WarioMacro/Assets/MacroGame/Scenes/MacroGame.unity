@@ -4022,12 +4022,40 @@ PrefabInstance:
       value: SelectMultiplier
       objectReference: {fileID: 0}
     - target: {fileID: 1916013833, guid: ab3ae3b527c99934cb849c9a07833f5b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1916013833, guid: ab3ae3b527c99934cb849c9a07833f5b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1916013833, guid: ab3ae3b527c99934cb849c9a07833f5b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1749864768}
     - target: {fileID: 1916013833, guid: ab3ae3b527c99934cb849c9a07833f5b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 784403035}
+    - target: {fileID: 1916013833, guid: ab3ae3b527c99934cb849c9a07833f5b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1916013833, guid: ab3ae3b527c99934cb849c9a07833f5b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: StopRecruitPhase
+      objectReference: {fileID: 0}
+    - target: {fileID: 1916013833, guid: ab3ae3b527c99934cb849c9a07833f5b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: ClosePlan
+      objectReference: {fileID: 0}
+    - target: {fileID: 1916013833, guid: ab3ae3b527c99934cb849c9a07833f5b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: PlanManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1916013833, guid: ab3ae3b527c99934cb849c9a07833f5b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 3144464906435573225, guid: ab3ae3b527c99934cb849c9a07833f5b, type: 3}
       propertyPath: m_Pivot.x
@@ -4483,7 +4511,6 @@ MonoBehaviour:
   - {fileID: 481867903098265975, guid: 617e424176f278e42a14d52b1deafe04, type: 3}
   - {fileID: 481867903098265975, guid: 9c36020b248eb7e4a801e791a384c749, type: 3}
   - {fileID: 481867903098265975, guid: b30442333042d3c4d8b024e16368ff63, type: 3}
-  - {fileID: 481867903098265975, guid: c8413dab875b4c841ba2eb633b434110, type: 3}
 --- !u!114 &1749864768
 MonoBehaviour:
   m_ObjectHideFlags: 0
