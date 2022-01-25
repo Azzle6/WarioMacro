@@ -12,6 +12,7 @@ public class PlanManager : MonoBehaviour
     [SerializeField] private Transform[] DomainsPlaces;
     [SerializeField] private TextMeshProUGUI[] floorCountTexts;
     [SerializeField] private TextMeshProUGUI priceText;
+    [SerializeField] private TextMeshProUGUI startGameText;
     [SerializeField] private Button startGameButton;
     [SerializeField] private SpriteListSO domainsVisu;
     [SerializeField] private ScoreMultiplier[] multiplierList;
@@ -112,13 +113,18 @@ public class PlanManager : MonoBehaviour
         priceText.text = currentSelectedMultiplier.boostPrice + "$";
         if (scoreManager.currentMoney < currentSelectedMultiplier.boostPrice)
         {
-             // "Price : " + currentSelectedMultiplier.boostPrice + "\n Too expensive !"; // TODO : change start button text
+            startGameText.text = "Too expensive !";
             startGameButton.interactable = false;
         }
         else
         {
-            // "Price : " + currentSelectedMultiplier.boostPrice + "\n You can go !";
+            
+            startGameText.text =  "Go !";
             startGameButton.interactable = true;
+        }
+        if (CharacterManager.instance.playerTeam.Count < 4)
+        {
+            startGameText.text = (4 - CharacterManager.instance.playerTeam.Count) + " more members to start...";
         }
     }
     
@@ -127,12 +133,12 @@ public class PlanManager : MonoBehaviour
         if(multiplierList != null) currentSelectedMultiplier = multiplierList[0];
         scoreManager.scoreMultiplier = currentSelectedMultiplier.multiplierValue;
         UpdateGOButton();
+        GenerateFloorCounts();
     }
 
     private void Update()
     {
         if(InputManager.GetKeyDown(ControllerKey.B, true) && isOpen) ClosePlan();
-        
     }
 
 }
