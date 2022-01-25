@@ -7,11 +7,13 @@ using UnityEngine.UI;
 
 public class DialogConstructor : MonoBehaviour
 {
+    public Sprite chara;
     public string name;
     [Space]
     public string[] dialogs;
 
     public Response[] Responses;
+    public bool InteractionEndWhenDialogEnd = true;
 }
 
 [System.Serializable]

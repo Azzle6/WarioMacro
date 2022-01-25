@@ -3,7 +3,7 @@ using UnityEngine.Serialization;
 
 public class GameSettingsManager : MonoBehaviour
 {
-    [FormerlySerializedAs("gameControllerSO")] public GameConfig gameConfig;
+    public GameConfig gameConfig;
     [SerializeField] private BPMSettingsSO bpmSettingsSO;
 
     public void IncreaseDifficulty()

@@ -12,8 +12,6 @@ public class MapManager : MonoBehaviour
     public static int currentPhase { get; private set; }
     public static int floor { get; private set; }
     public GameObject currentMapGO { get; private set; }
-    
-    public readonly Dictionary<int, float> typePercentages = new Dictionary<int, float>();
 
     [SerializeField] private GameSettingsManager settingsManager;
     [SerializeField] private Transform mapParent;
@@ -21,9 +19,9 @@ public class MapManager : MonoBehaviour
     [SerializeField] private Map astralPathMap;
     [SerializeField] private GameObject[] mapPrefabList;
     private Queue<GameObject> mapPrefabQueue;
-    private IPhaseDomains[] phaseDomainsArray;
+    public IPhaseDomains[] phaseDomainsArray;
     private Map currentMap;
-    private int[] phaseFloorThresholds = new int[2] {5, 8}; // TODO : replace with right values
+    [HideInInspector] public int[] phaseFloorThresholds = new int[2] {5, 8}; // TODO : replace with right values
     
 
     public Map LoadRecruitmentMap()
@@ -187,6 +185,7 @@ public class MapManager : MonoBehaviour
 
     private void UpdatePhase()
     {
+        PlayerPrefs.Save();
         if (currentPhase == 2)
         {
             Debug.LogError("Already at last phase (3)");
@@ -197,6 +196,7 @@ public class MapManager : MonoBehaviour
 
     private void RefillMapQueue()
     {
+        PlayerPrefs.Save();
         var rd = new System.Random();
         var currentList = new List<GameObject>(mapPrefabQueue);
 
@@ -226,11 +226,5 @@ public class MapManager : MonoBehaviour
     {
         var rd = new System.Random();
         mapPrefabQueue = new Queue<GameObject>(mapPrefabList.OrderBy(go => rd.Next()));
-        
-        // TODO : Obsolete, delete after merging
-        foreach (FieldInfo field in typeof(SpecialistType).GetFields())
-        {
-            typePercentages.Add((int) field.GetValue(null), 0f);
-        }
     }
 }
