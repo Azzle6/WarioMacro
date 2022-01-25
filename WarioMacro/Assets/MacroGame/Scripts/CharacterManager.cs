@@ -61,6 +61,14 @@ public class CharacterManager : MonoBehaviour
         {
             UpdateAvailable();
         }
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            foreach (Imprisoned character in imprisonedCharacters)
+            {
+                Debug.Log(character.character.name);
+            }
+        }
     }
 
     private void SetRecruitable()
@@ -102,10 +110,11 @@ public class CharacterManager : MonoBehaviour
     
     public void LoseCharacter()
     {
-        var rand = Random.Range(0, 4);
-        life.Imprison(rand);
-        imprisonedCharacters.Add(new Imprisoned(playerTeam[rand],3,25000));
-        playerTeam.Remove(playerTeam[rand]);
+        Character rdCharacter = playerTeam[Random.Range(0, playerTeam.Count)];
+        life.Imprison(rdCharacter);
+        imprisonedCharacters.Add(new Imprisoned(rdCharacter, 3, 25000));
+        playerTeam.Remove(rdCharacter);
+        UpdateAvailable();
     }
 
     public void LoadAvailable()

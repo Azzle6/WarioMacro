@@ -25,10 +25,17 @@ public class LifeBar : MonoBehaviour
         life++;
     }
 
-    public void Imprison(int index)
+    public void Imprison(Character chara)
     {
         AudioManager.MacroPlaySound("CharacterLose", 0);
-        lifeBarGO.GetChild(index).GetComponent<Animator>().SetBool("Anim", true); //à remplacer par le trigger de l'animation
+        for (int i = 0; i < portraits.Length; i++)
+        {
+            if (chara.lifebarSprite != portraits[i].sprite) continue;
+            
+            lifeBarGO.GetChild(i).GetComponent<Animator>().SetBool("Anim", true); //à remplacer par le trigger de l'animation
+            break;
+        }
+        
         
         life--;
     }
