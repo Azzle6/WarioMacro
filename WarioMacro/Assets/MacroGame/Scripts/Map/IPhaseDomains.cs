@@ -10,8 +10,8 @@ public interface IPhaseDomains
 
 public class NormalPhaseDomains : IPhaseDomains
 {
-    private int primaryDomain;
-    private readonly int[] secondaryDomains;
+    public int primaryDomain;
+    public readonly int[] secondaryDomains;
 
     public NormalPhaseDomains(int primaryDomain, int[] secondaryDomains)
     {
@@ -52,7 +52,7 @@ public class NormalPhaseDomains : IPhaseDomains
 
 public class LastPhaseDomains : IPhaseDomains
 {
-    private readonly int[] primaryDomains;
+    public readonly int[] primaryDomains;
     private readonly int secondaryDomain;
 
     public LastPhaseDomains(int[] primaryDomains, int secondaryDomain)
