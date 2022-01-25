@@ -15,6 +15,7 @@ public class GameController : Ticker
 
     
     [HideInSubClass] public ScoreManager scoreManager;
+    [HideInSubClass] public HallOfFame hallOfFame;
     [HideInSubClass] [SerializeField] protected internal CharacterManager characterManager;
     [HideInSubClass] [SerializeField] protected internal MiniGameResultPannel_UI resultPanel;
     [HideInSubClass] [SerializeField] protected internal GameSettingsManager settingsManager;
@@ -42,6 +43,9 @@ public class GameController : Ticker
     protected internal Map map;
     private bool debugMicro;
 
+
+    public bool runChronometer = false;
+    public float chronometer;
     public delegate void InteractEvent();
     public static InteractEvent OnInteractionEnd;
     public static bool isInActionEvent;
@@ -81,6 +85,7 @@ public class GameController : Ticker
         if (value)
         {
             macroGameCanvasAnimator.SetTrigger(victory);
+            scoreManager.AddToCurrentMoney();
             AudioManager.MacroPlaySound("GameWin", 0);
         }
         else
@@ -88,7 +93,9 @@ public class GameController : Ticker
             macroGameCanvasAnimator.SetTrigger(defeat);
             AudioManager.MacroPlaySound("GameLose", 0);
         }
-
+        hallOfFame.UpdateHallOfFame(scoreManager.currentMoney,chronometer);
+        characterManager.ResetEndGame();
+        runChronometer = false;
         PlayerPrefs.Save();
         while (!InputManager.GetKeyDown(ControllerKey.A)) yield return null;
         SceneManager.LoadScene(1);
@@ -283,6 +290,11 @@ public class GameController : Ticker
     private void Update()
     {
         TickerUpdate();
+        if (runChronometer)
+            chronometer += Time.unscaledTime - Time.time;
+        else
+            chronometer = 0;
+
     }
 
     public void InteractiveEventEnd()
