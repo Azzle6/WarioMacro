@@ -33,7 +33,7 @@ public class CharacterNode : MonoBehaviour
             if (chara.characterType == type)
             {
                 currentChara = chara;
-                //Instantiate(currentChara.PuppetPrefab, CharacterEmplacement.transform);
+                Instantiate(currentChara.PuppetPrefab, CharacterEmplacement.transform);
                 return;
             }
         }
