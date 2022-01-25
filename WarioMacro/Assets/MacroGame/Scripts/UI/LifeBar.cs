@@ -21,15 +21,21 @@ public class LifeBar : MonoBehaviour
         portraits[life].sprite = chara.lifebarSprite;
         portraits[life].enabled = true;
         keyChains[life].sprite = Resources.Load<SpriteListSO>("KeyChainSprites")
-            .nodeSprites[chara.characterType - CharacterType.Scoundrel];
+            .nodeSprites[chara.characterType - SpecialistType.Brute];
         life++;
     }
 
-    public void Imprison()
+    public void Imprison(Character chara)
     {
         AudioManager.MacroPlaySound("CharacterLose", 0);
-        lifeBarGO.GetChild(life-1).GetComponent<Animator>().SetBool("Anim", true); //à remplacer par le trigger de l'animation
-        lifeBarGO.GetChild(life-1).GetChild(0).gameObject.SetActive(true);
+        for (int i = 0; i < portraits.Length; i++)
+        {
+            if (chara.lifebarSprite != portraits[i].sprite) continue;
+            
+            lifeBarGO.GetChild(i).GetComponent<Animator>().SetBool("Anim", true); //à remplacer par le trigger de l'animation
+            break;
+        }
+        
         
         life--;
     }

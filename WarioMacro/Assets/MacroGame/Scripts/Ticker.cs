@@ -19,7 +19,7 @@ public class Ticker : MonoBehaviour
     
     private static readonly List<ITickable> tickables = new List<ITickable>();
     private IEnumerator tickEnumerator;
-    protected internal GameControllerSO gameControllerSO;
+    private GameConfig gameConfig;
     private MusicManager musicManager;
 
     public static void Init(ITickable t)
@@ -45,7 +45,8 @@ public class Ticker : MonoBehaviour
 
     private protected void TickerAwake()
     {
-        gameControllerSO = Resources.LoadAll<GameControllerSO>("").First();
+        gameConfig = Resources.LoadAll<GameConfig>("").First();
+        gameConfig.Init();
     }
 
     private protected void TickerStart(bool debug)
@@ -56,13 +57,13 @@ public class Ticker : MonoBehaviour
         if (!debug)
         {
             // Reset bpm and difficulty 
-            gameControllerSO.currentGameSpeed = gameControllerSO.initialGameSpeed;
-            gameControllerSO.currentDifficulty = gameControllerSO.initialDifficulty;
+            gameConfig.currentGameSpeed = gameConfig.initialGameSpeed;
+            gameConfig.currentDifficulty = gameConfig.initialDifficulty;
         }
         
         // Update BPM and difficulty
-        gameBPM = gameControllerSO.currentGameSpeed;
-        difficulty = gameControllerSO.currentDifficulty;
+        gameBPM = gameConfig.currentGameSpeed;
+        difficulty = gameConfig.currentDifficulty;
         Time.timeScale = gameBPM / 60;
 
         tickEnumerator = TickCoroutine();
@@ -72,8 +73,8 @@ public class Ticker : MonoBehaviour
     private protected void TickerUpdate()
     {
         // update difficulty / speed
-        gameBPM = gameControllerSO.currentGameSpeed;
-        difficulty = gameControllerSO.currentDifficulty;
+        gameBPM = gameConfig.currentGameSpeed;
+        difficulty = gameConfig.currentDifficulty;
         
         // update global timescale
         Time.timeScale = lockTimescale ? 0f : gameBPM / 60;
