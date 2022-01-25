@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class PlaytestTool : MonoBehaviour
@@ -43,7 +42,7 @@ public class PlaytestTool : MonoBehaviour
         if (mapManager.currentMapGO != null)
         {
             string mapName = mapManager.currentMapGO.name;
-            if(mapName.Length > 0 ) mapNameText.text = "Current Level : " + mapName.Substring(0, mapName.Length - 7);;
+            if(mapName.Length > 0 ) mapNameText.text = "Current Level : " + mapName.Substring(0, mapName.Length - 7);
         }
     }
 
@@ -85,7 +84,7 @@ public class PlaytestTool : MonoBehaviour
     public void OnListUpdate(int toggleIndex, bool isActivated)
     {
         Debug.Log(toggleIndex);
-        List<String> SNames = new List<string>();
+        var SNames = new List<string>();
         SNames = GameControl.sceneNames.ToList();
         
         if (isActivated)
@@ -106,12 +105,8 @@ public class PlaytestTool : MonoBehaviour
                 }
             }
         }
-        
-        
-        
-        
-        
     }
+    
     public void SelectAll()
     {
         foreach (Toggle tog in TogglesList)
@@ -122,23 +117,6 @@ public class PlaytestTool : MonoBehaviour
 
     public void SkipRecruitPhase()
     {
-        StartCoroutine(RecruitControl.SkipRecruitment());
+        RecruitControl.SkipRecruitment();
     }
-    
-    
-    /*
-    public void CopyDebug()
-    {
-        
-    }
-
-    public void OpenExcel()
-    {
-        
-    }
-
-    public void TakeScreenshot()
-    {
-        
-    }*/
 }
