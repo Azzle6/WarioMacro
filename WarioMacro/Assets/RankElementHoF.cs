@@ -21,7 +21,7 @@ public class RankElementHoF : MonoBehaviour
         foreach (var key in run.team.Keys)
         {
             portraits[0].sprite = key.cardSprite;
-            mask[0].SetActive(run.team[key]);
+            mask[0].SetActive(!run.team[key]);
             i++;
         }
     }

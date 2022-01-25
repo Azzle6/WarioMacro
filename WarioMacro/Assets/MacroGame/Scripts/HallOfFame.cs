@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
+using Random = UnityEngine.Random;
 
 public class HallOfFame : MonoBehaviour
 {
@@ -34,7 +35,9 @@ public class HallOfFame : MonoBehaviour
             var toString =  score + "," + time + ",";
             foreach (var character in team)
             {
-                toString += character.Key+"."+character.Value+":";
+                Debug.Log(character.Key);
+                Debug.Log(character.Value);
+                toString += character.Key.ToString()+"."+character.Value+":";
             }
             toString = toString.Substring(0, toString.Length - 1);
             Debug.Log(toString);
@@ -58,6 +61,7 @@ public class HallOfFame : MonoBehaviour
     
     public void SetHallOfFame()
     {
+        PlayerPrefs.DeleteAll();
         var j = 0;
         var temp = PlayerPrefs.GetString("hallOfFame");
         if (temp == "") return;
@@ -129,6 +133,11 @@ public class HallOfFame : MonoBehaviour
     private void Update()
     {
         if(InputManager.GetKeyDown(ControllerKey.B, true) && isOpen) CloseHall();
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            StartRun(CharacterManager.instance.playerTeam.ToArray());
+            UpdateHallOfFame(Random.Range(0,156),Random.Range(0,156));
+        }
         
     }
     public void OpenHall()
