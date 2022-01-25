@@ -17,7 +17,10 @@ public class RankElementHoF : MonoBehaviour
     {
         var i = 0;
         scoreTMP.text = run.score.ToString() +"$";
-        timeTMP.text = run.time.ToString();
+        
+        var minutes  = run.time / 60;
+        var seconds  = run.time % 60;
+        timeTMP.text = String.Format("{0:00}:{1:00}", minutes, seconds);
         foreach (var key in run.team.Keys)
         {
             portraits[0].sprite = key.cardSprite;

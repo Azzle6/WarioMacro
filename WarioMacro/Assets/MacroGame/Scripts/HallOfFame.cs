@@ -133,12 +133,6 @@ public class HallOfFame : MonoBehaviour
     private void Update()
     {
         if(InputManager.GetKeyDown(ControllerKey.B, true) && isOpen) CloseHall();
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            StartRun(CharacterManager.instance.playerTeam.ToArray());
-            UpdateHallOfFame(Random.Range(0,156),Random.Range(0,156));
-        }
-        
     }
     public void OpenHall()
     {

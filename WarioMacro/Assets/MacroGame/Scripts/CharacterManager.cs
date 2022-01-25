@@ -115,6 +115,14 @@ public class CharacterManager : MonoBehaviour
     }
 
 
+    public void ResetEndGame()
+    {
+        UpdateImprisoned();
+        ResetList();
+        UpdateAvailable();
+        SetRecruitable();
+    }
+
     public void Recruit(Character character)
     {
         playerTeam.Add(character);
