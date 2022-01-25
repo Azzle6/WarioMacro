@@ -7,6 +7,7 @@ using UnityEngine;
 public class RecruitmentController : GameController
 {
     public bool skipRecruitment;
+    public bool canFinishRecruitment;
     [SerializeField] private GameObject alarmGO;
     private NodeVisual lastNoMGNode;
 
@@ -62,9 +63,11 @@ public class RecruitmentController : GameController
                 instance.player.TeleportPlayer(startNode.transform.position);
                 instance.map.currentNode = startNode;*/
             }
-
+            
             yield return null;
         }
+
+        //yield return new WaitUntil(() => canFinishRecruitment);
         
         SetRecruitmentActive(false);
     }
@@ -97,7 +100,11 @@ public class RecruitmentController : GameController
         
         alarmGO.SetActive(!state);
     }
-    
+
+    public void StopRecruitPhase()
+    {
+        if (instance.characterManager.playerTeam.Count >= 4) canFinishRecruitment = true;
+    }
 
     public IEnumerator SkipRecruitment()
     {

@@ -19,9 +19,9 @@ public class MapManager : MonoBehaviour
     [SerializeField] private Map astralPathMap;
     [SerializeField] private GameObject[] mapPrefabList;
     private Queue<GameObject> mapPrefabQueue;
-    private IPhaseDomains[] phaseDomainsArray;
+    public IPhaseDomains[] phaseDomainsArray;
     private Map currentMap;
-    private int[] phaseFloorThresholds = new int[2] {5, 8}; // TODO : replace with right values
+    [HideInInspector] public int[] phaseFloorThresholds = new int[2] {5, 8}; // TODO : replace with right values
     
 
     public Map LoadRecruitmentMap()
