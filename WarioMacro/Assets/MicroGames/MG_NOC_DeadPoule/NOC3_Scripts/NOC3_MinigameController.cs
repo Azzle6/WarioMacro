@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
 using UnityEngine.EventSystems;
-using System.Linq;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -37,9 +36,9 @@ namespace MiniGame.DeadPoule
         [SerializeField] private GameObject wand;
 
         [Space, SerializeField] private GameObject[] buttons;
+        [SerializeField] private Difficulty difficulty;
         [SerializeField] private Transform buttonSequenceStart;
 
-        private Difficulty difficulty;
         private int countDownTracker = 3;
 
         private List<string> buttonsInternalName = new List<string> { "NOC3_A", "NOC3_B", "NOC3_X", "NOC3_Y" };
@@ -55,7 +54,6 @@ namespace MiniGame.DeadPoule
 
         private bool doneOnce;
         private EventSystem eventSystem;
-        private byte values;
 
         public static bool HasWon { get; set; }
 
@@ -198,22 +196,12 @@ namespace MiniGame.DeadPoule
             }
         }
 
-        public static bool checkEquality<T>(T[] first, T[] second)
-        {
-            return Enumerable.SequenceEqual(first, second);
-        }
-
         private void ReceiveEngGameEvent()
         {
-            byte[] values = new byte[(byte)difficulty];
-            for (int i = 0; i < values.Length; i++)
+            for (int i = 0; i < (int)difficulty; i++)
             {
-                values[i] = playerSequence[i];
+                hasFailed = playerSequence[i] != internalSequence[i];
             }
-
-
-            hasFailed = !checkEquality(internalSequence, values);
-
 
             // send to macro game
             // WIN

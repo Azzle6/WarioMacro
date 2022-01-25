@@ -40,8 +40,6 @@ public class ULB1_GameManager : MonoBehaviour, ITickable
 
     [SerializeField] private int finishTick;
 
-    [SerializeField] private bool isStopTimer;
-
     private void Awake()
     {
         instance = this;
@@ -126,7 +124,6 @@ public class ULB1_GameManager : MonoBehaviour, ITickable
 
     public void FinishGame(bool Win)
     {
-        player.gameObject.SetActive(false);
         if (GameController.currentTick!=5)
         {
             finishTick = GameController.currentTick+1;
@@ -135,6 +132,7 @@ public class ULB1_GameManager : MonoBehaviour, ITickable
         {
             finishTick = GameController.currentTick;
         }
+        GameController.StopTimer();
         isFinish = true;
         if (Win && isPlay)
         {
@@ -178,8 +176,6 @@ public class ULB1_GameManager : MonoBehaviour, ITickable
 
             if (GameController.currentTick == 5 && !isWin)
             {
-                GameController.StopTimer();
-                isStopTimer = true;
                 if (!isFinish)
                 {
                     FinishGame(false);
@@ -189,12 +185,6 @@ public class ULB1_GameManager : MonoBehaviour, ITickable
             if (GameController.currentTick == finishTick+3 && finishTick!=0)
             {
                 GameController.FinishGame(isWin);
-            }
-
-            if (isFinish && !isStopTimer)
-            {
-                GameController.StopTimer();
-                isStopTimer = true;
             }
 
     }

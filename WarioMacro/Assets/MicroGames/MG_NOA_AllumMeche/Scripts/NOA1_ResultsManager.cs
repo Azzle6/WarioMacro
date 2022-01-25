@@ -8,7 +8,6 @@ public class NOA1_ResultsManager : MonoBehaviour, ITickable
     [SerializeField] private Animator camAnimator;
     [SerializeField] private Animator grilleAnimator;
     [SerializeField] private AudioClip[] sfx;
-    [SerializeField] private GameObject explosion;
     private bool results;
     private bool isFinished;
     private int tickEnd = 10;
@@ -60,18 +59,11 @@ public class NOA1_ResultsManager : MonoBehaviour, ITickable
             if ((other.GetComponent<NOA1_Matches>().isOnFire) && (!isFinished))
             {
                 AudioManager.PlaySound(sfx[0],0.3f);
-                explosion.SetActive(true);
                 AudioManager.PlaySound(sfx[2],0.3f,1.4f);
                 isFinished = true;
                 results = true;
-                StartCoroutine(CamDelay());
+                camAnimator.SetBool("Win",true);
             }
         }
-    }
-
-    private IEnumerator CamDelay()
-    {
-        yield return new WaitForSeconds(0.4f);
-        camAnimator.SetBool("Win",true);
     }
 }

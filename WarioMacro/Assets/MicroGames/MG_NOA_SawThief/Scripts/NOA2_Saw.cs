@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.RenderGraphModule;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 using Vector3 = UnityEngine.Vector3;
@@ -164,35 +166,36 @@ public class NOA2_Saw : MonoBehaviour, ITickable
 
     public void OnTick()
     {
-        print(GameController.currentTick);
-        
-        if (GameController.currentTick == 5)
-        {
-            if (doOnce)
-            {
-                lose();
-            }
-            GameController.StopTimer();
-        }
-        
-        if (GameController.currentTick == 8)
-        {
-            GameController.FinishGame(results);
-        }
-        
         if (results || fail)
         {
+          /*Debug.Log(GameController.currentTick);
+            Debug.Log(results);
+            print("stoptick :" +stopTick);*/
+            GameController.StopTimer();
+
             if (doOnceTick)
             {
                 stopTick = GameController.currentTick;
                 doOnceTick = false;
             }
 
-            print("stoptick :" + stopTick);
-            GameController.StopTimer();
-
             if (GameController.currentTick == stopTick + 3)
             {
+                GameController.FinishGame(results);
+            }
+        }
+        
+        if (GameController.currentTick > 5)
+        {
+            if (doOnce)
+            {
+                lose();
+            }
+            GameController.StopTimer();
+
+            if (GameController.currentTick == 8)
+            {
+                //Debug.Log("Results :" + results);
                 GameController.FinishGame(results);
             }
         }
@@ -200,7 +203,7 @@ public class NOA2_Saw : MonoBehaviour, ITickable
     
     void changeDirection(Transform sawpart, Vector3 a, Vector3 b)
     {
-       if (moving && GameController.currentTick <5)
+       if (moving && GameController.currentTick <=5)
        {
            float t = Mathf.PingPong(Time.time, 1f);
            //print(t);
@@ -213,7 +216,7 @@ public class NOA2_Saw : MonoBehaviour, ITickable
 
     void SawActive()
     {
-        if (InputManager.GetKeyDown(ControllerKey.A) && GameController.currentTick < 5)
+        if (InputManager.GetKeyDown(ControllerKey.A) && GameController.currentTick <= 5)
         {
             sawAValue(tValue);
             moving = false;
@@ -280,6 +283,7 @@ public class NOA2_Saw : MonoBehaviour, ITickable
     {
         results = true;
         head.SetTrigger("Win");
+        body.SetBool("Results", results);
         grille.SetBool("Results", results);
         StartCoroutine(winAnimation());
     }
@@ -298,14 +302,11 @@ public class NOA2_Saw : MonoBehaviour, ITickable
         yield return new WaitForSeconds(0.8f);
         scaler.SetTrigger("Lose");
     }
-    
     IEnumerator winAnimation()
     {
-        yield return new WaitForSeconds(0.2f);
-        body.SetTrigger("Win");
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(1.7f);
         winHead.SetTrigger("Win");
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.5f);
         scaler.SetTrigger("Win");
         yield return new WaitForSeconds(0.1f);
         coffre.SetTrigger("Win");

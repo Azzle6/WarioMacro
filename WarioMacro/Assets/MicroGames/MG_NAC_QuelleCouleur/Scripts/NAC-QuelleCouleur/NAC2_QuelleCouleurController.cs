@@ -82,12 +82,11 @@ public class NAC2_QuelleCouleurController : MonoBehaviour, ITickable
         if (GameController.currentTick == 2)
         {
             answerManager.GenerateAnswers(goodColors);
-            answerMenu.SetActive(true);
 
         }
         if (GameController.currentTick == 3)
         {
-           // answerMenu.SetActive(true);
+            answerMenu.SetActive(true);
         }
 
         if (GameController.currentTick == 5)
