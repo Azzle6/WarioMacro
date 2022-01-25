@@ -10,12 +10,12 @@ public class PlanManager : MonoBehaviour
     [SerializeField] private MapManager MapMana;
     [SerializeField] private GameObject PlanObject;
     [SerializeField] private Transform[] DomainsPlaces;
+    [SerializeField] private TextMeshProUGUI[] floorCountTexts;
     [SerializeField] private TextMeshProUGUI priceText;
     [SerializeField] private Button startGameButton;
     [SerializeField] private SpriteListSO domainsVisu;
     [SerializeField] private ScoreMultiplier[] multiplierList;
 
-    private Vector2[] potentialFloorCounts = new Vector2[2];
     private ScoreMultiplier currentSelectedMultiplier;
     private bool isOpen;
 
@@ -44,7 +44,22 @@ public class PlanManager : MonoBehaviour
 
     private void GenerateFloorCounts()
     {
-        
+        for (int i = 0; i < 2; i++)
+        {
+            int trueFloorCount = MapMana.phaseFloorThresholds[i];
+            if (trueFloorCount == GameConfig.instance.firstPhaseMaxFloorCount)
+            {
+                floorCountTexts[i].text = trueFloorCount.ToString();
+                continue;
+            }
+
+            int lowerLimit = trueFloorCount - Random.Range(1, 3);
+            if (lowerLimit < 1)
+                lowerLimit = 1;
+            int upperLimit = trueFloorCount + Random.Range(1, 3);
+            
+            floorCountTexts[i].text = lowerLimit + " <> " + upperLimit;
+        }
     }
 
     private void UpdateDomains()
