@@ -24,7 +24,7 @@ public class Player : MonoBehaviour
         StartMove();
         foreach (Vector3 position in positions.Select(t => t.position))
         {
-            FlipSpriteX(position.x < transform.position.x);
+            FlipSpriteX(position.x < transform.position.x - 0.1f);
             var tween = transform.DOMove(position, moveSpeed).SetSpeedBased().SetEase(Ease.Linear);
 
             while (tween.IsPlaying()) yield return null;
@@ -51,7 +51,12 @@ public class Player : MonoBehaviour
     {
         for (int i = 0; i < puppetMainCharacter.childCount; i++)
         {
-            puppetMainCharacter.GetChild(i).GetComponent<SpriteRenderer>().flipX = flip;
+            var renderer = puppetMainCharacter.GetChild(i).GetComponent<SpriteRenderer>();
+
+            if (renderer != null)
+            {
+                renderer.flipX = flip;
+            }
         }
     }
     
