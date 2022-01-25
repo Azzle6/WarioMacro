@@ -173,6 +173,12 @@ public class GameController : Ticker
         yield return astralPathController.EscapeLoop();
     }
 
+    public void NextMap()
+    {
+        AudioManager.MacroPlaySound("Elevator", 0);
+        map = mapManager.LoadNextMap();
+    }
+
     internal IEnumerator NodeWithMicroGame(GameController controller, BehaviourNode behaviourNode)
     {
         // select 3 random micro games from micro games list
