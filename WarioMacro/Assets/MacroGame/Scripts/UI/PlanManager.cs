@@ -48,7 +48,7 @@ public class PlanManager : MonoBehaviour
         for (int i = 0; i < 2; i++)
         {
             int trueFloorCount = MapMana.phaseFloorThresholds[i];
-            if (trueFloorCount == GameConfig.instance.firstPhaseMaxFloorCount)
+            if (trueFloorCount == GameControllerSO.instance.firstPhaseMaxFloorCount)
             {
                 floorCountTexts[i].text = trueFloorCount.ToString();
                 continue;
