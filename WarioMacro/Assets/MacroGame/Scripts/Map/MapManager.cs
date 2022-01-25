@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using GameTypes;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 // ReSharper disable once CheckNamespace
@@ -14,18 +12,20 @@ public class MapManager : MonoBehaviour
     public GameObject currentMapGO { get; private set; }
 
     [SerializeField] private GameSettingsManager settingsManager;
+    [SerializeField] private GameConfig config;
     [SerializeField] private Transform mapParent;
     [SerializeField] private Map recruitmentMap;
     [SerializeField] private Map astralPathMap;
     [SerializeField] private GameObject[] mapPrefabList;
     private Queue<GameObject> mapPrefabQueue;
-    private IPhaseDomains[] phaseDomainsArray;
+    public IPhaseDomains[] phaseDomainsArray;
     private Map currentMap;
-    private int[] phaseFloorThresholds = new int[2] {5, 8}; // TODO : replace with right values
+    [HideInInspector] public int[] phaseFloorThresholds = new int[2];
     
 
     public Map LoadRecruitmentMap()
     {
+        GeneratePhaseFloorCount();
         GeneratePhasesDomains();
         currentMap = recruitmentMap;
         currentMap.Load();
@@ -65,7 +65,13 @@ public class MapManager : MonoBehaviour
         return currentMap;
     }
 
-    public void GeneratePhasesDomains()
+    public void GeneratePhaseFloorCount()
+    {
+        phaseFloorThresholds[0] = Random.Range(config.firstPhaseMinFloorCount, config.firstPhaseMaxFloorCount + 1);
+        phaseFloorThresholds[1] = Random.Range(config.secondPhaseMinFloorCount, config.secondPhaseMaxFloorCount + 1);
+    }
+
+    private void GeneratePhasesDomains()
     {
         var notUsedDomains = new List<int>(SpecialistType.GetTypes());
         phaseDomainsArray = new IPhaseDomains[3];
@@ -96,7 +102,7 @@ public class MapManager : MonoBehaviour
         notUsedDomains.Remove(domains[rd]);
         domains.RemoveAt(rd);
 
-        if (Random.Range(0f, 100f) < GameConfig.instance.phaseDoubleDomainPercentage)
+        if (Random.Range(0f, 100f) < config.phaseDoubleDomainPercentage)
         {
             rd = Random.Range(0, domains.Count);
             secondaryDomains.Add(domains[rd]);
@@ -155,8 +161,13 @@ public class MapManager : MonoBehaviour
         
         // 3rd is completely random
         RandomSecondary :
-        rd = Random.Range(0, domains.Count);
-        int secondaryDomain = domains[rd];
+        int secondaryDomain = 0;
+        
+        if (Random.Range(0f, 100f) < config.lastPhaseSecondaryDomainPercentage)
+        {
+            rd = Random.Range(0, domains.Count);
+            secondaryDomain = domains[rd];
+        }
 
         phaseDomainsArray[phaseDomainsArray.Length - 1] = new LastPhaseDomains(primaryDomains, secondaryDomain);
     }

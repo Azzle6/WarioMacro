@@ -140,13 +140,13 @@ public class GameController : Ticker
                 }
             }
 
-            var nodeInteract = map.currentNode.GetComponent<InteractibleNode>();
+            /*var nodeInteract = map.currentNode.GetComponent<InteractibleNode>();
             if (nodeInteract != null && !isInActionEvent)
             {
                 nodeInteract.EventInteractible.Invoke();
                 isInActionEvent = true;
                 yield return new WaitWhile(() => isInActionEvent);
-            }
+            }*/
             
 
             if (map.OnLastNode())

@@ -72,6 +72,10 @@ PrefabInstance:
       value: Voulez vous de moi ?
       objectReference: {fileID: 0}
     - target: {fileID: 3839740401953144346, guid: 450937361d9b9924caaf3eaf153f0a52, type: 3}
+      propertyPath: InteractionEndWhenDialogEnd
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3839740401953144346, guid: 450937361d9b9924caaf3eaf153f0a52, type: 3}
       propertyPath: Responses.Array.data[0].ButtonResponse
       value: Oui
       objectReference: {fileID: 0}
@@ -207,6 +211,7 @@ MonoBehaviour:
   dialogs:
   - "D\xE9sol\xE9 je suis d\xE9j\xE0 dans votre \xE9quipe !"
   Responses: []
+  InteractionEndWhenDialogEnd: 1
 --- !u!1001 &7742102807300579255
 PrefabInstance:
   m_ObjectHideFlags: 0
