@@ -48,7 +48,11 @@ public class RecruitmentController : GameController
 
     public void StopRecruitPhase()
     {
-        if (instance.characterManager.playerTeam.Count >= 4) canFinishRecruitment = true;
+        if (instance.characterManager.playerTeam.Count >= 4)
+        {
+            GameController.instance.hallOfFame.StartRun(instance.characterManager.playerTeam.ToArray());
+            canFinishRecruitment = true;
+        }
     }
 
     public void SkipRecruitment()
