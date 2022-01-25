@@ -186,6 +186,7 @@ public class CharacterManager : MonoBehaviour
     
     public void UpdateAvailable()
     {
+        if (!imprisonedCharacters.Any()) return;
         var save = "";
         PlayerPrefs.DeleteKey("imprisoned");
         foreach (var imprisoned in imprisonedCharacters)
