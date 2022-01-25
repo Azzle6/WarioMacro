@@ -7,7 +7,7 @@ public class NAA3_LineController_LAC : MonoBehaviour
     public NAA3_MicroGameController_LAC MC_Controller;
     public LineRenderer line;
     public Transform startPoint, endPoint;
-    float bpmFactor; // between 0 & 1
+    public float bpmFactor; // between 0 & 1
     [Range(0, 3)]
     public float baseAmp, baseFreq;
     public float ampMult, freqMult;
@@ -47,10 +47,10 @@ public class NAA3_LineController_LAC : MonoBehaviour
         }
         
         blinkFreq = Mathf.Lerp(minBlinkFreq, maxBlinkFreq,1 - bpmFactor );
-        if((Time.unscaledTime - blinkTime) > ((isBlinking)?blinkDuration : blinkFreq))
+        if(Time.time - (blinkTime/Time.timeScale) > ((isBlinking)?blinkDuration : blinkFreq))
         {
             //Debug.Log("Bmp Ratio : " + MC_Controller.currentBpm());
-            blinkTime = Time.unscaledTime;
+            blinkTime = Time.time;
             isBlinking = !isBlinking;
 
             line.enabled = !isBlinking;

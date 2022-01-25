@@ -7,16 +7,15 @@ using UnityEngine.Playables;
 public class ULC1_Phatass_PinceController : MonoBehaviour, ITickable
 {   
     [SerializeField] private float speed = 5f;
-    public float endingTimeModifier;
     private Vector2 joystickInput;
-    [SerializeField] private bool canTakeKey = false, hasPinched = false, bestEnding, canInput, canStopTimer = false, canStopGame = false;
+    [SerializeField] private bool canTakeKey = false, hasPinched = false, bestEnding, canInput, canStop = false;
     public bool phatassSuccess;
     [SerializeField] Sprite neutralPince, readyPince;
     [SerializeField] private SpriteRenderer thisSpriteRenderer;
     [SerializeField] private PlayableDirector soundDirector;
     [SerializeField] private Animator phatassAnimator;
     // Fail Audio Clips
-    [SerializeField] AudioClip screamingSquirel, wilhelmScream, yameteKudasai, uCantTouchThis, getOverHere, weGotEm;
+    [SerializeField] AudioClip screamingSquirel, wilhelmScream, yameteKudasai, uCantTouchThis, theWhoYeah, weGotEm;
     // Success Audio Clips
     [SerializeField] AudioClip gotchaBitch;
     [SerializeField] private PlayableDirector gtaMissionPassed, jojoReference;
@@ -28,7 +27,6 @@ public class ULC1_Phatass_PinceController : MonoBehaviour, ITickable
         canInput = true;
         bestEnding = true;
         ahhhhSource = GetComponent<AudioSource>();
-        PrepareEndingTime();
         GameManager.Register(); //Mise en place du Input Manager, du Sound Manager et du Game Controller
         GameController.Init(this); //Permet a ce script d'utiliser le OnTick
     }
@@ -39,12 +37,12 @@ public class ULC1_Phatass_PinceController : MonoBehaviour, ITickable
         {
             joystickInput = new Vector2(InputManager.GetAxis(ControllerAxis.LEFT_STICK_HORIZONTAL),-InputManager.GetAxis(ControllerAxis.LEFT_STICK_VERTICAL));
         
-            transform.position += new Vector3(joystickInput.x, -joystickInput.y, 0) * speed * GameController.gameBPM/60;
+            transform.position += new Vector3(joystickInput.x, -joystickInput.y, 0) * speed * GameController.gameBPM / 60;
         
             if (InputManager.GetKeyDown(ControllerKey.A) && canTakeKey && !hasPinched) 
             {
                 phatassSuccess = true;
-                canStopTimer = true;
+                canStop = true;
                 /*if (bestEnding)
                 {
                 phatassAnimator.SetTrigger("RespecMaDude");
@@ -62,17 +60,17 @@ public class ULC1_Phatass_PinceController : MonoBehaviour, ITickable
                     thisSpriteRenderer.enabled = false;
                     hasPinched = true;
                     soundDirector.enabled = false;
-                    StartCoroutine(HolupALilBit(1f * endingTimeModifier));
+                    StartCoroutine(HolupALilBit(1f));
                 }
                 else if (randomValue == 2)
                 {
                     phatassAnimator.SetTrigger("SnipTheKey");
-                    ahhhhSource.clip = getOverHere;
+                    ahhhhSource.clip = theWhoYeah;
                     ahhhhSource.Play();
                     thisSpriteRenderer.enabled = false;
                     hasPinched = true;
                     soundDirector.enabled = false;
-                    StartCoroutine(HolupALilBit(1.75f * endingTimeModifier));
+                    StartCoroutine(HolupALilBit(2.5f));
                 }
                 else if (randomValue == 3)
                 {
@@ -82,14 +80,14 @@ public class ULC1_Phatass_PinceController : MonoBehaviour, ITickable
                     thisSpriteRenderer.enabled = false;
                     hasPinched = true;
                     soundDirector.enabled = false;
-                    StartCoroutine(HolupALilBit(2.2f * endingTimeModifier));
+                    StartCoroutine(HolupALilBit(2f));
                 }
                  
             }
         else if (InputManager.GetKeyDown(ControllerKey.A) && !canTakeKey && !hasPinched)
         {
             phatassSuccess = false;
-            canStopTimer = true;
+            canStop = true;
             /*if (bestEnding)
             {
                 phatassAnimator.SetTrigger("ToBeContinued");
@@ -111,7 +109,7 @@ public class ULC1_Phatass_PinceController : MonoBehaviour, ITickable
                 thisSpriteRenderer.enabled = false;
                 hasPinched = true;
                 soundDirector.enabled = false;
-                StartCoroutine(HolupALilBit(1.5f * endingTimeModifier));
+                StartCoroutine(HolupALilBit(1.5f));
             }            
             else if(randomValue == 2)
             {
@@ -121,7 +119,7 @@ public class ULC1_Phatass_PinceController : MonoBehaviour, ITickable
                 thisSpriteRenderer.enabled = false;
                 hasPinched = true;
                 soundDirector.enabled = false;
-                StartCoroutine(HolupALilBit(1f * endingTimeModifier));
+                StartCoroutine(HolupALilBit(1f));
             }
             else if(randomValue == 3)
             {
@@ -131,7 +129,7 @@ public class ULC1_Phatass_PinceController : MonoBehaviour, ITickable
                 thisSpriteRenderer.enabled = false;
                 hasPinched = true;
                 soundDirector.enabled = false;
-                StartCoroutine(HolupALilBit(.75f * endingTimeModifier));
+                StartCoroutine(HolupALilBit(.75f));
             }
             else if(randomValue == 4)
             {
@@ -141,36 +139,16 @@ public class ULC1_Phatass_PinceController : MonoBehaviour, ITickable
                 thisSpriteRenderer.enabled = false;
                 hasPinched = true;
                 soundDirector.enabled = false;
-                StartCoroutine(HolupALilBit(1.5f * endingTimeModifier));
+                StartCoroutine(HolupALilBit(1.3f));
             }
         }
         } 
     }
 
-    void PrepareEndingTime()
-    {
-        if(GameController.gameBPM == 50)
-        {
-            endingTimeModifier = .9f;
-        }
-        else if(GameController.gameBPM == 60)
-        {
-            endingTimeModifier = 1.1f;
-        }
-        else if (GameController.gameBPM == 70)
-        {
-            endingTimeModifier = 1.3f;
-        }
-        else if (GameController.gameBPM == 80)
-        {
-            endingTimeModifier = 1.5f;
-        }
-    }
-
     IEnumerator HolupALilBit(float yieldTime)
     {
         yield return new WaitForSeconds(yieldTime);
-        canStopGame = true;
+        GameController.FinishGame(phatassSuccess);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -207,16 +185,10 @@ public class ULC1_Phatass_PinceController : MonoBehaviour, ITickable
             Debug.Log("No more Input");
         }
         
-        if (canStopTimer)
+        if (canStop)
         {
             GameController.StopTimer();
-            canStopTimer = false;
-        }
-
-        if (canStopGame)
-        {
-            canStopGame = false;
-            GameController.FinishGame(phatassSuccess);
+            canStop = false;
         }
 
         if (GameController.currentTick == 8) //FINISH GAME

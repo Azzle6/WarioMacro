@@ -14,27 +14,19 @@ public class NOA1_MatchesThrower : MonoBehaviour
     [SerializeField] private Transform spawnPos;
     [SerializeField] private Vector2 forceDirection;
     [SerializeField] private Vector2 forceRange;
-    private bool started = false;
 
-    private void OnEnable()
+    private void Start()
     {
         animator.SetFloat("Speed", speed);
-        StartCoroutine(WaitForStart());
     }
 
     void Update()
     {
-        if ((InputManager.GetKeyDown(ControllerKey.A)) && (started) )
+        if (InputManager.GetKeyDown(ControllerKey.A))
         {
             lastMatches = Instantiate(matches).GetComponent<Rigidbody>();
             lastMatches.transform.position = spawnPos.position;
             lastMatches.AddForce(forceDirection*Random.Range(forceRange.x,forceRange.y),ForceMode.Impulse);
         }
-    }
-    
-    IEnumerator WaitForStart()
-    {
-        yield return new WaitForSeconds(0.2f);
-        started = true;
     }
 }
