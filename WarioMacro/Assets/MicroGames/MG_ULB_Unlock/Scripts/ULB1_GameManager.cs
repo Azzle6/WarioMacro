@@ -75,14 +75,14 @@ public class ULB1_GameManager : MonoBehaviour, ITickable
     {
         cameraAnim.clip = cameraLevel1;
         cameraAnim.Play();
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.3f);
         randomMaze = Random.Range(0, easyLevels.Length);
         chosenMaze = easyLevels[randomMaze];
         maze = ULB1_Pooler.instance.Pop(chosenMaze);
         maze.transform.position = new Vector3(0,-401,0);
         player.position = maze.transform.GetChild(maze.transform.childCount - 1).transform.position;
-        cam.orthographicSize = 5;
-        cam.transform.position = new Vector3(0, 1, -10);
+        //cam.orthographicSize = 5;
+        //cam.transform.position = new Vector3(0, 1, -10);
         chest.SetActive(false);
         isPlay = true;
         playerMovement.speed = 15;
@@ -92,14 +92,14 @@ public class ULB1_GameManager : MonoBehaviour, ITickable
     {
         cameraAnim.clip = cameraLevel2;
         cameraAnim.Play();
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.3f);
         randomMaze = Random.Range(0, middleLevels.Length);
         chosenMaze = middleLevels[randomMaze];
         maze = ULB1_Pooler.instance.Pop(chosenMaze);
         maze.transform.position = new Vector3(0,-401,0);
         player.position = maze.transform.GetChild(maze.transform.childCount - 1).transform.position;
-        cam.orthographicSize = 7;
-        cam.transform.position = new Vector3(0, 1, -10);
+        //cam.orthographicSize = 7;
+        //cam.transform.position = new Vector3(0, 1, -10);
         chest.SetActive(false);
         isPlay = true;
         playerMovement.speed = 17;
@@ -109,14 +109,14 @@ public class ULB1_GameManager : MonoBehaviour, ITickable
     {
         cameraAnim.clip = cameraLevel3;
         cameraAnim.Play();
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.3f);
         randomMaze = Random.Range(0, hardLevels.Length);
         chosenMaze = hardLevels[randomMaze];
         maze = ULB1_Pooler.instance.Pop(chosenMaze);
         maze.transform.position = new Vector3(0,-401,0);
         player.position = maze.transform.GetChild(maze.transform.childCount - 1).transform.position;
-        cam.orthographicSize = 7;
-        cam.transform.position = new Vector3(0, 1, -10);
+        //cam.orthographicSize = 7;
+        //cam.transform.position = new Vector3(0, 1, -10);
         chest.SetActive(false);
         isPlay = true;
         playerMovement.speed = 17;
@@ -124,14 +124,21 @@ public class ULB1_GameManager : MonoBehaviour, ITickable
 
     public void FinishGame(bool Win)
     {
-        finishTick = GameController.currentTick+1;
+        if (GameController.currentTick!=5)
+        {
+            finishTick = GameController.currentTick+1;
+        }
+        else
+        {
+            finishTick = GameController.currentTick;
+        }
         GameController.StopTimer();
         isFinish = true;
         if (Win && isPlay)
         {
             isWin = true;
             chest.SetActive(true);
-            ULB1_Pooler.instance.DePop(chosenMaze,maze);
+            StartCoroutine(DePop());
             cameraAnim[cameraAnim.clip.name].time = 1;
             cameraAnim[cameraAnim.clip.name].speed = -1;
             cameraAnim.Play();
@@ -151,7 +158,7 @@ public class ULB1_GameManager : MonoBehaviour, ITickable
             paint.SetActive(false);
             arrow.SetActive(true);
             StartCoroutine(ChangeArrowColor());
-            ULB1_Pooler.instance.DePop(chosenMaze, maze);
+            StartCoroutine(DePop());
         }
     }
 
@@ -190,5 +197,11 @@ public class ULB1_GameManager : MonoBehaviour, ITickable
         arrow.GetComponent<MeshRenderer>().material = redArrowHDR;
         yield return new WaitForSeconds(0.5f);
         StartCoroutine(ChangeArrowColor());
+    }
+
+    IEnumerator DePop()
+    {
+        yield return new WaitForSeconds(0.5f);
+        ULB1_Pooler.instance.DePop(chosenMaze, maze);
     }
 }
