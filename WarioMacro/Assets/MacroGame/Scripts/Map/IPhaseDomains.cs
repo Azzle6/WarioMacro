@@ -53,7 +53,7 @@ public class NormalPhaseDomains : IPhaseDomains
 public class LastPhaseDomains : IPhaseDomains
 {
     public readonly int[] primaryDomains;
-    private readonly int secondaryDomain;
+    public readonly int secondaryDomain;
 
     public LastPhaseDomains(int[] primaryDomains, int secondaryDomain)
     {
