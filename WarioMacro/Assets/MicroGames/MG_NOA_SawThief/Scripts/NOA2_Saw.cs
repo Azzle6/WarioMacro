@@ -168,9 +168,9 @@ public class NOA2_Saw : MonoBehaviour, ITickable
     {
         if (results || fail)
         {
-            Debug.Log(GameController.currentTick);
-            //Debug.Log(results);
-            print("stoptick :" +stopTick);
+          /*Debug.Log(GameController.currentTick);
+            Debug.Log(results);
+            print("stoptick :" +stopTick);*/
             GameController.StopTimer();
 
             if (doOnceTick)
@@ -187,7 +187,7 @@ public class NOA2_Saw : MonoBehaviour, ITickable
         
         if (GameController.currentTick > 5)
         {
-            if (fail)
+            if (doOnce)
             {
                 lose();
             }
@@ -195,7 +195,7 @@ public class NOA2_Saw : MonoBehaviour, ITickable
 
             if (GameController.currentTick == 8)
             {
-                Debug.Log("Results :" + results);
+                //Debug.Log("Results :" + results);
                 GameController.FinishGame(results);
             }
         }
@@ -257,12 +257,7 @@ public class NOA2_Saw : MonoBehaviour, ITickable
 
         if (pointSaw.position.x > cutHere[0].position.x && pointSaw.position.x < cutHere[1].position.x && !inverted)
         {
-            results = true;
-            head.SetTrigger("Win");
-            body.SetBool("Results", results);
-            grille.SetBool("Results", results);
-            StartCoroutine(winAnimation());
-
+            win();
         }
         
         else if (!inverted)
@@ -272,11 +267,7 @@ public class NOA2_Saw : MonoBehaviour, ITickable
 
         if (pointSaw.position.x < cutHere[0].position.x && pointSaw.position.x > cutHere[1].position.x && inverted)
         {
-            results = true;
-            head.SetTrigger("Win");
-            body.SetBool("Results", results);
-            grille.SetBool("Results", results);
-            StartCoroutine(winAnimation());
+            win();
         }
 
         else if (inverted)
@@ -288,25 +279,36 @@ public class NOA2_Saw : MonoBehaviour, ITickable
         
     }
 
+    void win()
+    {
+        results = true;
+        head.SetTrigger("Win");
+        body.SetBool("Results", results);
+        grille.SetBool("Results", results);
+        StartCoroutine(winAnimation());
+    }
+
     void lose()
     {
         fail = true;
         headFollow.GetComponent<NOA2_PosLink>().enabled = false;
-        Debug.Log(results);
+        //Debug.Log(results);
         head.SetTrigger("Lose");
-        scaler.SetTrigger("Lose");
+        StartCoroutine(losecorout());
     }
 
-    /*IEnumerator lose()
+    IEnumerator losecorout()
     {
-        yield return new WaitForSeconds(1.5f);
-        GameController.FinishGame(results);
-    }*/
+        yield return new WaitForSeconds(0.8f);
+        scaler.SetTrigger("Lose");
+    }
     IEnumerator winAnimation()
     {
         yield return new WaitForSeconds(1.7f);
         winHead.SetTrigger("Win");
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.5f);
+        scaler.SetTrigger("Win");
+        yield return new WaitForSeconds(0.1f);
         coffre.SetTrigger("Win");
         yield return new WaitForSeconds(0.5f);
         coinParticles.SetActive(results);
