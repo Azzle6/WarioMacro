@@ -20,20 +20,15 @@ public class RecruitmentController : GameController
             yield break;
         }
 
-        StartCoroutine(MoveLoop());
+        IEnumerator moveLoop = MoveLoop();
+        StartCoroutine(moveLoop);
         
         
         SetRecruitmentActive(true);
         
-        while(!canFinishRecruitment)
-        {
-            // Select path and move
-            var typedNode = instance.map.currentNode.GetComponent<RecruitmentNode>();
-
-
-            yield return null;
-        }
-        StopCoroutine(MoveLoop());
+        while(!canFinishRecruitment) yield return null;
+        
+        StopCoroutine(moveLoop);
     }
 
     private IEnumerator MoveLoop()
@@ -53,7 +48,12 @@ public class RecruitmentController : GameController
 
     public void StopRecruitPhase()
     {
-        if (instance.characterManager.playerTeam.Count >= 4) canFinishRecruitment = true;
+        if (instance.characterManager.playerTeam.Count >= 4)
+        {
+            GameController.instance.hallOfFame.StartRun(instance.characterManager.playerTeam.ToArray());
+            SetRecruitmentActive(false);
+            canFinishRecruitment = true;
+        }
     }
 
     public void SkipRecruitment()

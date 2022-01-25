@@ -6,27 +6,26 @@ using UnityEngine.Playables;
 public class ScoreManager : MonoBehaviour
 {
     [NonSerialized] public int currentMoney;
+    public int currentRunMoney;
     [HideInInspector] public int scoreMultiplier = 1;
     
-    [SerializeField] private Leaderboard leaderBoard;
     [SerializeField] private PlayableDirector moneyBagsDirector;
     [SerializeField] private TextMeshProUGUI moneyBagsText;
 
     
-
-    public void FinalScore()
-    {
-        leaderBoard.UpdateLeaderboard(currentMoney * GameController.instance.characterManager.playerTeam.Count);
-    }
-
     public void AddMoney(int addedValue)
     {
-        currentMoney += addedValue * scoreMultiplier;
-
-        PlayerPrefs.SetInt("PlayerMoney", currentMoney);
-        moneyBagsText.text = currentMoney.ToString();
+        currentRunMoney += addedValue * scoreMultiplier;
+        moneyBagsText.text = currentRunMoney.ToString();
         moneyBagsDirector.Play();
         AudioManager.MacroPlaySound("CashGain", 0);
+    }
+    
+    public void AddToCurrentMoney()
+    {
+        currentMoney += currentRunMoney;
+        moneyBagsText.text = currentMoney.ToString();
+        PlayerPrefs.SetInt("PlayerMoney", currentMoney);
     }
 
     public bool Pay(int v)

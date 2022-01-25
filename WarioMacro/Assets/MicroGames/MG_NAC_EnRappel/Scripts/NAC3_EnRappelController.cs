@@ -50,17 +50,21 @@ public class NAC3_EnRappelController : MonoBehaviour, ITickable
 
     public void CheckEndGame(bool result) 
     {
+
+        if (!hasEnded) 
+        {
+            if (result)
+            {
+                this.result = true;
+                Victory();
+            }
+            else
+            {
+                this.result = false;
+                Defeat();
+            }
+        }
         hasEnded = true;
-        if (result)
-        {
-            this.result = true;
-            Victory();
-        }
-        else 
-        {
-            this.result = false;
-            Defeat();
-        }
     }
 
     private void Victory() 
