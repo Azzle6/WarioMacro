@@ -28,13 +28,12 @@ public class RecruitmentController : GameController
         while(!canFinishRecruitment)
         {
             // Select path and move
-            lastNoMGNode = instance.map.currentNode;
             var typedNode = instance.map.currentNode.GetComponent<RecruitmentNode>();
 
 
             yield return null;
         }
-
+        StopCoroutine(MoveLoop());
     }
 
     private IEnumerator MoveLoop()
@@ -45,19 +44,6 @@ public class RecruitmentController : GameController
 
             yield return StartCoroutine(instance.player.MoveToPosition(instance.map.currentPath.wayPoints));
         }
-    }
-
-    private void DeletePath(NodeVisual.Path path, RecruitmentNode node)
-    {
-        for (var i = 0; i < lastNoMGNode.paths.Length; i++)
-        {
-            if (lastNoMGNode.paths[i] != path) continue;
-            
-            lastNoMGNode.paths[i] = null;
-            break;
-        }
-        
-        node.DisableNode();
     }
 
     private void SetRecruitmentActive(bool state)
