@@ -39,7 +39,7 @@ public class GameController : Ticker
     private static readonly int defeat = Animator.StringToHash("Defeat");
     private static bool gameFinished;
     private static bool gameResult;
-    private bool stopLoop = false;
+    public bool stopLoop = false;
     protected internal Map map;
     private bool debugMicro;
 
@@ -49,6 +49,8 @@ public class GameController : Ticker
     public delegate void InteractEvent();
     public static InteractEvent OnInteractionEnd;
     public static bool isInActionEvent;
+
+    public bool WantToContinue;
 
     public static void Register()
     {
@@ -115,7 +117,14 @@ public class GameController : Ticker
         {
             yield return StartCoroutine(map.WaitForNodeSelection());
 
+            if (stopLoop)
+            {
+                break;
+            }
+            Debug.Log("NodeSelect");
+            
             yield return StartCoroutine(player.MoveToPosition(map.currentPath.wayPoints));
+            Debug.Log("EndDisplacement");
             var nodeMicroGame = map.currentNode.GetComponent<BehaviourNode>();
             
 
@@ -145,6 +154,7 @@ public class GameController : Ticker
                 {
                     break;
                 }
+                
             }
 
             /*var nodeInteract = map.currentNode.GetComponent<InteractibleNode>();
@@ -158,8 +168,15 @@ public class GameController : Ticker
 
             if (map.OnLastNode())
             {
-                AudioManager.MacroPlaySound("Elevator", 0);
-                map = mapManager.LoadNextMap();
+                isInActionEvent = true;
+                yield return StartCoroutine(ElevatorTrigger());
+                if (WantToContinue)
+                {
+                    AudioManager.MacroPlaySound("Elevator", 0);
+                    map = mapManager.LoadNextMap();
+                    map.currentNode = map.startNode;
+                }
+                WantToContinue = false;
             }
 
             yield return null;
@@ -171,6 +188,15 @@ public class GameController : Ticker
 
         map = mapManager.LoadAstralPath();
         yield return astralPathController.EscapeLoop();
+    }
+
+    private IEnumerator ElevatorTrigger()
+    {
+        map.currentNode.gameObject.GetComponent<InteractibleNode>().EventInteractible.Invoke();
+
+        yield return new WaitWhile(() => isInActionEvent);
+        
+        yield return null;
     }
 
     public void NextMap()
