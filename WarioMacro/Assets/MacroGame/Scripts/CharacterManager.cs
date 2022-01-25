@@ -13,13 +13,13 @@ public class CharacterManager : MonoBehaviour
     public CharacterList[] allAvailableCharacters = new CharacterList[6];
     public Character[] novices = new Character[6];
     public List<Imprisoned> imprisonedCharacters = new List<Imprisoned>();
+
+    public OutOfJailElement[] jailedUI = new OutOfJailElement[12];
     
     [SerializeField] private LifeBar life;
 
     public bool isOpen;
     public GameObject jailPanel;
-    public GameObject jailButton;
-    public GameObject jailUI;
     private GameObject go;
     public delegate void RecruitCharacter();
     public static RecruitCharacter RecruitableCharaFinished;
@@ -49,7 +49,23 @@ public class CharacterManager : MonoBehaviour
             price = i1;
         }
     }
-    
+
+
+    public void SetJailed()
+    {
+        foreach (var element in jailedUI)
+        {
+            if(imprisonedCharacters.Any(i =>i.character == element.character))
+            {
+                element.gameObject.SetActive(true);
+                element.SetJail(imprisonedCharacters.First(i =>i.character == element.character));
+            }
+            else
+            {
+                element.gameObject.SetActive(false);
+            }
+        }    
+    }
     private void Start()
     {
         GameController.instance.hallOfFame.SetHallOfFame();
@@ -66,7 +82,7 @@ public class CharacterManager : MonoBehaviour
         jailPanel.SetActive(true);
         isOpen = true;
         InputManager.lockInput = true;
-        SetJailUI();
+        SetJailed();
     }
 
     public void CloseJail()
@@ -76,16 +92,6 @@ public class CharacterManager : MonoBehaviour
         GameController.OnInteractionEnd();
     }
     
-    public void SetJailUI()
-    {
-        for(int i = jailUI.transform.childCount-1;i>-1;i++)
-            Destroy(jailUI.transform.GetChild(i));
-        foreach (var imp in imprisonedCharacters)
-        {
-            go = Instantiate(jailButton, jailUI.transform);
-            go.GetComponent<JailButton>().SetJail(imp);
-        }
-    }
     private void SetRecruitable()
     {
         foreach (var list in allAvailableCharacters)
@@ -208,6 +214,7 @@ public class CharacterManager : MonoBehaviour
     
     public void FreeImprisoned(Imprisoned imp)
     {
+        if (!imprisonedCharacters.Contains(imp)) return;
         if (!GameController.instance.scoreManager.Pay((int)imp.price)) return;
         foreach (var list in allAvailableCharacters.Where(list => imp.character.characterType == list.type))
         {
