@@ -29,6 +29,7 @@ public class NOC2_Controller : MonoBehaviour
 
     private void Move()
     {
+        if (Time.timeScale == 0) return;
         joystickValue = Vector2.zero;
 
         if (InputManager.GetKey(ControllerKey.DPAD_LEFT)) joystickValue.x = -1;
@@ -38,9 +39,7 @@ public class NOC2_Controller : MonoBehaviour
 
         joystickValue += new Vector2(InputManager.GetAxis(ControllerAxis.LEFT_STICK_HORIZONTAL), InputManager.GetAxis(ControllerAxis.LEFT_STICK_VERTICAL));
         joystickValue.Normalize();
-        if (Time.timeScale != 0) joystickValue *= 1 / Time.timeScale;
-        rb.velocity = joystickValue * speed * Time.deltaTime;
-        Debug.Log(joystickValue);
+        rb.velocity = joystickValue * speed * Time.unscaledDeltaTime / Time.timeScale;
         
         if (rb.velocity.y > 0) NOC2_JetPack.instance.strength = 0.05f;
         else if (rb.velocity.y == 0) NOC2_JetPack.instance.strength = 0.025f; 
