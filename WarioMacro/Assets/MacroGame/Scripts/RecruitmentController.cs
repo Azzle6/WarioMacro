@@ -20,17 +20,21 @@ public class RecruitmentController : GameController
             yield return SkipRecruitment();
             yield break;
         }
+
+        StartCoroutine(MoveLoop());
         
         
         SetRecruitmentActive(true);
         
-        while(instance.characterManager.playerTeam.Count < 4)
+        while(!canFinishRecruitment)
         {
             // Select path and move
             lastNoMGNode = instance.map.currentNode;
-            yield return StartCoroutine(instance.map.WaitForNodeSelection());
-
-            yield return StartCoroutine(instance.player.MoveToPosition(instance.map.currentPath.wayPoints));
+            //yield return StartCoroutine(instance.map.WaitForNodeSelection());
+            
+            //yield return StartCoroutine(instance.player.MoveToPosition(instance.map.currentPath.wayPoints));
+            
+            
             
             var typedNode = instance.map.currentNode.GetComponent<RecruitmentNode>();
 
@@ -63,13 +67,23 @@ public class RecruitmentController : GameController
                 instance.player.TeleportPlayer(startNode.transform.position);
                 instance.map.currentNode = startNode;*/
             }
-            
+            StopCoroutine(MoveLoop());
             yield return null;
         }
 
         //yield return new WaitUntil(() => canFinishRecruitment);
         
         SetRecruitmentActive(false);
+    }
+
+    private IEnumerator MoveLoop()
+    {
+        while (instance.characterManager.playerTeam.Count < 4 || !canFinishRecruitment)
+        {
+            yield return StartCoroutine(instance.map.WaitForNodeSelection());
+
+            yield return StartCoroutine(instance.player.MoveToPosition(instance.map.currentPath.wayPoints));
+        }
     }
 
     private void DeletePath(NodeVisual.Path path, RecruitmentNode node)
