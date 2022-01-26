@@ -694,7 +694,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2477474572740818337, guid: d3a08eec4a5dcf544a16dc06d2b346a9, type: 3}
       propertyPath: m_RootOrder
-      value: 15
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 2477474572740818337, guid: d3a08eec4a5dcf544a16dc06d2b346a9, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1786,7 +1786,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6500841275803848314, guid: c9709f509a52b364d8b7a00a25a1083b, type: 3}
       propertyPath: m_RootOrder
-      value: 14
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 6500841275803848314, guid: c9709f509a52b364d8b7a00a25a1083b, type: 3}
       propertyPath: m_AnchorMax.x
@@ -3046,7 +3046,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2080272510952921449, guid: 1f60270574141a24f9cd34fb14d33bc4, type: 3}
       propertyPath: m_RootOrder
-      value: 13
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 2080272510952921449, guid: 1f60270574141a24f9cd34fb14d33bc4, type: 3}
       propertyPath: m_AnchorMax.x
@@ -3883,6 +3883,10 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 6847896505585499406, guid: c526801d65ade4e43912c6513864ea76, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -113.000244
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c526801d65ade4e43912c6513864ea76, type: 3}
 --- !u!224 &1287644082 stripped
@@ -4004,6 +4008,49 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2056309721574369033, guid: 61c30988b7ee7fe4f8e1f4f5d7dd1872, type: 3}
   m_PrefabInstance: {fileID: 1818866496}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1481208176
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1481208178}
+  - component: {fileID: 1481208177}
+  m_Layer: 0
+  m_Name: PersistentObject
+  m_TagString: PersistentObject
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1481208177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1481208176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06736ac70323519498d1df700440e0be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1481208178
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1481208176}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.293962, y: -0.2256931, z: -24.591127}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1492340222
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4423,8 +4470,10 @@ MonoBehaviour:
   - MG_ULC_Scene_TacticMagic
   - MG_ULA_EscapeFromThem
   - MG_NAA_Scene_ChainedFist
+  stopLoop: 0
   runChronometer: 0
   chronometer: 0
+  WantToContinue: 0
 --- !u!4 &1749864761
 Transform:
   m_ObjectHideFlags: 0
@@ -4475,8 +4524,10 @@ MonoBehaviour:
   mainMenuBuildIndex: 0
   macroObjects: []
   sceneNames: []
+  stopLoop: 0
   runChronometer: 0
   chronometer: 0
+  WantToContinue: 0
 --- !u!114 &1749864763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4517,7 +4568,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09c158129cea9cd4f9fcddd2477def36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameConfig: {fileID: 11400000, guid: 3eb3fccf2c11a9347b96f0ec0c8cb566, type: 2}
+  gameControllerSO: {fileID: 11400000, guid: 3eb3fccf2c11a9347b96f0ec0c8cb566, type: 2}
   bpmSettingsSO: {fileID: 11400000, guid: 996be0bf0d7ce5346a498077aa92f7c6, type: 2}
 --- !u!114 &1749864767
 MonoBehaviour:
@@ -4533,17 +4584,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   phaseFloorThresholds: 0500000008000000
   settingsManager: {fileID: 1749864766}
-  config: {fileID: 11400000, guid: 3eb3fccf2c11a9347b96f0ec0c8cb566, type: 2}
+  controllerSO: {fileID: 11400000, guid: 3eb3fccf2c11a9347b96f0ec0c8cb566, type: 2}
   mapParent: {fileID: 2053484115}
   recruitmentMap: {fileID: 1111097173}
   astralPathMap: {fileID: 356356310}
   mapPrefabList:
   - {fileID: 481867903098265975, guid: 73e983d1f0c38f64d83394487db797cd, type: 3}
   - {fileID: 481867903098265975, guid: 28e2a6588abd032498e671b3519335a2, type: 3}
-  - {fileID: 481867903098265975, guid: cef2413d008fb3748a4aaa6479afc27d, type: 3}
   - {fileID: 481867903098265975, guid: 36b53a81fbb819347be2a0a9ac75e1e3, type: 3}
   - {fileID: 481867903098265975, guid: 94043741a53f9ba4db35e7fde654c24e, type: 3}
-  - {fileID: 481867903098265975, guid: d3025b160099adf45992146a071863de, type: 3}
   - {fileID: 481867903098265975, guid: 617e424176f278e42a14d52b1deafe04, type: 3}
   - {fileID: 481867903098265975, guid: 9c36020b248eb7e4a801e791a384c749, type: 3}
   - {fileID: 481867903098265975, guid: b30442333042d3c4d8b024e16368ff63, type: 3}
@@ -4581,8 +4630,10 @@ MonoBehaviour:
   mainMenuBuildIndex: 0
   macroObjects: []
   sceneNames: []
+  stopLoop: 0
   runChronometer: 0
   chronometer: 0
+  WantToContinue: 0
   skipRecruitment: 0
   canFinishRecruitment: 0
   alarmGO: {fileID: 2023252415}
@@ -5291,10 +5342,10 @@ RectTransform:
   - {fileID: 1112552554}
   - {fileID: 1022589566}
   - {fileID: 1235174357}
-  - {fileID: 1843691484}
-  - {fileID: 2136152315}
   - {fileID: 284984258}
   - {fileID: 2145587291}
+  - {fileID: 1843691484}
+  - {fileID: 2136152315}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5664,7 +5715,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1203847785147042496, guid: 4f24120b376c64e418ae5f425ba27d2b, type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 1203847785147042496, guid: 4f24120b376c64e418ae5f425ba27d2b, type: 3}
       propertyPath: m_AnchorMax.x

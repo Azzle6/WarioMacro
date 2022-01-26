@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -23,9 +24,11 @@ public class CharacterManager : MonoBehaviour
     private GameObject go;
     public delegate void RecruitCharacter();
     public static RecruitCharacter RecruitableCharaFinished;
+    public static bool IsFirstLoad = true;
 
     private void Awake()
     {
+        RecruitableCharaFinished = null;
         if (instance != null) return;
         instance = this;
     }
@@ -68,9 +71,17 @@ public class CharacterManager : MonoBehaviour
     }
     private void Start()
     {
-        GameController.instance.hallOfFame.SetHallOfFame();
-        LoadAvailable();
-        SetRecruitable();
+        if (IsFirstLoad)
+        {
+            GameController.instance.hallOfFame.SetHallOfFame();
+            LoadAvailable();
+            SetRecruitable();
+        }
+        else
+        {
+            ResetEndGame();
+            Debug.Log("Load not first");
+        }
     }
     private void Update()
     {
@@ -94,6 +105,14 @@ public class CharacterManager : MonoBehaviour
     
     private void SetRecruitable()
     {
+        StartCoroutine(SetRecruitWithTiming());
+    }
+
+    private IEnumerator SetRecruitWithTiming()
+    {
+        yield return new WaitForSecondsRealtime(0.1f);
+        recruitableCharacters = new List<Character>();
+        
         foreach (var list in allAvailableCharacters)
         {
             var rand = Random.Range(0, 2);
@@ -123,6 +142,7 @@ public class CharacterManager : MonoBehaviour
 
     public void ResetEndGame()
     {
+        Debug.Log("ResetList");
         UpdateImprisoned();
         ResetList();
         UpdateAvailable();

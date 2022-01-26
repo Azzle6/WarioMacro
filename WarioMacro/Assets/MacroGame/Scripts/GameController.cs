@@ -96,11 +96,17 @@ public class GameController : Ticker
             AudioManager.MacroPlaySound("GameLose", 0);
         }
         hallOfFame.UpdateHallOfFame(scoreManager.currentMoney,chronometer);
-        characterManager.ResetEndGame();
-        runChronometer = false;
+        
+        
         PlayerPrefs.Save();
         while (!InputManager.GetKeyDown(ControllerKey.A)) yield return null;
         SceneManager.LoadScene(1);
+        AsyncOperation asyncLoadLvl = SceneManager.LoadSceneAsync(1, LoadSceneMode.Single);
+        while (!asyncLoadLvl.isDone) yield return null;
+        
+        CharacterManager.IsFirstLoad = false;
+        Debug.Log("Oui");
+        runChronometer = false;
     }
 
     private IEnumerator GameLoop()
