@@ -96,7 +96,7 @@ public class DialogManager : MonoBehaviour
         curIndex = 0;
         isInDialog = false;
         Ticker.lockTimescale = false;
-        GameController.OnInteractionEnd();
+        if(curDial.InteractionEndWhenDialogEnd) GameController.OnInteractionEnd();
         foreach (GameObject but in Buttons)
         {
             Destroy(but);

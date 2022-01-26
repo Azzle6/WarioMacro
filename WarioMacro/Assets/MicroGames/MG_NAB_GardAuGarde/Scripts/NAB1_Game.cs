@@ -52,13 +52,20 @@ public class NAB1_Game : MonoBehaviour, ITickable
         {
             guard1 = Instantiate(guardPrefab, new Vector3(0,0,0), Quaternion.identity, container.transform);
             animator = guard1.GetComponent<Animator>();
-            guard1.GetComponent<NAB1_Guard>().InitAngle(17);
+            if (GameController.difficulty == 2)
+            {
+                guard1.GetComponent<NAB1_Guard>().InitAngle(17);
+            }
+            else
+            {
+                guard1.GetComponent<NAB1_Guard>().InitAngle(0);
+            }
         }
     }
 
     void Update()
     {
-        if (InputManager.GetKeyDown(ControllerKey.A))
+        if (InputManager.GetKeyDown(ControllerKey.A) || InputManager.GetKeyDown(ControllerKey.B) || InputManager.GetKeyDown(ControllerKey.X) || InputManager.GetKeyDown(ControllerKey.Y))
         {
             player.GetComponent<NAB1_PlayerMove>().Move();
             result = true;
@@ -82,8 +89,7 @@ public class NAB1_Game : MonoBehaviour, ITickable
 
     public void OnTick()
     {
-
-        Debug.Log(GameController.currentTick);
+        
         if ((result || seen) && (GameController.currentTick < 5) && playing)
         {
             GameController.StopTimer();
@@ -104,7 +110,9 @@ public class NAB1_Game : MonoBehaviour, ITickable
 
         if(GameController.currentTick == 5 && (!seen && !result))
         {
+            guard1.GetComponent<NAB1_Guard>().SwitchLight();
             AudioManager.PlaySound(defeatSound);
+            playing = false;
             defeatText.enabled = true;
             player.SendMessage("Spotted", SendMessageOptions.DontRequireReceiver);
             player.GetComponentInChildren<Transform>().rotation = Quaternion.Euler(player.transform.rotation.x, player.transform.rotation.y + 180, player.transform.rotation.z);
@@ -119,14 +127,14 @@ public class NAB1_Game : MonoBehaviour, ITickable
             guard1.GetComponentInParent<Transform>().LookAt(player.transform.position);
         }
 
-        if (playing && GameController.difficulty == 1 && GameController.currentTick % 2 == 0)
+        if (playing && GameController.difficulty == 1)
         {
-            guard1.GetComponent<NAB1_Guard>().SwitchSide(animator);
+            guard1.GetComponent<NAB1_Guard>().SwitchLight();
         }
         
         else if (playing && GameController.difficulty == 2)
         {
-            guard1.GetComponent<NAB1_Guard>().SwitchSideRandom(animator);
+            guard1.GetComponent<NAB1_Guard>().SwitchSide(animator);
         }
         
         else if (playing && GameController.difficulty == 3 && GameController.currentTick % 2 == 0)

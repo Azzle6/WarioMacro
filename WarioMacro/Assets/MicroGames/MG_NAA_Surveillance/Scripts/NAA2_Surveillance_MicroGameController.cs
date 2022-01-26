@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NAA2_Surveillance_MicroGameController : MonoBehaviour, ITickable
 {
-    public GameConfig gc;
+    public GameControllerSO gc;
     [SerializeField]
     NAA2_Surveillance_CameraDetect cd, cdd;
     [SerializeField]

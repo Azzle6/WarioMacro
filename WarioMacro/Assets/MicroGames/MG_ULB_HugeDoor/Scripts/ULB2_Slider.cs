@@ -13,7 +13,7 @@ public class ULB2_Slider : MonoBehaviour, ITickable
     public RectTransform GoodZone, handle;
     bool colider = false;
     Vector2 zonePosition;
-    public GameConfig difficulty;
+    public GameControllerSO difficulty;
     public int[] sizes;
     private bool result = false;
     private bool hasJumped;

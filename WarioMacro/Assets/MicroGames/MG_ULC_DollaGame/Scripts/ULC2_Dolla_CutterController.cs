@@ -11,7 +11,7 @@ public class ULC2_Dolla_CutterController : MonoBehaviour, ITickable
     private Vector2 joystickInput;
     [SerializeField] private GameObject correctImmage, victoryScreen, failScreen, cutFeedbackObj;
     [SerializeField] private float speed = 5f;
-    public bool canCut, hasFinishedGame, success;
+    public bool canCut, hasFinishedGame, success, canDeleteCorners = false;
     public int cornersReached = 0, billsToCut;
     [SerializeField] private List<GameObject> dollaBills;
     private AudioSource audioSource;
@@ -52,16 +52,17 @@ public class ULC2_Dolla_CutterController : MonoBehaviour, ITickable
             //Joystick Input
             joystickInput = new Vector2(InputManager.GetAxis(ControllerAxis.LEFT_STICK_HORIZONTAL),
                 -InputManager.GetAxis(ControllerAxis.LEFT_STICK_VERTICAL));
-            transform.position += new Vector3(joystickInput.x, -joystickInput.y, 0) * speed * GameController.gameBPM / 60;
+            transform.position += new Vector3(joystickInput.x, -joystickInput.y, 0) * speed * GameController.gameBPM/60;
 
             if (InputManager.GetKeyDown(ControllerKey.A) && canCut)
             {
+                Debug.Log("Player Has Cut a Bill");
                 billsToCut--;
                 Instantiate(cutFeedbackObj, transform.position, Quaternion.identity);
                 if (billsToCut > 0)
                 {
-                    Debug.Log("Cut Paper Sound Played");
                     audioSource.Play();
+                    canDeleteCorners = true;
                 }
             }
             else if (InputManager.GetKeyDown(ControllerKey.A) && !canCut)
