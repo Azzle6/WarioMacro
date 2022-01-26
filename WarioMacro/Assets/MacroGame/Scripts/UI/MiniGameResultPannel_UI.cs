@@ -296,13 +296,12 @@ public class MiniGameResultPannel_UI : MonoBehaviour
 
     public IEnumerator CharaApparition(int nodeType)
     {
-        if(nodeType <= 1) yield return null;
-
-
+        if(nodeType <= 1) yield break;
 
         Character selectedChara = CharacterManager.instance.playerTeam[CharacterManager.instance.SpecialistOfTypeInTeam(nodeType)];
-
-        if (selectedChara == null) yield return null;
+        
+        if (selectedChara == null) yield break;
+        AudioManager.MacroPlaySound(selectedChara.GetMGSoundName());
         charaSpecialistSprite.sprite = selectedChara.portraitSprite;
         charaApparitionGO.SetActive(true);
         

@@ -51,6 +51,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2835204696243062776, guid: 450937361d9b9924caaf3eaf153f0a52, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 3155302701556424545, guid: 450937361d9b9924caaf3eaf153f0a52, type: 3}
       propertyPath: m_Name
       value: Node CharaRecruit
@@ -129,10 +133,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5824290160939531563, guid: 450937361d9b9924caaf3eaf153f0a52, type: 3}
       propertyPath: EventInteractible.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5824290160939531563, guid: 450937361d9b9924caaf3eaf153f0a52, type: 3}
       propertyPath: EventInteractible.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5824290160939531563, guid: 450937361d9b9924caaf3eaf153f0a52, type: 3}
+      propertyPath: EventInteractible.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5824290160939531563, guid: 450937361d9b9924caaf3eaf153f0a52, type: 3}
@@ -140,8 +148,28 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8079668600464717627}
     - target: {fileID: 5824290160939531563, guid: 450937361d9b9924caaf3eaf153f0a52, type: 3}
+      propertyPath: EventInteractible.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 6128044423416470890}
+    - target: {fileID: 5824290160939531563, guid: 450937361d9b9924caaf3eaf153f0a52, type: 3}
       propertyPath: EventInteractible.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5824290160939531563, guid: 450937361d9b9924caaf3eaf153f0a52, type: 3}
+      propertyPath: EventInteractible.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5824290160939531563, guid: 450937361d9b9924caaf3eaf153f0a52, type: 3}
+      propertyPath: EventInteractible.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: PlayCharacterSound
+      objectReference: {fileID: 0}
+    - target: {fileID: 5824290160939531563, guid: 450937361d9b9924caaf3eaf153f0a52, type: 3}
+      propertyPath: EventInteractible.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: CharacterNode, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5824290160939531563, guid: 450937361d9b9924caaf3eaf153f0a52, type: 3}
+      propertyPath: EventInteractible.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 450937361d9b9924caaf3eaf153f0a52, type: 3}
