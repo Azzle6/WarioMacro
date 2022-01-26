@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Playables;
 using DG.Tweening;
+using GameTypes;
 
 public class MiniGameResultPannel_UI : MonoBehaviour
 {
@@ -41,6 +42,11 @@ public class MiniGameResultPannel_UI : MonoBehaviour
     [SerializeField] private PlayableDirector director;
     [SerializeField] private PlayableAsset moneyGain;
     [SerializeField] private PlayableAsset moneyLose;
+
+    [Header("CharacterAnim")] 
+    [SerializeField] private GameObject charaApparitionGO;
+    [SerializeField] private SpriteListSO portraitsList;
+    [SerializeField] private Image charaSpecialistSprite; 
 
     [Header("TypesSO")]
     [SerializeField] private TypeSO brute;
@@ -156,7 +162,6 @@ public class MiniGameResultPannel_UI : MonoBehaviour
                 SpawnNode(i, littleNodePrefab, new Vector2(0.60f, 0.60f), expertSpec[i]);
             }
         }
-        else Debug.LogError("MiniGameResultPannel_UI / SetStartingNodeNumber : Nombre de Node pas compris entre 3 et 6");
     }
 
     private void SpawnNode(int index, GameObject nodePrefab, Vector2 localScale, int expertType)
@@ -289,16 +294,36 @@ public class MiniGameResultPannel_UI : MonoBehaviour
         }
     }
 
+    public IEnumerator CharaApparition(int nodeType)
+    {
+        if(nodeType <= 1) yield return null;
+
+
+
+        Character selectedChara = CharacterManager.instance.playerTeam[CharacterManager.instance.SpecialistOfTypeInTeam(nodeType)];
+
+        if (selectedChara == null) yield return null;
+        charaSpecialistSprite.sprite = selectedChara.portraitSprite;
+        charaApparitionGO.SetActive(true);
+        
+        yield return new WaitForSeconds(2);
+        charaApparitionGO.SetActive(false);
+        yield return null;
+    }
+
     public void PopWindowUp()
     {
         //Tween the Window Here
-        animator.SetBool("IsUp", true);
+        ((RectTransform) transform).DOAnchorPosY(0, 0.5f);
+        //transform.DOMoveY(0, 0.5f);
+        //animator.SetBool("IsUp", true);
     }
 
     public void PopWindowDown()
     {
         //Tween the Window Here
-        animator.SetBool("IsUp", false);
+        ((RectTransform) transform).DOAnchorPosY(-800, 0.5f); //.DOMoveY(-800, 0.5f);
+        //animator.SetBool("IsUp", false);
     }
 
     public void ToggleWindow(bool toogle)

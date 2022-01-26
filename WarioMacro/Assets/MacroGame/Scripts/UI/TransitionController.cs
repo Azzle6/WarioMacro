@@ -1,10 +1,12 @@
 using System.Collections;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
 
 public class TransitionController : MonoBehaviour
 {
+    [SerializeField] private GameObject transitionGO;
     [SerializeField] private PlayableDirector director;
     [SerializeField] private GameObject timerGO;
     private bool startAsyncOp;
@@ -12,6 +14,7 @@ public class TransitionController : MonoBehaviour
     // ReSharper disable once MemberCanBePrivate.Global
     public void TransitionStart()
     {
+        director.time = 0;
         director.Play();
     }
     
@@ -22,12 +25,14 @@ public class TransitionController : MonoBehaviour
     }
 
     // Used in Transition's signal receiver
+    [UsedImplicitly]
     public void TransitionPause()
     {
         director.Pause();
     }
 
     // Used in Transition's signal receiver
+    [UsedImplicitly]
     public void StartAsyncMGOp(bool toggle)
     {
         startAsyncOp = toggle;
@@ -54,6 +59,7 @@ public class TransitionController : MonoBehaviour
 
         while (director.state == PlayState.Playing) yield return null;
         
+        transitionGO.SetActive(false);
         Ticker.lockTimescale = false;
     }
 

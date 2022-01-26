@@ -126,7 +126,7 @@ public class ULB1_GameManager : MonoBehaviour, ITickable
 
     public void FinishGame(bool Win)
     {
-        player.gameObject.SetActive(false);
+        player.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
         if (GameController.currentTick!=5)
         {
             finishTick = GameController.currentTick+1;
@@ -150,6 +150,7 @@ public class ULB1_GameManager : MonoBehaviour, ITickable
         }
         else
         {
+            Debug.Log("ok");
             isWin = false;
             AudioManager.PlaySound(handCuffSound);
             cameraAnim[cameraAnim.clip.name].time = 1;
@@ -213,5 +214,6 @@ public class ULB1_GameManager : MonoBehaviour, ITickable
     {
         yield return new WaitForSeconds(0.5f);
         ULB1_Pooler.instance.DePop(chosenMaze, maze);
+        player.gameObject.SetActive(false);
     }
 }

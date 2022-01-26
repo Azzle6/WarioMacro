@@ -209,12 +209,13 @@ public class CharacterManager : MonoBehaviour
 
     public void UpdateImprisoned()
     {
-        foreach (var imprisoned in imprisonedCharacters)
+        for (int i = imprisonedCharacters.Count - 1; i >= 0; i--)
         {
+            var imprisoned = imprisonedCharacters[i];
             imprisoned.turnLeft--;
             if (imprisoned.turnLeft != 0) continue;
             allAvailableCharacters.First(l => l.type == imprisoned.character.characterType).Add(imprisoned.character);
-            imprisonedCharacters.Remove(imprisoned);
+            imprisonedCharacters.RemoveAt(i);
         }
     }
     
