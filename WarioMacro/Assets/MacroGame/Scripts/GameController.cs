@@ -95,9 +95,8 @@ public class GameController : Ticker
             macroGameCanvasAnimator.SetTrigger(defeat);
             AudioManager.MacroPlaySound("GameLose", 0);
         }
-        hallOfFame.UpdateHallOfFame(scoreManager.currentMoney,chronometer);
-        
-        
+
+        runChronometer = false;
         PlayerPrefs.Save();
         while (!InputManager.GetKeyDown(ControllerKey.A)) yield return null;
         //NotDestroyedScript.isAReload = true;
@@ -119,6 +118,7 @@ public class GameController : Ticker
         Debug.Log("Phase braquage");
         map = mapManager.LoadNextMap();
         MusicManager.instance.state = Soundgroup.CurrentPhase.ACTION;
+        runChronometer = true;
         while(true)
         {
             yield return StartCoroutine(map.WaitForNodeSelection());
@@ -333,7 +333,7 @@ public class GameController : Ticker
     {
         TickerUpdate();
         if (runChronometer)
-            chronometer += Time.unscaledTime - Time.time;
+            chronometer += Time.unscaledDeltaTime - Time.unscaledTime;
         else
             chronometer = 0;
 

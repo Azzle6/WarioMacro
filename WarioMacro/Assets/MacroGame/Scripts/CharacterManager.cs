@@ -146,6 +146,7 @@ public class CharacterManager : MonoBehaviour
         UpdateImprisoned();
         ResetList();
         UpdateAvailable();
+        LoadAvailable();
         SetRecruitable();
     }
 
