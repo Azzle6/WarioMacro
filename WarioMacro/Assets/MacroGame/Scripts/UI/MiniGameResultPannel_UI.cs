@@ -54,6 +54,7 @@ public class MiniGameResultPannel_UI : MonoBehaviour
     public GameObject[] nodeArray = new GameObject[10];
 
     [Header("Test Variables")]
+    public bool debug = false;
     public int testNodeNbr;
     public int[] nodeMGDomain;
 
@@ -63,6 +64,12 @@ public class MiniGameResultPannel_UI : MonoBehaviour
     {
         ClearAllNodes();
         ToggleWindow(false);
+
+        if(debug)
+        {
+            ToggleWindow(true);
+            SetStartingNodeNumber(testNodeNbr, nodeMGDomain);
+        }
     }
 
     public void ClearAllNodes()
