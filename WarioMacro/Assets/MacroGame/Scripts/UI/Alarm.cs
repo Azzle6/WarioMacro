@@ -56,5 +56,6 @@ public class Alarm : MonoBehaviour
         GameController.instance.macroObjects.Add(alarmPostProcess);
         MusicManager.instance.state = Soundgroup.CurrentPhase.ESCAPE;
         AudioManager.MacroPlaySound("Alarm", 0);
+        GameController.instance.stopLoop = true;
     }
 }

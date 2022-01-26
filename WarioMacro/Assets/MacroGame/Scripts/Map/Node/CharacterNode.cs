@@ -18,7 +18,7 @@ public class CharacterNode : MonoBehaviour
     [SerializeField] private InteractibleNode NodeEventScript;
     private bool HasBeenRecruit;
 
-    private void Awake()
+    private void Start()
     {
         CharacterManager.RecruitableCharaFinished += Setup;
         HasBeenRecruit = false;
@@ -34,10 +34,24 @@ public class CharacterNode : MonoBehaviour
             {
                 currentChara = chara;
                 Instantiate(currentChara.PuppetPrefab, CharacterEmplacement.transform);
-                return;
             }
         }
+        //StartCoroutine(SetupWithTiming());
     }
+
+    /*private IEnumerator SetupWithTiming()
+    {
+        yield return new WaitForSecondsRealtime(5f);
+        foreach (Character chara in CharacterManager.instance.recruitableCharacters)
+        {
+            if (chara.characterType == type)
+            {
+                currentChara = chara;
+                Instantiate(currentChara.PuppetPrefab, CharacterEmplacement.transform);
+                yield return null;
+            }
+        }
+    }*/
 
     public void Recruit()
     {

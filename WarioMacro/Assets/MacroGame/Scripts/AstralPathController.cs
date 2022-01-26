@@ -42,7 +42,8 @@ public class AstralPathController : GameController
 
                 if (instance.lifeBar.GetLife() == 0)
                 {
-                    StartCoroutine(instance.ToggleEndGame(false));
+                    //StartCoroutine(instance.ToggleEndGame(false));
+                    NotDestroyedScript.instance.EndRun(false);
                     yield break;
                 }
             }
@@ -50,6 +51,7 @@ public class AstralPathController : GameController
             yield return null;
         }
         StartCoroutine(instance.ToggleEndGame(true));
+        //NotDestroyedScript.instance.EndRun(true);
     }
 
     protected override bool MGResults(BehaviourNode behaviourNode, int mgNumber, bool result)
