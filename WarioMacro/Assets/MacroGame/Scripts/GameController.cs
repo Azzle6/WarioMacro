@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
+using GameTypes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
@@ -13,7 +13,7 @@ public class GameController : Ticker
     [HideInInspector] public string currentScene;
     [HideInSubClass] public Player player;
 
-    
+
     [HideInSubClass] public ScoreManager scoreManager;
     [HideInSubClass] public HallOfFame hallOfFame;
     [HideInSubClass] [SerializeField] protected internal CharacterManager characterManager;
@@ -21,7 +21,6 @@ public class GameController : Ticker
     [HideInSubClass] [SerializeField] protected internal GameSettingsManager settingsManager;
     [HideInSubClass] [SerializeField] protected internal MapManager mapManager;
     [HideInSubClass] [SerializeField] protected internal LifeBar lifeBar;
-    [HideInSubClass] [SerializeField] protected internal TextMeshProUGUI resultPanelPlaceholder;
     [HideInSubClass] [SerializeField] private RewardChart rewardChart;
     [HideInSubClass] [SerializeField] private Animator macroGameCanvasAnimator;
     [HideInSubClass] [SerializeField] private Alarm alarm;
@@ -31,7 +30,6 @@ public class GameController : Ticker
     [HideInSubClass] [SerializeField] private MenuManager menu;
     [HideInSubClass] [SerializeField] private TransitionController transitionController;
     [HideInSubClass] [SerializeField] private KeywordDisplay keywordManager;
-    [HideInSubClass] [SerializeField] private int mainMenuBuildIndex;
     [SerializeField] protected internal List<GameObject> macroObjects = new List<GameObject>();
     [SerializeField] public string[] sceneNames = Array.Empty<string>();
 
@@ -39,7 +37,7 @@ public class GameController : Ticker
     private static readonly int defeat = Animator.StringToHash("Defeat");
     private static bool gameFinished;
     private static bool gameResult;
-    public bool stopLoop = false;
+    public bool stopLoop;
     protected internal Map map;
     private bool debugMicro;
 
@@ -60,7 +58,7 @@ public class GameController : Ticker
         instance.TickerStart(true);
         instance.debugMicro = true;
         Debug.Log("macro registered");
-        
+
     }
 
     public static void StopTimer()
@@ -104,7 +102,7 @@ public class GameController : Ticker
         //NotDestroyedScript.isAReload = true;
         AsyncOperation asyncLoadLvl = SceneManager.LoadSceneAsync(1, LoadSceneMode.Single);
         while (!asyncLoadLvl.isDone) yield return null;
-        
+
         CharacterManager.IsFirstLoad = false;
         //Debug.Log("Oui");
         runChronometer = false;
@@ -130,7 +128,7 @@ public class GameController : Ticker
         yield return recruitmentController.RecruitmentLoop();
 
         InitHeist();
-        
+
         while(true)
         {
             yield return StartCoroutine(map.WaitForNodeSelection());
@@ -140,23 +138,16 @@ public class GameController : Ticker
                 break;
             }
             Debug.Log("NodeSelect");
-            
+
             yield return StartCoroutine(player.MoveToPosition(map.currentPath.wayPoints));
             Debug.Log("EndDisplacement");
             var nodeMicroGame = map.currentNode.GetComponent<BehaviourNode>();
-            
+
 
             // True if node with micro games, false otherwise
             if (nodeMicroGame != null && nodeMicroGame.enabled)
             {
                 nodeMicroGame.microGamesNumber = rewardChart.GetMGNumber(MapManager.currentPhase, nodeMicroGame.behaviour);
-                int[] mgDomains = nodeMicroGame.GetMGDomains();
-                resultPanelPlaceholder.text = mgDomains[0].ToString(); // TODO : remove placeholder
-
-                for (int i = 1; i < mgDomains.Length; i++)
-                {
-                    resultPanelPlaceholder.text += ", " + mgDomains[i];
-                }
 
                 yield return StartCoroutine(NodeWithMicroGame(this, nodeMicroGame));
 
@@ -172,7 +163,7 @@ public class GameController : Ticker
                 {
                     break;
                 }
-                
+
             }
 
             /*var nodeInteract = map.currentNode.GetComponent<InteractibleNode>();
@@ -182,7 +173,7 @@ public class GameController : Ticker
                 isInActionEvent = true;
                 yield return new WaitWhile(() => isInActionEvent);
             }*/
-            
+
 
             if (map.OnLastNode())
             {
@@ -213,7 +204,7 @@ public class GameController : Ticker
         map.currentNode.gameObject.GetComponent<InteractibleNode>().EventInteractible.Invoke();
 
         yield return new WaitWhile(() => isInActionEvent);
-        
+
         yield return null;
     }
 
@@ -238,11 +229,13 @@ public class GameController : Ticker
         }
 
         // init result panel
-        resultPanel.Init(microGamesQueue.Count, map.currentNode.GetComponent<BehaviourNode>().GetMGDomains());
+        resultPanel.Init(microGamesQueue.Count, behaviourNode.GetMGDomains());
+        yield return new WaitForSeconds(1f);
 
         // play each micro games one by one
         while (microGamesQueue.Count > 0)
         {
+            StartCoroutine(resultPanel.CharaApparition(behaviourNode.GetMGDomains()[currentMG]));
             yield return new WaitForSecondsRealtime(1f);
 
             resultPanel.PopWindowDown();
@@ -258,7 +251,7 @@ public class GameController : Ticker
 
             // Disable menu
             menu.enabled = false;
-            
+
             // Launch transition
             AudioManager.MacroPlaySound("MiniGameEnter", 0);
             yield return StartCoroutine(transitionController.TransitionHandler(currentScene, true));
@@ -274,19 +267,19 @@ public class GameController : Ticker
 
             timer.StopTimer();
             yield return StartCoroutine(transitionController.TransitionHandler(currentScene, false));
-            
+
             // switch back to macro state
             menu.enabled = true;
             ResetTickables();
             ResetTick();
 
-            if (controller.MGResults(behaviourNode, currentMG, gameResult)) 
+            if (controller.MGResults(behaviourNode, currentMG, gameResult))
                 yield break;
 
             resultPanel.PopWindowUp();
             resultPanel.SetHeaderText(gameResult);
             yield return new WaitForSeconds(1f);
-        
+
             resultPanel.SetCurrentNode(gameResult);
             currentMG++;
             yield return new WaitForSeconds(1f);
@@ -309,15 +302,15 @@ public class GameController : Ticker
         }
 
         if (!Alarm.isActive) return false;
-        
+
         stopLoop = true;
         return true;
     }
-    
+
 
     private void Awake()
     {
-        
+
         if (instance == null)
         {
             instance = this;
