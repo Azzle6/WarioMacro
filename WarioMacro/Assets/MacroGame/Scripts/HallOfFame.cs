@@ -71,7 +71,7 @@ public class HallOfFame : MonoBehaviour
         {
             Run run = new Run();
             var temp2 = item.Split('/');
-            
+            Debug.Log(item);
             var team = temp2[2].Split(':');
             run.score = float.Parse(temp2[0]);
             run.time = float.Parse(temp2[1]);
@@ -117,7 +117,6 @@ public class HallOfFame : MonoBehaviour
         save = save.Substring(0, save.Length - 1);
         PlayerPrefs.SetString("hallOfFame",save);
         Debug.Log(save);
-        SetHallOfFame();
 
     }
 

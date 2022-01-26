@@ -46,6 +46,7 @@ public class GameController : Ticker
 
     public bool runChronometer = false;
     public float chronometer;
+    public float startTimer;
     public delegate void InteractEvent();
     public static InteractEvent OnInteractionEnd;
     public static bool isInActionEvent;
@@ -96,13 +97,14 @@ public class GameController : Ticker
             AudioManager.MacroPlaySound("GameLose", 0);
         }
 
-        runChronometer = false;
+        instance.hallOfFame.UpdateHallOfFame(GameController.instance.scoreManager.currentRunMoney,GameController.instance.chronometer);
+        characterManager.ResetEndGame();
         PlayerPrefs.Save();
         while (!InputManager.GetKeyDown(ControllerKey.A)) yield return null;
         //NotDestroyedScript.isAReload = true;
         AsyncOperation asyncLoadLvl = SceneManager.LoadSceneAsync(1, LoadSceneMode.Single);
         while (!asyncLoadLvl.isDone) yield return null;
-
+        
         CharacterManager.IsFirstLoad = false;
         //Debug.Log("Oui");
         runChronometer = false;
@@ -118,6 +120,7 @@ public class GameController : Ticker
         Debug.Log("Phase braquage");
         map = mapManager.LoadNextMap();
         MusicManager.instance.state = Soundgroup.CurrentPhase.ACTION;
+        startTimer = Time.unscaledTime;
         runChronometer = true;
         while(true)
         {
@@ -333,7 +336,7 @@ public class GameController : Ticker
     {
         TickerUpdate();
         if (runChronometer)
-            chronometer += Time.unscaledDeltaTime - Time.unscaledTime;
+            chronometer += Time.unscaledTime - startTimer;
         else
             chronometer = 0;
 
