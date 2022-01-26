@@ -110,6 +110,17 @@ public class GameController : Ticker
         runChronometer = false;
     }
 
+    private void InitHeist()
+    {
+        Debug.Log("Phase braquage");
+        map = mapManager.LoadNextMap();
+        MusicManager.instance.state = Soundgroup.CurrentPhase.ACTION;
+        startTimer = Time.unscaledTime;
+        runChronometer = true;
+        Alarm.isActive = false;
+        scoreManager.ShowMoney();
+    }
+
     private IEnumerator GameLoop()
     {
         stopLoop = false;
@@ -117,11 +128,9 @@ public class GameController : Ticker
 
         MusicManager.instance.state = Soundgroup.CurrentPhase.RECRUIT;
         yield return recruitmentController.RecruitmentLoop();
-        Debug.Log("Phase braquage");
-        map = mapManager.LoadNextMap();
-        MusicManager.instance.state = Soundgroup.CurrentPhase.ACTION;
-        startTimer = Time.unscaledTime;
-        runChronometer = true;
+
+        InitHeist();
+        
         while(true)
         {
             yield return StartCoroutine(map.WaitForNodeSelection());
