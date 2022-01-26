@@ -42,8 +42,8 @@ public class AstralPathController : GameController
 
                 if (instance.lifeBar.GetLife() == 0)
                 {
-                    //StartCoroutine(instance.ToggleEndGame(false));
-                    NotDestroyedScript.instance.EndRun(false);
+                    StartCoroutine(instance.ToggleEndGame(false));
+                    //NotDestroyedScript.instance.EndRun(false);
                     yield break;
                 }
             }

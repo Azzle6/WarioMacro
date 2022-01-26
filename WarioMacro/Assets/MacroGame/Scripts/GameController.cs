@@ -46,6 +46,7 @@ public class GameController : Ticker
 
     public bool runChronometer = false;
     public float chronometer;
+    public float startTimer;
     public delegate void InteractEvent();
     public static InteractEvent OnInteractionEnd;
     public static bool isInActionEvent;
@@ -95,18 +96,29 @@ public class GameController : Ticker
             macroGameCanvasAnimator.SetTrigger(defeat);
             AudioManager.MacroPlaySound("GameLose", 0);
         }
-        hallOfFame.UpdateHallOfFame(scoreManager.currentMoney,chronometer);
-        
-        
+
+        instance.hallOfFame.UpdateHallOfFame(GameController.instance.scoreManager.currentRunMoney,GameController.instance.chronometer);
+        characterManager.ResetEndGame();
         PlayerPrefs.Save();
         while (!InputManager.GetKeyDown(ControllerKey.A)) yield return null;
-        NotDestroyedScript.isAReload = true;
+        //NotDestroyedScript.isAReload = true;
         AsyncOperation asyncLoadLvl = SceneManager.LoadSceneAsync(1, LoadSceneMode.Single);
         while (!asyncLoadLvl.isDone) yield return null;
-
         
-        Debug.Log("Oui");
+        CharacterManager.IsFirstLoad = false;
+        //Debug.Log("Oui");
         runChronometer = false;
+    }
+
+    private void InitHeist()
+    {
+        Debug.Log("Phase braquage");
+        map = mapManager.LoadNextMap();
+        MusicManager.instance.state = Soundgroup.CurrentPhase.ACTION;
+        startTimer = Time.unscaledTime;
+        runChronometer = true;
+        Alarm.isActive = false;
+        scoreManager.ShowMoney();
     }
 
     private IEnumerator GameLoop()
@@ -116,9 +128,9 @@ public class GameController : Ticker
 
         MusicManager.instance.state = Soundgroup.CurrentPhase.RECRUIT;
         yield return recruitmentController.RecruitmentLoop();
-        Debug.Log("Phase braquage");
-        map = mapManager.LoadNextMap();
-        MusicManager.instance.state = Soundgroup.CurrentPhase.ACTION;
+
+        InitHeist();
+        
         while(true)
         {
             yield return StartCoroutine(map.WaitForNodeSelection());
@@ -333,7 +345,7 @@ public class GameController : Ticker
     {
         TickerUpdate();
         if (runChronometer)
-            chronometer += Time.unscaledTime - Time.time;
+            chronometer = Time.unscaledTime - startTimer;
         else
             chronometer = 0;
 

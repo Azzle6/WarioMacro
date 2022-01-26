@@ -71,16 +71,11 @@ public class CharacterManager : MonoBehaviour
     }
     private void Start()
     {
-        if (!NotDestroyedScript.isAReload)
+        if (IsFirstLoad)
         {
             GameController.instance.hallOfFame.SetHallOfFame();
             LoadAvailable();
             SetRecruitable();
-        }
-        else
-        {
-            ResetEndGame();
-            Debug.Log("Not first Load");
         }
     }
     private void Update()
@@ -146,6 +141,7 @@ public class CharacterManager : MonoBehaviour
         UpdateImprisoned();
         ResetList();
         UpdateAvailable();
+        LoadAvailable();
         SetRecruitable();
     }
 
