@@ -15,8 +15,8 @@ public class OutOfJailManager : MonoBehaviour
     public bool isOpen;
     public GameObject jailPanel;
     private GameObject go;
-    private int currentRowId = 0;
-    private int lastRowId = 0;    
+    public int currentRowId = 0;
+    public int lastRowId = 1;    
     
     
     private void Update()
@@ -24,9 +24,10 @@ public class OutOfJailManager : MonoBehaviour
         if (!isOpen) return;
         if (rows[currentRowId] != EventSystem.current.currentSelectedGameObject.transform.parent.gameObject)
         {
+            lastRowId = currentRowId;
             for(int i = 0;i<rows.Length;i++)
             {
-                lastRowId = currentRowId;
+                
                 if (rows[i] == EventSystem.current.currentSelectedGameObject.transform.parent.gameObject)
                     currentRowId = i;
             }
