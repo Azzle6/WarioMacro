@@ -18,7 +18,7 @@ public class LifeBar : MonoBehaviour
     {
         if (life == 4) return;
         
-        portraits[life].sprite = chara.lifebarSprite;
+        portraits[life].sprite = chara.portraitSprite;
         portraits[life].enabled = true;
         keyChains[life].sprite = Resources.Load<SpriteListSO>("KeyChainSprites")
             .nodeSprites[chara.characterType - SpecialistType.Brute];
@@ -30,7 +30,7 @@ public class LifeBar : MonoBehaviour
         AudioManager.MacroPlaySound("CharacterLose", 0);
         for (int i = 0; i < portraits.Length; i++)
         {
-            if (chara.lifebarSprite != portraits[i].sprite) continue;
+            if (chara.portraitSprite != portraits[i].sprite) continue;
             
             lifeBarGO.GetChild(i).GetComponent<Animator>().SetBool("Anim", true); //à remplacer par le trigger de l'animation
             break;
