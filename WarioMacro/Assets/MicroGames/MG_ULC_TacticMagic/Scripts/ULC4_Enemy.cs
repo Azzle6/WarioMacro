@@ -6,13 +6,12 @@ public class ULC4_Enemy : MonoBehaviour
     private Animator animatorEnemy;
     
     [SerializeField] private float timeBetweenSpells, chanceOfDoubleFire;
-    private bool canFire;
+    private int nbShots = 6;
     
     [SerializeField] private AudioClip[] spellSounds;
 
     private void Start()
     {
-        canFire = true;
         animatorEnemy = GetComponent<Animator>();
         StartCoroutine(FireCoroutine());
     }
@@ -21,10 +20,11 @@ public class ULC4_Enemy : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         
-        while (ULC4_GameManager.instance.inGame && canFire)
+        while (ULC4_GameManager.instance.inGame && nbShots > 0)
         {
             if (Random.Range(0f,1f) < chanceOfDoubleFire) DoubleFire();
             else Fire();
+            nbShots--;
 
             yield return new WaitForSeconds(timeBetweenSpells);
         }
@@ -47,10 +47,8 @@ public class ULC4_Enemy : MonoBehaviour
         int rdm = Random.Range(1, 3);
         if (rdm == 1) ULC4_SpellManager.instance.TopSpell(this);
         else ULC4_SpellManager.instance.BotSpell(this);
-        AudioManager.PlaySound(spellSounds[Random.Range(0,3)],0.2f);
+        AudioManager.PlaySound(spellSounds[Random.Range(0,3)],0.3f);
     }
     
     public void setChanceOfDF(float chance) {chanceOfDoubleFire = chance;}
-
-    public void stopFire() {canFire = false;}
 }

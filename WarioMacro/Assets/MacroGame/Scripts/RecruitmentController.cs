@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // ReSharper disable once CheckNamespace
 public class RecruitmentController : GameController
@@ -19,16 +20,26 @@ public class RecruitmentController : GameController
             SetRecruitmentActive(false);
             yield break;
         }
+
+        IEnumerator moveLoop = MoveLoop();
+        StartCoroutine(moveLoop);
         
-        while(instance.characterManager.playerTeam.Count < 4)
+        
+        SetRecruitmentActive(true);
+        
+        while(!canFinishRecruitment) yield return null;
+        
+        StopCoroutine(moveLoop);
+    }
+
+    private IEnumerator MoveLoop()
+    {
+        while (instance.characterManager.playerTeam.Count < 4 || !canFinishRecruitment)
         {
-            // Select path and move
             yield return StartCoroutine(instance.map.WaitForNodeSelection());
+
             yield return StartCoroutine(instance.player.MoveToPosition(instance.map.currentPath.wayPoints));
-
-            yield return null;
         }
-
     }
 
     private void SetRecruitmentActive(bool state)
@@ -38,7 +49,12 @@ public class RecruitmentController : GameController
 
     public void StopRecruitPhase()
     {
-        if (instance.characterManager.playerTeam.Count >= 4) canFinishRecruitment = true;
+        if (instance.characterManager.playerTeam.Count >= 4)
+        {
+            GameController.instance.hallOfFame.StartRun(instance.characterManager.playerTeam.ToArray());
+            SetRecruitmentActive(false);
+            canFinishRecruitment = true;
+        }
     }
 
     public void SkipRecruitment()

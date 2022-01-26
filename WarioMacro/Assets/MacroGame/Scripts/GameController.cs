@@ -15,6 +15,7 @@ public class GameController : Ticker
 
     
     [HideInSubClass] public ScoreManager scoreManager;
+    [HideInSubClass] public HallOfFame hallOfFame;
     [HideInSubClass] [SerializeField] protected internal CharacterManager characterManager;
     [HideInSubClass] [SerializeField] protected internal MiniGameResultPannel_UI resultPanel;
     [HideInSubClass] [SerializeField] protected internal GameSettingsManager settingsManager;
@@ -38,13 +39,19 @@ public class GameController : Ticker
     private static readonly int defeat = Animator.StringToHash("Defeat");
     private static bool gameFinished;
     private static bool gameResult;
-    private bool stopLoop = false;
+    public bool stopLoop = false;
     protected internal Map map;
     private bool debugMicro;
 
+
+    public bool runChronometer = false;
+    public float chronometer;
+    public float startTimer;
     public delegate void InteractEvent();
     public static InteractEvent OnInteractionEnd;
     public static bool isInActionEvent;
+
+    public bool WantToContinue;
 
     public static void Register()
     {
@@ -81,6 +88,7 @@ public class GameController : Ticker
         if (value)
         {
             macroGameCanvasAnimator.SetTrigger(victory);
+            scoreManager.AddToCurrentMoney();
             AudioManager.MacroPlaySound("GameWin", 0);
         }
         else
@@ -89,9 +97,17 @@ public class GameController : Ticker
             AudioManager.MacroPlaySound("GameLose", 0);
         }
 
+        instance.hallOfFame.UpdateHallOfFame(GameController.instance.scoreManager.currentRunMoney,GameController.instance.chronometer);
+        characterManager.ResetEndGame();
         PlayerPrefs.Save();
         while (!InputManager.GetKeyDown(ControllerKey.A)) yield return null;
-        SceneManager.LoadScene(1);
+        //NotDestroyedScript.isAReload = true;
+        AsyncOperation asyncLoadLvl = SceneManager.LoadSceneAsync(1, LoadSceneMode.Single);
+        while (!asyncLoadLvl.isDone) yield return null;
+        
+        CharacterManager.IsFirstLoad = false;
+        //Debug.Log("Oui");
+        runChronometer = false;
     }
 
     private IEnumerator GameLoop()
@@ -101,14 +117,23 @@ public class GameController : Ticker
 
         MusicManager.instance.state = Soundgroup.CurrentPhase.RECRUIT;
         yield return recruitmentController.RecruitmentLoop();
-
+        Debug.Log("Phase braquage");
         map = mapManager.LoadNextMap();
         MusicManager.instance.state = Soundgroup.CurrentPhase.ACTION;
+        startTimer = Time.unscaledTime;
+        runChronometer = true;
         while(true)
         {
             yield return StartCoroutine(map.WaitForNodeSelection());
 
+            if (stopLoop)
+            {
+                break;
+            }
+            Debug.Log("NodeSelect");
+            
             yield return StartCoroutine(player.MoveToPosition(map.currentPath.wayPoints));
+            Debug.Log("EndDisplacement");
             var nodeMicroGame = map.currentNode.GetComponent<BehaviourNode>();
             
 
@@ -138,6 +163,7 @@ public class GameController : Ticker
                 {
                     break;
                 }
+                
             }
 
             /*var nodeInteract = map.currentNode.GetComponent<InteractibleNode>();
@@ -151,14 +177,41 @@ public class GameController : Ticker
 
             if (map.OnLastNode())
             {
-                AudioManager.MacroPlaySound("Elevator", 0);
-                map = mapManager.LoadNextMap();
+                isInActionEvent = true;
+                yield return StartCoroutine(ElevatorTrigger());
+                if (WantToContinue)
+                {
+                    AudioManager.MacroPlaySound("Elevator", 0);
+                    map = mapManager.LoadNextMap();
+                    map.currentNode = map.startNode;
+                }
+                WantToContinue = false;
             }
 
             yield return null;
         }
 
+        yield return new WaitForSecondsRealtime(2f);
+
+        yield return player.EnterPortal();
+
+        map = mapManager.LoadAstralPath();
         yield return astralPathController.EscapeLoop();
+    }
+
+    private IEnumerator ElevatorTrigger()
+    {
+        map.currentNode.gameObject.GetComponent<InteractibleNode>().EventInteractible.Invoke();
+
+        yield return new WaitWhile(() => isInActionEvent);
+        
+        yield return null;
+    }
+
+    public void NextMap()
+    {
+        AudioManager.MacroPlaySound("Elevator", 0);
+        map = mapManager.LoadNextMap();
     }
 
     internal IEnumerator NodeWithMicroGame(GameController controller, BehaviourNode behaviourNode)
@@ -248,21 +301,18 @@ public class GameController : Ticker
 
         if (!Alarm.isActive) return false;
         
-        map = mapManager.LoadAstralPath();
         stopLoop = true;
         return true;
     }
     
-    private void OnEnable()
-    {
-        OnInteractionEnd += instance.InteractiveEventEnd;
-    }
 
     private void Awake()
     {
+        
         if (instance == null)
         {
             instance = this;
+            OnInteractionEnd += instance.InteractiveEventEnd;
         }
         else
         {
@@ -285,6 +335,11 @@ public class GameController : Ticker
     private void Update()
     {
         TickerUpdate();
+        if (runChronometer)
+            chronometer = Time.unscaledTime - startTimer;
+        else
+            chronometer = 0;
+
     }
 
     public void InteractiveEventEnd()

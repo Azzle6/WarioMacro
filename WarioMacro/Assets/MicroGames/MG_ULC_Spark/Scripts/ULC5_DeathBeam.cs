@@ -18,7 +18,7 @@ public class ULC5_DeathBeam : MonoBehaviour {
         float angle = Vector2.SignedAngle(Vector2.up, direction);
         
         beam = Instantiate(beamEffectPrefab, summonPoint, Quaternion.Euler(0,0,angle), transform);
-        AudioManager.PlaySound(blastKOSound,0.25f);
+        AudioManager.PlaySound(blastKOSound,0.5f);
         StartCoroutine(BeamAnimation(beam));
     }
 
@@ -26,10 +26,10 @@ public class ULC5_DeathBeam : MonoBehaviour {
         float popTime = beamTime*1/3;
         float fadeTime = beamTime*2/3;
         while (popTime > 0) {
-            beam.transform.GetChild(0).transform.localScale += Vector3.up*0.01f;
+            beam.transform.GetChild(0).transform.localScale += Vector3.up*2f*Time.deltaTime;
             yield return new WaitForSeconds(Time.deltaTime);
             popTime -= Time.deltaTime;
-            if (beam.transform.GetChild(0).transform.localScale.y >= 0.7f) popTime = 0;
+            if (beam.transform.GetChild(0).transform.localScale.y >= 0.5f) popTime = 0;
         }
 
         float stepAlpha = fadeTime / Time.deltaTime;

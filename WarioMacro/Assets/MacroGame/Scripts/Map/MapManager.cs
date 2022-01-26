@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GameTypes;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 // ReSharper disable once CheckNamespace
@@ -10,17 +11,20 @@ public class MapManager : MonoBehaviour
     public static int currentPhase { get; private set; }
     public static int floor { get; private set; }
     public GameObject currentMapGO { get; private set; }
+    
+    public IPhaseDomains[] phaseDomainsArray;
+    [HideInInspector] public int[] phaseFloorThresholds = new int[2];
 
     [SerializeField] private GameSettingsManager settingsManager;
-    [SerializeField] private GameConfig config;
+    [FormerlySerializedAs("config")] [SerializeField] private GameControllerSO controllerSO;
     [SerializeField] private Transform mapParent;
     [SerializeField] private Map recruitmentMap;
     [SerializeField] private Map astralPathMap;
     [SerializeField] private GameObject[] mapPrefabList;
     private Queue<GameObject> mapPrefabQueue;
-    public IPhaseDomains[] phaseDomainsArray;
+    
     private Map currentMap;
-    [HideInInspector] public int[] phaseFloorThresholds = new int[2];
+    
     
 
     public Map LoadRecruitmentMap()
@@ -67,8 +71,8 @@ public class MapManager : MonoBehaviour
 
     public void GeneratePhaseFloorCount()
     {
-        phaseFloorThresholds[0] = Random.Range(config.firstPhaseMinFloorCount, config.firstPhaseMaxFloorCount + 1);
-        phaseFloorThresholds[1] = Random.Range(config.secondPhaseMinFloorCount, config.secondPhaseMaxFloorCount + 1);
+        phaseFloorThresholds[0] = Random.Range(controllerSO.firstPhaseMinFloorCount, controllerSO.firstPhaseMaxFloorCount + 1);
+        phaseFloorThresholds[1] = Random.Range(controllerSO.secondPhaseMinFloorCount, controllerSO.secondPhaseMaxFloorCount + 1);
     }
 
     private void GeneratePhasesDomains()
@@ -90,100 +94,93 @@ public class MapManager : MonoBehaviour
 
     private void GenerateNormalPhaseDomains(int phase, ref List<int> notUsedDomains)
     {
+        var secondaryDomains = new List<int>();
         var domains = new List<int>(SpecialistType.GetTypes());
         
-        int rd = Random.Range(0, domains.Count);
-        int primaryDomain = domains[rd];
-        notUsedDomains.Remove(domains[rd]);
-        domains.RemoveAt(rd);
+        int primaryDomain = GetDomainFromList(ref domains, ref notUsedDomains);
         
-        rd = Random.Range(0, domains.Count);
-        var secondaryDomains = new List<int> {domains[rd]};
-        notUsedDomains.Remove(domains[rd]);
-        domains.RemoveAt(rd);
+        secondaryDomains.Add(GetDomainFromList(ref domains, ref notUsedDomains));
 
-        if (Random.Range(0f, 100f) < config.phaseDoubleDomainPercentage)
+        if (Random.Range(0f, 100f) < controllerSO.phaseDoubleDomainPercentage)
         {
-            rd = Random.Range(0, domains.Count);
-            secondaryDomains.Add(domains[rd]);
-            notUsedDomains.Remove(domains[rd]);
+            secondaryDomains.Add(GetDomainFromList(ref domains, ref notUsedDomains));
         }
 
         phaseDomainsArray[phase] = new NormalPhaseDomains(primaryDomain, secondaryDomains.ToArray());
     }
 
-    private void GenerateLastPhaseDomains(IList<int> notUsedDomains)
+    private void GenerateLastPhaseDomains(List<int> notUsedDomains)
     {
         var primaryDomains = new int[2];
+        int secondaryDomain = 0;
         var domains = new List<int>(SpecialistType.GetTypes());
-        
-        int rd;
-   
+
         switch (notUsedDomains.Count)
         {
             case 4:
                 // modify an already set domain
-                ReplaceDomain(ref notUsedDomains, Random.Range(0, 4));
-                goto FirstPrimaryNotUsed;
+                ReplaceDomain(ref notUsedDomains, ref domains, Random.Range(0, 4));
+                goto case 3;
             case 3:
-                goto FirstPrimaryNotUsed;
+                // 1st in not used list
+                primaryDomains[0] = GetDomainFromList(ref notUsedDomains, ref domains);
+                
+                // 2d in not used list
+                primaryDomains[1] = GetDomainFromList(ref notUsedDomains, ref domains);
+                break;
             case 2:
-                // 1st random
-                rd = Random.Range(0, domains.Count);
-                primaryDomains[0] = domains[rd];
-                domains.RemoveAt(rd);
+                // 1st in not used list
+                primaryDomains[0] = GetDomainFromList(ref notUsedDomains, ref domains);
+                // 2d random
+                primaryDomains[1] = GetDomainFromList(ref domains);
 
-                goto SecondPrimaryNotUsed;
+                break;
             default:
                 // 1st random
-                rd = Random.Range(0, domains.Count);
-                primaryDomains[0] = domains[rd];
-                domains.RemoveAt(rd);
+                primaryDomains[0] = GetDomainFromList(ref domains);
                 
                 // 2d random
-                rd = Random.Range(0, domains.Count);
-                primaryDomains[1] = domains[rd];
-                domains.RemoveAt(rd);
+                primaryDomains[1] = GetDomainFromList(ref domains);
                 
-                goto RandomSecondary;
+                break;
         }
-        
-        // 1st in not used list
-        FirstPrimaryNotUsed :
-        rd = Random.Range(0, notUsedDomains.Count);
-        primaryDomains[0] = notUsedDomains[rd];
-        notUsedDomains.RemoveAt(rd);
-        
-        // 2d in not used list
-        SecondPrimaryNotUsed :
-        rd = Random.Range(0, notUsedDomains.Count);
-        primaryDomains[1] = notUsedDomains[rd];
-        
+
         // 3rd is completely random
-        RandomSecondary :
-        int secondaryDomain = 0;
-        
-        if (Random.Range(0f, 100f) < config.lastPhaseSecondaryDomainPercentage)
+        if (Random.Range(0f, 100f) < controllerSO.lastPhaseSecondaryDomainPercentage)
         {
-            rd = Random.Range(0, domains.Count);
-            secondaryDomain = domains[rd];
+            secondaryDomain = GetDomainFromList(ref domains);
         }
 
         phaseDomainsArray[phaseDomainsArray.Length - 1] = new LastPhaseDomains(primaryDomains, secondaryDomain);
     }
 
-    private void ReplaceDomain(ref IList<int> notUsedDomains, int toReplace)
+    private static int GetDomainFromList(ref List<int> toUse)
     {
-        int rd = Random.Range(0, notUsedDomains.Count);
+        List<int> keepUpdated = null;
+        return GetDomainFromList(ref toUse, ref keepUpdated);
+    }
+
+    private static int GetDomainFromList(ref List<int> toUse, ref List<int> keepUpdated)
+    {
+        int rd = Random.Range(0, toUse.Count);
+        int res = toUse[rd];
+        keepUpdated?.Remove(toUse[rd]);
+        toUse.RemoveAt(rd);
+        
+        return res;
+    }
+
+    private void ReplaceDomain(ref List<int> notUsedDomains, ref List<int> domains, int toReplace)
+    {
+        int newDomain = GetDomainFromList(ref notUsedDomains, ref domains);
         if (toReplace / 2 == 0)
         {
-            ((NormalPhaseDomains) phaseDomainsArray[toReplace % 2]).SetPrimaryDomain(notUsedDomains[rd]);
+            ((NormalPhaseDomains) phaseDomainsArray[toReplace % 2]).SetPrimaryDomain(newDomain);
         }
         else
         {
-            ((NormalPhaseDomains) phaseDomainsArray[toReplace % 2]).SetSecondaryDomain(notUsedDomains[rd], 0);
+            ((NormalPhaseDomains) phaseDomainsArray[toReplace % 2]).SetSecondaryDomain(newDomain, 0);
         }
-        notUsedDomains.RemoveAt(rd);
     }
 
     private void GenerateMapNodesDomains(Map map)
