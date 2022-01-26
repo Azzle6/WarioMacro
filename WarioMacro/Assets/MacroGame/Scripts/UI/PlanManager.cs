@@ -27,6 +27,7 @@ public class PlanManager : MonoBehaviour
         PlanObject.SetActive(true);
         isOpen = true;
         InputManager.lockInput = true;
+        UpdateGOButton();
         UpdateDomains();
     }
 
@@ -113,21 +114,22 @@ public class PlanManager : MonoBehaviour
     private void UpdateGOButton()
     {
         priceText.text = currentSelectedMultiplier.boostPrice + "$";
-        if (scoreManager.currentMoney < currentSelectedMultiplier.boostPrice)
+        if (CharacterManager.instance.playerTeam.Count < 4)
+        {
+            startGameText.text = (4 - CharacterManager.instance.playerTeam.Count) + " more members to start...";
+            startGameButton.interactable = false;
+        }
+        else if (scoreManager.currentMoney < currentSelectedMultiplier.boostPrice)
         {
             startGameText.text = "Too expensive !";
             startGameButton.interactable = false;
         }
         else
         {
-            
             startGameText.text =  "Go !";
             startGameButton.interactable = true;
         }
-        if (CharacterManager.instance.playerTeam.Count < 4)
-        {
-            startGameText.text = (4 - CharacterManager.instance.playerTeam.Count) + " more members to start...";
-        }
+        
     }
     
     private void Start()
