@@ -20,7 +20,8 @@ public class InteractibleNode : MonoBehaviour
 
     public void EndGame()
     {
-        NotDestroyedScript.instance.EndRun(true);
+        StartCoroutine(GameController.instance.ToggleEndGame(true));
+        //NotDestroyedScript.instance.EndRun(true);
         GameController.instance.InteractiveEventEnd();
     }
 }
