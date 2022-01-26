@@ -4,11 +4,21 @@ using UnityEngine;
 // ReSharper disable once CheckNamespace
 public class AstralPathController : GameController
 {
+    [SerializeField] private GameObject alarmPostProcess;
+    [SerializeField] private GameObject astralPostProcess;
+    [SerializeField] private GameObject normalLights;
+    [SerializeField] private GameObject astralLights;
+    
     private int mgFailed;
 
     public IEnumerator EscapeLoop()
     {
         GameControllerSO.instance.currentDifficulty = 3;
+        normalLights.SetActive(false);
+        alarmPostProcess.SetActive(false);
+        astralLights.SetActive(true);
+        astralPostProcess.SetActive(true);
+        
         yield return instance.player.ExitPortal();
         
         while (!instance.map.OnLastNode())
