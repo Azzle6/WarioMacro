@@ -25,6 +25,7 @@ public class PlanManager : MonoBehaviour
     public void OpenPlan()
     {
         PlanObject.SetActive(true);
+        AudioManager.MacroPlaySound("MapEnter");
         isOpen = true;
         InputManager.lockInput = true;
         UpdateGOButton();
@@ -34,6 +35,7 @@ public class PlanManager : MonoBehaviour
     public void ClosePlan()
     {
         PlanObject.SetActive(false);
+        AudioManager.MacroPlaySound("MapExit");
         InputManager.lockInput = false;
         GameController.OnInteractionEnd();
         DisableDomains();
