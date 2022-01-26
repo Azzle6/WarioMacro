@@ -50,8 +50,14 @@ public class MiniGameResultPannel_UI : MonoBehaviour
     [SerializeField] private TypeSO ghost;
     [SerializeField] private TypeSO technomancer;
 
+    [Header("NodeAnim")]
+    [SerializeField] private float resultAnimBtwnTime = 0.33f;
+    [SerializeField] private float resultAnimWaitTime = 0.8f;
+    [SerializeField] private float spawnAnimBtwnTime = 0.66f;
+    [SerializeField] private float spawnAnimWaitTime = 2.3f;
 
     public GameObject[] nodeArray = new GameObject[10];
+    private GameObject[] expertNodeArray = new GameObject[6];
 
     [Header("Test Variables")]
     public bool debug = false;
@@ -157,6 +163,8 @@ public class MiniGameResultPannel_UI : MonoBehaviour
             }
         }
         else Debug.LogError("MiniGameResultPannel_UI / SetStartingNodeNumber : Nombre de Node pas compris entre 3 et 6");
+
+        StartCoroutine(CasdaingNodeSpawnAnim());
     }
 
     private void SpawnNode(int index, GameObject nodePrefab, Vector2 localScale, int expertType)
@@ -168,6 +176,9 @@ public class MiniGameResultPannel_UI : MonoBehaviour
         GameObject plus = nodeArray[index].transform.GetChild(0).gameObject;
         GameObject expertHover = nodeArray[index].transform.GetChild(1).gameObject;
 
+        plus.SetActive(false);
+        expertHover.gameObject.SetActive(false);
+
         switch (expertType)
         {
             case 0 : 
@@ -176,52 +187,59 @@ public class MiniGameResultPannel_UI : MonoBehaviour
                 break;
 
             case GameTypes.SpecialistType.Brute :
-                plus.gameObject.SetActive(true);
-                expertHover.gameObject.SetActive(true);
+                //plus.gameObject.SetActive(true);
+                //expertHover.gameObject.SetActive(true);
 
                 //Set things
                 expertHover.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = brute.logoSimple;
                 expertHover.GetComponent<Image>().color = brute.typeColor;
+
+                expertNodeArray[index] = nodeArray[index];
                 break;
 
             case GameTypes.SpecialistType.Acrobat:
-                plus.gameObject.SetActive(true);
-                expertHover.gameObject.SetActive(true);
+                //plus.gameObject.SetActive(true);
+                //expertHover.gameObject.SetActive(true);
 
                 expertHover.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = acrobat.logoSimple;
                 expertHover.GetComponent<Image>().color = acrobat.typeColor;
+                expertNodeArray[index] = nodeArray[index];
                 break;
 
             case GameTypes.SpecialistType.Alchemist:
-                plus.gameObject.SetActive(true);
-                expertHover.gameObject.SetActive(true);
+                //plus.gameObject.SetActive(true);
+                //expertHover.gameObject.SetActive(true);
 
                 expertHover.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = alchemist.logoSimple;
                 expertHover.GetComponent<Image>().color = alchemist.typeColor;
+                expertNodeArray[index] = nodeArray[index];
                 break;
 
             case GameTypes.SpecialistType.Expert:
-                plus.gameObject.SetActive(true);
-                expertHover.gameObject.SetActive(true);
+                //plus.gameObject.SetActive(true);
+                //expertHover.gameObject.SetActive(true);
 
                 expertHover.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = expert.logoSimple;
                 expertHover.GetComponent<Image>().color = expert.typeColor;
+                expertNodeArray[index] = nodeArray[index];
                 break;
 
             case GameTypes.SpecialistType.Ghost:
-                plus.gameObject.SetActive(true);
-                expertHover.gameObject.SetActive(true);
+                //plus.gameObject.SetActive(true);
+                //expertHover.gameObject.SetActive(true);
 
                 expertHover.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = ghost.logoSimple;
                 expertHover.GetComponent<Image>().color = ghost.typeColor;
+                expertNodeArray[index] = nodeArray[index];
                 break;
 
             case GameTypes.SpecialistType.Technomancer:
-                plus.gameObject.SetActive(true);
-                expertHover.gameObject.SetActive(true);
+                //plus.gameObject.SetActive(true);
+                //expertHover.gameObject.SetActive(true);
 
                 expertHover.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = technomancer.logoSimple;
                 expertHover.GetComponent<Image>().color = technomancer.typeColor;
+                expertNodeArray[index] = nodeArray[index];
                 break;
         }
 
@@ -280,12 +298,32 @@ public class MiniGameResultPannel_UI : MonoBehaviour
 
     IEnumerator CascadingNodeAnim()
     {
-        yield return new WaitForSeconds(.8f);
+        yield return new WaitForSeconds(resultAnimWaitTime);
 
         for (int i = 0; i < nodeArray.Length; i++)
         {
             nodeArray[i].gameObject.GetComponent<Animator>().SetTrigger("Anim");
-            yield return new WaitForSeconds(0.33f);
+            yield return new WaitForSeconds(resultAnimBtwnTime);
+        }
+    }
+
+    IEnumerator CasdaingNodeSpawnAnim()
+    {
+        yield return new WaitForSeconds(spawnAnimWaitTime);
+
+        for (int i = 0; i < expertNodeArray.Length; i++)
+        {
+            if(expertNodeArray[i] != null)
+            {
+                GameObject plus = expertNodeArray[i].transform.GetChild(0).gameObject;
+                GameObject expertHover = expertNodeArray[i].transform.GetChild(1).gameObject;
+
+                plus.SetActive(true);
+                expertHover.gameObject.SetActive(true);
+                expertNodeArray[i].gameObject.GetComponent<Animator>().SetTrigger("Spawn");
+            }
+
+            yield return new WaitForSeconds(spawnAnimBtwnTime);
         }
     }
 
