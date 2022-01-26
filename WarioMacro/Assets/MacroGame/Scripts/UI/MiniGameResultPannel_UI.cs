@@ -298,11 +298,22 @@ public class MiniGameResultPannel_UI : MonoBehaviour
     {
         if(nodeType <= 1) yield break;
 
-        Character selectedChara = CharacterManager.instance.playerTeam[CharacterManager.instance.SpecialistOfTypeInTeam(nodeType)];
+        Debug.Log(CharacterManager.instance.SpecialistOfTypeInTeam(nodeType));
+
+        Character selectedChara = null;
+
+        foreach (Character chara in CharacterManager.instance.playerTeam)
+        {
+            if (chara.characterType == nodeType) selectedChara = chara;
+        }
+        
+        
+        
+        Debug.Log(selectedChara);
         
         if (selectedChara == null) yield break;
         AudioManager.MacroPlaySound(selectedChara.GetMGSoundName());
-        charaSpecialistSprite.sprite = selectedChara.portraitSprite;
+        charaSpecialistSprite.sprite = selectedChara.fullSizeSprite;
         charaApparitionGO.SetActive(true);
         
         yield return new WaitForSeconds(2);
