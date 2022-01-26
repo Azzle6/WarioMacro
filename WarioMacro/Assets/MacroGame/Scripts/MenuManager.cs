@@ -58,7 +58,9 @@ public class MenuManager : MonoBehaviour
     public void SwitchScene(string sceneName)
     {
         Ticker.lockTimescale = false;
+        InputManager.lockInput = false;
         gameIsPaused = false;
+        GameController.OnInteractionEnd();
         SceneManager.LoadScene(sceneName);
     }
 

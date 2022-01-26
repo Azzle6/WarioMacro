@@ -1,8 +1,10 @@
+using System;
 using GameTypes;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class PlanManager : MonoBehaviour
 {
@@ -140,7 +142,6 @@ public class PlanManager : MonoBehaviour
     {
         if(InputManager.GetKeyDown(ControllerKey.B, true) && isOpen) ClosePlan();
     }
-
 }
 
 [System.Serializable]
