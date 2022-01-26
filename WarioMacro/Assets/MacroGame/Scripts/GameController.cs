@@ -100,12 +100,12 @@ public class GameController : Ticker
         
         PlayerPrefs.Save();
         while (!InputManager.GetKeyDown(ControllerKey.A)) yield return null;
-        NotDestroyedScript.isAReload = true;
+        //NotDestroyedScript.isAReload = true;
         AsyncOperation asyncLoadLvl = SceneManager.LoadSceneAsync(1, LoadSceneMode.Single);
         while (!asyncLoadLvl.isDone) yield return null;
 
-        
-        Debug.Log("Oui");
+        CharacterManager.IsFirstLoad = false;
+        //Debug.Log("Oui");
         runChronometer = false;
     }
 
