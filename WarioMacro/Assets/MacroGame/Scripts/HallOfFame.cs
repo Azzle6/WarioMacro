@@ -147,6 +147,7 @@ public class HallOfFame : MonoBehaviour
     public void CloseHall()
     {
         hallPanel.SetActive(false);
+        isOpen = false;
         InputManager.lockInput = false;
         GameController.OnInteractionEnd();
         AudioManager.MacroPlayRandomSound("BarmanExit");

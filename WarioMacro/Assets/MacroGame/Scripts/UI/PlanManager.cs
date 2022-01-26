@@ -34,6 +34,7 @@ public class PlanManager : MonoBehaviour
     public void ClosePlan()
     {
         PlanObject.SetActive(false);
+        isOpen = false;
         InputManager.lockInput = false;
         GameController.OnInteractionEnd();
         DisableDomains();
