@@ -6,6 +6,7 @@ using UnityEngine;
 public class NotDestroyedScript : MonoBehaviour
 {
     public static NotDestroyedScript instance;
+    public static bool isAReload = false;
     
     private void Awake()
     {
