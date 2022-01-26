@@ -153,7 +153,7 @@ public class MiniGameResultPannel_UI : MonoBehaviour
             pannelLayoutGroup.spacing = (-12 * nodeNbr);
             for (int i = 0; i < nodeNbr; i++)
             {
-                SpawnNode(i, littleNodePrefab, new Vector2(0.65f, 0.65f), expertSpec[i]);
+                SpawnNode(i, littleNodePrefab, new Vector2(0.60f, 0.60f), expertSpec[i]);
             }
         }
         else Debug.LogError("MiniGameResultPannel_UI / SetStartingNodeNumber : Nombre de Node pas compris entre 3 et 6");
