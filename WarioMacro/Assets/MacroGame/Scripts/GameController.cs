@@ -229,7 +229,7 @@ public class GameController : Ticker
         }
 
         // init result panel
-        resultPanel.Init(microGamesQueue.Count);
+        resultPanel.Init(microGamesQueue.Count, map.currentNode.GetComponent<BehaviourNode>().GetMGDomains());
 
         // play each micro games one by one
         while (microGamesQueue.Count > 0)
