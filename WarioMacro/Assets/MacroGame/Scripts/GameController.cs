@@ -336,7 +336,7 @@ public class GameController : Ticker
     {
         TickerUpdate();
         if (runChronometer)
-            chronometer += Time.unscaledTime - startTimer;
+            chronometer = Time.unscaledTime - startTimer;
         else
             chronometer = 0;
 
