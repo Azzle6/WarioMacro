@@ -71,7 +71,7 @@ public class CharacterManager : MonoBehaviour
     }
     private void Start()
     {
-        if (IsFirstLoad)
+        if (!NotDestroyedScript.isAReload)
         {
             GameController.instance.hallOfFame.SetHallOfFame();
             LoadAvailable();
@@ -80,7 +80,7 @@ public class CharacterManager : MonoBehaviour
         else
         {
             ResetEndGame();
-            Debug.Log("Load not first");
+            Debug.Log("Not first Load");
         }
     }
     private void Update()
