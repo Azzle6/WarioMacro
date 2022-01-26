@@ -4,11 +4,21 @@ using UnityEngine;
 // ReSharper disable once CheckNamespace
 public class AstralPathController : GameController
 {
+    [SerializeField] private GameObject alarmPostProcess;
+    [SerializeField] private GameObject astralPostProcess;
+    [SerializeField] private GameObject normalLights;
+    [SerializeField] private GameObject astralLights;
+    
     private int mgFailed;
 
     public IEnumerator EscapeLoop()
     {
         GameControllerSO.instance.currentDifficulty = 3;
+        normalLights.SetActive(false);
+        alarmPostProcess.SetActive(false);
+        astralLights.SetActive(true);
+        astralPostProcess.SetActive(true);
+        
         yield return instance.player.ExitPortal();
         
         while (!instance.map.OnLastNode())
@@ -22,13 +32,6 @@ public class AstralPathController : GameController
             if (nodeMicroGame != null && nodeMicroGame.enabled)
             {
                 nodeMicroGame.microGamesNumber = GameControllerSO.instance.astralMGCount;
-                int[] mgDomains = nodeMicroGame.GetMGDomains();
-                instance.resultPanelPlaceholder.text = mgDomains[0].ToString(); // TODO : remove placeholder
-
-                for (int i = 1; i < mgDomains.Length; i++)
-                {
-                    instance.resultPanelPlaceholder.text += ", " + mgDomains[i];
-                }
 
                 yield return StartCoroutine(instance.NodeWithMicroGame(this, nodeMicroGame));
 
@@ -43,6 +46,7 @@ public class AstralPathController : GameController
                 if (instance.lifeBar.GetLife() == 0)
                 {
                     StartCoroutine(instance.ToggleEndGame(false));
+                    //NotDestroyedScript.instance.EndRun(false);
                     yield break;
                 }
             }
@@ -50,6 +54,7 @@ public class AstralPathController : GameController
             yield return null;
         }
         StartCoroutine(instance.ToggleEndGame(true));
+        //NotDestroyedScript.instance.EndRun(true);
     }
 
     protected override bool MGResults(BehaviourNode behaviourNode, int mgNumber, bool result)

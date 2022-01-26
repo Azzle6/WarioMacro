@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -23,9 +24,11 @@ public class CharacterManager : MonoBehaviour
     private GameObject go;
     public delegate void RecruitCharacter();
     public static RecruitCharacter RecruitableCharaFinished;
+    public static bool IsFirstLoad = true;
 
     private void Awake()
     {
+        RecruitableCharaFinished = null;
         if (instance != null) return;
         instance = this;
     }
@@ -68,9 +71,12 @@ public class CharacterManager : MonoBehaviour
     }
     private void Start()
     {
-        GameController.instance.hallOfFame.SetHallOfFame();
-        LoadAvailable();
-        SetRecruitable();
+        if (IsFirstLoad)
+        {
+            GameController.instance.hallOfFame.SetHallOfFame();
+            LoadAvailable();
+            SetRecruitable();
+        }
     }
     private void Update()
     {
@@ -94,6 +100,14 @@ public class CharacterManager : MonoBehaviour
     
     private void SetRecruitable()
     {
+        StartCoroutine(SetRecruitWithTiming());
+    }
+
+    private IEnumerator SetRecruitWithTiming()
+    {
+        yield return new WaitForSecondsRealtime(0.1f);
+        recruitableCharacters = new List<Character>();
+        
         foreach (var list in allAvailableCharacters)
         {
             var rand = Random.Range(0, 2);
@@ -123,9 +137,11 @@ public class CharacterManager : MonoBehaviour
 
     public void ResetEndGame()
     {
+        Debug.Log("ResetList");
         UpdateImprisoned();
         ResetList();
         UpdateAvailable();
+        LoadAvailable();
         SetRecruitable();
     }
 
@@ -175,12 +191,13 @@ public class CharacterManager : MonoBehaviour
 
     public void UpdateImprisoned()
     {
-        foreach (var imprisoned in imprisonedCharacters)
+        for (int i = imprisonedCharacters.Count - 1; i >= 0; i--)
         {
+            var imprisoned = imprisonedCharacters[i];
             imprisoned.turnLeft--;
             if (imprisoned.turnLeft != 0) continue;
             allAvailableCharacters.First(l => l.type == imprisoned.character.characterType).Add(imprisoned.character);
-            imprisonedCharacters.Remove(imprisoned);
+            imprisonedCharacters.RemoveAt(i);
         }
     }
     

@@ -47,7 +47,7 @@ public class NAC1_MiniGameController : MonoBehaviour, ITickable
         InitializeArray();
 
         CreateSigns();
-        uiManager.UpdateTimer(nbTickMax - GameController.currentTick);
+      //  uiManager.UpdateTimer(nbTickMax - GameController.currentTick);
         hasStarted = true;
         Debug.Log(result);
 
@@ -178,7 +178,7 @@ public class NAC1_MiniGameController : MonoBehaviour, ITickable
         Debug.Log("winTick : " + winTick);
         if (!hasEnded)
         {
-            uiManager.UpdateTimer(nbTickMax - GameController.currentTick);
+           // uiManager.UpdateTimer(nbTickMax - GameController.currentTick);
         }
         //if (GameController.currentTick == nbTickMax && !hasEnded) EndGame(false);
 

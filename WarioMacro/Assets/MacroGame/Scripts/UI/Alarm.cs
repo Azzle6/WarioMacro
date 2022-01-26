@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Alarm : MonoBehaviour
 {
-    public static bool isActive { get; private set; }
+    public static bool isActive;
     [SerializeField] private RewardChart rewardChart;
     [SerializeField] private GameObject actionPostProcess;
     [SerializeField] private GameObject alarmPostProcess;
@@ -56,5 +56,6 @@ public class Alarm : MonoBehaviour
         GameController.instance.macroObjects.Add(alarmPostProcess);
         MusicManager.instance.state = Soundgroup.CurrentPhase.ESCAPE;
         AudioManager.MacroPlaySound("Alarm", 0);
+        GameController.instance.stopLoop = true;
     }
 }

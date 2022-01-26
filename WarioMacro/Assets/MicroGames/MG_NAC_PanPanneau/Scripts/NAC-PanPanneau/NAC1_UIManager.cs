@@ -7,7 +7,7 @@ public class NAC1_UIManager : MonoBehaviour
 {
     [SerializeField] private Sprite[] signSprites = new Sprite[3];
     [SerializeField] private SpriteRenderer trueSigneSprite;
-    [SerializeField] private TMP_Text timerText;
+   // [SerializeField] private TMP_Text timerText;
     [SerializeField] private GameObject endScreen, bodyGuard, defaite, victoire;
     [SerializeField] private TMP_Text resultText;
     public AudioClip audioClip , audioClip2;
@@ -23,10 +23,10 @@ public class NAC1_UIManager : MonoBehaviour
     {
         GameManager.Register();
     }
-    public void UpdateTimer(int nbTickLeft) 
+   /* public void UpdateTimer(int nbTickLeft) 
     {
         timerText.text = nbTickLeft.ToString();
-    }
+    } */
 
     public void EnableEndScreen(bool result) 
     {
