@@ -16,9 +16,14 @@ public class ScoreManager : MonoBehaviour
     public void AddMoney(int addedValue)
     {
         currentRunMoney += addedValue * scoreMultiplier;
-        moneyBagsText.text = currentRunMoney.ToString();
+        ShowMoney();
         moneyBagsDirector.Play();
         AudioManager.MacroPlaySound("CashGain", 0);
+    }
+
+    public void ShowMoney()
+    {
+        moneyBagsText.text = currentRunMoney.ToString();
     }
     
     public void AddToCurrentMoney()

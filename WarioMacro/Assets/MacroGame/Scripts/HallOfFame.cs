@@ -149,5 +149,6 @@ public class HallOfFame : MonoBehaviour
         hallPanel.SetActive(false);
         InputManager.lockInput = false;
         GameController.OnInteractionEnd();
+        AudioManager.MacroPlayRandomSound("BarmanExit");
     }
 }

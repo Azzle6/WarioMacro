@@ -70,24 +70,26 @@ public class ULA1_GameManager : MonoBehaviour, ITickable
     public void OnTick()
     {
             ULA1_CameraShake.instance.Shake(0.5f);
-
+            Debug.Log(GameController.currentTick);
+            
             if (cinematic && GameController.currentTick>=2 && !stop)
             {
+                stop = true;
                 Debug.Log(GameController.currentTick);
                 GameController.StopTimer();
                 tickLoose = GameController.currentTick;
-                stop = true;
+                
             }
             
             if (GameController.currentTick == 5 && !stop)
             {
-                Loose();
                 stop = true;
+                Loose();
                 GameController.StopTimer();
                 tickLoose = GameController.currentTick;
             }
 
-            if (tickLoose!=0 && GameController.currentTick == (tickLoose + 3))
+            if (tickLoose!=0 && GameController.currentTick == tickLoose + 3)
             {
                 Debug.Log(result);
                 GameController.FinishGame(result);
@@ -96,6 +98,7 @@ public class ULA1_GameManager : MonoBehaviour, ITickable
 
     public void Win()
     {
+        Debug.Log(tickLoose);
         victory.enabled = true;
         result = true;
         cinematic = true;
@@ -107,6 +110,7 @@ public class ULA1_GameManager : MonoBehaviour, ITickable
 
     public void Loose()
     {
+        Debug.Log(tickLoose);
         defeat.enabled = true;
         result = false;
         cinematic = true;
