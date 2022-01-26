@@ -39,7 +39,7 @@ public class NOC2_Controller : MonoBehaviour
 
         joystickValue += new Vector2(InputManager.GetAxis(ControllerAxis.LEFT_STICK_HORIZONTAL), InputManager.GetAxis(ControllerAxis.LEFT_STICK_VERTICAL));
         joystickValue.Normalize();
-        rb.velocity = joystickValue * speed * Time.unscaledDeltaTime / Time.timeScale;
+        rb.velocity = joystickValue * speed * GameController.gameBPM / 60;
         
         if (rb.velocity.y > 0) NOC2_JetPack.instance.strength = 0.05f;
         else if (rb.velocity.y == 0) NOC2_JetPack.instance.strength = 0.025f; 
