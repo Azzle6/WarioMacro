@@ -71,7 +71,7 @@ public class CharacterManager : MonoBehaviour
     }
     private void Start()
     {
-        if (!NotDestroyedScript.isAReload)
+        if (IsFirstLoad)
         {
             GameController.instance.hallOfFame.SetHallOfFame();
             LoadAvailable();
