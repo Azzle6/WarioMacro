@@ -1,10 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using System.Linq;
 using GameTypes;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
 
 public class CharacterNode : MonoBehaviour
 {
@@ -16,24 +13,24 @@ public class CharacterNode : MonoBehaviour
     [SerializeField] private GameObject CharacterEmplacement;
     [SerializeField] private DialogConstructor AlreadyRecruitDialog;
     [SerializeField] private InteractibleNode NodeEventScript;
-    private bool HasBeenRecruit;
 
     private void Start()
     {
         CharacterManager.RecruitableCharaFinished += Setup;
-        HasBeenRecruit = false;
     }
-
-    
 
     private void Setup()
     {
-        foreach (Character chara in CharacterManager.instance.recruitableCharacters)
+        foreach (Character chara in CharacterManager.instance.recruitableCharacters.Where(chara => chara.characterType == type))
         {
-            if (chara.characterType == type)
+            currentChara = chara;
+            Instantiate(currentChara.PuppetPrefab, CharacterEmplacement.transform);
+
+            var dialogs = GetComponents<DialogConstructor>();
+            foreach (DialogConstructor dialogC in dialogs)
             {
-                currentChara = chara;
-                Instantiate(currentChara.PuppetPrefab, CharacterEmplacement.transform);
+                dialogC.chara = currentChara.fullSizeSprite;
+                dialogC.name = currentChara.characterName;
             }
         }
         //StartCoroutine(SetupWithTiming());
@@ -55,10 +52,8 @@ public class CharacterNode : MonoBehaviour
 
     public void Recruit()
     {
-        HasBeenRecruit = true;
         CharacterManager.instance.Recruit(currentChara);
 
-        
         NodeEventScript.EventInteractible.RemoveAllListeners();
         UnityEvent NewEvent = new UnityEvent();
         NewEvent.AddListener(() => DialogManager.instance.StartDialog(AlreadyRecruitDialog));
@@ -66,4 +61,19 @@ public class CharacterNode : MonoBehaviour
         NodeEventScript.EventInteractible = NewEvent;
     }
 
+    public void PlayCharacterSound()
+    {
+        switch (currentChara.gender)
+        {
+            case Character.Gender.Dog :
+                AudioManager.MacroPlaySound("DogDialog");
+                break;
+            case Character.Gender.Male :
+                AudioManager.MacroPlayRandomSound("CharacterDialogsBoys");
+                break;
+            case Character.Gender.Female :
+                AudioManager.MacroPlayRandomSound("CharacterDialogsGirls");
+                break;
+        }
+    }
 }

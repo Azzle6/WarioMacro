@@ -19,7 +19,7 @@ public class OutOfJailElement : MonoBehaviour
 
     void Start()
     {
-        portrait.sprite = character.cardSprite;
+        portrait.sprite = character.fullSizeSprite;
     }
     
     void Update()

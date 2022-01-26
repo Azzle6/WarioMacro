@@ -96,6 +96,7 @@ public class CharacterManager : MonoBehaviour
         jailPanel.SetActive(false);
         InputManager.lockInput = false;
         GameController.OnInteractionEnd();
+        AudioManager.MacroPlayRandomSound("BarmanExit");
     }
     
     private void SetRecruitable()
