@@ -42,6 +42,7 @@ public class BehaviourNode : Node
         {
             secondaryDomain = phaseDomains.GetRandomSecondaryDomain();
             //sRenderer.sprite = Resources.Load<SpriteListSO>("NodeSprites").nodeSprites[secondaryDomain - 1];
+            Debug.Log(secondaryDomain);
             primaryLogo.sprite = Resources.Load<SpriteListSO>("NodeLogoSprites").nodeSprites[secondaryDomain - 2];
         }
         primaryLogo.transform.parent.gameObject.SetActive(true);
