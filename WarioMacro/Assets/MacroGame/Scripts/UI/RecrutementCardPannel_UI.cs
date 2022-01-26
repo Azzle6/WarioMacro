@@ -25,8 +25,8 @@ public class RecrutementCardPannel_UI : MonoBehaviour
 
     public void SetCards(Character cardOne, Character cardTwo)
     {
-        cardOnePortrait.sprite = cardOne.cardSprite;
-        cardTwoPortrait.sprite = cardTwo.cardSprite;
+        cardOnePortrait.sprite = cardOne.fullSizeSprite;
+        cardTwoPortrait.sprite = cardTwo.fullSizeSprite;
 
     }
     
@@ -47,7 +47,7 @@ public class RecrutementCardPannel_UI : MonoBehaviour
         
         // Reset Button
         button.gameObject.SetActive(true);
-        portrait.sprite = character.cardSprite;
+        portrait.sprite = character.fullSizeSprite;
         button.onClick.RemoveAllListeners();
             
         //Ajoute un listener au bouton pour qu'il ajoute le bon personnage
