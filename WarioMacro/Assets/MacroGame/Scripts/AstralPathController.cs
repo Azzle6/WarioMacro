@@ -50,8 +50,8 @@ public class AstralPathController : GameController
             
             yield return null;
         }
-        //StartCoroutine(instance.ToggleEndGame(true));
-        NotDestroyedScript.instance.EndRun(true);
+        StartCoroutine(instance.ToggleEndGame(true));
+        //NotDestroyedScript.instance.EndRun(true);
     }
 
     protected override bool MGResults(BehaviourNode behaviourNode, int mgNumber, bool result)
