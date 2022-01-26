@@ -93,12 +93,9 @@ public class AudioManager : MonoBehaviour
         SoundInfo sound = instance.soundList.FindSound(soundName);
         instance.StartCoroutine(instance.PlayAudio(sound.clip, AudioType.Sound, sound.clipVolume, delay));
     }
-    
-    /// <summary>
-    /// Method used to play a sound. Don't use this one during a micro game. Use PlaySound(AudioClip soundClip) instead.
-    /// </summary>
-    /// <param name="soundName"></param>
-    /// <param name="delay"></param>
+
+    public static void MacroPlayRandomSound(string soundName) => MacroPlayRandomSound(soundName, 0);
+
     public static void MacroPlayRandomSound(string soundName, float delay)
     {
         SoundInfo sound = instance.soundList.FindRandomSound(soundName);
