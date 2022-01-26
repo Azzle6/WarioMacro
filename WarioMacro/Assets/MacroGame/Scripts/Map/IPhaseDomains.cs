@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 // ReSharper disable once CheckNamespace
@@ -31,6 +32,12 @@ public class NormalPhaseDomains : IPhaseDomains
 
     public int GetRandomSecondaryDomain()
     {
+        Debug.Log("last : ca bug " + secondaryDomains[0]);
+        if (secondaryDomains.Length > 1)
+        {
+            Debug.Log("last : ca bug " + secondaryDomains[1]);
+        }
+        
         return secondaryDomains[Random.Range(0, secondaryDomains.Length)];
     }
 
@@ -73,6 +80,7 @@ public class LastPhaseDomains : IPhaseDomains
 
     public int GetRandomSecondaryDomain()
     {
+        Debug.Log("last : ca bug " + secondaryDomain);
         return secondaryDomain;
     }
 
