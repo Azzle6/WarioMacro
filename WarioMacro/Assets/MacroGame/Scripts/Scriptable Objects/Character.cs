@@ -20,6 +20,20 @@ public class Character : ScriptableObject
     
     public GameObject PuppetPrefab;
 
+    public string GetMGSoundName()
+    {
+        return characterType switch
+        {
+            SpecialistType.Brute => "SpecializedMGBrute",
+            SpecialistType.Alchemist => "SpecializedMGAlchemist",
+            SpecialistType.Expert => "SpecializedMGExpert",
+            SpecialistType.Ghost => "SpecializedMGGhost",
+            SpecialistType.Acrobat => "SpecializedMGAcrobat",
+            SpecialistType.Technomancer => "SpecializedMGTechnomancer",
+            _ => null
+        };
+    }
+
     public enum Level
     {
         Novice, Expert
