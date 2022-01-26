@@ -156,7 +156,6 @@ public class MiniGameResultPannel_UI : MonoBehaviour
                 SpawnNode(i, littleNodePrefab, new Vector2(0.60f, 0.60f), expertSpec[i]);
             }
         }
-        else Debug.LogError("MiniGameResultPannel_UI / SetStartingNodeNumber : Nombre de Node pas compris entre 3 et 6");
     }
 
     private void SpawnNode(int index, GameObject nodePrefab, Vector2 localScale, int expertType)
@@ -230,13 +229,13 @@ public class MiniGameResultPannel_UI : MonoBehaviour
 
     public void SetCurrentNode(bool result)
     {
-        Image checkMarkImage = nodeArray[currentNode].transform.GetChild(3).GetComponent<Image>(); //Get the child Image Component of the current node
+        Image checkMarkImage = nodeArray[currentNode].transform.GetChild(2).GetComponent<Image>(); //Get the child Image Component of the current node
         if (result) checkMarkImage.sprite = successCheckMark; 
         else checkMarkImage.sprite = failureCheckMark;  
 
         checkMarkImage.enabled = true;
 
-        Image remanentImage = nodeArray[currentNode].transform.GetChild(4).GetComponent<Image>(); //Repeat For the Remanent Image
+        Image remanentImage = nodeArray[currentNode].transform.GetChild(3).GetComponent<Image>(); //Repeat For the Remanent Image
         if (result) remanentImage.sprite = successCheckMark;
         else remanentImage.sprite = failureCheckMark;
 
@@ -292,13 +291,16 @@ public class MiniGameResultPannel_UI : MonoBehaviour
     public void PopWindowUp()
     {
         //Tween the Window Here
-        animator.SetBool("IsUp", true);
+        ((RectTransform) transform).DOAnchorPosY(0, 0.5f);
+        //transform.DOMoveY(0, 0.5f);
+        //animator.SetBool("IsUp", true);
     }
 
     public void PopWindowDown()
     {
         //Tween the Window Here
-        animator.SetBool("IsUp", false);
+        ((RectTransform) transform).DOAnchorPosY(-800, 0.5f); //.DOMoveY(-800, 0.5f);
+        //animator.SetBool("IsUp", false);
     }
 
     public void ToggleWindow(bool toogle)

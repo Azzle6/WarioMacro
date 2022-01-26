@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
@@ -21,7 +20,6 @@ public class GameController : Ticker
     [HideInSubClass] [SerializeField] protected internal GameSettingsManager settingsManager;
     [HideInSubClass] [SerializeField] protected internal MapManager mapManager;
     [HideInSubClass] [SerializeField] protected internal LifeBar lifeBar;
-    [HideInSubClass] [SerializeField] protected internal TextMeshProUGUI resultPanelPlaceholder;
     [HideInSubClass] [SerializeField] private RewardChart rewardChart;
     [HideInSubClass] [SerializeField] private Animator macroGameCanvasAnimator;
     [HideInSubClass] [SerializeField] private Alarm alarm;
@@ -39,7 +37,7 @@ public class GameController : Ticker
     private static readonly int defeat = Animator.StringToHash("Defeat");
     private static bool gameFinished;
     private static bool gameResult;
-    public bool stopLoop = false;
+    public bool stopLoop;
     protected internal Map map;
     private bool debugMicro;
 
@@ -150,13 +148,6 @@ public class GameController : Ticker
             if (nodeMicroGame != null && nodeMicroGame.enabled)
             {
                 nodeMicroGame.microGamesNumber = rewardChart.GetMGNumber(MapManager.currentPhase, nodeMicroGame.behaviour);
-                int[] mgDomains = nodeMicroGame.GetMGDomains();
-                resultPanelPlaceholder.text = mgDomains[0].ToString(); // TODO : remove placeholder
-
-                for (int i = 1; i < mgDomains.Length; i++)
-                {
-                    resultPanelPlaceholder.text += ", " + mgDomains[i];
-                }
 
                 yield return StartCoroutine(NodeWithMicroGame(this, nodeMicroGame));
 
@@ -238,7 +229,8 @@ public class GameController : Ticker
         }
 
         // init result panel
-        resultPanel.Init(microGamesQueue.Count);
+        resultPanel.Init(microGamesQueue.Count, behaviourNode.GetMGDomains());
+        yield return new WaitForSeconds(1f);
 
         // play each micro games one by one
         while (microGamesQueue.Count > 0)
