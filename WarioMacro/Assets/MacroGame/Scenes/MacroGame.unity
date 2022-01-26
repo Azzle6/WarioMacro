@@ -175,13 +175,57 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 5640497177822817446, guid: 16fa56177c5012b4faa1ee6a2b624a11, type: 2}
     - target: {fileID: 6403898561365136584, guid: bf3de5f947698fc4682ddc837991eb5b, type: 3}
+      propertyPath: brute
+      value: 
+      objectReference: {fileID: 11400000, guid: 127076b44739f5b4e9efac808a84ff5c, type: 2}
+    - target: {fileID: 6403898561365136584, guid: bf3de5f947698fc4682ddc837991eb5b, type: 3}
+      propertyPath: ghost
+      value: 
+      objectReference: {fileID: 11400000, guid: 0268fba4597eeec47a9d1305fcf60788, type: 2}
+    - target: {fileID: 6403898561365136584, guid: bf3de5f947698fc4682ddc837991eb5b, type: 3}
+      propertyPath: expert
+      value: 
+      objectReference: {fileID: 11400000, guid: 617c1d4f4d007a745af488a782e1f104, type: 2}
+    - target: {fileID: 6403898561365136584, guid: bf3de5f947698fc4682ddc837991eb5b, type: 3}
+      propertyPath: acrobat
+      value: 
+      objectReference: {fileID: 11400000, guid: 1a7194f75fe8efe4ab4dd119ed9d79a4, type: 2}
+    - target: {fileID: 6403898561365136584, guid: bf3de5f947698fc4682ddc837991eb5b, type: 3}
       propertyPath: animator
       value: 
       objectReference: {fileID: 485812076}
     - target: {fileID: 6403898561365136584, guid: bf3de5f947698fc4682ddc837991eb5b, type: 3}
+      propertyPath: director
+      value: 
+      objectReference: {fileID: 1018517684}
+    - target: {fileID: 6403898561365136584, guid: bf3de5f947698fc4682ddc837991eb5b, type: 3}
+      propertyPath: alchemist
+      value: 
+      objectReference: {fileID: 11400000, guid: f2ce1c54dc99f0341a0e108580ac05f1, type: 2}
+    - target: {fileID: 6403898561365136584, guid: bf3de5f947698fc4682ddc837991eb5b, type: 3}
+      propertyPath: moneyGain
+      value: 
+      objectReference: {fileID: 11400000, guid: a6570f17bd3f9f64894606e815af34bd, type: 2}
+    - target: {fileID: 6403898561365136584, guid: bf3de5f947698fc4682ddc837991eb5b, type: 3}
+      propertyPath: moneyLose
+      value: 
+      objectReference: {fileID: 11400000, guid: 79fb28bae9d78f3439ce2910d19406ca, type: 2}
+    - target: {fileID: 6403898561365136584, guid: bf3de5f947698fc4682ddc837991eb5b, type: 3}
+      propertyPath: moneyBagGO
+      value: 
+      objectReference: {fileID: 925746210}
+    - target: {fileID: 6403898561365136584, guid: bf3de5f947698fc4682ddc837991eb5b, type: 3}
       propertyPath: readyKeyword
       value: Ready?
       objectReference: {fileID: 0}
+    - target: {fileID: 6403898561365136584, guid: bf3de5f947698fc4682ddc837991eb5b, type: 3}
+      propertyPath: technomancer
+      value: 
+      objectReference: {fileID: 11400000, guid: e36f4960ab9772f4bad8a3419239ad8d, type: 2}
+    - target: {fileID: 6403898561365136584, guid: bf3de5f947698fc4682ddc837991eb5b, type: 3}
+      propertyPath: moneyTextField
+      value: 
+      objectReference: {fileID: 1906668102}
     - target: {fileID: 6403898561365136585, guid: bf3de5f947698fc4682ddc837991eb5b, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3267,6 +3311,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1f60270574141a24f9cd34fb14d33bc4, type: 3}
+--- !u!1 &925746210 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2576905254493432720, guid: d885208160eb0ce4e857b5d06d735208, type: 3}
+  m_PrefabInstance: {fileID: 2100103766}
+  m_PrefabAsset: {fileID: 0}
 --- !u!320 &1018517684 stripped
 PlayableDirector:
   m_CorrespondingSourceObject: {fileID: 4104179151765241174, guid: d885208160eb0ce4e857b5d06d735208, type: 3}
@@ -4885,7 +4934,7 @@ MonoBehaviour:
   m_text: victory!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 16fa56177c5012b4faa1ee6a2b624a11, type: 2}
-  m_sharedMaterial: {fileID: -8126084813207962825, guid: 02c2b84ad75b53b48b371e355de7af08, type: 2}
+  m_sharedMaterial: {fileID: 5640497177822817446, guid: 16fa56177c5012b4faa1ee6a2b624a11, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

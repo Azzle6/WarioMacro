@@ -230,13 +230,13 @@ public class MiniGameResultPannel_UI : MonoBehaviour
 
     public void SetCurrentNode(bool result)
     {
-        Image checkMarkImage = nodeArray[currentNode].transform.GetChild(3).GetComponent<Image>(); //Get the child Image Component of the current node
+        Image checkMarkImage = nodeArray[currentNode].transform.GetChild(2).GetComponent<Image>(); //Get the child Image Component of the current node
         if (result) checkMarkImage.sprite = successCheckMark; 
         else checkMarkImage.sprite = failureCheckMark;  
 
         checkMarkImage.enabled = true;
 
-        Image remanentImage = nodeArray[currentNode].transform.GetChild(4).GetComponent<Image>(); //Repeat For the Remanent Image
+        Image remanentImage = nodeArray[currentNode].transform.GetChild(3).GetComponent<Image>(); //Repeat For the Remanent Image
         if (result) remanentImage.sprite = successCheckMark;
         else remanentImage.sprite = failureCheckMark;
 
