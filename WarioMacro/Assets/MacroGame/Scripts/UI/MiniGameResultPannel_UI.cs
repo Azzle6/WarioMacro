@@ -42,7 +42,20 @@ public class MiniGameResultPannel_UI : MonoBehaviour
     [SerializeField] private PlayableAsset moneyGain;
     [SerializeField] private PlayableAsset moneyLose;
 
+    [Header("TypesSO")]
+    [SerializeField] private TypeSO brute;
+    [SerializeField] private TypeSO alchemist;
+    [SerializeField] private TypeSO acrobat;
+    [SerializeField] private TypeSO expert;
+    [SerializeField] private TypeSO ghost;
+    [SerializeField] private TypeSO technomancer;
+
+
     public GameObject[] nodeArray = new GameObject[10];
+
+    [Header("Test Variables")]
+    public int testNodeNbr;
+    public int[] nodeMGDomain;
 
     private int currentNode;
 
@@ -50,8 +63,6 @@ public class MiniGameResultPannel_UI : MonoBehaviour
     {
         ClearAllNodes();
         ToggleWindow(false);
-        SetStartingNodeNumber(4);
-        //SetCurrentNode(true, 1);
     }
 
     public void ClearAllNodes()
@@ -62,41 +73,163 @@ public class MiniGameResultPannel_UI : MonoBehaviour
             Destroy(pannelLayoutGroup.transform.GetChild(i).gameObject);
         }
     }
-    
+
     //Note:Fonctionne mal avec plus de 6 nodes
     public void SetStartingNodeNumber(int nodeNbr)
     {
         nodeArray = new GameObject[nodeNbr];
 
-        if (nodeNbr < 5 )
+        if (nodeNbr < 5)
         {
             //Spawn X big node
-            pannelLayoutGroup.spacing = 0f;
+            if (nodeNbr == 3) pannelLayoutGroup.spacing = 25f;
+            else pannelLayoutGroup.spacing = 0f;
+
             for (int i = 0; i < nodeNbr; i++)
             {
                 nodeArray[i] = Instantiate(bigNodePrefab, pannelLayoutGroup.transform);
             }
         }
-        else
+        else if (nodeNbr < 6)
         {
             //Spawn X little nodes
-            pannelLayoutGroup.spacing = (-12*nodeNbr);
+            pannelLayoutGroup.spacing = -40f;
             for (int i = 0; i < nodeNbr; i++)
             {
                 nodeArray[i] = Instantiate(littleNodePrefab, pannelLayoutGroup.transform);
             }
         }
+        else if (nodeNbr >= 6)
+        {
+            //Spawn X little nodes
+            pannelLayoutGroup.spacing = (-12 * nodeNbr);
+            for (int i = 0; i < nodeNbr; i++)
+            {
+
+                nodeArray[i] = Instantiate(littleNodePrefab, pannelLayoutGroup.transform);
+                nodeArray[i].transform.localScale = new Vector2(.6f, .6f);
+            }
+        }
+    }
+
+    //Override de la fonction pour accepter les experts
+    public void SetStartingNodeNumber(int nodeNbr, int[]expertSpec)
+    {
+        nodeArray = new GameObject[nodeNbr];
+
+        if (nodeNbr == 3)
+        {
+            pannelLayoutGroup.spacing = 25f;
+            for (int i = 0; i < nodeNbr; i++)
+            {
+                SpawnNode(i, bigNodePrefab, new Vector2(0.85f, 0.85f), expertSpec[i]);
+            }
+        }
+        else if (nodeNbr == 4)
+        {
+            pannelLayoutGroup.spacing = 0f;
+            for (int i = 0; i < nodeNbr; i++)
+            {
+                SpawnNode(i, bigNodePrefab, new Vector2(0.85f, 0.85f), expertSpec[i]);
+            }
+        }
+        else if (nodeNbr == 5)
+        {
+            pannelLayoutGroup.spacing = -40f;
+            for (int i = 0; i < nodeNbr; i++)
+            {
+                SpawnNode(i, bigNodePrefab, new Vector2(0.75f, 0.75f), expertSpec[i]);
+            }
+        }
+        else if (nodeNbr == 6)
+        {
+            pannelLayoutGroup.spacing = (-12 * nodeNbr);
+            for (int i = 0; i < nodeNbr; i++)
+            {
+                SpawnNode(i, littleNodePrefab, new Vector2(0.65f, 0.65f), expertSpec[i]);
+            }
+        }
+        else Debug.LogError("MiniGameResultPannel_UI / SetStartingNodeNumber : Nombre de Node pas compris entre 3 et 6");
+    }
+
+    private void SpawnNode(int index, GameObject nodePrefab, Vector2 localScale, int expertType)
+    {
+        nodeArray[index] = Instantiate(nodePrefab, pannelLayoutGroup.transform);
+        nodeArray[index].transform.localScale = localScale;
+
+        //Expert is Set Here
+        GameObject plus = nodeArray[index].transform.GetChild(0).gameObject;
+        GameObject expertHover = nodeArray[index].transform.GetChild(1).gameObject;
+
+        switch (expertType)
+        {
+            case 0 : 
+                plus.SetActive(false);
+                expertHover.gameObject.SetActive(false);
+                break;
+
+            case GameTypes.SpecialistType.Brute :
+                plus.gameObject.SetActive(true);
+                expertHover.gameObject.SetActive(true);
+
+                //Set things
+                expertHover.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = brute.logoSimple;
+                expertHover.GetComponent<Image>().color = brute.typeColor;
+                break;
+
+            case GameTypes.SpecialistType.Acrobat:
+                plus.gameObject.SetActive(true);
+                expertHover.gameObject.SetActive(true);
+
+                expertHover.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = acrobat.logoSimple;
+                expertHover.GetComponent<Image>().color = acrobat.typeColor;
+                break;
+
+            case GameTypes.SpecialistType.Alchemist:
+                plus.gameObject.SetActive(true);
+                expertHover.gameObject.SetActive(true);
+
+                expertHover.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = alchemist.logoSimple;
+                expertHover.GetComponent<Image>().color = alchemist.typeColor;
+                break;
+
+            case GameTypes.SpecialistType.Expert:
+                plus.gameObject.SetActive(true);
+                expertHover.gameObject.SetActive(true);
+
+                expertHover.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = expert.logoSimple;
+                expertHover.GetComponent<Image>().color = expert.typeColor;
+                break;
+
+            case GameTypes.SpecialistType.Ghost:
+                plus.gameObject.SetActive(true);
+                expertHover.gameObject.SetActive(true);
+
+                expertHover.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = ghost.logoSimple;
+                expertHover.GetComponent<Image>().color = ghost.typeColor;
+                break;
+
+            case GameTypes.SpecialistType.Technomancer:
+                plus.gameObject.SetActive(true);
+                expertHover.gameObject.SetActive(true);
+
+                expertHover.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = technomancer.logoSimple;
+                expertHover.GetComponent<Image>().color = technomancer.typeColor;
+                break;
+        }
+
+        //Nodes Anim Here
     }
 
     public void SetCurrentNode(bool result)
     {
-        Image checkMarkImage = nodeArray[currentNode].transform.GetChild(0).GetComponent<Image>(); //Get the child Image Component of the current node
+        Image checkMarkImage = nodeArray[currentNode].transform.GetChild(3).GetComponent<Image>(); //Get the child Image Component of the current node
         if (result) checkMarkImage.sprite = successCheckMark; 
         else checkMarkImage.sprite = failureCheckMark;  
 
         checkMarkImage.enabled = true;
 
-        Image remanentImage = nodeArray[currentNode].transform.GetChild(1).GetComponent<Image>(); //Repeat For the Remanent Image
+        Image remanentImage = nodeArray[currentNode].transform.GetChild(4).GetComponent<Image>(); //Repeat For the Remanent Image
         if (result) remanentImage.sprite = successCheckMark;
         else remanentImage.sprite = failureCheckMark;
 
@@ -172,6 +305,16 @@ public class MiniGameResultPannel_UI : MonoBehaviour
         SetHeaderText(HeaderType.GetReady);
         ClearAllNodes();
         SetStartingNodeNumber(microGameCount);
+        PopWindowUp();
+        currentNode = 0;
+    }
+
+    public void Init(int microGameCount, int[] expertSpec)
+    {
+        ToggleWindow(true);
+        SetHeaderText(HeaderType.GetReady);
+        ClearAllNodes();
+        SetStartingNodeNumber(microGameCount, expertSpec);
         PopWindowUp();
         currentNode = 0;
     }
