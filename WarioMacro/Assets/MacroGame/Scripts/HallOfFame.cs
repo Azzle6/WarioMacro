@@ -32,7 +32,7 @@ public class HallOfFame : MonoBehaviour
         
         public override string ToString()
         {
-            var toString =  score + "," + time + ",";
+            var toString =  score + "/" + time + "/";
             foreach (var character in team)
             {
                 Debug.Log(character.Key);
@@ -61,7 +61,7 @@ public class HallOfFame : MonoBehaviour
     
     public void SetHallOfFame()
     {
-        PlayerPrefs.DeleteAll();
+        //PlayerPrefs.DeleteAll();
         var j = 0;
         var temp = PlayerPrefs.GetString("hallOfFame");
         if (temp == "") return;
@@ -70,8 +70,8 @@ public class HallOfFame : MonoBehaviour
         foreach (var item in hallOfFame)
         {
             Run run = new Run();
-            var temp2 = item.Split(',');
-            
+            var temp2 = item.Split('/');
+            Debug.Log(item);
             var team = temp2[2].Split(':');
             run.score = float.Parse(temp2[0]);
             run.time = float.Parse(temp2[1]);
@@ -79,6 +79,7 @@ public class HallOfFame : MonoBehaviour
             foreach (var couple in team)
             {
                 var temp3 = couple.Split('.');
+                
                 run.team.Add(GameController.instance.characterManager.GetCharacter(temp3[0]),bool.Parse(temp3[1]));
             }
             hall[j] = run;
@@ -88,6 +89,7 @@ public class HallOfFame : MonoBehaviour
 
     public void UpdateHallOfFame(float score, float time)
     {
+        
         currentRun.score = score;
         currentRun.time = time;
         if (hall.Length == 10 && currentRun.score <= hall[hall.Length - 1].score) return;
