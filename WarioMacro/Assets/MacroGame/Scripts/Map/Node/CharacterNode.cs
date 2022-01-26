@@ -53,6 +53,7 @@ public class CharacterNode : MonoBehaviour
     public void Recruit()
     {
         CharacterManager.instance.Recruit(currentChara);
+        AudioManager.MacroPlaySound(currentChara.mastery == Character.Level.Novice ? "NoviceSelection" : "CharacterSelection");
 
         NodeEventScript.EventInteractible.RemoveAllListeners();
         UnityEvent NewEvent = new UnityEvent();
