@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using GameTypes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
@@ -234,6 +235,7 @@ public class GameController : Ticker
         // play each micro games one by one
         while (microGamesQueue.Count > 0)
         {
+            StartCoroutine(resultPanel.CharaApparition(behaviourNode.GetMGDomains()[currentMG]));
             yield return new WaitForSecondsRealtime(1f);
 
             resultPanel.PopWindowDown();

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Playables;
 using DG.Tweening;
+using GameTypes;
 
 public class MiniGameResultPannel_UI : MonoBehaviour
 {
@@ -41,6 +42,11 @@ public class MiniGameResultPannel_UI : MonoBehaviour
     [SerializeField] private PlayableDirector director;
     [SerializeField] private PlayableAsset moneyGain;
     [SerializeField] private PlayableAsset moneyLose;
+
+    [Header("CharacterAnim")] 
+    [SerializeField] private GameObject charaApparitionGO;
+    [SerializeField] private SpriteListSO portraitsList;
+    [SerializeField] private Image charaSpecialistSprite; 
 
     [Header("TypesSO")]
     [SerializeField] private TypeSO brute;
@@ -286,6 +292,23 @@ public class MiniGameResultPannel_UI : MonoBehaviour
             nodeArray[i].gameObject.GetComponent<Animator>().SetTrigger("Anim");
             yield return new WaitForSeconds(0.33f);
         }
+    }
+
+    public IEnumerator CharaApparition(int nodeType)
+    {
+        if(nodeType <= 1) yield return null;
+
+
+
+        Character selectedChara = CharacterManager.instance.playerTeam[CharacterManager.instance.SpecialistOfTypeInTeam(nodeType)];
+
+        if (selectedChara == null) yield return null;
+        charaSpecialistSprite.sprite = selectedChara.portraitSprite;
+        charaApparitionGO.SetActive(true);
+        
+        yield return new WaitForSeconds(2);
+        charaApparitionGO.SetActive(false);
+        yield return null;
     }
 
     public void PopWindowUp()
