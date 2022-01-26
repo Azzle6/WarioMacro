@@ -15,14 +15,11 @@ public class CharacterManager : MonoBehaviour
     public Character[] novices = new Character[6];
     public List<Imprisoned> imprisonedCharacters = new List<Imprisoned>();
 
-    public OutOfJailElement[] jailedUI = new OutOfJailElement[12];
-    public GameObject[] rows = new GameObject[6];
+    
     
     [SerializeField] private LifeBar life;
 
-    public bool isOpen;
-    public GameObject jailPanel;
-    private GameObject go;
+    
     public delegate void RecruitCharacter();
     public static RecruitCharacter RecruitableCharaFinished;
     public static bool IsFirstLoad = true;
@@ -55,37 +52,7 @@ public class CharacterManager : MonoBehaviour
     }
 
 
-    public void SetJailed()
-    {
-        foreach (var go in rows) go.SetActive(true);
-        var count = 0;
-        foreach (var element in jailedUI)
-        {
-            if(imprisonedCharacters.Any(i =>i.character == element.character))
-            {
-                element.gameObject.SetActive(true);
-                element.SetJail(imprisonedCharacters.First(i =>i.character == element.character));
-            }
-            else
-            {
-                element.gameObject.SetActive(false);
-            }
-            
-        }
-        SetRowsUI();
-    }
-
-    public void SetRowsUI()
-    {
-        foreach (var go in rows)
-        {
-            if (go.transform.GetChild(0).gameObject.activeSelf == false &&
-                go.transform.GetChild(1).gameObject.activeSelf == false)
-            {
-                go.SetActive(false);
-            }
-        }
-    }
+    
     
     private void Start()
     {
@@ -96,26 +63,9 @@ public class CharacterManager : MonoBehaviour
             SetRecruitable();
         }
     }
-    private void Update()
-    {
-        if(InputManager.GetKeyDown(ControllerKey.B, true) && isOpen) CloseJail();
+    
 
-    }
-    public void OpenJail()
-    {
-        jailPanel.SetActive(true);
-        isOpen = true;
-        InputManager.lockInput = true;
-        SetJailed();
-    }
-
-    public void CloseJail()
-    {
-        jailPanel.SetActive(false);
-        InputManager.lockInput = false;
-        GameController.OnInteractionEnd();
-        AudioManager.MacroPlayRandomSound("BarmanExit");
-    }
+    
     
     private void SetRecruitable()
     {
