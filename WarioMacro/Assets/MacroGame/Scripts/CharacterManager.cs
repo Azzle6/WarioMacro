@@ -77,11 +77,6 @@ public class CharacterManager : MonoBehaviour
             LoadAvailable();
             SetRecruitable();
         }
-        else
-        {
-            ResetEndGame();
-            Debug.Log("Not first Load");
-        }
     }
     private void Update()
     {
@@ -146,6 +141,7 @@ public class CharacterManager : MonoBehaviour
         UpdateImprisoned();
         ResetList();
         UpdateAvailable();
+        LoadAvailable();
         SetRecruitable();
     }
 
