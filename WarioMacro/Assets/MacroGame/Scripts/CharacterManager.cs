@@ -16,6 +16,7 @@ public class CharacterManager : MonoBehaviour
     public List<Imprisoned> imprisonedCharacters = new List<Imprisoned>();
 
     public OutOfJailElement[] jailedUI = new OutOfJailElement[12];
+    public GameObject[] rows = new GameObject[6];
     
     [SerializeField] private LifeBar life;
 
@@ -56,6 +57,8 @@ public class CharacterManager : MonoBehaviour
 
     public void SetJailed()
     {
+        foreach (var go in rows) go.SetActive(true);
+        var count = 0;
         foreach (var element in jailedUI)
         {
             if(imprisonedCharacters.Any(i =>i.character == element.character))
@@ -67,8 +70,23 @@ public class CharacterManager : MonoBehaviour
             {
                 element.gameObject.SetActive(false);
             }
-        }    
+            
+        }
+        SetRowsUI();
     }
+
+    public void SetRowsUI()
+    {
+        foreach (var go in rows)
+        {
+            if (go.transform.GetChild(0).gameObject.activeSelf == false &&
+                go.transform.GetChild(1).gameObject.activeSelf == false)
+            {
+                go.SetActive(false);
+            }
+        }
+    }
+    
     private void Start()
     {
         if (IsFirstLoad)
