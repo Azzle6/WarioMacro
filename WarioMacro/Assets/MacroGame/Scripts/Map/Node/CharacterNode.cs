@@ -28,11 +28,13 @@ public class CharacterNode : MonoBehaviour
 
     private void Setup()
     {
+        Debug.Log(CharacterManager.instance.recruitableCharacters);
         foreach (Character chara in CharacterManager.instance.recruitableCharacters)
         {
             if (chara.characterType == type)
             {
                 currentChara = chara;
+                //Debug.Log(currentChara.PuppetPrefab.name);
                 Instantiate(currentChara.PuppetPrefab, CharacterEmplacement.transform);
                 return;
             }

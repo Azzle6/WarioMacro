@@ -123,6 +123,7 @@ public class CharacterManager : MonoBehaviour
 
     public void ResetEndGame()
     {
+        Debug.Log("ResetList");
         UpdateImprisoned();
         ResetList();
         UpdateAvailable();

@@ -4423,8 +4423,10 @@ MonoBehaviour:
   - MG_ULC_Scene_TacticMagic
   - MG_ULA_EscapeFromThem
   - MG_NAA_Scene_ChainedFist
+  stopLoop: 0
   runChronometer: 0
   chronometer: 0
+  WantToContinue: 0
 --- !u!4 &1749864761
 Transform:
   m_ObjectHideFlags: 0
@@ -4475,8 +4477,10 @@ MonoBehaviour:
   mainMenuBuildIndex: 0
   macroObjects: []
   sceneNames: []
+  stopLoop: 0
   runChronometer: 0
   chronometer: 0
+  WantToContinue: 0
 --- !u!114 &1749864763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4517,7 +4521,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09c158129cea9cd4f9fcddd2477def36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameConfig: {fileID: 11400000, guid: 3eb3fccf2c11a9347b96f0ec0c8cb566, type: 2}
+  gameControllerSO: {fileID: 11400000, guid: 3eb3fccf2c11a9347b96f0ec0c8cb566, type: 2}
   bpmSettingsSO: {fileID: 11400000, guid: 996be0bf0d7ce5346a498077aa92f7c6, type: 2}
 --- !u!114 &1749864767
 MonoBehaviour:
@@ -4533,17 +4537,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   phaseFloorThresholds: 0500000008000000
   settingsManager: {fileID: 1749864766}
-  config: {fileID: 11400000, guid: 3eb3fccf2c11a9347b96f0ec0c8cb566, type: 2}
+  controllerSO: {fileID: 11400000, guid: 3eb3fccf2c11a9347b96f0ec0c8cb566, type: 2}
   mapParent: {fileID: 2053484115}
   recruitmentMap: {fileID: 1111097173}
   astralPathMap: {fileID: 356356310}
   mapPrefabList:
   - {fileID: 481867903098265975, guid: 73e983d1f0c38f64d83394487db797cd, type: 3}
   - {fileID: 481867903098265975, guid: 28e2a6588abd032498e671b3519335a2, type: 3}
-  - {fileID: 481867903098265975, guid: cef2413d008fb3748a4aaa6479afc27d, type: 3}
   - {fileID: 481867903098265975, guid: 36b53a81fbb819347be2a0a9ac75e1e3, type: 3}
   - {fileID: 481867903098265975, guid: 94043741a53f9ba4db35e7fde654c24e, type: 3}
-  - {fileID: 481867903098265975, guid: d3025b160099adf45992146a071863de, type: 3}
   - {fileID: 481867903098265975, guid: 617e424176f278e42a14d52b1deafe04, type: 3}
   - {fileID: 481867903098265975, guid: 9c36020b248eb7e4a801e791a384c749, type: 3}
   - {fileID: 481867903098265975, guid: b30442333042d3c4d8b024e16368ff63, type: 3}
@@ -4581,8 +4583,10 @@ MonoBehaviour:
   mainMenuBuildIndex: 0
   macroObjects: []
   sceneNames: []
+  stopLoop: 0
   runChronometer: 0
   chronometer: 0
+  WantToContinue: 0
   skipRecruitment: 0
   canFinishRecruitment: 0
   alarmGO: {fileID: 2023252415}
