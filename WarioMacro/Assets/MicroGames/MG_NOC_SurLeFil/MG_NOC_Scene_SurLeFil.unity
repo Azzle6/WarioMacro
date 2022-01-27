@@ -305,6 +305,54 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &277173909
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 277173910}
+  - component: {fileID: 277173911}
+  m_Layer: 0
+  m_Name: Global Volume Win
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &277173910
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 277173909}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 7.777778, y: -1.1111112, z: 0}
+  m_LocalScale: {x: 1.1111112, y: 1.1111112, z: 0}
+  m_Children: []
+  m_Father: {fileID: 1429482993}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &277173911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 277173909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isGlobal: 1
+  priority: 0
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: 02d68b73b012afc4eba010f624dbac46, type: 2}
 --- !u!1 &277429293
 GameObject:
   m_ObjectHideFlags: 0
@@ -711,7 +759,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -200}
+  m_AnchoredPosition: {x: -60, y: -200}
   m_SizeDelta: {x: 500, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &373289795
@@ -727,7 +775,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.9882353, g: 0.5921569, b: 0.12156863, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -735,7 +783,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 7935e33af6df95445929b0bcd7e8f317, type: 3}
     m_FontSize: 200
     m_FontStyle: 0
     m_BestFit: 0
@@ -1393,7 +1441,6 @@ MonoBehaviour:
   winner: {fileID: 373289793}
   looser: {fileID: 1520111275}
   animator: {fileID: 1429482994}
-  fallingTime: 1
   grincements:
   - {fileID: 8300000, guid: 2642ab4101b5d3444bdd31d60cafca8c, type: 3}
   - {fileID: 8300000, guid: 23d868db901b7ac408467e4d3c6e8960, type: 3}
@@ -1406,6 +1453,8 @@ MonoBehaviour:
   spriteRender: {fileID: 1429482992}
   sprite1: {fileID: 21300000, guid: af0274577e983934dbcf5c313e7d0828, type: 3}
   sprite2: {fileID: 21300000, guid: c13fd32b7607fb443a48d027f8334a71, type: 3}
+  sprite3: {fileID: 21300000, guid: 0fd9a206697f86e4b9941bb72f71f4e5, type: 3}
+  backGround: {fileID: 966937358}
 --- !u!54 &1429482991
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1487,6 +1536,7 @@ Transform:
   - {fileID: 573938358}
   - {fileID: 717534279}
   - {fileID: 81916942}
+  - {fileID: 277173910}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1600,8 +1650,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -200}
-  m_SizeDelta: {x: 500, y: 300}
+  m_AnchoredPosition: {x: -60, y: -200}
+  m_SizeDelta: {x: 700, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1520111277
 MonoBehaviour:
@@ -1616,7 +1666,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.16862746, g: 0.87058824, b: 0.91764706, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1624,8 +1674,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 200
+    m_Font: {fileID: 12800000, guid: 7935e33af6df95445929b0bcd7e8f317, type: 3}
+    m_FontSize: 300
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0

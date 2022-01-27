@@ -39,25 +39,27 @@ namespace MiniGame.DeadPoule
         [Space, SerializeField] private GameObject[] buttons;
         [SerializeField] private Transform buttonSequenceStart;
 
-        private Difficulty difficulty;
-        private int countDownTracker = 3;
+        public static Difficulty Difficulty { get; private set; }
+        private int countDownTracker = 2;
 
         private List<string> buttonsInternalName = new List<string> { "NOC3_A", "NOC3_B", "NOC3_X", "NOC3_Y" };
 
         private byte[] internalSequence;
         private byte[] playerSequence;
         private int rngTracker;
-        private int playerSequenceTracker;
+        public static int PlayerSequenceTracker { get; private set; }
 
-        private bool hasFailed; // because |failed| < |successful|
         private GameObject[] buttonReferences;
-        private GameState gameState;
+        public static GameState GameState { get; private set; }
 
         private bool doneOnce;
-        private EventSystem eventSystem;
-        private byte values;
 
-        public static bool HasWon { get; set; }
+        public static bool HasWon { get; private set; }
+        public static bool FailedSequenceBeforeEnd { get; private set; }
+
+
+        // DEBUG
+        private int playerSequenceTrackerDebug;
 
         private void OnEnable()
         {
@@ -71,14 +73,15 @@ namespace MiniGame.DeadPoule
 
         private void Start()
         {
-            difficulty = gameConfig.currentDifficulty == 1 ? Difficulty.Easy : gameConfig.currentDifficulty == 2 ? Difficulty.Medium : Difficulty.Hard;
-
+            FailedSequenceBeforeEnd = false; 
+            PlayerSequenceTracker = 0; 
+            Difficulty = gameConfig.currentDifficulty == 1 ? Difficulty.Easy : gameConfig.currentDifficulty == 2 ? Difficulty.Medium : Difficulty.Hard;
             HasWon = false;
-            gameState = GameState.Showing;
+            GameState = GameState.Showing;
 
-            internalSequence = new byte[(int)difficulty];
-            playerSequence = new byte[(int)difficulty];
-            buttonReferences = new GameObject[(int)difficulty];
+            internalSequence = new byte[(int)Difficulty];
+            playerSequence = new byte[(int)Difficulty];
+            buttonReferences = new GameObject[(int)Difficulty];
 
             chicken.SetActive(false);
             defaultGraphics.SetActive(false);
@@ -94,7 +97,8 @@ namespace MiniGame.DeadPoule
 
         private void Update()
         {
-            if (gameState == GameState.Playing)
+            playerSequenceTrackerDebug = PlayerSequenceTracker;
+            if (GameState == GameState.Playing)
             {
                 ProcessPlayerInputs();
             }
@@ -103,7 +107,7 @@ namespace MiniGame.DeadPoule
 
         private void ShowRandomButtonSequence() 
         {
-            for (int i = 0; i < (int)difficulty; i++)
+            for (int i = 0; i < (int)Difficulty; i++)
             {
                 int index = Random.Range(0, buttons.Length - 1);
 
@@ -131,7 +135,7 @@ namespace MiniGame.DeadPoule
             }
             else
             {
-                gameState = GameState.Playing;
+                GameState = GameState.Playing;
 
                 if (!doneOnce)
                 {
@@ -147,7 +151,7 @@ namespace MiniGame.DeadPoule
 
         private void ProcessPlayerInputs()
         {
-            if (playerSequenceTracker > (int)difficulty - 1) return;
+            if (PlayerSequenceTracker > (int)Difficulty - 1) return;
 
             /* Debug.Log(eventSystem.currentSelectedGameObject.name);
 
@@ -159,7 +163,7 @@ namespace MiniGame.DeadPoule
                 }
             } */
 
-            // higly professional code
+            // highly professional code
             if (InputManager.GetKeyDown(ControllerKey.A))
             {
                 Check(buttonsInternalName.IndexOf("NOC3_A"));
@@ -180,14 +184,19 @@ namespace MiniGame.DeadPoule
 
         private void Check(int buttonIndex)
         {
-            playerSequence[playerSequenceTracker] = (byte)buttonIndex;
+            playerSequence[PlayerSequenceTracker] = (byte)buttonIndex;
 
-            if (playerSequence[playerSequenceTracker] == internalSequence[playerSequenceTracker])
+            if (playerSequence[PlayerSequenceTracker] == internalSequence[PlayerSequenceTracker])
             {
-                wand.transform.Rotate(new Vector3(0f, 0f, -40f / (int)difficulty));
+                wand.transform.Rotate(new Vector3(0f, 0f, -40f / (int)Difficulty));
+            }
+            else
+            {
+                FailedSequenceBeforeEnd = true;
+                HasWon = false;
             }
 
-            playerSequenceTracker++;
+            PlayerSequenceTracker++;
         }
 
         private void HideButtonSequence()
@@ -205,37 +214,34 @@ namespace MiniGame.DeadPoule
 
         private void ReceiveEngGameEvent()
         {
-            byte[] values = new byte[(byte)difficulty];
-            for (int i = 0; i < values.Length; i++)
+            if (!FailedSequenceBeforeEnd)
             {
-                values[i] = playerSequence[i];
+                byte[] values = new byte[(byte)Difficulty];
+                for (int i = 0; i < values.Length; i++)
+                {
+                    values[i] = playerSequence[i];
+                }
+
+                HasWon = checkEquality(internalSequence, values);
             }
-
-
-            hasFailed = !checkEquality(internalSequence, values);
-
 
             // send to macro game
             // WIN
-            if (!hasFailed)
+            if (HasWon)
             {
                 wand.transform.rotation = Quaternion.Euler(0f, 0f, -5f); // badass audiovisual feedback with a "yeaaa" sound
                 chicken.SetActive(true);
                 defaultGraphics.SetActive(false);
                 Instantiate(winVFX, transform.position, Quaternion.identity);
                 NOC3_AudioManager.PlaySound(winSound.clip, winSound.volume, winSound.delay);
-
-                HasWon = true;
             }
             // LOSE
             else
             {
                 NOC3_AudioManager.PlaySound(loseSound.clip, loseSound.volume, loseSound.delay);
-
-                HasWon = false;
             }
 
-            gameState = GameState.Unloading;
+            GameState = GameState.Unloading;
         }
     }
 }

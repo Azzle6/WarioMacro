@@ -22,7 +22,7 @@ public class ULA3_UIManager : MonoBehaviour, ITickable
     [SerializeField] private Image level;
 
     [SerializeField] private Transform parent;
-    [SerializeField] private Transform viseur;
+    [SerializeField] private RectTransform viseur;
     
     [SerializeField] private GameObject cross;
     
@@ -32,34 +32,45 @@ public class ULA3_UIManager : MonoBehaviour, ITickable
     private bool result;
     private int random;
     private int pressed=0;
+    private Texture2D test;
+    private Color color;
     void Start()
     {
         GameManager.Register();
         GameController.Init(this);
         random = Random.Range(0, 3);
+        Debug.Log("random :"+random);
         switch (GameController.difficulty)
         {
             case 1:
                 target = 1;
                 level.sprite = levelEasy[random];
+                test = level.sprite.texture;
                 viseurAnim.Play("ViseurEasy"+(random+1));
+                Debug.Log("anim :"+(random+1));
                 break;
             case 2:
                 target = 1;
                 level.sprite = levelMedium[random];
+                test = level.sprite.texture;
                 viseurAnim.Play("ViseurMedium"+(random+1));
+                Debug.Log("anim :"+(+random+1));
                 break;
             case 3:
-                target = 2;
+                target = 1;
                 level.sprite = levelHard[random];
+                test = level.sprite.texture;
                 viseurAnim.Play("ViseurHard"+(random+1));
+                Debug.Log("anim :"+(random+1));
                 break;
         }
     }
 
     private void Update()
     {
-        if (InputManager.GetKeyDown(ControllerKey.X))
+        color = test.GetPixel(Mathf.FloorToInt(viseur.anchoredPosition.x),
+            Mathf.FloorToInt(viseur.anchoredPosition.y));
+        if (InputManager.GetKeyDown(ControllerKey.X) || InputManager.GetKeyDown(ControllerKey.A) || InputManager.GetKeyDown(ControllerKey.B) || InputManager.GetKeyDown(ControllerKey.Y) )
         {
             if (!finish)
             {
@@ -67,138 +78,14 @@ public class ULA3_UIManager : MonoBehaviour, ITickable
                 Canvas.Instantiate(cross, viseur.position, Quaternion.identity, parent);
             }
             
-            switch (GameController.difficulty)
+            if (color == Color.red)
             {
-                case 1:
-                    switch (random+1)
-                    {
-                        case 1:
-                            if (GameController.currentTick == 4)
-                            {
-                                target = 0;
-                            }
-                            else
-                            {
-                                finish = true;
-                            }
-
-                            break;
-                        case 2:
-                            if (GameController.currentTick == 3)
-                            {
-                                target = 0;
-                            }
-                            else
-                            {
-                                finish = true;
-                            }
-                            break;
-                        case 3:
-                            if (GameController.currentTick == 4)
-                            {
-                                target = 0;
-                            }
-                            else
-                            {
-                                finish = true;
-                            }
-                            break;
-                    }
-                    break;
-                    
-                case 2:
-                    switch (random+1)
-                    {
-                        case 1:
-                            if (GameController.currentTick == 3)
-                            {
-                                target = 0;
-                            }
-                            else
-                            {
-                                finish = true;
-                            }
-
-                            break;
+                target = 0;
                         
-                        case 2:
-                            if (GameController.currentTick == 3)
-                            {
-                                target = 0;
-                            }
-                            else
-                            {
-                                finish = true;
-                            }
-
-                            break;
-                        
-                        case 3:
-                            if (GameController.currentTick == 4)
-                            {
-                                target = 0;
-                            }
-                            else
-                            {
-                                finish = true;
-                            }
-
-                            break;
-                    }
-                    break;
-                case 3:
-                    switch (random+1)
-                    {
-                        case 1:
-                            if (GameController.currentTick == 1 && pressed==0)
-                            {
-                                target -= 1;
-                                pressed++;
-                            } else if (GameController.currentTick == 4 && pressed==1)
-                            {
-                                target -= 1;
-                                pressed++;
-                            }else
-                            {
-                                pressed++;
-                            }
-
-                            break;
-                        
-                        case 2:
-                            if (GameController.currentTick == 2 && pressed==0)
-                            {
-                                target -= 1;
-                                pressed++;
-                            } else if (GameController.currentTick == 4 && pressed==1)
-                            {
-                                target -= 1;
-                                pressed++;
-                            }else
-                            {
-                                pressed++;
-                            }
-
-                            break;
-                        
-                        case 3:
-                            if (GameController.currentTick == 0 && pressed==0)
-                            {
-                                target -= 1;
-                                pressed++;
-                            } else if (GameController.currentTick == 3 && pressed==1)
-                            {
-                                target -= 1;
-                                pressed++;
-                            }else
-                            {
-                                pressed++;
-                            }
-
-                            break;
-                    }
-                    break;
-
+            }
+            else
+            {
+                finish = true;
             }
         }
 
@@ -210,8 +97,6 @@ public class ULA3_UIManager : MonoBehaviour, ITickable
 
     public void OnTick()
     {
-        Debug.Log(GameController.currentTick);
-        
         if (GameController.currentTick == 5 && !finish)
         {
             finish = true;
@@ -237,7 +122,6 @@ public class ULA3_UIManager : MonoBehaviour, ITickable
         if (GameController.currentTick == tickend + 3)
         {
             GameController.FinishGame(result);
-            Debug.Log(result);
         }
     }
 }
