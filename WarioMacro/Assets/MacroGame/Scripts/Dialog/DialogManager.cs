@@ -146,6 +146,12 @@ public class DialogManager : MonoBehaviour
     private void LastDialog()
     {
         ButtonsParent.SetActive(true);
+        if (ButtonsParent.transform.childCount > 0)
+        {
+            EventSystem.current.SetSelectedGameObject(ButtonsParent.transform.GetChild(0).gameObject);
+            ButtonsParent.transform.GetChild(0).GetComponent<Animator>().Play("Dialog_ChoiceButton_Hover");
+        }
+        
     }
 
     private void FinishDialog()
@@ -211,6 +217,7 @@ public class DialogManager : MonoBehaviour
         
         ButtonsParent.SetActive(false);
         ButtonsParent.GetComponent<EventSystemFocus>().firstSelected = buttons[0];
+        
         return buttons.ToArray();
     }
     

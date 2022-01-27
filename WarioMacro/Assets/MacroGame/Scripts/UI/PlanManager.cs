@@ -2,6 +2,7 @@ using System;
 using GameTypes;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -16,10 +17,10 @@ public class PlanManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI priceText;
     [SerializeField] private TextMeshProUGUI startGameText;
     [SerializeField] private Button startGameButton;
+    [SerializeField] private Animator startGameButtonAnimator;
     [SerializeField] private SpriteListSO domainsVisu;
     [SerializeField] private ScoreMultiplier[] multiplierList;
     [SerializeField] private Animator[] multiplierAnimators;
-    [SerializeField] private PlanButton[] buttons;
 
     private ScoreMultiplier currentSelectedMultiplier;
     private bool isOpen;
@@ -32,8 +33,12 @@ public class PlanManager : MonoBehaviour
         AudioManager.MacroPlaySound("MapEnter");
         isOpen = true;
         InputManager.lockInput = true;
+        currentSelectedMultiplier = multiplierList[0];
+        scoreManager.scoreMultiplier = currentSelectedMultiplier.multiplierValue;
+        multiplierAnimators[0].Play("Plan_Multiplier_Selected");
         UpdateGOButton();
         UpdateDomains();
+        
     }
 
     public void ClosePlan(bool playSound)
@@ -135,17 +140,21 @@ public class PlanManager : MonoBehaviour
         if (CharacterManager.instance.playerTeam.Count < 4)
         {
             startGameText.text = (4 - CharacterManager.instance.playerTeam.Count) + " more members to start...";
+            EventSystem.current.SetSelectedGameObject(multiplierAnimators[0].gameObject);
             startGameButton.interactable = false;
         }
         else if (scoreManager.currentMoney < currentSelectedMultiplier.boostPrice)
         {
             startGameText.text = "Too expensive !";
+            EventSystem.current.SetSelectedGameObject(multiplierAnimators[0].gameObject);
             startGameButton.interactable = false;
         }
         else
         {
             startGameText.text =  "Go !";
             startGameButton.interactable = true;
+            EventSystem.current.SetSelectedGameObject(startGameButton.gameObject);
+            startGameButtonAnimator.SetBool("hovered", true);
         }
 
     }

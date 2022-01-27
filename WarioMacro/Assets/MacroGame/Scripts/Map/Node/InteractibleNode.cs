@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -19,7 +20,12 @@ public class InteractibleNode : MonoBehaviour
 
     public void EndGame()
     {
-        StartCoroutine(GameController.instance.ToggleEndGame(true));
+        StartCoroutine(WaitForEndGame());
+    }
+
+    private IEnumerator WaitForEndGame()
+    {
+        yield return StartCoroutine(GameController.instance.ToggleEndGame(true));
         //NotDestroyedScript.instance.EndRun(true);
         GameController.instance.InteractiveEventEnd();
     }
