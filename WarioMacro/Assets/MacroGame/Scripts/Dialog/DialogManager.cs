@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class DialogManager : MonoBehaviour
@@ -50,6 +52,7 @@ public class DialogManager : MonoBehaviour
     private int curIndex;
     private string[] currentCharaDialog;
     public bool isCharaDialog;
+    public TMP_Text nametext;
 
     private void Awake()
     {
@@ -72,9 +75,15 @@ public class DialogManager : MonoBehaviour
         if (curDial.chara != null)
         {
             charaSprite.sprite = curDial.chara;
+            nametext.text = curDial.name;
             charaSprite.gameObject.SetActive(true);
         }
-        else charaSprite.gameObject.SetActive(false);
+        else
+        {
+            if(curDial.chara != null) charaSprite.sprite = curDial.chara;
+            charaSprite.gameObject.SetActive(false);
+            nametext.text = curDial.name;
+        }
         
         isInDialog = true;
         dialogGO.SetActive(true);
@@ -130,6 +139,13 @@ public class DialogManager : MonoBehaviour
     private void FinishDialog()
     {
         StopCoroutine(currentCoroutine);
+
+        StartCoroutine(FinishWithTiming());
+    }
+
+    IEnumerator FinishWithTiming()
+    {
+        yield return new WaitForSeconds(0.4f);
         currentCoroutine = null;
         dialogGO.SetActive(false);
         curIndex = 0;
@@ -141,8 +157,9 @@ public class DialogManager : MonoBehaviour
             but.GetComponent<Button>().onClick.RemoveAllListeners();
             Destroy(but);
         }
-
     }
+    
+    private 
 
     GameObject[] SetupButtons()
     {
@@ -154,8 +171,10 @@ public class DialogManager : MonoBehaviour
             
             Button butComponent = but.GetComponent<Button>();
             but.GetComponentInChildren<TMP_Text>().text = resp.ButtonResponse;
+            UnityEvent butCurEvent = butComponent.onClick;
             butComponent.onClick = resp.ButtonEvent;
             butComponent.onClick.AddListener(FinishDialog);
+            butComponent.onClick.AddListener(butCurEvent.Invoke);
 
             buttons.Add(but);
             
