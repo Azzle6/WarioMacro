@@ -115,11 +115,11 @@ public class GameController : Ticker
             AudioManager.StopMacroSound("VictoryLoop",0);
         else
             AudioManager.StopMacroSound("DefeatLoop",0);
-        endScoreUI.CloseEndScore();
+        
         //NotDestroyedScript.isAReload = true;
         AsyncOperation asyncLoadLvl = SceneManager.LoadSceneAsync(1, LoadSceneMode.Single);
         while (!asyncLoadLvl.isDone) yield return null;
-
+        endScoreUI.CloseEndScore();
         CharacterManager.IsFirstLoad = false;
         //Debug.Log("Oui");
         runChronometer = false;
