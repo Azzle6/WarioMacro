@@ -32,11 +32,13 @@ public class PlanManager : MonoBehaviour
         UpdateDomains();
     }
 
-    public void ClosePlan()
+    public void ClosePlan(bool playSound)
     {
         PlanObject.SetActive(false);
         isOpen = false;
-        AudioManager.MacroPlaySound("MapExit");
+        if (playSound)
+            AudioManager.MacroPlaySound("MapExit");
+        
         InputManager.lockInput = false;
         GameController.OnInteractionEnd();
         DisableDomains();
@@ -145,7 +147,7 @@ public class PlanManager : MonoBehaviour
 
     private void Update()
     {
-        if(InputManager.GetKeyDown(ControllerKey.B, true) && isOpen) ClosePlan();
+        if(InputManager.GetKeyDown(ControllerKey.B, true) && isOpen) ClosePlan(true);
     }
 }
 

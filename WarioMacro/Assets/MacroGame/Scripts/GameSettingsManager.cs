@@ -25,7 +25,8 @@ public class GameSettingsManager : MonoBehaviour
         AudioManager.MacroPlaySound("SpeedUp", 0);
         if (gameControllerSO.currentGameSpeed == bpmSettingsSO.maxBPM)
         {
-            AudioManager.MacroPlayRandomSound("HighLimitVoices", 0);
+            AudioManager.MacroPlayRandomSound("HighLimitVoices");
+            Debug.Log("play sound");
         }
         else
         {
