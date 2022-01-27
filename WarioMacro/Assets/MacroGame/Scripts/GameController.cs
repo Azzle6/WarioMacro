@@ -138,10 +138,8 @@ public class GameController : Ticker
             {
                 break;
             }
-            Debug.Log("NodeSelect");
 
             yield return StartCoroutine(player.MoveToPosition(map.currentPath.wayPoints));
-            Debug.Log("EndDisplacement");
             var nodeMicroGame = map.currentNode.GetComponent<BehaviourNode>();
 
 
