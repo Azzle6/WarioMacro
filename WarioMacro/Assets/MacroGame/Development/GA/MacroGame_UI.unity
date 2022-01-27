@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311918, g: 0.3807398, b: 0.35872716, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -6811,7 +6811,6 @@ MonoBehaviour:
   settingsManager: {fileID: 1749864766}
   mapManager: {fileID: 1749864767}
   lifeBar: {fileID: 1749864765}
-  resultPanelPlaceholder: {fileID: 0}
   rewardChart: {fileID: 0}
   macroGameCanvasAnimator: {fileID: 2008032679}
   alarm: {fileID: 0}
@@ -6821,7 +6820,6 @@ MonoBehaviour:
   menu: {fileID: 0}
   transitionController: {fileID: 1749864762}
   keywordManager: {fileID: 1112552556}
-  mainMenuBuildIndex: 0
   macroObjects:
   - {fileID: 2053484114}
   - {fileID: 0}
@@ -6868,6 +6866,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 099982473ecba8f4aa019be946136936, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  transitionGO: {fileID: 0}
   director: {fileID: 1696372370}
   timerGO: {fileID: 1287644084}
 --- !u!114 &1749864763
@@ -6994,7 +6993,6 @@ MonoBehaviour:
   settingsManager: {fileID: 0}
   mapManager: {fileID: 0}
   lifeBar: {fileID: 0}
-  resultPanelPlaceholder: {fileID: 0}
   rewardChart: {fileID: 0}
   macroGameCanvasAnimator: {fileID: 0}
   alarm: {fileID: 0}
@@ -7004,7 +7002,6 @@ MonoBehaviour:
   menu: {fileID: 0}
   transitionController: {fileID: 0}
   keywordManager: {fileID: 0}
-  mainMenuBuildIndex: 0
   macroObjects: []
   sceneNames: []
   stopLoop: 0
@@ -7068,22 +7065,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   imprisonedCharacters: []
-  jailedUI:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   life: {fileID: 0}
-  isOpen: 0
-  jailPanel: {fileID: 0}
 --- !u!114 &1749864770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9435,6 +9417,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2008032678}
     m_Modifications:
+    - target: {fileID: 2846748954985033218, guid: ab3ae3b527c99934cb849c9a07833f5b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3144464906435573225, guid: ab3ae3b527c99934cb849c9a07833f5b, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -9525,7 +9511,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3144464906435573226, guid: ab3ae3b527c99934cb849c9a07833f5b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5956544827555860073, guid: ab3ae3b527c99934cb849c9a07833f5b, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6215284970032512271, guid: ab3ae3b527c99934cb849c9a07833f5b, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6215284970032512271, guid: ab3ae3b527c99934cb849c9a07833f5b, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ab3ae3b527c99934cb849c9a07833f5b, type: 3}
@@ -9536,6 +9534,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2008032678}
     m_Modifications:
+    - target: {fileID: 4528065915671411589, guid: c370440cd4c97c94288004b6075eb289, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: b1667f76cca8dc9489a8c0e93e547bb0, type: 2}
+    - target: {fileID: 4528065915671411589, guid: c370440cd4c97c94288004b6075eb289, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 5239046674449089943, guid: b1667f76cca8dc9489a8c0e93e547bb0, type: 2}
     - target: {fileID: 4528065916131963889, guid: c370440cd4c97c94288004b6075eb289, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -9623,6 +9629,10 @@ PrefabInstance:
     - target: {fileID: 4528065916131963890, guid: c370440cd4c97c94288004b6075eb289, type: 3}
       propertyPath: m_Name
       value: Transition
+      objectReference: {fileID: 0}
+    - target: {fileID: 4528065916131963890, guid: c370440cd4c97c94288004b6075eb289, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c370440cd4c97c94288004b6075eb289, type: 3}
