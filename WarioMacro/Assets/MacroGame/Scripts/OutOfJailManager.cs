@@ -22,13 +22,17 @@ public class OutOfJailManager : MonoBehaviour
     private void Update()
     {
         if (!isOpen) return;
-        if (rows[currentRowId] != EventSystem.current.currentSelectedGameObject.transform.parent.gameObject)
+        GameObject currentGo = EventSystem.current.currentSelectedGameObject;
+
+        if (currentGo == null) 
+            return;
+        if (rows[currentRowId] != currentGo.transform.parent.gameObject)
         {
             lastRowId = currentRowId;
             for(int i = 0;i<rows.Length;i++)
             {
                 
-                if (rows[i] == EventSystem.current.currentSelectedGameObject.transform.parent.gameObject)
+                if (rows[i] == currentGo.transform.parent.gameObject)
                     currentRowId = i;
             }
         }
@@ -68,6 +72,7 @@ public class OutOfJailManager : MonoBehaviour
             if(CharacterManager.instance.imprisonedCharacters.Any(i =>i.character == element.character))
             {
                 element.gameObject.SetActive(true);
+                Debug.Log("obj active");
                 element.SetJail(CharacterManager.instance.imprisonedCharacters.First(i =>i.character == element.character));
             }
             else
@@ -76,8 +81,12 @@ public class OutOfJailManager : MonoBehaviour
             }
         }
         SetRowsUI();
+        Debug.Log("obj uwu");
         if(jailedUI.Any(c => c.gameObject.activeSelf))
-            eventSystemFocus.firstSelected = jailedUI.First(c => c.gameObject.activeSelf).gameObject;
+        {
+            Debug.Log("selected");
+            EventSystem.current.SetSelectedGameObject(jailedUI.First(c => c.gameObject.activeSelf).gameObject);
+        }
     }
 
     public void SetRowsUI()
