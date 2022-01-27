@@ -24,11 +24,17 @@ public class NAB2_Shot : MonoBehaviour
 
     public AudioClip shot, robot;
 
+
+    private void Start()
+    {
+        win = false;
+    }
     void Update()
     {
         if (shotFired == false)
         {
-            if (InputManager.GetKeyDown(ControllerKey.A) == true && targetAcquired == true)
+            if ((InputManager.GetKeyDown(ControllerKey.A) || InputManager.GetKeyDown(ControllerKey.B) 
+            || InputManager.GetKeyDown(ControllerKey.Y) || InputManager.GetKeyDown(ControllerKey.X)) && targetAcquired == true)
             {
                 spriteRendering.sprite = shooting;
                 win = true;
@@ -37,7 +43,8 @@ public class NAB2_Shot : MonoBehaviour
                 AudioManager.PlaySound(robot, 0.3f, 0.2f);
             }
 
-            if (InputManager.GetKeyDown(ControllerKey.A) == true && targetAcquired != true)
+            if ((InputManager.GetKeyDown(ControllerKey.A) || InputManager.GetKeyDown(ControllerKey.B)
+            || InputManager.GetKeyDown(ControllerKey.Y) || InputManager.GetKeyDown(ControllerKey.X)) && targetAcquired != true)
             {
                 shotFired = true;
                 FailAnimation();

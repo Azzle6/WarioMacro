@@ -95,6 +95,7 @@ public class ULB2_Slider : MonoBehaviour, ITickable
             sliderValue = slider.value;
             //GRL_Audio.instance.audio[0].Stop();
             TestValue();
+            Debug.Log("handle : " + handle.localPosition);
         }
     }
 
@@ -170,5 +171,4 @@ public class ULB2_Slider : MonoBehaviour, ITickable
     {
         audio[index].Stop();
     }
-
 }
