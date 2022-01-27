@@ -111,7 +111,7 @@ public class DialogManager : MonoBehaviour
         for (int i = 0; i < dialogToDisplay[curIndex].Length; i++)
         {
             textZone.text = string.Concat(textZone.text, dialogToDisplay[curIndex][i]);
-            yield return new WaitForSeconds(0.02f);
+            yield return new WaitForSecondsRealtime(0.01f);
         }
         
         if(curIndex < curDial.dialogs.Length - 1) curIndex++;
@@ -143,11 +143,17 @@ public class DialogManager : MonoBehaviour
     {
         StopCoroutine(currentCoroutine);
 
+        foreach (GameObject but in Buttons)
+        {
+            but.GetComponent<Button>().interactable = false;
+        }
+        
         StartCoroutine(FinishWithTiming());
     }
 
     IEnumerator FinishWithTiming()
     {
+        
         yield return new WaitForSeconds(0.4f);
         currentCoroutine = null;
         dialogGO.SetActive(false);
