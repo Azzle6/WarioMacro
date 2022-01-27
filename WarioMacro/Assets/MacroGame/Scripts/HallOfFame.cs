@@ -10,10 +10,7 @@ public class HallOfFame : MonoBehaviour
 {
     public Run[] hall;
     public Run currentRun;
-    public GameObject hallPanel;
-    public RankElementHoF[] ranks = new RankElementHoF[10]; 
     
-    private bool isOpen;
     
     [Serializable]
     public class Run
@@ -49,6 +46,7 @@ public class HallOfFame : MonoBehaviour
     {
         foreach (var c in team)
         {
+            Debug.Log(c);
             currentRun.team.Add(c,true);
         }
     }
@@ -71,11 +69,11 @@ public class HallOfFame : MonoBehaviour
         {
             Run run = new Run();
             var temp2 = item.Split('/');
-            Debug.Log(item);
+            //Debug.Log(item);
             var team = temp2[2].Split(':');
             run.score = float.Parse(temp2[0]);
             run.time = float.Parse(temp2[1]);
-            Debug.Log(temp2[2]);
+            //Debug.Log(temp2[2]);
             foreach (var couple in team)
             {
                 var temp3 = couple.Split('.');
@@ -121,34 +119,5 @@ public class HallOfFame : MonoBehaviour
     }
 
 
-    public void setRanksUI()
-    {
-        var i = 0;
-        foreach (var rank in hall)
-        {
-            ranks[i].gameObject.SetActive(true);
-            ranks[i].SetRank(rank);
-            i++;
-        }
-    }
     
-    private void Update()
-    {
-        if(InputManager.GetKeyDown(ControllerKey.B, true) && isOpen) CloseHall();
-    }
-    public void OpenHall()
-    {
-        hallPanel.SetActive(true);
-        isOpen = true;
-        InputManager.lockInput = true;
-        setRanksUI();
-    }
-
-    public void CloseHall()
-    {
-        hallPanel.SetActive(false);
-        InputManager.lockInput = false;
-        GameController.OnInteractionEnd();
-        AudioManager.MacroPlayRandomSound("BarmanExit");
-    }
 }

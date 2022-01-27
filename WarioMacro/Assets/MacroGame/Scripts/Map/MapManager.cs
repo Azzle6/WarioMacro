@@ -58,10 +58,14 @@ public class MapManager : MonoBehaviour
         currentMap = currentMapGO.GetComponent<Map>();
         currentMap.Load();
         floor++;
+        Debug.Log("Floor " + floor);
 
-        if (currentPhase < 2 && floor > phaseFloorThresholds[currentPhase])
+        switch (currentPhase)
         {
-            UpdatePhase();
+            case 0 when floor > phaseFloorThresholds[0]:
+            case 1 when floor > phaseFloorThresholds[0] + phaseFloorThresholds[1]:
+                UpdatePhase();
+                break;
         }
         
         GenerateMapNodesDomains(currentMap);
@@ -69,7 +73,7 @@ public class MapManager : MonoBehaviour
         return currentMap;
     }
 
-    public void GeneratePhaseFloorCount()
+    private void GeneratePhaseFloorCount()
     {
         phaseFloorThresholds[0] = Random.Range(controllerSO.firstPhaseMinFloorCount, controllerSO.firstPhaseMaxFloorCount + 1);
         phaseFloorThresholds[1] = Random.Range(controllerSO.secondPhaseMinFloorCount, controllerSO.secondPhaseMaxFloorCount + 1);
@@ -193,7 +197,6 @@ public class MapManager : MonoBehaviour
 
     private void UpdatePhase()
     {
-        PlayerPrefs.Save();
         if (currentPhase == 2)
         {
             Debug.LogError("Already at last phase (3)");
@@ -204,7 +207,6 @@ public class MapManager : MonoBehaviour
 
     private void RefillMapQueue()
     {
-        PlayerPrefs.Save();
         var rd = new System.Random();
         var currentList = new List<GameObject>(mapPrefabQueue);
 
