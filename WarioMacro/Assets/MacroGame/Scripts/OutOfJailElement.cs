@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -15,11 +16,12 @@ public class OutOfJailElement : MonoBehaviour
     EventSystemFocus test;
     
     private CharacterManager.Imprisoned imp;
+    private static readonly int selection = Animator.StringToHash("Selection");
 
 
     void Start()
     {
-        portrait.sprite = character.fullSizeSprite;
+        portrait.sprite = character.portraitSprite;
     }
     
     void Update()
@@ -29,14 +31,17 @@ public class OutOfJailElement : MonoBehaviour
     
     public void SetJail(CharacterManager.Imprisoned imprisoned)
     {
-        priceTMP.text = imprisoned.price.ToString() +"$";
+        priceTMP.text = imprisoned.price +"$";
         timeLeftTMP.text = imprisoned.turnLeft.ToString();
         imp = imprisoned;
     }
 
     public void ReleaseCharacter()
     {
-        CharacterManager.instance.FreeImprisoned(imp);
+        if (CharacterManager.instance.FreeImprisoned(imp))
+        {
+            animator.SetTrigger(selection);
+        }
     }
 
     public void SetSelected()
@@ -49,5 +54,11 @@ public class OutOfJailElement : MonoBehaviour
         {
             animator.SetBool("isSelected", false);
         }
+    }
+
+    [UsedImplicitly]
+    private void DisableElement()
+    {
+        gameObject.SetActive(false);
     }
 }

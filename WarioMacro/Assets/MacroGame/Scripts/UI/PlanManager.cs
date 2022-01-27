@@ -18,6 +18,7 @@ public class PlanManager : MonoBehaviour
     [SerializeField] private Button startGameButton;
     [SerializeField] private SpriteListSO domainsVisu;
     [SerializeField] private ScoreMultiplier[] multiplierList;
+    [SerializeField] private Image[] multiplierImages;
 
     private ScoreMultiplier currentSelectedMultiplier;
     private bool isOpen;
@@ -32,20 +33,27 @@ public class PlanManager : MonoBehaviour
         UpdateDomains();
     }
 
-    public void ClosePlan()
+    public void ClosePlan(bool playSound)
     {
         PlanObject.SetActive(false);
-        AudioManager.MacroPlaySound("MapExit");
+        isOpen = false;
+        if (playSound)
+            AudioManager.MacroPlaySound("MapExit");
+        
         InputManager.lockInput = false;
         GameController.OnInteractionEnd();
         DisableDomains();
     }
-    
+
     public void SelectMultiplier(int selectedMultIndex )
     {
         currentSelectedMultiplier = multiplierList[selectedMultIndex];
         scoreManager.scoreMultiplier = currentSelectedMultiplier.multiplierValue;
         UpdateGOButton();
+
+        multiplierImages[selectedMultIndex].color = new Color(1, 1, 1);
+        multiplierImages[(selectedMultIndex + 1) % 3].color = new Color(0.4f, 0.4f, 0.4f);
+        multiplierImages[(selectedMultIndex + 2) % 3].color = new Color(0.4f, 0.4f, 0.4f);
     }
 
     private void GenerateFloorCounts()
@@ -63,7 +71,7 @@ public class PlanManager : MonoBehaviour
             if (lowerLimit < 1)
                 lowerLimit = 1;
             int upperLimit = trueFloorCount + Random.Range(1, 3);
-            
+
             floorCountTexts[i].text = lowerLimit + " <> " + upperLimit;
         }
     }
@@ -73,16 +81,16 @@ public class PlanManager : MonoBehaviour
         for (int i = 0; i < MapMana.phaseDomainsArray.Length - 1; i++)
         {
             var normPhase = (NormalPhaseDomains) MapMana.phaseDomainsArray[i];
-            
+
             SetDomain(i, 0, domainsVisu.nodeSprites[normPhase.primaryDomain - SpecialistType.Brute]);
-            
+
             for (int j = 0; j < normPhase.secondaryDomains.Length; j++)
             {
                 SetDomain(i, 1 + j, domainsVisu.nodeSprites[normPhase.secondaryDomains[j] - SpecialistType.Brute]);
             }
         }
-        
-        
+
+
         LastPhaseDomains lastPhase = (LastPhaseDomains) MapMana.phaseDomainsArray[MapMana.phaseDomainsArray.Length - 1];
 
         for (var i = 0; i < lastPhase.primaryDomains.Length; i++)
@@ -131,9 +139,9 @@ public class PlanManager : MonoBehaviour
             startGameText.text =  "Go !";
             startGameButton.interactable = true;
         }
-        
+
     }
-    
+
     private void Start()
     {
         if(multiplierList != null) currentSelectedMultiplier = multiplierList[0];
@@ -144,7 +152,7 @@ public class PlanManager : MonoBehaviour
 
     private void Update()
     {
-        if(InputManager.GetKeyDown(ControllerKey.B, true) && isOpen) ClosePlan();
+        if(InputManager.GetKeyDown(ControllerKey.B, true) && isOpen) ClosePlan(true);
     }
 }
 

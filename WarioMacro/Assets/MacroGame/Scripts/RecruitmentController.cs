@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 // ReSharper disable once CheckNamespace
 public class RecruitmentController : GameController
 {
+    static public bool isInRecruitmentLoop;
     public bool skipRecruitment;
     public bool canFinishRecruitment;
     [SerializeField] private GameObject alarmGO;
@@ -44,17 +45,18 @@ public class RecruitmentController : GameController
 
     private void SetRecruitmentActive(bool state)
     {
+        isInRecruitmentLoop = state;
         alarmGO.SetActive(!state);
     }
 
     public void StopRecruitPhase()
     {
-        if (instance.characterManager.playerTeam.Count >= 4)
-        {
-            GameController.instance.hallOfFame.StartRun(instance.characterManager.playerTeam.ToArray());
-            SetRecruitmentActive(false);
-            canFinishRecruitment = true;
-        }
+        if (instance.characterManager.playerTeam.Count < 4) return;
+        
+        instance.hallOfFame.StartRun(instance.characterManager.playerTeam.ToArray());
+        SetRecruitmentActive(false);
+        AudioManager.MacroPlaySound("RunStart");
+        canFinishRecruitment = true;
     }
 
     public void SkipRecruitment()
