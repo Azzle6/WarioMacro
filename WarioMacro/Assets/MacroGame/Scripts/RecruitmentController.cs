@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 // ReSharper disable once CheckNamespace
 public class RecruitmentController : GameController
 {
+    static public bool isInRecruitmentLoop;
     public bool skipRecruitment;
     public bool canFinishRecruitment;
     [SerializeField] private GameObject alarmGO;
@@ -46,6 +47,7 @@ public class RecruitmentController : GameController
 
     private void SetRecruitmentActive(bool state)
     {
+        isInRecruitmentLoop = state;
         alarmGO.SetActive(!state);
     }
 
