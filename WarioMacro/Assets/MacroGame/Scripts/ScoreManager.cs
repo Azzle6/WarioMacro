@@ -13,9 +13,9 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI moneyBagsText;
 
     
-    public void AddMoney(int addedValue)
+    public void AddMoney(float addedValue)
     {
-        currentRunMoney += addedValue * scoreMultiplier;
+        currentRunMoney += (int) (addedValue * scoreMultiplier);
         ShowMoney();
         moneyBagsDirector.Play();
         AudioManager.MacroPlaySound("CashGain", 0);
@@ -36,11 +36,11 @@ public class ScoreManager : MonoBehaviour
     public bool Pay(int v)
     {
         if (v > currentMoney) return false;
-
-        PlayerPrefs.SetInt("PlayerMoney", currentMoney);
+        
         currentMoney -= v;
         moneyBagsText.text = currentMoney.ToString();
         moneyBagsDirector.Play(); // Lose money animation ?
+        PlayerPrefs.SetInt("PlayerMoney", currentMoney);
         AudioManager.MacroPlaySound("CashLose", 0);
         return true;
     }

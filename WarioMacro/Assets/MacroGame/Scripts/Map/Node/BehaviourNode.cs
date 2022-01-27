@@ -28,22 +28,31 @@ public class BehaviourNode : Node
         if (Random.Range(0f, 100f) < primaryDomainPercentage)
         {
             primaryDomain = phaseDomains.GetRandomPrimaryDomain();
-            //sRenderer.sprite = Resources.Load<SpriteListSO>("NodeSprites").nodeSprites[primaryDomain - 1];
             primaryLogo.sprite = Resources.Load<SpriteListSO>("NodeLogoSprites").nodeSprites[primaryDomain - 2];
 
             if (Random.Range(0f, 100f) < doubleDomainPercentage)
             {
                 secondaryDomain = phaseDomains.GetRandomSecondaryDomain();
-                secondaryLogo.sprite = Resources.Load<SpriteListSO>("NodeLogoSprites").nodeSprites[secondaryDomain - 2];
-                secondaryLogo.transform.parent.gameObject.SetActive(true);
+                if (secondaryDomain != 0)
+                {
+                    secondaryLogo.sprite = Resources.Load<SpriteListSO>("NodeLogoSprites").nodeSprites[secondaryDomain - 2];
+                    secondaryLogo.transform.parent.gameObject.SetActive(true);
+                }
             }
         }
         else
         {
             secondaryDomain = phaseDomains.GetRandomSecondaryDomain();
-            //sRenderer.sprite = Resources.Load<SpriteListSO>("NodeSprites").nodeSprites[secondaryDomain - 1];
-            Debug.Log(secondaryDomain);
-            primaryLogo.sprite = Resources.Load<SpriteListSO>("NodeLogoSprites").nodeSprites[secondaryDomain - 2];
+            if (secondaryDomain != 0)
+            {
+                primaryLogo.sprite = Resources.Load<SpriteListSO>("NodeLogoSprites").nodeSprites[secondaryDomain - 2];
+            }
+            else
+            {
+                primaryDomain = phaseDomains.GetRandomPrimaryDomain();
+                primaryLogo.sprite = Resources.Load<SpriteListSO>("NodeLogoSprites").nodeSprites[primaryDomain - 2];
+            }
+            
         }
         primaryLogo.transform.parent.gameObject.SetActive(true);
         

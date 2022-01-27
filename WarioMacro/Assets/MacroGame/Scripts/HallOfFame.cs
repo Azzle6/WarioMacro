@@ -49,6 +49,7 @@ public class HallOfFame : MonoBehaviour
     {
         foreach (var c in team)
         {
+            Debug.Log(c);
             currentRun.team.Add(c,true);
         }
     }
@@ -71,11 +72,11 @@ public class HallOfFame : MonoBehaviour
         {
             Run run = new Run();
             var temp2 = item.Split('/');
-            Debug.Log(item);
+            //Debug.Log(item);
             var team = temp2[2].Split(':');
             run.score = float.Parse(temp2[0]);
             run.time = float.Parse(temp2[1]);
-            Debug.Log(temp2[2]);
+            //Debug.Log(temp2[2]);
             foreach (var couple in team)
             {
                 var temp3 = couple.Split('.');
@@ -147,6 +148,7 @@ public class HallOfFame : MonoBehaviour
     public void CloseHall()
     {
         hallPanel.SetActive(false);
+        isOpen = false;
         InputManager.lockInput = false;
         GameController.OnInteractionEnd();
         AudioManager.MacroPlayRandomSound("BarmanExit");

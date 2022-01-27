@@ -38,15 +38,15 @@ public class MiniGameResultPannel_UI : MonoBehaviour
 
     [Header("MoneyBag")]
     [SerializeField] private GameObject moneyBagGO;
-    [SerializeField] private TMP_Text moneyTextField; 
+    [SerializeField] private TMP_Text moneyTextField;
     [SerializeField] private PlayableDirector director;
     [SerializeField] private PlayableAsset moneyGain;
     [SerializeField] private PlayableAsset moneyLose;
 
-    [Header("CharacterAnim")] 
+    [Header("CharacterAnim")]
     [SerializeField] private GameObject charaApparitionGO;
     [SerializeField] private SpriteListSO portraitsList;
-    [SerializeField] private Image charaSpecialistSprite; 
+    [SerializeField] private Image charaSpecialistSprite;
 
     [Header("TypesSO")]
     [SerializeField] private TypeSO brute;
@@ -56,8 +56,14 @@ public class MiniGameResultPannel_UI : MonoBehaviour
     [SerializeField] private TypeSO ghost;
     [SerializeField] private TypeSO technomancer;
 
+    [Header("NodeAnim")]
+    [SerializeField] private float resultAnimBtwnTime = 0.33f;
+    [SerializeField] private float resultAnimWaitTime = 0.8f;
+    [SerializeField] public float spawnAnimBtwnTime = 0.66f;
+    [SerializeField] private float spawnAnimWaitTime = 2.3f;
 
     public GameObject[] nodeArray = new GameObject[10];
+    private GameObject[] expertNodeArray = new GameObject[6];
 
     [Header("Test Variables")]
     public bool debug = false;
@@ -162,6 +168,8 @@ public class MiniGameResultPannel_UI : MonoBehaviour
                 SpawnNode(i, littleNodePrefab, new Vector2(0.60f, 0.60f), expertSpec[i]);
             }
         }
+
+        StartCoroutine(CasdaingNodeSpawnAnim());
     }
 
     private void SpawnNode(int index, GameObject nodePrefab, Vector2 localScale, int expertType)
@@ -173,60 +181,70 @@ public class MiniGameResultPannel_UI : MonoBehaviour
         GameObject plus = nodeArray[index].transform.GetChild(0).gameObject;
         GameObject expertHover = nodeArray[index].transform.GetChild(1).gameObject;
 
+        plus.SetActive(false);
+        expertHover.gameObject.SetActive(false);
+
         switch (expertType)
         {
-            case 0 : 
+            case 0 :
                 plus.SetActive(false);
                 expertHover.gameObject.SetActive(false);
                 break;
 
             case GameTypes.SpecialistType.Brute :
-                plus.gameObject.SetActive(true);
-                expertHover.gameObject.SetActive(true);
+                //plus.gameObject.SetActive(true);
+                //expertHover.gameObject.SetActive(true);
 
                 //Set things
                 expertHover.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = brute.logoSimple;
                 expertHover.GetComponent<Image>().color = brute.typeColor;
+
+                expertNodeArray[index] = nodeArray[index];
                 break;
 
             case GameTypes.SpecialistType.Acrobat:
-                plus.gameObject.SetActive(true);
-                expertHover.gameObject.SetActive(true);
+                //plus.gameObject.SetActive(true);
+                //expertHover.gameObject.SetActive(true);
 
                 expertHover.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = acrobat.logoSimple;
                 expertHover.GetComponent<Image>().color = acrobat.typeColor;
+                expertNodeArray[index] = nodeArray[index];
                 break;
 
             case GameTypes.SpecialistType.Alchemist:
-                plus.gameObject.SetActive(true);
-                expertHover.gameObject.SetActive(true);
+                //plus.gameObject.SetActive(true);
+                //expertHover.gameObject.SetActive(true);
 
                 expertHover.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = alchemist.logoSimple;
                 expertHover.GetComponent<Image>().color = alchemist.typeColor;
+                expertNodeArray[index] = nodeArray[index];
                 break;
 
             case GameTypes.SpecialistType.Expert:
-                plus.gameObject.SetActive(true);
-                expertHover.gameObject.SetActive(true);
+                //plus.gameObject.SetActive(true);
+                //expertHover.gameObject.SetActive(true);
 
                 expertHover.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = expert.logoSimple;
                 expertHover.GetComponent<Image>().color = expert.typeColor;
+                expertNodeArray[index] = nodeArray[index];
                 break;
 
             case GameTypes.SpecialistType.Ghost:
-                plus.gameObject.SetActive(true);
-                expertHover.gameObject.SetActive(true);
+                //plus.gameObject.SetActive(true);
+                //expertHover.gameObject.SetActive(true);
 
                 expertHover.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = ghost.logoSimple;
                 expertHover.GetComponent<Image>().color = ghost.typeColor;
+                expertNodeArray[index] = nodeArray[index];
                 break;
 
             case GameTypes.SpecialistType.Technomancer:
-                plus.gameObject.SetActive(true);
-                expertHover.gameObject.SetActive(true);
+                //plus.gameObject.SetActive(true);
+                //expertHover.gameObject.SetActive(true);
 
                 expertHover.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = technomancer.logoSimple;
                 expertHover.GetComponent<Image>().color = technomancer.typeColor;
+                expertNodeArray[index] = nodeArray[index];
                 break;
         }
 
@@ -236,8 +254,8 @@ public class MiniGameResultPannel_UI : MonoBehaviour
     public void SetCurrentNode(bool result)
     {
         Image checkMarkImage = nodeArray[currentNode].transform.GetChild(2).GetComponent<Image>(); //Get the child Image Component of the current node
-        if (result) checkMarkImage.sprite = successCheckMark; 
-        else checkMarkImage.sprite = failureCheckMark;  
+        if (result) checkMarkImage.sprite = successCheckMark;
+        else checkMarkImage.sprite = failureCheckMark;
 
         checkMarkImage.enabled = true;
 
@@ -285,12 +303,35 @@ public class MiniGameResultPannel_UI : MonoBehaviour
 
     IEnumerator CascadingNodeAnim()
     {
-        yield return new WaitForSeconds(.8f);
+        yield return new WaitForSeconds(resultAnimWaitTime);
 
         for (int i = 0; i < nodeArray.Length; i++)
         {
             nodeArray[i].gameObject.GetComponent<Animator>().SetTrigger("Anim");
-            yield return new WaitForSeconds(0.33f);
+            yield return new WaitForSeconds(resultAnimBtwnTime);
+        }
+
+        yield return null;
+    }
+
+    IEnumerator CasdaingNodeSpawnAnim()
+    {
+        Debug.Log("passe ici coucou");
+        yield return new WaitForSeconds(spawnAnimWaitTime);
+
+        for (int i = 0; i < expertNodeArray.Length; i++)
+        {
+            if(expertNodeArray[i] != null)
+            {
+                GameObject plus = expertNodeArray[i].transform.GetChild(0).gameObject;
+                GameObject expertHover = expertNodeArray[i].transform.GetChild(1).gameObject;
+
+                plus.SetActive(true);
+                expertHover.gameObject.SetActive(true);
+                expertNodeArray[i].gameObject.GetComponent<Animator>().SetTrigger("Spawn");
+            }
+
+            yield return new WaitForSeconds(spawnAnimBtwnTime);
         }
     }
 
@@ -298,13 +339,24 @@ public class MiniGameResultPannel_UI : MonoBehaviour
     {
         if(nodeType <= 1) yield break;
 
-        Character selectedChara = CharacterManager.instance.playerTeam[CharacterManager.instance.SpecialistOfTypeInTeam(nodeType)];
-        
+        Debug.Log(CharacterManager.instance.SpecialistOfTypeInTeam(nodeType));
+
+        Character selectedChara = null;
+
+        foreach (Character chara in CharacterManager.instance.playerTeam)
+        {
+            if (chara.characterType == nodeType) selectedChara = chara;
+        }
+
+
+
+        Debug.Log(selectedChara);
+
         if (selectedChara == null) yield break;
         AudioManager.MacroPlaySound(selectedChara.GetMGSoundName());
-        charaSpecialistSprite.sprite = selectedChara.portraitSprite;
+        charaSpecialistSprite.sprite = selectedChara.fullSizeSprite;
         charaApparitionGO.SetActive(true);
-        
+
         yield return new WaitForSeconds(2);
         charaApparitionGO.SetActive(false);
         yield return null;
@@ -350,7 +402,7 @@ public class MiniGameResultPannel_UI : MonoBehaviour
         currentNode = 0;
     }
 
-    public void TriggerResult(bool result)
+    public IEnumerator TriggerResult(bool result)
     {
         if (!result)
         {
@@ -359,8 +411,8 @@ public class MiniGameResultPannel_UI : MonoBehaviour
         else director.playableAsset = moneyGain;
 
         animator.SetTrigger("Result");
-        StartCoroutine(CascadingNodeAnim());
-        
+        yield return StartCoroutine(CascadingNodeAnim());
+
         //Text for the MoneyBag goes here
     }
 }
