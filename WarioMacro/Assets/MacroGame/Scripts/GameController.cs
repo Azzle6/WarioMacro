@@ -96,9 +96,11 @@ public class GameController : Ticker
             AudioManager.MacroPlaySound("GameLose", 0);
         }
 
-        instance.hallOfFame.UpdateHallOfFame(GameController.instance.scoreManager.currentRunMoney,GameController.instance.chronometer);
+        instance.hallOfFame.UpdateHallOfFame(instance.scoreManager.currentRunMoney,instance.chronometer);
         characterManager.ResetEndGame();
         PlayerPrefs.Save();
+        
+        yield return new WaitForSecondsRealtime(0.5f);
         while (!InputManager.GetKeyDown(ControllerKey.A)) yield return null;
         //NotDestroyedScript.isAReload = true;
         AsyncOperation asyncLoadLvl = SceneManager.LoadSceneAsync(1, LoadSceneMode.Single);
@@ -138,10 +140,8 @@ public class GameController : Ticker
             {
                 break;
             }
-            Debug.Log("NodeSelect");
 
             yield return StartCoroutine(player.MoveToPosition(map.currentPath.wayPoints));
-            Debug.Log("EndDisplacement");
             var nodeMicroGame = map.currentNode.GetComponent<BehaviourNode>();
 
 
@@ -259,7 +259,6 @@ public class GameController : Ticker
             menu.enabled = false;
 
             // Launch transition
-            AudioManager.MacroPlaySound("MiniGameEnter", 0);
             yield return StartCoroutine(transitionController.TransitionHandler(currentScene, true));
 
 
@@ -302,8 +301,11 @@ public class GameController : Ticker
         if (result)
         {
             settingsManager.IncreaseBPM();
+            Character c = characterManager.SpecialistOfTypeInTeam(behaviourNode.GetMGDomain(mgNumber));
             scoreManager.AddMoney(rewardChart.GetMoneyBags(MapManager.currentPhase, behaviourNode.behaviour) *
-                                  (characterManager.SpecialistOfTypeInTeam(behaviourNode.GetMGDomain(mgNumber)) > 0 ? 2 : 1));
+                                  (c != default(Character)
+                                      ? (c.mastery == Character.Level.Expert ? 2 : 1.5f) 
+                                      : 1));
         }
         else
         {
