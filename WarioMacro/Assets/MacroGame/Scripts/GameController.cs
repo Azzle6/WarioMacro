@@ -332,8 +332,8 @@ public class GameController : Ticker
             resultPanel.SetGain( Mathf.FloorToInt(rewardChart.GetMoneyBags(MapManager.currentPhase, behaviourNode.behaviour) * (c != default(Character)
                 ? (c.mastery == Character.Level.Expert ? 2 : 1.5f) 
                 : 1)));
-            UIMoneyField.SetCounterTextTyping(scoreManager.currentMoney.ToString());
-            Debug.Log(scoreManager.currentMoney.ToString());
+            UIMoneyField.SetCounterTextTyping(scoreManager.currentRunMoney.ToString());
+            Debug.Log(scoreManager.currentRunMoney.ToString());
             resultPanel.ToggleMoneyBag(true);
         }
         else
