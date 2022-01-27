@@ -61,32 +61,14 @@ public class PlanManager : MonoBehaviour
 
         multiplierAnimators[selectedMultIndex].SetBool(isSelected, true);
         multiplierAnimators[selectedMultIndex].SetTrigger(@select);
-        
-        //buttons[selectedMultIndex].enabled = false;
         multiplierAnimators[(selectedMultIndex + 1) % 3].SetBool(isSelected, false);
-        //buttons[(selectedMultIndex + 1) % 3].enabled = true;
         multiplierAnimators[(selectedMultIndex + 2) % 3].SetBool(isSelected, false);
-        //buttons[(selectedMultIndex + 2) % 3].enabled = true;
     }
 
     private void GenerateFloorCounts()
     {
-        for (int i = 0; i < 2; i++)
-        {
-            int trueFloorCount = MapMana.phaseFloorThresholds[i];
-            if (trueFloorCount == GameControllerSO.instance.firstPhaseMaxFloorCount)
-            {
-                floorCountTexts[i].text = trueFloorCount.ToString();
-                continue;
-            }
-
-            int lowerLimit = trueFloorCount - Random.Range(1, 3);
-            if (lowerLimit < 1)
-                lowerLimit = 1;
-            int upperLimit = trueFloorCount + Random.Range(1, 3);
-
-            floorCountTexts[i].text = lowerLimit + " <> " + upperLimit;
-        }
+        floorCountTexts[0].text = GameControllerSO.instance.firstPhaseMinFloorCount + " <> " + GameControllerSO.instance.firstPhaseMaxFloorCount;
+        floorCountTexts[1].text = GameControllerSO.instance.secondPhaseMinFloorCount + " <> " + GameControllerSO.instance.secondPhaseMaxFloorCount;
     }
 
     private void UpdateDomains()
