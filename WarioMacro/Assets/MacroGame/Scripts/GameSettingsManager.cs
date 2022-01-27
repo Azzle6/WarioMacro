@@ -1,8 +1,9 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class GameSettingsManager : MonoBehaviour
 {
-    public GameControllerSO gameControllerSO;
+    [FormerlySerializedAs("gameConfig")] public GameControllerSO gameControllerSO;
     [SerializeField] private BPMSettingsSO bpmSettingsSO;
 
     public void IncreaseDifficulty()
@@ -24,7 +25,8 @@ public class GameSettingsManager : MonoBehaviour
         AudioManager.MacroPlaySound("SpeedUp", 0);
         if (gameControllerSO.currentGameSpeed == bpmSettingsSO.maxBPM)
         {
-            AudioManager.MacroPlayRandomSound("HighLimitVoices", 0);
+            AudioManager.MacroPlayRandomSound("HighLimitVoices");
+            Debug.Log("play sound");
         }
         else
         {
@@ -37,7 +39,7 @@ public class GameSettingsManager : MonoBehaviour
     public void DecreaseBPM()
     {
         AudioManager.MacroPlaySound("SpeedDown", 0);
-        if (gameControllerSO.currentGameSpeed == bpmSettingsSO.maxBPM)
+        if (gameControllerSO.currentGameSpeed == bpmSettingsSO.minBPM)
         {
             AudioManager.MacroPlayRandomSound("LowLimitVoices", 0);
         }

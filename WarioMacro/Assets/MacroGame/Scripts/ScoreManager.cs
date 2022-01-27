@@ -1,101 +1,53 @@
-using System.Collections.Generic;
-using GameTypes;
+using System;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class ScoreManager : MonoBehaviour
 {
+    [NonSerialized] public int currentMoney;
+    public int currentRunMoney;
+    [HideInInspector] public int scoreMultiplier = 1;
     
-    [SerializeField] private Leaderboard leaderBoard;
-    
-    public int score;
-    
-    public int moneyBag;
-    
-    [Header("3 MicroGames")] 
-    [SerializeField]
-    private int[] neutral = new int[4];
-    [SerializeField]
-    private int[] oneSpecialist= new int[4];
-    [SerializeField]
-    private int[] twoSpecialist = new int[4];
-    
-    [Header("3 MicroGames Alarm")] 
-    [SerializeField]
-    private int[] neutralAlarm = new int[4];
-    [SerializeField]
-    private int[] oneSpecialistAlarm = new int[4];
-    [SerializeField]
-    private int[] twoSpecialistAlarm = new int[4];
+    [SerializeField] private PlayableDirector moneyBagsDirector;
+    [SerializeField] private TextMeshProUGUI moneyBagsText;
 
-    [Header("5 MicroGames")] 
-    [SerializeField]
-    private int[] noSpecialist = new int[6];
-
-    [Header("5 MicroGames Alarm")] 
-    [SerializeField]
-    private int[] noSpecialistAlarm = new int[6];
-
-    private void FinalScore()
+    
+    public void AddMoney(float addedValue)
     {
-        score = moneyBag * GameController.instance.characterManager.playerTeam.Count;
-        leaderBoard.UpdateLeaderboard(score);
+        currentRunMoney += (int) (addedValue * scoreMultiplier);
+        ShowMoney();
+        moneyBagsDirector.Play();
+        AudioManager.MacroPlaySound("CashGain", 0);
     }
 
-    public void UpdateScore(int nodeSuccess,int gameCount,Stack<Character> team)
+    public void ShowMoney()
     {
-        var type = GameController.instance.map.currentNode.GetComponent<NodeSettings>().type;
-        int bagsBeforeUpdate = moneyBag;
-        switch (Alarm.isActive)
-        {
-            case false:
-                if (gameCount == 3)
-                {
-                    if ( type == NodeType.None)
-                        moneyBag += neutral[nodeSuccess];
-                    if (CheckTeamTypes(team) == 1)
-                        moneyBag += oneSpecialist[nodeSuccess];
-                    if (CheckTeamTypes(team) > 1) 
-                        moneyBag += twoSpecialist[nodeSuccess];
-                }
-                if (gameCount == 5)
-                    moneyBag += noSpecialist[nodeSuccess];
-                break;
-            
-            case true:
-                if (gameCount == 3)
-                {
-                    if (type == NodeType.None)
-                    {
-                        moneyBag += neutralAlarm[nodeSuccess];
-                    }
-                    if (CheckTeamTypes(team) == 1)
-                        moneyBag += oneSpecialistAlarm[nodeSuccess];
-                    if (CheckTeamTypes(team) > 1) 
-                        moneyBag += twoSpecialistAlarm[nodeSuccess];
-                }
-
-                if (gameCount == 5)
-                {
-                    moneyBag += noSpecialistAlarm[nodeSuccess];
-                }
-                break;
-        }
-
-        AudioManager.MacroPlaySound(moneyBag > bagsBeforeUpdate ? "CashGain" : "CashLose", 0);
-    } 
-    
-    public int CheckTeamTypes(Stack<Character> team)
-    {
-        var count = 0;
-        foreach (var character in team)
-        {
-            if (character.characterType == GameController.instance.map.currentNode.GetComponent<NodeSettings>().type)
-            {
-                count++;
-            }
-        }
-        return count;
+        moneyBagsText.text = currentRunMoney.ToString();
     }
     
-    
+    public void AddToCurrentMoney()
+    {
+        currentMoney += currentRunMoney;
+        moneyBagsText.text = currentMoney.ToString();
+        PlayerPrefs.SetInt("PlayerMoney", currentMoney);
+    }
+
+    public bool Pay(int v)
+    {
+        if (v > currentMoney) return false;
+        
+        currentMoney -= v;
+        moneyBagsText.text = currentMoney.ToString();
+        moneyBagsDirector.Play(); // Lose money animation ?
+        PlayerPrefs.SetInt("PlayerMoney", currentMoney);
+        AudioManager.MacroPlaySound("CashLose", 0);
+        return true;
+    }
+
+    private void Awake()
+    {
+        currentMoney = PlayerPrefs.GetInt("PlayerMoney", 0);
+        moneyBagsText.text = currentMoney.ToString();
+    }
 }

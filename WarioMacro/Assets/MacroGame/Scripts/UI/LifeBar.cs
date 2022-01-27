@@ -1,13 +1,13 @@
+using GameTypes;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class LifeBar : MonoBehaviour
 {
     [SerializeField] private Transform lifeBarGO;
-    [Range(0, 4)]
-    [SerializeField] private int life;
-
-    [SerializeField] private Image[] portraits; 
+    [SerializeField] private Image[] portraits;
+    [SerializeField] private Image[] keyChains;
+    private int life;
 
     private void Start()
     {
@@ -17,16 +17,25 @@ public class LifeBar : MonoBehaviour
     public void RecruitCharacter(Character chara)
     {
         if (life == 4) return;
+        
+        portraits[life].sprite = chara.portraitSprite;
+        portraits[life].enabled = true;
+        keyChains[life].sprite = Resources.Load<SpriteListSO>("KeyChainSprites")
+            .nodeSprites[chara.characterType - SpecialistType.Brute];
         life++;
-        portraits[life-1].sprite = chara.lifebarSprite;
-        portraits[life - 1].enabled = true;
     }
 
-    public void Imprison()
+    public void Imprison(Character chara)
     {
         AudioManager.MacroPlaySound("CharacterLose", 0);
-        lifeBarGO.GetChild(life-1).GetComponent<Animator>().SetBool("Anim", true); //à remplacer par le trigger de l'animation
-        lifeBarGO.GetChild(life-1).GetChild(0).gameObject.SetActive(true);
+        for (int i = 0; i < portraits.Length; i++)
+        {
+            if (chara.portraitSprite != portraits[i].sprite) continue;
+            
+            lifeBarGO.GetChild(i).GetComponent<Animator>().SetBool("Anim", true); //à remplacer par le trigger de l'animation
+            break;
+        }
+        
         
         life--;
     }

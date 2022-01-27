@@ -1,10 +1,12 @@
 using System.Collections;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
 
 public class TransitionController : MonoBehaviour
 {
+    [SerializeField] private GameObject transitionGO;
     [SerializeField] private PlayableDirector director;
     [SerializeField] private GameObject timerGO;
     private bool startAsyncOp;
@@ -12,6 +14,8 @@ public class TransitionController : MonoBehaviour
     // ReSharper disable once MemberCanBePrivate.Global
     public void TransitionStart()
     {
+        director.time = 0;
+        AudioManager.MacroPlaySound("MiniGameEnter", 0);
         director.Play();
     }
     
@@ -22,12 +26,14 @@ public class TransitionController : MonoBehaviour
     }
 
     // Used in Transition's signal receiver
+    [UsedImplicitly]
     public void TransitionPause()
     {
         director.Pause();
     }
 
     // Used in Transition's signal receiver
+    [UsedImplicitly]
     public void StartAsyncMGOp(bool toggle)
     {
         startAsyncOp = toggle;
@@ -40,39 +46,40 @@ public class TransitionController : MonoBehaviour
         startAsyncOp = false; 
         while (!startAsyncOp) yield return null;
 
-        AsyncOperation asyncOp;
-        if (toLoad)
-        {
-            asyncOp = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-        }
-        else
-        {
-            GameController.instance.ShowMacroObjects(true);
-            timerGO.SetActive(false);
-            AudioManager.StopAllMicroSounds();
-            asyncOp = SceneManager.UnloadSceneAsync(sceneName);
-        }
+        AsyncOperation asyncOp = toLoad
+            ? SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive)
+            : SceneManager.UnloadSceneAsync(sceneName);
+        
+        OnAsyncOpCompleted(asyncOp, sceneName, toLoad);
 
         while (!asyncOp.isDone) yield return null;
 
-        if (toLoad)
-        {
-            GameController.instance.ShowMacroObjects(false);
-            timerGO.SetActive(true);
-            SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
-        }
-
-        GameController.lockTimescale = true;
+        Ticker.lockTimescale = true;
         // resume transition UI
         TransitionResume();
 
         while (director.state == PlayState.Playing) yield return null;
         
-        GameController.lockTimescale = false;
+        transitionGO.SetActive(false);
+        Ticker.lockTimescale = false;
     }
 
-    private void Awake()
+    private void OnAsyncOpCompleted(AsyncOperation asyncOp, string sceneName, bool toLoad)
     {
-        GameController.Register();
+        asyncOp.completed += operation =>
+        {
+            if (toLoad)
+            {
+                GameController.instance.ShowMacroObjects(false);
+                timerGO.SetActive(true);
+                SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
+            }
+            else
+            {
+                GameController.instance.ShowMacroObjects(true);
+                timerGO.SetActive(false);
+                AudioManager.StopAllMicroSounds();
+            }
+        };
     }
 }

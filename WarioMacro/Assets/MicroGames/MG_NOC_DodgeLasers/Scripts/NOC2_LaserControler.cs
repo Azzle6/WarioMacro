@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security;
-using TreeEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -49,6 +48,7 @@ public class NOC2_LaserControler : MonoBehaviour
 
     private void Move()
     {
+        if (Time.timeScale == 0) return;
         //Bouger 
         transform.localPosition += direction * Time.deltaTime * 1 / Time.timeScale * speed[difficulty];
 

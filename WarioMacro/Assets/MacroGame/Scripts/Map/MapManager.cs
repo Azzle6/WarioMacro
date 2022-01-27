@@ -1,26 +1,45 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using GameTypes;
 using UnityEngine;
-using Random = System.Random;
+using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 // ReSharper disable once CheckNamespace
 public class MapManager : MonoBehaviour
 {
-    public static int floor { get; private set; } = -1;
-    public Dictionary<int, float> typePercentages = new Dictionary<int, float>();
+    public static int currentPhase { get; private set; }
+    public static int floor { get; private set; }
+    public GameObject currentMapGO { get; private set; }
+    
+    public IPhaseDomains[] phaseDomainsArray;
+    [HideInInspector] public int[] phaseFloorThresholds = new int[2];
 
+    [SerializeField] private GameSettingsManager settingsManager;
+    [FormerlySerializedAs("config")] [SerializeField] private GameControllerSO controllerSO;
+    [SerializeField] private Transform mapParent;
     [SerializeField] private Map recruitmentMap;
-    [SerializeField] private int mapsPerGame = 5;
-    [SerializeField] private GameObject[] mapGOList;
-    private Queue<GameObject> mapGoQueue;
-
+    [SerializeField] private Map astralPathMap;
+    [SerializeField] private GameObject[] mapPrefabList;
+    private Queue<GameObject> mapPrefabQueue;
+    
     private Map currentMap;
+    
+    
 
     public Map LoadRecruitmentMap()
     {
+        GeneratePhaseFloorCount();
+        GeneratePhasesDomains();
         currentMap = recruitmentMap;
+        currentMap.Load();
+        return currentMap;
+    }
+    
+    public Map LoadAstralPath()
+    {
+        currentMap.Unload();
+        currentMap = astralPathMap;
         currentMap.Load();
         return currentMap;
     }
@@ -28,87 +47,194 @@ public class MapManager : MonoBehaviour
     public Map LoadNextMap()
     {
         currentMap.Unload();
+        Destroy(currentMapGO);
 
-        currentMap = mapGoQueue.Dequeue().GetComponent<Map>();
+        if (mapPrefabQueue.Count < 6)
+        {
+            RefillMapQueue();
+        }
+
+        currentMapGO = Instantiate(mapPrefabQueue.Dequeue(), mapParent);
+        currentMap = currentMapGO.GetComponent<Map>();
         currentMap.Load();
         floor++;
+        Debug.Log("Floor " + floor);
+
+        switch (currentPhase)
+        {
+            case 0 when floor > phaseFloorThresholds[0]:
+            case 1 when floor > phaseFloorThresholds[0] + phaseFloorThresholds[1]:
+                UpdatePhase();
+                break;
+        }
+        
+        GenerateMapNodesDomains(currentMap);
         
         return currentMap;
     }
 
-    public bool OnLastMap()
+    private void GeneratePhaseFloorCount()
     {
-        return mapGoQueue.Count == 0;
+        phaseFloorThresholds[0] = Random.Range(controllerSO.firstPhaseMinFloorCount, controllerSO.firstPhaseMaxFloorCount + 1);
+        phaseFloorThresholds[1] = Random.Range(controllerSO.secondPhaseMinFloorCount, controllerSO.secondPhaseMaxFloorCount + 1);
     }
 
-    private void TypeCountsToPercentages(int total)
+    private void GeneratePhasesDomains()
     {
-        int farthestUpperKey = 0;
-        float farthestUpperValue = 1f;
-        int farthestLowerKey = 0;
-        float farthestLowerValue = -1f;
-        int totalPercentage = 0;
-        
-        foreach (int key in typePercentages.Select(pair => pair.Key).ToList())
+        var notUsedDomains = new List<int>(SpecialistType.GetTypes());
+        phaseDomainsArray = new IPhaseDomains[3];
+        for (int i = 0; i < phaseDomainsArray.Length - 1; i++)
         {
-            float v = (float) ((double) typePercentages[key] / total * 20);
-            float distTo05 = v % 1 - 0.5f;
-            
-            if (distTo05 < 0 && distTo05 > farthestLowerValue)
-            {
-                farthestLowerKey = key;
-                farthestLowerValue = distTo05;
-            } 
-            else if (distTo05 >= 0 && distTo05 < farthestUpperValue)
-            {
-                farthestUpperKey = key;
-                farthestUpperValue = distTo05;
-            }
-            
-            typePercentages[key] = Mathf.RoundToInt(v) * 5;
-            totalPercentage += (int) typePercentages[key];
+            GenerateNormalPhaseDomains(i, ref notUsedDomains);
+        }
+        GenerateLastPhaseDomains(notUsedDomains);
+        
+    }
+
+    public void SkipToNextMap()
+    {
+        currentMap.SelectLastNode();
+    }
+
+    private void GenerateNormalPhaseDomains(int phase, ref List<int> notUsedDomains)
+    {
+        var secondaryDomains = new List<int>();
+        var domains = new List<int>(SpecialistType.GetTypes());
+        
+        int primaryDomain = GetDomainFromList(ref domains, ref notUsedDomains);
+        
+        secondaryDomains.Add(GetDomainFromList(ref domains, ref notUsedDomains));
+
+        if (Random.Range(0f, 100f) < controllerSO.phaseDoubleDomainPercentage)
+        {
+            secondaryDomains.Add(GetDomainFromList(ref domains, ref notUsedDomains));
         }
 
-        if (totalPercentage > 100)
+        phaseDomainsArray[phase] = new NormalPhaseDomains(primaryDomain, secondaryDomains.ToArray());
+    }
+
+    private void GenerateLastPhaseDomains(List<int> notUsedDomains)
+    {
+        var primaryDomains = new int[2];
+        int secondaryDomain = 0;
+        var domains = new List<int>(SpecialistType.GetTypes());
+
+        switch (notUsedDomains.Count)
         {
-            typePercentages[farthestUpperKey] += 100 - totalPercentage;
+            case 4:
+                // modify an already set domain
+                ReplaceDomain(ref notUsedDomains, ref domains, Random.Range(0, 4));
+                goto case 3;
+            case 3:
+                // 1st in not used list
+                primaryDomains[0] = GetDomainFromList(ref notUsedDomains, ref domains);
+                
+                // 2d in not used list
+                primaryDomains[1] = GetDomainFromList(ref notUsedDomains, ref domains);
+                break;
+            case 2:
+                // 1st in not used list
+                primaryDomains[0] = GetDomainFromList(ref notUsedDomains, ref domains);
+                // 2d random
+                primaryDomains[1] = GetDomainFromList(ref domains);
+
+                break;
+            default:
+                // 1st random
+                primaryDomains[0] = GetDomainFromList(ref domains);
+                
+                // 2d random
+                primaryDomains[1] = GetDomainFromList(ref domains);
+                
+                break;
         }
-        else if (totalPercentage < 100)
+
+        // 3rd is completely random
+        if (Random.Range(0f, 100f) < controllerSO.lastPhaseSecondaryDomainPercentage)
         {
-            typePercentages[farthestLowerKey] += 100 - totalPercentage;
+            secondaryDomain = GetDomainFromList(ref domains);
         }
+
+        phaseDomainsArray[phaseDomainsArray.Length - 1] = new LastPhaseDomains(primaryDomains, secondaryDomain);
+    }
+
+    private static int GetDomainFromList(ref List<int> toUse)
+    {
+        List<int> keepUpdated = null;
+        return GetDomainFromList(ref toUse, ref keepUpdated);
+    }
+
+    private static int GetDomainFromList(ref List<int> toUse, ref List<int> keepUpdated)
+    {
+        int rd = Random.Range(0, toUse.Count);
+        int res = toUse[rd];
+        keepUpdated?.Remove(toUse[rd]);
+        toUse.RemoveAt(rd);
+        
+        return res;
+    }
+
+    private void ReplaceDomain(ref List<int> notUsedDomains, ref List<int> domains, int toReplace)
+    {
+        int newDomain = GetDomainFromList(ref notUsedDomains, ref domains);
+        if (toReplace / 2 == 0)
+        {
+            ((NormalPhaseDomains) phaseDomainsArray[toReplace % 2]).SetPrimaryDomain(newDomain);
+        }
+        else
+        {
+            ((NormalPhaseDomains) phaseDomainsArray[toReplace % 2]).SetSecondaryDomain(newDomain, 0);
+        }
+    }
+
+    private void GenerateMapNodesDomains(Map map)
+    {
+        foreach (BehaviourNode node in map.nodesParent.GetComponentsInChildren<BehaviourNode>())
+        {
+            node.SetRandomDomain(phaseDomainsArray[currentPhase]);
+        }
+    }
+
+    private void UpdatePhase()
+    {
+        if (currentPhase == 2)
+        {
+            Debug.LogError("Already at last phase (3)");
+        }
+        currentPhase++;
+        settingsManager.IncreaseDifficulty();
+    }
+
+    private void RefillMapQueue()
+    {
+        var rd = new System.Random();
+        var currentList = new List<GameObject>(mapPrefabQueue);
+
+        foreach (GameObject go in mapPrefabList.OrderBy(go => rd.Next()))
+        {
+            if (!AlreadyIn(ref currentList, go))
+            {
+                mapPrefabQueue.Enqueue(go);
+            }
+        }
+    }
+
+    private static bool AlreadyIn(ref List<GameObject> goList, Object go)
+    {
+        for (var i = 0; i < goList.Count; i++)
+        {
+            if (go != goList[i]) continue;
+                
+            goList.RemoveAt(i);
+            return true;
+        }
+
+        return false;
     }
 
     private void OnEnable()
     {
-        var rd = new Random();
-        mapGoQueue = new Queue<GameObject>(mapGOList.OrderBy(go => rd.Next())
-            .Take(mapGOList.Length < mapsPerGame ? mapGOList.Length : mapsPerGame));
-
-        int total = 0;
-        
-        foreach (FieldInfo field in typeof(GameType).GetFields())
-        {
-            typePercentages.Add((int) field.GetValue(null), 0f);
-        }
-
-        foreach (NodeSettings node in mapGoQueue.SelectMany(mapGO =>
-            mapGO.GetComponent<Map>().nodesParent.GetComponentsInChildren<NodeSettings>()))
-        {
-            switch (node.type)
-            {
-                case NodeType.None:
-                    continue;
-                case NodeType.Random:
-                    node.SetRandomType();
-                    break;
-            }
-
-            typePercentages[node.type]++;
-            total++;
-
-        }
-
-        TypeCountsToPercentages(total);
+        var rd = new System.Random();
+        mapPrefabQueue = new Queue<GameObject>(mapPrefabList.OrderBy(go => rd.Next()));
     }
 }

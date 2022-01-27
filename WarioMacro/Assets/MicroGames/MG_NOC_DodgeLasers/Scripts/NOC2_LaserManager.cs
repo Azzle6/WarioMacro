@@ -138,18 +138,19 @@ public class NOC2_LaserManager : MonoBehaviour, ITickable
                     StartCoroutine(DisplayResult("DEFAITE"));
                     policeAnim.Play("Police");
                     result = false;
-                    //AudioManager.PlaySound(sounds[3]);
+                    AudioManager.PlaySound(sounds[3], 0.3f);
                     return;
                 }
             }
             StartCoroutine(DisplayResult("VICTOIRE"));
             result = true;
+            AudioManager.PlaySound(sounds[4], 0.3f);
             backgroundAnim.Play("Win");
         }
     }
 
     public void PlaySound(int index)
     {
-        AudioManager.PlaySound(sounds[index], 0.5f, 0);
+        AudioManager.PlaySound(sounds[index], 0.1f, 0);
     }
 }

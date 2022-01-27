@@ -33,6 +33,8 @@ public class NAA1_Safe_SafeManager : MonoBehaviour, ITickable
 
     public string codeString = "";
 
+    private int winTick = -1;
+
     void Start()
     {
         GameManager.Register(); //Mise en place du Input Manager, du Sound Manager et du Game Controller
@@ -85,6 +87,20 @@ public class NAA1_Safe_SafeManager : MonoBehaviour, ITickable
     
     public void OnTick()
     {
+        if (success)
+        {
+            GameController.StopTimer();
+            if (winTick < 0)
+            winTick = GameController.currentTick;
+            Debug.LogWarning("You won !");
+            successImg.SetActive(true);
+
+            if (GameController.currentTick == winTick + 3)
+            {
+                //Le jeu se décharge
+                GameController.FinishGame(success);
+            }
+        }
         if (GameController.currentTick == 5)
         {
             if (!success)

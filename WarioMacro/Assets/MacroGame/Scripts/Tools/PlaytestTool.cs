@@ -1,9 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class PlaytestTool : MonoBehaviour
@@ -11,11 +10,15 @@ public class PlaytestTool : MonoBehaviour
     [SerializeField] private string[] ScenesList = null;
     [SerializeField] private GameObject ScrollContent;
     [SerializeField] private GameObject ToggleTemplate;
-    [SerializeField] private GameObject PlaytestPanel;
-    private bool panelIsActive = false;
-    private List<Toggle> TogglesList;
+    [SerializeField] private GameObject playTestPanel;
     [SerializeField] private GameController GameControl;
     [SerializeField] private ScenesReferencesSO ScenesRefs;
+    [SerializeField] private RecruitmentController RecruitControl;
+    [SerializeField] private MapManager mapManager;
+    [SerializeField] private TMP_Text MiniGameInfoText;
+    [SerializeField] private TextMeshProUGUI mapNameText;
+    private List<Toggle> TogglesList;
+    private bool panelIsActive;
 
     private void Start()
     {
@@ -27,7 +30,19 @@ public class PlaytestTool : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.P))
         {
             panelIsActive = !panelIsActive;
-            PlaytestPanel.SetActive(panelIsActive);
+            playTestPanel.SetActive(panelIsActive);
+        }
+
+        if (GameController.instance.currentScene != null)
+        {
+            string sceneName = GameController.instance.currentScene;
+            if(sceneName.Length > 0 )MiniGameInfoText.text = "Current MiniGame : " + sceneName.Substring(13, sceneName.Length - 13);
+        }
+        
+        if (mapManager.currentMapGO != null)
+        {
+            string mapName = mapManager.currentMapGO.name;
+            if(mapName.Length > 0 ) mapNameText.text = "Current Level : " + mapName.Substring(0, mapName.Length - 7);
         }
     }
 
@@ -38,7 +53,7 @@ public class PlaytestTool : MonoBehaviour
         List<String> SNames = new List<string>();
         foreach (MiniGameScriptableObject MGSO in ScenesRefs.MiniGames)
         {
-            SNames.Add(MGSO.MiniGameScene.name);
+            SNames.Add(MGSO.MiniGameSceneName);
         }
 
         GameControl.sceneNames = SNames.ToArray();
@@ -48,7 +63,7 @@ public class PlaytestTool : MonoBehaviour
         for (int i = 0; i < ScenesList.Length; i++)
         {
             GameObject go = Instantiate(ToggleTemplate, ScrollContent.transform);
-            go.GetComponentInChildren<Text>().text = ScenesList[i];
+            go.GetComponentInChildren<TMP_Text>().text = ScenesList[i].Substring(13, ScenesList[i].Length - 13);
 
             var i1 = i;
             go.GetComponentInChildren<Toggle>().onValueChanged.AddListener((value) =>
@@ -69,7 +84,7 @@ public class PlaytestTool : MonoBehaviour
     public void OnListUpdate(int toggleIndex, bool isActivated)
     {
         Debug.Log(toggleIndex);
-        List<String> SNames = new List<string>();
+        var SNames = new List<string>();
         SNames = GameControl.sceneNames.ToList();
         
         if (isActivated)
@@ -90,28 +105,24 @@ public class PlaytestTool : MonoBehaviour
                 }
             }
         }
-        
-        
-        
-        
-        
     }
     
-    
-    
-    /*
-    public void CopyDebug()
+    public void SelectAll()
     {
-        
+        foreach (Toggle tog in TogglesList)
+        {
+            tog.isOn = !tog.isOn;
+        }
     }
 
-    public void OpenExcel()
+    public void SkipRecruitPhase()
     {
-        
+        RecruitControl.SkipRecruitment();
     }
 
-    public void TakeScreenshot()
+    public void ResetPlayerPrefs()
     {
-        
-    }*/
+        PlayerPrefs.DeleteAll();
+        PlayerPrefs.Save();
+    }
 }

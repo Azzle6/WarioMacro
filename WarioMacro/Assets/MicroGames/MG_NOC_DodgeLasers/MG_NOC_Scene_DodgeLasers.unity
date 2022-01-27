@@ -616,10 +616,11 @@ MonoBehaviour:
   hardText: {fileID: 3478466312908579593}
   currentTick: 0
   sounds:
-  - {fileID: 8300000, guid: 772f699baeb27f845956240d0c7e1168, type: 3}
-  - {fileID: 8300000, guid: 6c400de7cdd5c2a47ad8b54e6a19247e, type: 3}
-  - {fileID: 8300000, guid: dfa302f18c088a9428ff7e79b5c73e9e, type: 3}
-  - {fileID: 8300000, guid: 11e9b370bf8aa774687805e224c7f4c1, type: 3}
+  - {fileID: 8300000, guid: e58ce0bc29514a74688c5982124acbec, type: 3}
+  - {fileID: 8300000, guid: 79d2fc02fce538d41a01d2d24c15a860, type: 3}
+  - {fileID: 8300000, guid: aa28c537ab706d94db931a11365d23ac, type: 3}
+  - {fileID: 8300000, guid: 749dca324b3dea6478091f5d8d78a2ba, type: 3}
+  - {fileID: 8300000, guid: a544747649f62d44fb3d705a1cd89fc1, type: 3}
   soundDelay:
   - 0.5
   - 0.4
@@ -5739,8 +5740,8 @@ Camera:
   m_GameObject: {fileID: 3478466312759879450}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.7372549, g: 0.73333335, b: 0.7372549, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -7204,7 +7205,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 32589e9dced16474d99e5ea2d5242212, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 593f5d51afb12a244937bf2e1b94a2aa, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -8972,7 +8973,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!61 &3478466314641328620
 BoxCollider2D:
@@ -9013,7 +9014,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 3478466314641328618}
-  speed: 6750
+  speed: 5
   blocked: 0
 --- !u!1 &3478466314641328623
 GameObject:
