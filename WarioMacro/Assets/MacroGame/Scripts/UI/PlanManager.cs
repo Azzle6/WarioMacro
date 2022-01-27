@@ -35,12 +35,13 @@ public class PlanManager : MonoBehaviour
     public void ClosePlan()
     {
         PlanObject.SetActive(false);
+        isOpen = false;
         AudioManager.MacroPlaySound("MapExit");
         InputManager.lockInput = false;
         GameController.OnInteractionEnd();
         DisableDomains();
     }
-    
+
     public void SelectMultiplier(int selectedMultIndex )
     {
         currentSelectedMultiplier = multiplierList[selectedMultIndex];
@@ -63,7 +64,7 @@ public class PlanManager : MonoBehaviour
             if (lowerLimit < 1)
                 lowerLimit = 1;
             int upperLimit = trueFloorCount + Random.Range(1, 3);
-            
+
             floorCountTexts[i].text = lowerLimit + " <> " + upperLimit;
         }
     }
@@ -73,16 +74,16 @@ public class PlanManager : MonoBehaviour
         for (int i = 0; i < MapMana.phaseDomainsArray.Length - 1; i++)
         {
             var normPhase = (NormalPhaseDomains) MapMana.phaseDomainsArray[i];
-            
+
             SetDomain(i, 0, domainsVisu.nodeSprites[normPhase.primaryDomain - SpecialistType.Brute]);
-            
+
             for (int j = 0; j < normPhase.secondaryDomains.Length; j++)
             {
                 SetDomain(i, 1 + j, domainsVisu.nodeSprites[normPhase.secondaryDomains[j] - SpecialistType.Brute]);
             }
         }
-        
-        
+
+
         LastPhaseDomains lastPhase = (LastPhaseDomains) MapMana.phaseDomainsArray[MapMana.phaseDomainsArray.Length - 1];
 
         for (var i = 0; i < lastPhase.primaryDomains.Length; i++)
@@ -131,9 +132,9 @@ public class PlanManager : MonoBehaviour
             startGameText.text =  "Go !";
             startGameButton.interactable = true;
         }
-        
+
     }
-    
+
     private void Start()
     {
         if(multiplierList != null) currentSelectedMultiplier = multiplierList[0];

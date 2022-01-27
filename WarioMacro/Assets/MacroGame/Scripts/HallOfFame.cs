@@ -49,6 +49,7 @@ public class HallOfFame : MonoBehaviour
     {
         foreach (var c in team)
         {
+            Debug.Log(c);
             currentRun.team.Add(c,true);
         }
     }
@@ -147,6 +148,7 @@ public class HallOfFame : MonoBehaviour
     public void CloseHall()
     {
         hallPanel.SetActive(false);
+        isOpen = false;
         InputManager.lockInput = false;
         GameController.OnInteractionEnd();
         AudioManager.MacroPlayRandomSound("BarmanExit");

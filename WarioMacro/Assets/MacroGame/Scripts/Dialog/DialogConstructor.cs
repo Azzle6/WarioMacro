@@ -14,6 +14,7 @@ public class DialogConstructor : MonoBehaviour
 
     public Response[] Responses;
     public bool InteractionEndWhenDialogEnd = true;
+    public bool canBeCanceled = false;
 }
 
 [System.Serializable]
