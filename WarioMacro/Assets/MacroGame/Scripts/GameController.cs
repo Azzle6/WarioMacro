@@ -95,7 +95,7 @@ public class GameController : Ticker
             instance.hallOfFame.UpdateHallOfFame(instance.scoreManager.currentRunMoney,instance.chronometer);
             AudioManager.MacroPlaySound("VictoryTheme",0);
             AudioManager.MacroPlaySoundLoop("VictoryLoop",6);
-            yield return new WaitForSeconds(6);
+            yield return new WaitForSeconds(3);
             endScoreUI.ToggleEndSuccess();
             scoreManager.AddToCurrentMoney();
             
@@ -104,7 +104,7 @@ public class GameController : Ticker
         {
             AudioManager.MacroPlaySound("DefeatTheme",0);
             AudioManager.MacroPlaySoundLoop("DefeatLoop",6);
-            yield return new WaitForSeconds(6);
+            yield return new WaitForSeconds(3);
             endScoreUI.ToggleEndFailure();
 
         }
