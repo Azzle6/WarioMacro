@@ -23,10 +23,12 @@ public class OutOfJailManager : MonoBehaviour
     private void Update()
     {
         if (!isOpen) return;
+        if(InputManager.GetKeyDown(ControllerKey.B, true) && isOpen) CloseJail();
         GameObject currentGo = EventSystem.current.currentSelectedGameObject;
 
         if (currentGo == null) 
             return;
+        if (!activeRows.Any()) return;
         if (activeRows[currentRowId] != currentGo.transform.parent.gameObject)
         {
             lastRowId = currentRowId;
@@ -60,9 +62,7 @@ public class OutOfJailManager : MonoBehaviour
                 break;
         }
         
-        
-        if(InputManager.GetKeyDown(ControllerKey.B, true) && isOpen) CloseJail();
-
+      
     }
     public void SetJailed()
     {
