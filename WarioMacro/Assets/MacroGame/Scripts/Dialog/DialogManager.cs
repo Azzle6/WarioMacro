@@ -112,7 +112,15 @@ public class DialogManager : MonoBehaviour
         {
             textZone.text = string.Concat(textZone.text, dialogToDisplay[curIndex][i]);
             yield return new WaitForSecondsRealtime(0.01f);
+            if (InputManager.GetKey(ControllerKey.A, true))
+            {
+                textZone.text = dialogToDisplay[curIndex];
+                yield return new WaitWhile(() => InputManager.GetKey(ControllerKey.A, true));
+                break;
+            }
         }
+
+        
         
         if(curIndex < curDial.dialogs.Length - 1) curIndex++;
         else
@@ -129,6 +137,7 @@ public class DialogManager : MonoBehaviour
         }
 
         yield return new WaitUntil(() => InputManager.GetKeyDown(ControllerKey.A, true));
+        yield return new WaitWhile(() => InputManager.GetKey(ControllerKey.A, true));
 
         currentCoroutine = WriteNextSentence();
         StartCoroutine(currentCoroutine);
