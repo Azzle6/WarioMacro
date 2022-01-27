@@ -22,6 +22,7 @@ public class NAB1_Game : MonoBehaviour, ITickable
 
     private int angle1;
     private int angle2;
+    private bool moving;
     private int maxTick = 8;
 
     private bool playing = true;
@@ -68,6 +69,7 @@ public class NAB1_Game : MonoBehaviour, ITickable
         if (InputManager.GetKeyDown(ControllerKey.A) || InputManager.GetKeyDown(ControllerKey.B) || InputManager.GetKeyDown(ControllerKey.X) || InputManager.GetKeyDown(ControllerKey.Y))
         {
             player.GetComponent<NAB1_PlayerMove>().Move();
+            moving = true;
             result = true;
         }
         
@@ -82,6 +84,7 @@ public class NAB1_Game : MonoBehaviour, ITickable
         }
 
         if (!seen) return;
+        moving = false;
         playing = false;
         result = false;
         defeatText.enabled = true;
@@ -108,7 +111,7 @@ public class NAB1_Game : MonoBehaviour, ITickable
             return;
         }
 
-        if(GameController.currentTick == 5 && (!seen && !result))
+        if(GameController.currentTick == 5 && (!seen && !result && !moving))
         {
             guard1.GetComponent<NAB1_Guard>().SwitchLight();
             AudioManager.PlaySound(defeatSound);

@@ -100,6 +100,7 @@ namespace MiniGame.DeadPoule
             playerSequenceTrackerDebug = PlayerSequenceTracker;
             if (GameState == GameState.Playing)
             {
+                Debug.Log("processing player input");
                 ProcessPlayerInputs();
             }
         }
@@ -197,6 +198,7 @@ namespace MiniGame.DeadPoule
             }
 
             PlayerSequenceTracker++;
+            Debug.Log("checking");
         }
 
         private void HideButtonSequence()
@@ -214,6 +216,7 @@ namespace MiniGame.DeadPoule
 
         private void ReceiveEngGameEvent()
         {
+            Debug.Log("receiving end game event");
             if (!FailedSequenceBeforeEnd)
             {
                 byte[] values = new byte[(byte)Difficulty];
