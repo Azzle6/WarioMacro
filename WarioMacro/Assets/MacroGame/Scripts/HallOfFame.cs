@@ -49,6 +49,7 @@ public class HallOfFame : MonoBehaviour
     {
         foreach (var c in team)
         {
+            Debug.Log(c);
             currentRun.team.Add(c,true);
         }
     }

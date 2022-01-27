@@ -60,8 +60,13 @@ public class DialogManager : MonoBehaviour
         else
         {
             LastDialog();
-            yield return new WaitUntil(() => InputManager.GetKeyDown(ControllerKey.A, true));
-            //FinishDialog();
+            while (!InputManager.GetKeyDown(ControllerKey.A, true) && (!curDial.canBeCanceled || !InputManager.GetKeyDown(ControllerKey.B, true)))
+            {
+                yield return null;
+            }
+            //yield return new WaitUntil(() => InputManager.GetKeyDown(ControllerKey.A, true));
+            Debug.Log("QUIT");
+            FinishDialog();
             yield break;
         }
 
