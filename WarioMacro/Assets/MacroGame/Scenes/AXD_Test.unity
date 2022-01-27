@@ -943,7 +943,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8717866440002024900, guid: 2ce2da841ea3ae6408496ef6ea0338ad, type: 3}
   m_PrefabInstance: {fileID: 432299751}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 432299753}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b3b6619aeba9cf45936132424083d3f, type: 3}
@@ -2772,11 +2772,6 @@ MonoBehaviour:
   m_FirstSelected: {fileID: 2070860413}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
---- !u!1 &1395309684 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 738912633962537875, guid: 6e98400099c7a404fb601974b3cbc9b2, type: 3}
-  m_PrefabInstance: {fileID: 708740582}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1395309685 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8928302667850467486, guid: 6e98400099c7a404fb601974b3cbc9b2, type: 3}
@@ -2993,11 +2988,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!224 &1726170782 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 4292527101941176009, guid: 20f270314eb27384fb26c55d18c4c596, type: 3}
-  m_PrefabInstance: {fileID: 1574477659}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1749864759
 GameObject:
   m_ObjectHideFlags: 0
@@ -3036,20 +3026,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d71c9da22b0148188ab63c718724b728, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentScene: 
   player: {fileID: 1862497960}
+  scoreManager: {fileID: 1923970708}
+  hallOfFame: {fileID: 0}
   characterManager: {fileID: 1749864769}
   resultPanel: {fileID: 135660540}
   settingsManager: {fileID: 1749864766}
   mapManager: {fileID: 1749864767}
+  lifeBar: {fileID: 1749864765}
+  rewardChart: {fileID: 0}
   macroGameCanvasAnimator: {fileID: 2008032679}
-  scoreManager: {fileID: 1923970708}
   alarm: {fileID: 432299754}
   recruitmentController: {fileID: 1749864768}
+  astralPathController: {fileID: 0}
   timer: {fileID: 1749864763}
+  menu: {fileID: 0}
   transitionController: {fileID: 1749864762}
   keywordManager: {fileID: 1112552556}
-  lifeBar: {fileID: 1749864765}
-  mainMenuBuildIndex: 0
+  endScoreUI: {fileID: 0}
   macroObjects:
   - {fileID: 2053484114}
   - {fileID: 219098538}
@@ -3064,6 +3059,11 @@ MonoBehaviour:
   - MG_ULC_Scene_TacticMagic
   - MG_ULA_EscapeFromThem
   - MG_NAA_Scene_ChainedFist
+  stopLoop: 0
+  runChronometer: 0
+  chronometer: 0
+  startTimer: 0
+  WantToContinue: 0
 --- !u!4 &1749864761
 Transform:
   m_ObjectHideFlags: 0
@@ -3091,6 +3091,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 099982473ecba8f4aa019be946136936, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  transitionGO: {fileID: 0}
   director: {fileID: 1696372370}
   timerGO: {fileID: 1287644084}
 --- !u!114 &1749864763
@@ -3161,12 +3162,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifeBarGO: {fileID: 219098539}
-  life: 0
   portraits:
   - {fileID: 726869229}
   - {fileID: 1703829208}
   - {fileID: 45363655}
   - {fileID: 1034112266}
+  keyChains: []
 --- !u!114 &1749864766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3193,10 +3194,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0436ebd9d0e87b0428785dd7236251fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  phaseFloorThresholds: 0000000000000000
+  settingsManager: {fileID: 0}
+  controllerSO: {fileID: 0}
+  mapParent: {fileID: 0}
   recruitmentMap: {fileID: 2039753417}
-  mapsPerGame: 5
-  mapGOList:
-  - {fileID: 1395309684}
+  astralPathMap: {fileID: 0}
+  mapPrefabList: []
 --- !u!114 &1749864768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3209,28 +3213,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eba1bfeb32f88648aca63bfb17b6528, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentScene: 
   player: {fileID: 0}
+  scoreManager: {fileID: 0}
+  hallOfFame: {fileID: 0}
   characterManager: {fileID: 0}
   resultPanel: {fileID: 0}
   settingsManager: {fileID: 0}
   mapManager: {fileID: 0}
+  lifeBar: {fileID: 0}
+  rewardChart: {fileID: 0}
   macroGameCanvasAnimator: {fileID: 0}
-  scoreManager: {fileID: 0}
   alarm: {fileID: 0}
   recruitmentController: {fileID: 0}
+  astralPathController: {fileID: 0}
   timer: {fileID: 0}
+  menu: {fileID: 0}
   transitionController: {fileID: 0}
   keywordManager: {fileID: 0}
-  lifeBar: {fileID: 0}
-  mainMenuBuildIndex: 0
+  endScoreUI: {fileID: 0}
   macroObjects: []
   sceneNames: []
+  stopLoop: 0
+  runChronometer: 0
+  chronometer: 0
+  startTimer: 0
+  WantToContinue: 0
   skipRecruitment: 1
+  canFinishRecruitment: 0
   alarmGO: {fileID: 432299753}
-  nodePrevisualisation: {fileID: 2064585279}
-  startNode: {fileID: 2039753416}
-  askedCharacterThreshold: 2
-  randomSpecialistThreshold: 1
+  director: {fileID: 0}
 --- !u!114 &1749864769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3243,6 +3255,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf041723ce897134abf20daa83b4d532, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerTeam: []
+  recruitableCharacters: []
   allAvailableCharacters:
   - type: 1
     characters:
@@ -3274,10 +3288,14 @@ MonoBehaviour:
     characters:
     - {fileID: 11400000, guid: 5e9b178d1d919ec4b82d2739a08b22de, type: 2}
     - {fileID: 11400000, guid: 3bd127e986944cb4580b6668631e3b95, type: 2}
-  totalCharacterCount: 4
-  isTeamFull: 0
-  chooseCharacterGO: {fileID: 1765599168}
-  buttonsParent: {fileID: 1726170782}
+  novices:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  imprisonedCharacters: []
   life: {fileID: 1749864765}
 --- !u!114 &1749864770
 MonoBehaviour:
@@ -3292,11 +3310,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menu: {fileID: 2136152314}
---- !u!1 &1765599168 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2993985442226087090, guid: 20f270314eb27384fb26c55d18c4c596, type: 3}
-  m_PrefabInstance: {fileID: 1574477659}
-  m_PrefabAsset: {fileID: 0}
+  defaultMenu: {fileID: 0}
+  settingsMenu: {fileID: 0}
 --- !u!224 &1765599169 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2993985442226087089, guid: 20f270314eb27384fb26c55d18c4c596, type: 3}
@@ -3649,9 +3664,13 @@ MonoBehaviour:
   ScenesList: []
   ScrollContent: {fileID: 1931179087}
   ToggleTemplate: {fileID: 50701862}
-  PlaytestPanel: {fileID: 1843691483}
+  playTestPanel: {fileID: 0}
   GameControl: {fileID: 1749864760}
   ScenesRefs: {fileID: 11400000, guid: d76fb35deef7b814f871c4671b373ba0, type: 2}
+  RecruitControl: {fileID: 0}
+  mapManager: {fileID: 0}
+  MiniGameInfoText: {fileID: 0}
+  mapNameText: {fileID: 0}
 --- !u!4 &1838577186
 Transform:
   m_ObjectHideFlags: 0
@@ -4033,17 +4052,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60baed0a3f598864c8037cba0b6cd755, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leaderBoard: {fileID: 0}
-  score: 0
-  moneyBag: 0
-  neutral: 00000000000000000000000000000000
-  oneSpecialist: 00000000000000000000000000000000
-  twoSpecialist: 00000000000000000000000000000000
-  neutralAlarm: 00000000000000000000000000000000
-  oneSpecialistAlarm: 00000000000000000000000000000000
-  twoSpecialistAlarm: 00000000000000000000000000000000
-  noSpecialist: 000000000000000000000000000000000000000000000000
-  noSpecialistAlarm: 000000000000000000000000000000000000000000000000
+  currentRunMoney: 0
+  scoreMultiplier: 1
+  moneyBagsDirector: {fileID: 0}
+  moneyBagsText: {fileID: 0}
 --- !u!1 &1931179087
 GameObject:
   m_ObjectHideFlags: 0
@@ -4325,17 +4337,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1588975975622184663, guid: e72f0a74ab8c7aa488d15216f00add06, type: 3}
   m_PrefabInstance: {fileID: 2039753414}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2039753416 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2277353041621368119, guid: e72f0a74ab8c7aa488d15216f00add06, type: 3}
-  m_PrefabInstance: {fileID: 2039753414}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ed55c304a8197e46bf04c615e97ff46, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2039753417 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1588975975622184662, guid: e72f0a74ab8c7aa488d15216f00add06, type: 3}
@@ -4563,17 +4564,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3352323816552735885, guid: 1e1ef1b76ab03374394526597db2186b, type: 3}
   m_PrefabInstance: {fileID: 2064585277}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2064585279 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6768247639776300833, guid: 1e1ef1b76ab03374394526597db2186b, type: 3}
-  m_PrefabInstance: {fileID: 2064585277}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24531290e5801a147954e1787113b718, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2070860413 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2993985442342349222, guid: 20f270314eb27384fb26c55d18c4c596, type: 3}
