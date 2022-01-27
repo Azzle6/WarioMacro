@@ -18,10 +18,13 @@ public class PlanManager : MonoBehaviour
     [SerializeField] private Button startGameButton;
     [SerializeField] private SpriteListSO domainsVisu;
     [SerializeField] private ScoreMultiplier[] multiplierList;
-    [SerializeField] private Image[] multiplierImages;
+    [SerializeField] private Animator[] multiplierAnimators;
+    [SerializeField] private PlanButton[] buttons;
 
     private ScoreMultiplier currentSelectedMultiplier;
     private bool isOpen;
+    private static readonly int isSelected = Animator.StringToHash("isSelected");
+    private static readonly int @select = Animator.StringToHash("Select");
 
     public void OpenPlan()
     {
@@ -51,9 +54,14 @@ public class PlanManager : MonoBehaviour
         scoreManager.scoreMultiplier = currentSelectedMultiplier.multiplierValue;
         UpdateGOButton();
 
-        multiplierImages[selectedMultIndex].color = new Color(1, 1, 1);
-        multiplierImages[(selectedMultIndex + 1) % 3].color = new Color(0.4f, 0.4f, 0.4f);
-        multiplierImages[(selectedMultIndex + 2) % 3].color = new Color(0.4f, 0.4f, 0.4f);
+        multiplierAnimators[selectedMultIndex].SetBool(isSelected, true);
+        multiplierAnimators[selectedMultIndex].SetTrigger(@select);
+        
+        //buttons[selectedMultIndex].enabled = false;
+        multiplierAnimators[(selectedMultIndex + 1) % 3].SetBool(isSelected, false);
+        //buttons[(selectedMultIndex + 1) % 3].enabled = true;
+        multiplierAnimators[(selectedMultIndex + 2) % 3].SetBool(isSelected, false);
+        //buttons[(selectedMultIndex + 2) % 3].enabled = true;
     }
 
     private void GenerateFloorCounts()
