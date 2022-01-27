@@ -96,7 +96,7 @@ public class GameController : Ticker
             instance.hallOfFame.UpdateHallOfFame(instance.scoreManager.currentRunMoney,instance.chronometer);
             AudioManager.MacroPlaySound("VictoryTheme",0);
             AudioManager.MacroPlaySoundLoop("VictoryLoop",6);
-            yield return new WaitForSeconds(3);
+            yield return new WaitForSeconds(6);
             int bonusScore = characterManager.playerTeam.Sum(character => 50);
             endScoreUI.ToggleEndSuccess(bonusScore);
             scoreManager.AddMoney(bonusScore);
@@ -106,7 +106,7 @@ public class GameController : Ticker
         else
         {
             AudioManager.MacroPlaySound("DefeatTheme",0);
-            AudioManager.MacroPlaySoundLoop("DefeatLoop",3);
+            AudioManager.MacroPlaySoundLoop("DefeatLoop",6);
             yield return new WaitForSeconds(6);
             endScoreUI.ToggleEndFailure();
 
@@ -332,7 +332,7 @@ public class GameController : Ticker
                                       : 1));
             
             resultPanel.SetGain( Mathf.FloorToInt(rewardChart.GetMoneyBags(MapManager.currentPhase, behaviourNode.behaviour) * (c != default(Character)
-                ? (c.mastery == Character.Level.Expert ? 2 : 1.5f) 
+                ? (c.mastery == Character.Level.Expert ? 1.5f : 1.2f) 
                 : 1)));
             UIMoneyField.SetCounterTextTyping(scoreManager.currentRunMoney.ToString());
             Debug.Log(scoreManager.currentRunMoney.ToString());
