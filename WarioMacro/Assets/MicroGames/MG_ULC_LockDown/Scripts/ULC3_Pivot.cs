@@ -1,15 +1,17 @@
 using UnityEngine;
+using DG.Tweening;
 
 public class ULC3_Pivot : MonoBehaviour
 {
     
     [SerializeField] private float anglePerStep;
     [SerializeField] private int numberOfSteps;
-    
+
     [HideInInspector] public int currentPos = 0;
     [HideInInspector] public int unlockPos;
 
     public bool isSelected = false;
+    private bool isPositionGood = false;
     
     [HideInInspector] public Vector2 leftStickInput;
     [HideInInspector] public Vector2 lastStickInput;
@@ -22,6 +24,25 @@ public class ULC3_Pivot : MonoBehaviour
     {
         unlockPos = Random.Range(1, numberOfSteps);
     }
+
+    void Update()
+    {
+        if (currentPos == unlockPos)
+        {
+            //Do Feedback
+            if (!isPositionGood)
+            {
+                isPositionGood = true;
+                transform.DOKill();
+                transform.DOShakePosition(.1f, 0.2f, 100, 25f, false, true);
+            }
+        }
+        else
+        {
+            isPositionGood = false;
+        }
+    }
+    
     
     void FixedUpdate()
     {

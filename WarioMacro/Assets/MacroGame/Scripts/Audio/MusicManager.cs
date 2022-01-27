@@ -8,9 +8,9 @@ public class MusicManager : MonoBehaviour, ITickable
 {
     public static MusicManager instance;
 
-    [HideInInspector] public Soundgroup.CurrentPhase state = Soundgroup.CurrentPhase.RECRUIT;
+    [HideInInspector] public Soundgroup.CurrentPhase state = Soundgroup.CurrentPhase.MENU;
     [SerializeField] private MusicManagerSO musicSO;
-    [SerializeField] private AudioSource AudioS; 
+    [SerializeField] public AudioSource AudioS; 
     private AudioClip currentAudioClip;
     private AudioClip nextAudioClip;
     private float nextVolume;
@@ -73,7 +73,7 @@ public class MusicManager : MonoBehaviour, ITickable
     {
         //GameManager.Register();
 
-        FindMusic(100, Soundgroup.PhaseState.MACROGAME, Soundgroup.CurrentPhase.RECRUIT);
+        FindMusic(100, Soundgroup.PhaseState.MACROGAME, Soundgroup.CurrentPhase.MENU);
         currentAudioClip = nextAudioClip;
         AudioS.clip = currentAudioClip;
         AudioS.volume = nextVolume;

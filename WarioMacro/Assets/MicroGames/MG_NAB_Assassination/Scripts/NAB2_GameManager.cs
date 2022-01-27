@@ -23,6 +23,8 @@ public class NAB2_GameManager : MonoBehaviour, ITickable
     {
         GameManager.Register();
         GameController.Init(this);
+        failure = false;
+        success = false;
     }
 
 
@@ -34,6 +36,7 @@ public class NAB2_GameManager : MonoBehaviour, ITickable
             successAnim.SetActive(true);
             ticWait = 3;
             earlyAction = true;
+            success = true;
             GameController.StopTimer();
         }
 
@@ -42,6 +45,7 @@ public class NAB2_GameManager : MonoBehaviour, ITickable
             failedAnim.SetActive(true);
             ticWait = 3;
             earlyAction = true;
+            failure = true;
             GameController.StopTimer();
         }
 
@@ -59,7 +63,7 @@ public class NAB2_GameManager : MonoBehaviour, ITickable
             }
             else if(shotScript.win == true)
             {
-                successAnim.SetActive(true);
+                successAnim.SetActive(success);
 
             }
         }
@@ -77,7 +81,7 @@ public class NAB2_GameManager : MonoBehaviour, ITickable
         ticWait--;
         if (ticWait == -1)
         {
-            GameController.FinishGame(true);
+            GameController.FinishGame(success);
         }
 
     }

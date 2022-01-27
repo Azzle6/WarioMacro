@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,12 +13,10 @@ public class MoneyField_UI : MonoBehaviour
     private char[] charArray = new char[100];
 
 
-    private void Start()
-    {
-        SetCounterTextTyping("128950");
-    }
+    
     public char[] SetCounterTextTyping(string number)
     {
+        textString = String.Empty;
         charArray = number.ToCharArray();
 
         StartCoroutine(CounterTyping());
@@ -48,7 +47,7 @@ public class MoneyField_UI : MonoBehaviour
                 string s = z.ToString();
                 char[] swapCharArray = s.ToCharArray();
                 if(debug)print(originChar + " // " + z);
-                if(debug)print("String de Texte intermédiaire = " + ChangeStringCharAtPosition(textCharArray, i, swapCharArray));
+                if(debug)print("String de Texte intermÃ©diaire = " + ChangeStringCharAtPosition(textCharArray, i, swapCharArray));
 
                 intermediaryString = ChangeStringCharAtPosition(textCharArray, i, swapCharArray);
                 textField.text = intermediaryString;
