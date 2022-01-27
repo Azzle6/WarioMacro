@@ -77,8 +77,7 @@ public class ULA1_GameManager : MonoBehaviour, ITickable
                 stop = true;
                 Debug.Log(GameController.currentTick);
                 GameController.StopTimer();
-                tickLoose = GameController.currentTick;
-                
+
             }
             
             if (GameController.currentTick == 5 && !stop)
@@ -98,6 +97,7 @@ public class ULA1_GameManager : MonoBehaviour, ITickable
 
     public void Win()
     {
+        tickLoose = GameController.currentTick;
         Debug.Log(tickLoose);
         victory.enabled = true;
         result = true;
@@ -110,6 +110,7 @@ public class ULA1_GameManager : MonoBehaviour, ITickable
 
     public void Loose()
     {
+        tickLoose = GameController.currentTick;
         Debug.Log(tickLoose);
         defeat.enabled = true;
         result = false;
