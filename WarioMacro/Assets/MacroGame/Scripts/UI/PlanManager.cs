@@ -18,6 +18,7 @@ public class PlanManager : MonoBehaviour
     [SerializeField] private Button startGameButton;
     [SerializeField] private SpriteListSO domainsVisu;
     [SerializeField] private ScoreMultiplier[] multiplierList;
+    [SerializeField] private Image[] multiplierImages;
 
     private ScoreMultiplier currentSelectedMultiplier;
     private bool isOpen;
@@ -49,6 +50,10 @@ public class PlanManager : MonoBehaviour
         currentSelectedMultiplier = multiplierList[selectedMultIndex];
         scoreManager.scoreMultiplier = currentSelectedMultiplier.multiplierValue;
         UpdateGOButton();
+
+        multiplierImages[selectedMultIndex].color = new Color(1, 1, 1);
+        multiplierImages[(selectedMultIndex + 1) % 3].color = new Color(0.4f, 0.4f, 0.4f);
+        multiplierImages[(selectedMultIndex + 2) % 3].color = new Color(0.4f, 0.4f, 0.4f);
     }
 
     private void GenerateFloorCounts()
