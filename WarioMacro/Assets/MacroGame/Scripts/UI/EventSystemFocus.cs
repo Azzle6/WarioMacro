@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 // ReSharper disable once CheckNamespace
 public class EventSystemFocus : MonoBehaviour
@@ -56,6 +57,15 @@ public class EventSystemFocus : MonoBehaviour
         return dir;
     }
 
+    private static void SetInstanceEnabled(Behaviour instance, bool state)
+    {
+        instance.enabled = state;
+        foreach (Button button in instance.GetComponentsInChildren<Button>())
+        {
+            button.enabled = state;
+        }
+    }
+
     private void Awake()
     {
         instances.Add(this);
@@ -68,7 +78,7 @@ public class EventSystemFocus : MonoBehaviour
 
         foreach (EventSystemFocus instance in instances.Where(instance => instance != this && instance.isActiveAndEnabled))
         {
-            instance.enabled = false;
+            SetInstanceEnabled(instance, false);
             previouslyActive = instance;
         }
     }
@@ -77,7 +87,7 @@ public class EventSystemFocus : MonoBehaviour
     {
         if (previouslyActive == null) return;
         
-        previouslyActive.enabled = true;
+        SetInstanceEnabled(previouslyActive, true);
         previouslyActive = null;
     }
 

@@ -49,12 +49,12 @@ public class RecruitmentController : GameController
 
     public void StopRecruitPhase()
     {
-        if (instance.characterManager.playerTeam.Count >= 4)
-        {
-            GameController.instance.hallOfFame.StartRun(instance.characterManager.playerTeam.ToArray());
-            SetRecruitmentActive(false);
-            canFinishRecruitment = true;
-        }
+        if (instance.characterManager.playerTeam.Count < 4) return;
+        
+        instance.hallOfFame.StartRun(instance.characterManager.playerTeam.ToArray());
+        SetRecruitmentActive(false);
+        AudioManager.MacroPlaySound("RunStart");
+        canFinishRecruitment = true;
     }
 
     public void SkipRecruitment()

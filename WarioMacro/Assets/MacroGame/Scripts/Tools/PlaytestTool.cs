@@ -119,4 +119,10 @@ public class PlaytestTool : MonoBehaviour
     {
         RecruitControl.SkipRecruitment();
     }
+
+    public void ResetPlayerPrefs()
+    {
+        PlayerPrefs.DeleteAll();
+        PlayerPrefs.Save();
+    }
 }

@@ -48,10 +48,9 @@ public class Player : MonoBehaviour
     public IEnumerator ExitPortal()
     {
         animator.SetTrigger(portalExit);
-        //while (playerAnimation.animationState) yield return null;
+        while (portalAnimation.animationState)
+            yield return null;
         portalAnimation.animationState = true;
-        yield return null;
-        //animator.SetTrigger(idle);
     }
     
 

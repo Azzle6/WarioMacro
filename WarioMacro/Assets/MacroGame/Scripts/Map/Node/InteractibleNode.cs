@@ -13,7 +13,6 @@ public class InteractibleNode : MonoBehaviour
 
     public void NextMap()
     {
-        GameController.instance.NextMap();
         GameController.instance.WantToContinue = true;
         GameController.instance.InteractiveEventEnd();
     }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class PortalAnimation : MonoBehaviour
 {
     public bool animationState = true;
-
+    
     [UsedImplicitly]
     private void PlayButtonSound()
     {

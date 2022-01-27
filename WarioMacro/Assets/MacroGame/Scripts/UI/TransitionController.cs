@@ -15,6 +15,7 @@ public class TransitionController : MonoBehaviour
     public void TransitionStart()
     {
         director.time = 0;
+        AudioManager.MacroPlaySound("MiniGameEnter", 0);
         director.Play();
     }
     

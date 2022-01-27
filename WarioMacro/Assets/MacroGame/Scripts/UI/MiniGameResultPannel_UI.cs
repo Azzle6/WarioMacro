@@ -59,7 +59,7 @@ public class MiniGameResultPannel_UI : MonoBehaviour
     [Header("NodeAnim")]
     [SerializeField] private float resultAnimBtwnTime = 0.33f;
     [SerializeField] private float resultAnimWaitTime = 0.8f;
-    [SerializeField] private float spawnAnimBtwnTime = 0.66f;
+    [SerializeField] public float spawnAnimBtwnTime = 0.66f;
     [SerializeField] private float spawnAnimWaitTime = 2.3f;
 
     public GameObject[] nodeArray = new GameObject[10];
@@ -310,10 +310,13 @@ public class MiniGameResultPannel_UI : MonoBehaviour
             nodeArray[i].gameObject.GetComponent<Animator>().SetTrigger("Anim");
             yield return new WaitForSeconds(resultAnimBtwnTime);
         }
+
+        yield return null;
     }
 
     IEnumerator CasdaingNodeSpawnAnim()
     {
+        Debug.Log("passe ici coucou");
         yield return new WaitForSeconds(spawnAnimWaitTime);
 
         for (int i = 0; i < expertNodeArray.Length; i++)
@@ -399,7 +402,7 @@ public class MiniGameResultPannel_UI : MonoBehaviour
         currentNode = 0;
     }
 
-    public void TriggerResult(bool result)
+    public IEnumerator TriggerResult(bool result)
     {
         if (!result)
         {
@@ -408,7 +411,7 @@ public class MiniGameResultPannel_UI : MonoBehaviour
         else director.playableAsset = moneyGain;
 
         animator.SetTrigger("Result");
-        StartCoroutine(CascadingNodeAnim());
+        yield return StartCoroutine(CascadingNodeAnim());
 
         //Text for the MoneyBag goes here
     }
