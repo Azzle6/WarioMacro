@@ -77,6 +77,9 @@ public class MiniGameResultPannel_UI : MonoBehaviour
         ClearAllNodes();
         ToggleWindow(false);
 
+        //SetGain(1500);
+        //ToggleMoneyBag(true);
+
         if(debug)
         {
             ToggleWindow(true);
@@ -296,9 +299,17 @@ public class MiniGameResultPannel_UI : MonoBehaviour
         pinkOutlineTextField.text = keyword;
     }
 
-    public void EnableMoneyBag()
+    public void SetGain(int gain)
     {
-        moneyBagGO.SetActive(true);
+        string s = gain.ToString();
+        string gainString = "+ " + gain + " $";
+
+        moneyTextField.text = gainString;
+    }
+
+    public void ToggleMoneyBag(bool toggle)
+    {
+        moneyBagGO.SetActive(toggle);
     }
 
     IEnumerator CascadingNodeAnim()
