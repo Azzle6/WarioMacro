@@ -10,7 +10,7 @@ public class MusicManager : MonoBehaviour, ITickable
 
     [HideInInspector] public Soundgroup.CurrentPhase state = Soundgroup.CurrentPhase.RECRUIT;
     [SerializeField] private MusicManagerSO musicSO;
-    [SerializeField] private AudioSource AudioS; 
+    [SerializeField] public AudioSource AudioS; 
     private AudioClip currentAudioClip;
     private AudioClip nextAudioClip;
     private float nextVolume;
