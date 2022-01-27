@@ -22,6 +22,7 @@ public class AudioManager : MonoBehaviour
     private int currentMGSoundSourceID;
     private int currentMusicSourceID;
     private int unavailableAudioCount;
+    private IEnumerator currentCoroutine;
 
     /// <summary>
     /// Returns the static instance of AudioManager. Creates a new one if not set.
@@ -91,13 +92,15 @@ public class AudioManager : MonoBehaviour
     public static void MacroPlaySound(string soundName, float delay)
     {
         SoundInfo sound = instance.soundList.FindSound(soundName);
-        instance.StartCoroutine(instance.PlayAudio(sound.clip, AudioType.Sound, sound.clipVolume, delay));
+        instance.currentCoroutine = instance.PlayAudio(sound.clip, AudioType.Sound, sound.clipVolume, delay);
+        instance.StartCoroutine(instance.currentCoroutine);
     }
     
     public static void MacroPlaySoundLoop(string soundName, float delay)
     {
         SoundInfo sound = instance.soundList.FindSound(soundName);
-        instance.StartCoroutine(instance.PlayAudioLoop(sound.clip, AudioType.Sound, sound.clipVolume, delay));
+        instance.currentCoroutine = instance.PlayAudioLoop(sound.clip, AudioType.Sound, sound.clipVolume, delay);
+        instance.StartCoroutine(instance.currentCoroutine);
     }
 
     public static void MacroPlayRandomSound(string soundName) => MacroPlayRandomSound(soundName, 0);
@@ -105,7 +108,8 @@ public class AudioManager : MonoBehaviour
     public static void MacroPlayRandomSound(string soundName, float delay)
     {
         SoundInfo sound = instance.soundList.FindRandomSound(soundName);
-        instance.StartCoroutine(instance.PlayAudio(sound.clip, AudioType.Sound, sound.clipVolume, delay));
+        instance.currentCoroutine = instance.PlayAudio(sound.clip, AudioType.Sound, sound.clipVolume, delay);
+        instance.StartCoroutine(instance.currentCoroutine);
     }
 
     /// <summary>
@@ -121,6 +125,10 @@ public class AudioManager : MonoBehaviour
     /// <param name="soundName"></param>
     /// <param name="delay">the delay before the music stops playing</param>
     public static void StopMacroSound(string soundName, float delay) => instance.StartCoroutine(instance.StopAudio(instance.soundList.FindSound(soundName).clip, AudioType.Sound, delay));
+
+    public static void StopCurrentCoroutine() => instance.StopCoroutine(instance.currentCoroutine);
+    
+    public static void AmStopAllCoroutines() => ((MonoBehaviour) instance).StopAllCoroutines();
 
     public static void StopAllMicroSounds()
     {
