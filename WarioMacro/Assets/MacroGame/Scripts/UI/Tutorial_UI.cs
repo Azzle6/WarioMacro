@@ -12,18 +12,14 @@ public class Tutorial_UI : MonoBehaviour
 
     private int currentIndex = 0;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        InitTutorial();
-    }
+    
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.LeftArrow)) PreviousPage();
-        if (Input.GetKeyDown(KeyCode.RightArrow)) NextPage();
+        if (InputManager.GetKeyDown(ControllerKey.LB, true)) PreviousPage();
+        if (InputManager.GetKeyDown(ControllerKey.RB, true)) NextPage();
 
-        if (Input.GetKeyDown(KeyCode.Space)) ToggleWindow(false);
+        if (InputManager.GetKeyDown(ControllerKey.B, true)) ToggleWindow(false);
     }
 
     public void PreviousPage()
@@ -46,6 +42,7 @@ public class Tutorial_UI : MonoBehaviour
     public void ToggleWindow(bool toggle)
     {
         allPannels.gameObject.SetActive(toggle);
+        if (!toggle) GameController.OnInteractionEnd();
     }
 
     public void ToggleContent(int contentIndex, bool toggle)
@@ -59,6 +56,7 @@ public class Tutorial_UI : MonoBehaviour
         {
             index = content.Length;
         }
+        ToggleWindow(true);
 
         currentIndex = 0;
         ToggleContent(currentIndex, true);
