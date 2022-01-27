@@ -2,6 +2,7 @@ using System;
 using GameTypes;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -16,10 +17,10 @@ public class PlanManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI priceText;
     [SerializeField] private TextMeshProUGUI startGameText;
     [SerializeField] private Button startGameButton;
+    [SerializeField] private Animator startGameButtonAnimator;
     [SerializeField] private SpriteListSO domainsVisu;
     [SerializeField] private ScoreMultiplier[] multiplierList;
     [SerializeField] private Animator[] multiplierAnimators;
-    [SerializeField] private PlanButton[] buttons;
 
     private ScoreMultiplier currentSelectedMultiplier;
     private bool isOpen;
@@ -32,8 +33,12 @@ public class PlanManager : MonoBehaviour
         AudioManager.MacroPlaySound("MapEnter");
         isOpen = true;
         InputManager.lockInput = true;
+        currentSelectedMultiplier = multiplierList[0];
+        scoreManager.scoreMultiplier = currentSelectedMultiplier.multiplierValue;
+        multiplierAnimators[0].Play("Plan_Multiplier_Selected");
         UpdateGOButton();
         UpdateDomains();
+        
     }
 
     public void ClosePlan(bool playSound)
@@ -56,32 +61,14 @@ public class PlanManager : MonoBehaviour
 
         multiplierAnimators[selectedMultIndex].SetBool(isSelected, true);
         multiplierAnimators[selectedMultIndex].SetTrigger(@select);
-        
-        //buttons[selectedMultIndex].enabled = false;
         multiplierAnimators[(selectedMultIndex + 1) % 3].SetBool(isSelected, false);
-        //buttons[(selectedMultIndex + 1) % 3].enabled = true;
         multiplierAnimators[(selectedMultIndex + 2) % 3].SetBool(isSelected, false);
-        //buttons[(selectedMultIndex + 2) % 3].enabled = true;
     }
 
     private void GenerateFloorCounts()
     {
-        for (int i = 0; i < 2; i++)
-        {
-            int trueFloorCount = MapMana.phaseFloorThresholds[i];
-            if (trueFloorCount == GameControllerSO.instance.firstPhaseMaxFloorCount)
-            {
-                floorCountTexts[i].text = trueFloorCount.ToString();
-                continue;
-            }
-
-            int lowerLimit = trueFloorCount - Random.Range(1, 3);
-            if (lowerLimit < 1)
-                lowerLimit = 1;
-            int upperLimit = trueFloorCount + Random.Range(1, 3);
-
-            floorCountTexts[i].text = lowerLimit + " <> " + upperLimit;
-        }
+        floorCountTexts[0].text = GameControllerSO.instance.firstPhaseMinFloorCount + " <> " + GameControllerSO.instance.firstPhaseMaxFloorCount;
+        floorCountTexts[1].text = GameControllerSO.instance.secondPhaseMinFloorCount + " <> " + GameControllerSO.instance.secondPhaseMaxFloorCount;
     }
 
     private void UpdateDomains()
@@ -135,17 +122,21 @@ public class PlanManager : MonoBehaviour
         if (CharacterManager.instance.playerTeam.Count < 4)
         {
             startGameText.text = (4 - CharacterManager.instance.playerTeam.Count) + " more members to start...";
+            EventSystem.current.SetSelectedGameObject(multiplierAnimators[0].gameObject);
             startGameButton.interactable = false;
         }
         else if (scoreManager.currentMoney < currentSelectedMultiplier.boostPrice)
         {
             startGameText.text = "Too expensive !";
+            EventSystem.current.SetSelectedGameObject(multiplierAnimators[0].gameObject);
             startGameButton.interactable = false;
         }
         else
         {
             startGameText.text =  "Go !";
             startGameButton.interactable = true;
+            EventSystem.current.SetSelectedGameObject(startGameButton.gameObject);
+            startGameButtonAnimator.SetBool("hovered", true);
         }
 
     }

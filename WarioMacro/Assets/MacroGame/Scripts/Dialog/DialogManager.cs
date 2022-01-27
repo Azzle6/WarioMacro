@@ -53,6 +53,7 @@ public class DialogManager : MonoBehaviour
     private string[] currentCharaDialog;
     public bool isCharaDialog;
     public TMP_Text nametext;
+    public TMP_Text nametextOutline;
 
     private void Awake()
     {
@@ -76,6 +77,7 @@ public class DialogManager : MonoBehaviour
         {
             charaSprite.sprite = curDial.chara;
             nametext.text = curDial.name;
+            nametextOutline.text = curDial.name;
             charaSprite.gameObject.SetActive(true);
         }
         else
@@ -83,6 +85,7 @@ public class DialogManager : MonoBehaviour
             if(curDial.chara != null) charaSprite.sprite = curDial.chara;
             charaSprite.gameObject.SetActive(false);
             nametext.text = curDial.name;
+            nametextOutline.text = curDial.name;
         }
         
         isInDialog = true;
@@ -109,7 +112,15 @@ public class DialogManager : MonoBehaviour
         {
             textZone.text = string.Concat(textZone.text, dialogToDisplay[curIndex][i]);
             yield return new WaitForSecondsRealtime(0.01f);
+            if (InputManager.GetKey(ControllerKey.A, true))
+            {
+                textZone.text = dialogToDisplay[curIndex];
+                yield return new WaitWhile(() => InputManager.GetKey(ControllerKey.A, true));
+                break;
+            }
         }
+
+        
         
         if(curIndex < curDial.dialogs.Length - 1) curIndex++;
         else
@@ -126,6 +137,7 @@ public class DialogManager : MonoBehaviour
         }
 
         yield return new WaitUntil(() => InputManager.GetKeyDown(ControllerKey.A, true));
+        yield return new WaitWhile(() => InputManager.GetKey(ControllerKey.A, true));
 
         currentCoroutine = WriteNextSentence();
         StartCoroutine(currentCoroutine);
@@ -134,6 +146,12 @@ public class DialogManager : MonoBehaviour
     private void LastDialog()
     {
         ButtonsParent.SetActive(true);
+        if (ButtonsParent.transform.childCount > 0)
+        {
+            EventSystem.current.SetSelectedGameObject(ButtonsParent.transform.GetChild(0).gameObject);
+            ButtonsParent.transform.GetChild(0).GetComponent<Animator>().Play("Dialog_ChoiceButton_Hover");
+        }
+        
     }
 
     private void FinishDialog()
@@ -199,6 +217,7 @@ public class DialogManager : MonoBehaviour
         
         ButtonsParent.SetActive(false);
         ButtonsParent.GetComponent<EventSystemFocus>().firstSelected = buttons[0];
+        
         return buttons.ToArray();
     }
     

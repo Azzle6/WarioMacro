@@ -30,6 +30,7 @@ public class GameController : Ticker
     [HideInSubClass] [SerializeField] private MenuManager menu;
     [HideInSubClass] [SerializeField] private TransitionController transitionController;
     [HideInSubClass] [SerializeField] private KeywordDisplay keywordManager;
+    [HideInSubClass] [SerializeField] private MoneyField_UI UIMoneyField;
     [HideInSubClass] [SerializeField] private EndScoreUI endScoreUI;
     [SerializeField] protected internal List<GameObject> macroObjects = new List<GameObject>();
     [SerializeField] public string[] sceneNames = Array.Empty<string>();
@@ -53,6 +54,9 @@ public class GameController : Ticker
 
     public bool WantToContinue;
 
+
+    public int nbMicroGamesSpecialist;
+    public int nbMicroGames;
     public static void Register()
     {
         if (instance != null) return;
@@ -91,7 +95,7 @@ public class GameController : Ticker
             instance.hallOfFame.UpdateHallOfFame(instance.scoreManager.currentRunMoney,instance.chronometer);
             AudioManager.MacroPlaySound("VictoryTheme",0);
             AudioManager.MacroPlaySoundLoop("VictoryLoop",6);
-            yield return new WaitForSeconds(6);
+            yield return new WaitForSeconds(3);
             endScoreUI.ToggleEndSuccess();
             scoreManager.AddToCurrentMoney();
             
@@ -100,7 +104,7 @@ public class GameController : Ticker
         {
             AudioManager.MacroPlaySound("DefeatTheme",0);
             AudioManager.MacroPlaySoundLoop("DefeatLoop",6);
-            yield return new WaitForSeconds(6);
+            yield return new WaitForSeconds(3);
             endScoreUI.ToggleEndFailure();
 
         }
@@ -134,6 +138,8 @@ public class GameController : Ticker
         runChronometer = true;
         Alarm.isActive = false;
         scoreManager.ShowMoney();
+        nbMicroGames = 0;
+        nbMicroGamesSpecialist = 0;
     }
 
     private IEnumerator GameLoop()
@@ -303,6 +309,8 @@ public class GameController : Ticker
             
             currentMG++;
             yield return new WaitForSeconds(1f);
+            resultPanel.ToggleMoneyBag(false);
+            nbMicroGames++;
         }
 
         FinalNodeResult =
@@ -318,8 +326,15 @@ public class GameController : Ticker
             Character c = characterManager.SpecialistOfTypeInTeam(behaviourNode.GetMGDomain(mgNumber));
             scoreManager.AddMoney(rewardChart.GetMoneyBags(MapManager.currentPhase, behaviourNode.behaviour) *
                                   (c != default(Character)
-                                      ? (c.mastery == Character.Level.Expert ? 2 : 1.5f) 
+                                      ? (c.mastery == Character.Level.Expert ? 1.5f : 1.2f) 
                                       : 1));
+            
+            resultPanel.SetGain( Mathf.FloorToInt(rewardChart.GetMoneyBags(MapManager.currentPhase, behaviourNode.behaviour) * (c != default(Character)
+                ? (c.mastery == Character.Level.Expert ? 2 : 1.5f) 
+                : 1)));
+            UIMoneyField.SetCounterTextTyping(scoreManager.currentRunMoney.ToString());
+            Debug.Log(scoreManager.currentRunMoney.ToString());
+            resultPanel.ToggleMoneyBag(true);
         }
         else
         {
