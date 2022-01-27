@@ -24,6 +24,7 @@ public class AstralPathController : GameController
         instance.macroObjects.Add(astralPostProcess);
         
         yield return instance.player.ExitPortal();
+        yield return new WaitForSecondsRealtime(0.2f);
         
         while (!instance.map.OnLastNode())
         {
