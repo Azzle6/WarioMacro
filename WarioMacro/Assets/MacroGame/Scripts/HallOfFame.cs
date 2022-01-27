@@ -10,10 +10,7 @@ public class HallOfFame : MonoBehaviour
 {
     public Run[] hall;
     public Run currentRun;
-    public GameObject hallPanel;
-    public RankElementHoF[] ranks = new RankElementHoF[10]; 
     
-    private bool isOpen;
     
     [Serializable]
     public class Run
@@ -122,35 +119,5 @@ public class HallOfFame : MonoBehaviour
     }
 
 
-    public void setRanksUI()
-    {
-        var i = 0;
-        foreach (var rank in hall)
-        {
-            ranks[i].gameObject.SetActive(true);
-            ranks[i].SetRank(rank);
-            i++;
-        }
-    }
     
-    private void Update()
-    {
-        if(InputManager.GetKeyDown(ControllerKey.B, true) && isOpen) CloseHall();
-    }
-    public void OpenHall()
-    {
-        hallPanel.SetActive(true);
-        isOpen = true;
-        InputManager.lockInput = true;
-        setRanksUI();
-    }
-
-    public void CloseHall()
-    {
-        hallPanel.SetActive(false);
-        isOpen = false;
-        InputManager.lockInput = false;
-        GameController.OnInteractionEnd();
-        AudioManager.MacroPlayRandomSound("BarmanExit");
-    }
 }

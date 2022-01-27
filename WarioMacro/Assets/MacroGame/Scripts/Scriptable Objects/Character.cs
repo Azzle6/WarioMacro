@@ -20,6 +20,9 @@ public class Character : ScriptableObject
     
     public GameObject PuppetPrefab;
 
+
+    public string[] RecruitDialog = new string[0];
+    public string[] AlreadyRecruitDialog = new string[0];
     public string GetMGSoundName()
     {
         return characterType switch
