@@ -96,9 +96,11 @@ public class GameController : Ticker
             AudioManager.MacroPlaySound("GameLose", 0);
         }
 
-        instance.hallOfFame.UpdateHallOfFame(GameController.instance.scoreManager.currentRunMoney,GameController.instance.chronometer);
+        instance.hallOfFame.UpdateHallOfFame(instance.scoreManager.currentRunMoney,instance.chronometer);
         characterManager.ResetEndGame();
         PlayerPrefs.Save();
+        
+        yield return new WaitForSecondsRealtime(0.5f);
         while (!InputManager.GetKeyDown(ControllerKey.A)) yield return null;
         //NotDestroyedScript.isAReload = true;
         AsyncOperation asyncLoadLvl = SceneManager.LoadSceneAsync(1, LoadSceneMode.Single);
