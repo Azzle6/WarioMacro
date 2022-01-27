@@ -34,10 +34,11 @@ public class CharacterManager : MonoBehaviour
     }
 
 
-    public int SpecialistOfTypeInTeam(int type)
+    public Character SpecialistOfTypeInTeam(int type)
     {
-        return playerTeam.Count(c => c.characterType == type);
+        return playerTeam.FirstOrDefault(c => c.characterType == type);
     }
+    
     [Serializable]
     public class Imprisoned
     {
@@ -94,8 +95,10 @@ public class CharacterManager : MonoBehaviour
     public void CloseJail()
     {
         jailPanel.SetActive(false);
+        isOpen = false;
         InputManager.lockInput = false;
         GameController.OnInteractionEnd();
+        AudioManager.MacroPlayRandomSound("BarmanExit");
     }
     
     private void SetRecruitable()
@@ -158,7 +161,7 @@ public class CharacterManager : MonoBehaviour
         Character rdCharacter = playerTeam[Random.Range(0, playerTeam.Count)];
         life.Imprison(rdCharacter);
         GameController.instance.hallOfFame.SetCharacterToJail(rdCharacter);
-        imprisonedCharacters.Add(new Imprisoned(rdCharacter, 3, 25000));
+        imprisonedCharacters.Add(new Imprisoned(rdCharacter, 4, 25000));
         playerTeam.Remove(rdCharacter);
         UpdateAvailable();
     }
@@ -203,9 +206,9 @@ public class CharacterManager : MonoBehaviour
     
     public void UpdateAvailable()
     {
+        PlayerPrefs.DeleteKey("imprisoned");
         if (!imprisonedCharacters.Any()) return;
         var save = "";
-        PlayerPrefs.DeleteKey("imprisoned");
         foreach (var imprisoned in imprisonedCharacters)
         {
             save += imprisoned.character + "," + imprisoned.turnLeft + "," + imprisoned.price +
@@ -227,18 +230,23 @@ public class CharacterManager : MonoBehaviour
             }
         }
         playerTeam.Clear();
-        SetRecruitable();
+        //SetRecruitable();
     }
     
-    public void FreeImprisoned(Imprisoned imp)
+    public bool FreeImprisoned(Imprisoned imp)
     {
-        if (!imprisonedCharacters.Contains(imp)) return;
-        if (!GameController.instance.scoreManager.Pay((int)imp.price)) return;
+        if (!imprisonedCharacters.Contains(imp)) return false;
+        if (!GameController.instance.scoreManager.Pay((int)imp.price)) return false;
         foreach (var list in allAvailableCharacters.Where(list => imp.character.characterType == list.type))
         {
             list.Add(imp.character);
             imprisonedCharacters.Remove(imp);
         }
+        
+        UpdateAvailable();
+        PlayerPrefs.Save();
+
+        return true;
     }
 
     public Character GetCharacter(string character)
@@ -251,6 +259,14 @@ public class CharacterManager : MonoBehaviour
                 {
                     return c;
                 }
+            }
+        }
+
+        foreach (var c in novices)
+        {
+            if (c.ToString() == character)
+            {
+                return c;
             }
         }
         return (from i in imprisonedCharacters where i.character.ToString() == character select i.character).FirstOrDefault();
