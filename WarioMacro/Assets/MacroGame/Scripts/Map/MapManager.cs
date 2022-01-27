@@ -9,20 +9,20 @@ using Random = UnityEngine.Random;
 public class MapManager : MonoBehaviour
 {
     public static int currentPhase { get; private set; }
-    public static int floor { get; private set; }
     public GameObject currentMapGO { get; private set; }
     
     public IPhaseDomains[] phaseDomainsArray;
     [HideInInspector] public int[] phaseFloorThresholds = new int[2];
 
     [SerializeField] private GameSettingsManager settingsManager;
+    [SerializeField] private FloorPlan_UI floorPlan;
     [FormerlySerializedAs("config")] [SerializeField] private GameControllerSO controllerSO;
     [SerializeField] private Transform mapParent;
     [SerializeField] private Map recruitmentMap;
     [SerializeField] private Map astralPathMap;
     [SerializeField] private GameObject[] mapPrefabList;
+    private static int floor;
     private Queue<GameObject> mapPrefabQueue;
-    
     private Map currentMap;
     
     
@@ -41,6 +41,7 @@ public class MapManager : MonoBehaviour
         currentMap.Unload();
         currentMap = astralPathMap;
         currentMap.Load();
+        floorPlan.SetFloor(floor, true);
         return currentMap;
     }
     
@@ -58,7 +59,7 @@ public class MapManager : MonoBehaviour
         currentMap = currentMapGO.GetComponent<Map>();
         currentMap.Load();
         floor++;
-        Debug.Log("Floor " + floor);
+        floorPlan.SetFloor(floor, false);
 
         switch (currentPhase)
         {

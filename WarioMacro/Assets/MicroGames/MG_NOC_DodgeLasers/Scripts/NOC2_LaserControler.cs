@@ -155,6 +155,12 @@ public class NOC2_LaserControler : MonoBehaviour
 
     private IEnumerator ColorEnd()
     {
+        if (NOC2_LaserManager.instance.currentTick < 3)
+        {
+            colorEndCoroutine = null;
+            yield break;
+        }
+        
         bool result = false;
         if (playerHere) result = true;
         NOC2_LaserManager.instance.AddResult(result);

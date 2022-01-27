@@ -11,6 +11,7 @@ public class RecruitmentController : GameController
     public bool canFinishRecruitment;
     [SerializeField] private GameObject alarmGO;
     [SerializeField] private PlayableDirector director;
+    [SerializeField] private GameObject floorPlanGO;
 
     public IEnumerator RecruitmentLoop()
     {
@@ -49,6 +50,7 @@ public class RecruitmentController : GameController
     {
         isInRecruitmentLoop = state;
         alarmGO.SetActive(!state);
+        floorPlanGO.SetActive(!state);
     }
 
     public void StopRecruitPhase()
