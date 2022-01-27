@@ -30,6 +30,7 @@ public class GameController : Ticker
     [HideInSubClass] [SerializeField] private MenuManager menu;
     [HideInSubClass] [SerializeField] private TransitionController transitionController;
     [HideInSubClass] [SerializeField] private KeywordDisplay keywordManager;
+    [HideInSubClass] [SerializeField] private EndScoreUI endScoreUI;
     [SerializeField] protected internal List<GameObject> macroObjects = new List<GameObject>();
     [SerializeField] public string[] sceneNames = Array.Empty<string>();
 
@@ -86,22 +87,24 @@ public class GameController : Ticker
     {
         if (value)
         {
-            macroGameCanvasAnimator.SetTrigger(victory);
+            //macroGameCanvasAnimator.SetTrigger(victory);
+            yield return StartCoroutine(endScoreUI.ToggleEndSuccess());
             scoreManager.AddToCurrentMoney();
-            AudioManager.MacroPlaySound("GameWin", 0);
+            
         }
         else
         {
-            macroGameCanvasAnimator.SetTrigger(defeat);
-            AudioManager.MacroPlaySound("GameLose", 0);
+            yield return StartCoroutine(endScoreUI.ToggleEndFailure());
+            //macroGameCanvasAnimator.SetTrigger(defeat);
+            
         }
 
         instance.hallOfFame.UpdateHallOfFame(instance.scoreManager.currentRunMoney,instance.chronometer);
         characterManager.ResetEndGame();
         PlayerPrefs.Save();
         
-        yield return new WaitForSecondsRealtime(0.5f);
-        while (!InputManager.GetKeyDown(ControllerKey.A)) yield return null;
+        //yield return new WaitForSecondsRealtime(0.5f);
+        //while (!InputManager.GetKeyDown(ControllerKey.A)) yield return null;
         //NotDestroyedScript.isAReload = true;
         AsyncOperation asyncLoadLvl = SceneManager.LoadSceneAsync(1, LoadSceneMode.Single);
         while (!asyncLoadLvl.isDone) yield return null;
