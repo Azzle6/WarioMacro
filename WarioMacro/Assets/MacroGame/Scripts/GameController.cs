@@ -37,6 +37,7 @@ public class GameController : Ticker
     private static readonly int defeat = Animator.StringToHash("Defeat");
     private static bool gameFinished;
     private static bool gameResult;
+    private bool FinalNodeResult;
     public bool stopLoop;
     protected internal Map map;
     private bool debugMicro;
@@ -152,6 +153,8 @@ public class GameController : Ticker
                 yield return StartCoroutine(NodeWithMicroGame(this, nodeMicroGame));
 
                 nodeMicroGame.DisableNode();
+                
+                //yield return StartCoroutine(resultPanel.TriggerResult(FinalNodeResult));
 
                 yield return new WaitForSecondsRealtime(1f);
 
@@ -220,6 +223,7 @@ public class GameController : Ticker
         var microGamesQueue = new Queue<string>();
         var microGamesList = new List<string>(sceneNames);
         int currentMG = 0;
+        int MicroGamesWin = 0;
 
         for (int i = Mathf.Min(behaviourNode.microGamesNumber, microGamesList.Count) - 1; i >= 0; i--)
         {
@@ -230,14 +234,16 @@ public class GameController : Ticker
 
         // init result panel
         resultPanel.Init(microGamesQueue.Count, behaviourNode.GetMGDomains());
-        yield return new WaitForSeconds(1f);
+        
+        if(behaviourNode.behaviour > 0) yield return new WaitForSeconds(resultPanel.spawnAnimBtwnTime * rewardChart.GetMGNumber(MapManager.currentPhase, behaviourNode.behaviour));
+        else yield return new WaitForSeconds(1f);
 
         // play each micro games one by one
         while (microGamesQueue.Count > 0)
         {
             StartCoroutine(resultPanel.CharaApparition(behaviourNode.GetMGDomains()[currentMG]));
             yield return new WaitForSecondsRealtime(1f);
-
+            
             resultPanel.PopWindowDown();
 
             yield return new WaitForSeconds(1f);
@@ -272,7 +278,7 @@ public class GameController : Ticker
             menu.enabled = true;
             ResetTickables();
             ResetTick();
-
+            if (gameResult) MicroGamesWin++;
             if (controller.MGResults(behaviourNode, currentMG, gameResult))
                 yield break;
 
@@ -281,9 +287,13 @@ public class GameController : Ticker
             yield return new WaitForSeconds(1f);
 
             resultPanel.SetCurrentNode(gameResult);
+            
             currentMG++;
             yield return new WaitForSeconds(1f);
         }
+
+        FinalNodeResult =
+            MicroGamesWin >= rewardChart.GetMGNumber(MapManager.currentPhase, behaviourNode.behaviour) / 2;
     }
 
     protected virtual bool MGResults(BehaviourNode behaviourNode, int mgNumber, bool result)
