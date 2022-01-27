@@ -318,7 +318,7 @@ public class GameController : Ticker
             Character c = characterManager.SpecialistOfTypeInTeam(behaviourNode.GetMGDomain(mgNumber));
             scoreManager.AddMoney(rewardChart.GetMoneyBags(MapManager.currentPhase, behaviourNode.behaviour) *
                                   (c != default(Character)
-                                      ? (c.mastery == Character.Level.Expert ? 2 : 1.5f) 
+                                      ? (c.mastery == Character.Level.Expert ? 1.5f : 1.2f) 
                                       : 1));
         }
         else
