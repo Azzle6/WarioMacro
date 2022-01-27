@@ -161,7 +161,7 @@ public class CharacterManager : MonoBehaviour
         Character rdCharacter = playerTeam[Random.Range(0, playerTeam.Count)];
         life.Imprison(rdCharacter);
         GameController.instance.hallOfFame.SetCharacterToJail(rdCharacter);
-        imprisonedCharacters.Add(new Imprisoned(rdCharacter, 3, 25000));
+        imprisonedCharacters.Add(new Imprisoned(rdCharacter, 4, 25000));
         playerTeam.Remove(rdCharacter);
         UpdateAvailable();
     }
@@ -230,7 +230,7 @@ public class CharacterManager : MonoBehaviour
             }
         }
         playerTeam.Clear();
-        SetRecruitable();
+        //SetRecruitable();
     }
     
     public bool FreeImprisoned(Imprisoned imp)

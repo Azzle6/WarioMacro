@@ -72,11 +72,11 @@ public class HallOfFame : MonoBehaviour
         {
             Run run = new Run();
             var temp2 = item.Split('/');
-            Debug.Log(item);
+            //Debug.Log(item);
             var team = temp2[2].Split(':');
             run.score = float.Parse(temp2[0]);
             run.time = float.Parse(temp2[1]);
-            Debug.Log(temp2[2]);
+            //Debug.Log(temp2[2]);
             foreach (var couple in team)
             {
                 var temp3 = couple.Split('.');
