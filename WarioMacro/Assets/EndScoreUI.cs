@@ -15,9 +15,10 @@ public class EndScoreUI : MonoBehaviour
     public TextMeshProUGUI score;
     public TextMeshProUGUI nbMicroGames;
     public TextMeshProUGUI nbSpecialistMicroGames;
+    public TextMeshProUGUI bonusGain;
 
 
-    public void ToggleEndSuccess()
+    public void ToggleEndSuccess(int bonusScore)
     {
         var i = 0;
         foreach (var t in GameController.instance.hallOfFame.currentRun.team)
@@ -28,6 +29,7 @@ public class EndScoreUI : MonoBehaviour
         score.text = GameController.instance.hallOfFame.currentRun.score +"$";
         nbMicroGames.text = "Micro Games Played : " + GameController.instance.nbMicroGames;
         nbSpecialistMicroGames.text = "Specialist Games Played : "+GameController.instance.nbMicroGamesSpecialist;
+        bonusGain.text = "+ " + bonusScore + "$";
         
         endPanel.SetActive(true);
         endSuccess.SetActive(true);

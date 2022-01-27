@@ -96,7 +96,13 @@ public class GameController : Ticker
             AudioManager.MacroPlaySound("VictoryTheme",0);
             AudioManager.MacroPlaySoundLoop("VictoryLoop",6);
             yield return new WaitForSeconds(3);
-            endScoreUI.ToggleEndSuccess();
+            int bonusScore = 0;
+            foreach (Character character in characterManager.playerTeam)
+            {
+                bonusScore += 50;
+            }
+            endScoreUI.ToggleEndSuccess(bonusScore);
+            scoreManager.AddMoney(bonusScore);
             scoreManager.AddToCurrentMoney();
             
         }
