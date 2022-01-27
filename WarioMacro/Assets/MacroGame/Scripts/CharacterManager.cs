@@ -15,13 +15,11 @@ public class CharacterManager : MonoBehaviour
     public Character[] novices = new Character[6];
     public List<Imprisoned> imprisonedCharacters = new List<Imprisoned>();
 
-    public OutOfJailElement[] jailedUI = new OutOfJailElement[12];
+    
     
     [SerializeField] private LifeBar life;
 
-    public bool isOpen;
-    public GameObject jailPanel;
-    private GameObject go;
+    
     public delegate void RecruitCharacter();
     public static RecruitCharacter RecruitableCharaFinished;
     public static bool IsFirstLoad = true;
@@ -55,21 +53,8 @@ public class CharacterManager : MonoBehaviour
     }
 
 
-    public void SetJailed()
-    {
-        foreach (var element in jailedUI)
-        {
-            if(imprisonedCharacters.Any(i =>i.character == element.character))
-            {
-                element.gameObject.SetActive(true);
-                element.SetJail(imprisonedCharacters.First(i =>i.character == element.character));
-            }
-            else
-            {
-                element.gameObject.SetActive(false);
-            }
-        }    
-    }
+    
+    
     private void Start()
     {
         if (IsFirstLoad)
@@ -79,27 +64,9 @@ public class CharacterManager : MonoBehaviour
             SetRecruitable();
         }
     }
-    private void Update()
-    {
-        if(InputManager.GetKeyDown(ControllerKey.B, true) && isOpen) CloseJail();
+    
 
-    }
-    public void OpenJail()
-    {
-        jailPanel.SetActive(true);
-        isOpen = true;
-        InputManager.lockInput = true;
-        SetJailed();
-    }
-
-    public void CloseJail()
-    {
-        jailPanel.SetActive(false);
-        isOpen = false;
-        InputManager.lockInput = false;
-        GameController.OnInteractionEnd();
-        AudioManager.MacroPlayRandomSound("BarmanExit");
-    }
+    
     
     private void SetRecruitable()
     {

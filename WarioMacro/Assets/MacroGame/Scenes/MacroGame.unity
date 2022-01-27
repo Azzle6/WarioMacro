@@ -1421,11 +1421,11 @@ PrefabInstance:
     - target: {fileID: 2182203013404681004, guid: d006286b8cf7e394abd2ec7978b991c4, type: 3}
       propertyPath: Responses.Array.data[0].ButtonEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 1749864763}
+      objectReference: {fileID: 784403038}
     - target: {fileID: 2182203013404681004, guid: d006286b8cf7e394abd2ec7978b991c4, type: 3}
       propertyPath: Responses.Array.data[1].ButtonEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 1749864769}
+      objectReference: {fileID: 784403037}
     - target: {fileID: 2182203013404681004, guid: d006286b8cf7e394abd2ec7978b991c4, type: 3}
       propertyPath: Responses.Array.data[0].ButtonEvent.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
@@ -1444,11 +1444,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2182203013404681004, guid: d006286b8cf7e394abd2ec7978b991c4, type: 3}
       propertyPath: Responses.Array.data[0].ButtonEvent.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: HallOfFame, Assembly-CSharp
+      value: HallOfFameUI, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 2182203013404681004, guid: d006286b8cf7e394abd2ec7978b991c4, type: 3}
       propertyPath: Responses.Array.data[1].ButtonEvent.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: CharacterManager, Assembly-CSharp
+      value: OutOfJailManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 2182203013404681004, guid: d006286b8cf7e394abd2ec7978b991c4, type: 3}
       propertyPath: Responses.Array.data[0].ButtonEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_StringArgument
@@ -1554,6 +1554,10 @@ PrefabInstance:
       propertyPath: EventInteractible.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: DialogConstructor, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 5127756571681823358, guid: d006286b8cf7e394abd2ec7978b991c4, type: 3}
+      propertyPath: map
+      value: 
+      objectReference: {fileID: 1111097173}
     - target: {fileID: 5570402814016704468, guid: d006286b8cf7e394abd2ec7978b991c4, type: 3}
       propertyPath: EventInteractible.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 2
@@ -1985,6 +1989,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6500841276628023538, guid: c9709f509a52b364d8b7a00a25a1083b, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 1874.8203
+      objectReference: {fileID: 0}
+    - target: {fileID: 6500841276628023538, guid: c9709f509a52b364d8b7a00a25a1083b, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -937.4102
+      objectReference: {fileID: 0}
     - target: {fileID: 6500841277404266468, guid: c9709f509a52b364d8b7a00a25a1083b, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -2317,6 +2329,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &436433638 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 343480207774584734, guid: c9709f509a52b364d8b7a00a25a1083b, type: 3}
+  m_PrefabInstance: {fileID: 284984257}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &456153372
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2435,6 +2458,16 @@ Animator:
   m_CorrespondingSourceObject: {fileID: 2056309722358240072, guid: 61c30988b7ee7fe4f8e1f4f5d7dd1872, type: 3}
   m_PrefabInstance: {fileID: 1818866496}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &566118233 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4112220151853102890, guid: d3a08eec4a5dcf544a16dc06d2b346a9, type: 3}
+  m_PrefabInstance: {fileID: 258124157}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &612275162 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2488249799465282274, guid: d3a08eec4a5dcf544a16dc06d2b346a9, type: 3}
+  m_PrefabInstance: {fileID: 258124157}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &661160890 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2394523847599014964, guid: d006286b8cf7e394abd2ec7978b991c4, type: 3}
@@ -2500,6 +2533,8 @@ GameObject:
   - component: {fileID: 784403033}
   - component: {fileID: 784403036}
   - component: {fileID: 784403035}
+  - component: {fileID: 784403037}
+  - component: {fileID: 784403038}
   m_Layer: 0
   m_Name: UI Manager
   m_TagString: Untagged
@@ -2686,6 +2721,71 @@ MonoBehaviour:
   textZone: {fileID: 1564097087}
   curDial: {fileID: 0}
   ButtonTemplate: {fileID: 1729914725550930027, guid: 2e314a7ede8c705409e51ce5004e945a, type: 3}
+--- !u!114 &784403037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 784403028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbfd3030a9ddf3c4e9bfb0145864101c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jailedUI:
+  - {fileID: 1251427070}
+  - {fileID: 293302264}
+  - {fileID: 1076069517}
+  - {fileID: 1297376607}
+  - {fileID: 183912335}
+  - {fileID: 1725127257}
+  - {fileID: 85518451}
+  - {fileID: 190765123}
+  - {fileID: 1909989240}
+  - {fileID: 1738881935}
+  - {fileID: 781820430}
+  - {fileID: 2131650521}
+  rows:
+  - {fileID: 612275162}
+  - {fileID: 897409499}
+  - {fileID: 834879081}
+  - {fileID: 1624976968}
+  - {fileID: 1201431048}
+  - {fileID: 566118233}
+  eventSystemFocus: {fileID: 2145587292}
+  scrollRect: {fileID: 1254102276}
+  isOpen: 0
+  jailPanel: {fileID: 2145587290}
+  currentRowId: 0
+  lastRowId: 0
+--- !u!114 &784403038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 784403028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9bab6f07595b4e45a8cc24bb29554f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hallPanel: {fileID: 284984269}
+  ranks:
+  - {fileID: 284984268}
+  - {fileID: 284984267}
+  - {fileID: 284984266}
+  - {fileID: 284984265}
+  - {fileID: 284984264}
+  - {fileID: 284984263}
+  - {fileID: 284984262}
+  - {fileID: 284984261}
+  - {fileID: 284984260}
+  - {fileID: 284984259}
+  scrollRect: {fileID: 436433638}
+  isOpen: 0
+  scrollSensitivity: 0.025
   charaSprite: {fileID: 1643901236}
   isCharaDialog: 0
 --- !u!1 &797653707
@@ -3010,6 +3110,16 @@ PrefabInstance:
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2080272510518713637, guid: 1f60270574141a24f9cd34fb14d33bc4, type: 3}
   m_PrefabInstance: {fileID: 925209361}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &834879081 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6304622574375774024, guid: d3a08eec4a5dcf544a16dc06d2b346a9, type: 3}
+  m_PrefabInstance: {fileID: 258124157}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &897409499 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2488249799012770673, guid: d3a08eec4a5dcf544a16dc06d2b346a9, type: 3}
+  m_PrefabInstance: {fileID: 258124157}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &925209361
 PrefabInstance:
@@ -3679,6 +3789,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 697f0d5e551413a4db8a249f4f748b53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1201431048 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6514881227314128695, guid: d3a08eec4a5dcf544a16dc06d2b346a9, type: 3}
+  m_PrefabInstance: {fileID: 258124157}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1227695569
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3841,6 +3956,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f55851bef0a2b974fb85fea06fa23af3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1254102276 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8976281126195901509, guid: d3a08eec4a5dcf544a16dc06d2b346a9, type: 3}
+  m_PrefabInstance: {fileID: 258124157}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1254111838 stripped
@@ -4495,6 +4621,11 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &1624976968 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2799766091396084989, guid: d3a08eec4a5dcf544a16dc06d2b346a9, type: 3}
+  m_PrefabInstance: {fileID: 258124157}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1627777002 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2085685932245395846, guid: b2ae5ec8f53bdb145a7a1d3e5ef95ae6, type: 3}
@@ -4777,18 +4908,6 @@ MonoBehaviour:
   currentRun:
     score: 0
     time: 0
-  hallPanel: {fileID: 284984269}
-  ranks:
-  - {fileID: 284984268}
-  - {fileID: 284984267}
-  - {fileID: 284984266}
-  - {fileID: 284984265}
-  - {fileID: 284984264}
-  - {fileID: 284984263}
-  - {fileID: 284984262}
-  - {fileID: 284984261}
-  - {fileID: 284984260}
-  - {fileID: 284984259}
 --- !u!114 &1749864766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4931,22 +5050,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: fcbbb6142265df64dbcd61b38e486251, type: 2}
   - {fileID: 11400000, guid: fe9f5bb2d8b206843b079ac09788cab8, type: 2}
   imprisonedCharacters: []
-  jailedUI:
-  - {fileID: 1251427070}
-  - {fileID: 293302264}
-  - {fileID: 1076069517}
-  - {fileID: 1297376607}
-  - {fileID: 183912335}
-  - {fileID: 1725127257}
-  - {fileID: 85518451}
-  - {fileID: 190765123}
-  - {fileID: 1909989240}
-  - {fileID: 1738881935}
-  - {fileID: 781820430}
-  - {fileID: 2131650521}
   life: {fileID: 784403029}
-  isOpen: 0
-  jailPanel: {fileID: 2145587290}
 --- !u!1 &1796344224
 GameObject:
   m_ObjectHideFlags: 0
