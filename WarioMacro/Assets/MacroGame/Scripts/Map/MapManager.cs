@@ -197,7 +197,6 @@ public class MapManager : MonoBehaviour
 
     private void UpdatePhase()
     {
-        PlayerPrefs.Save();
         if (currentPhase == 2)
         {
             Debug.LogError("Already at last phase (3)");
@@ -208,7 +207,6 @@ public class MapManager : MonoBehaviour
 
     private void RefillMapQueue()
     {
-        PlayerPrefs.Save();
         var rd = new System.Random();
         var currentList = new List<GameObject>(mapPrefabQueue);
 

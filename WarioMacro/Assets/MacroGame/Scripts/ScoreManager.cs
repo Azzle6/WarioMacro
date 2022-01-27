@@ -36,11 +36,11 @@ public class ScoreManager : MonoBehaviour
     public bool Pay(int v)
     {
         if (v > currentMoney) return false;
-
-        PlayerPrefs.SetInt("PlayerMoney", currentMoney);
+        
         currentMoney -= v;
         moneyBagsText.text = currentMoney.ToString();
         moneyBagsDirector.Play(); // Lose money animation ?
+        PlayerPrefs.SetInt("PlayerMoney", currentMoney);
         AudioManager.MacroPlaySound("CashLose", 0);
         return true;
     }

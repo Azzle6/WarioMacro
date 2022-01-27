@@ -206,9 +206,9 @@ public class CharacterManager : MonoBehaviour
     
     public void UpdateAvailable()
     {
+        PlayerPrefs.DeleteKey("imprisoned");
         if (!imprisonedCharacters.Any()) return;
         var save = "";
-        PlayerPrefs.DeleteKey("imprisoned");
         foreach (var imprisoned in imprisonedCharacters)
         {
             save += imprisoned.character + "," + imprisoned.turnLeft + "," + imprisoned.price +
