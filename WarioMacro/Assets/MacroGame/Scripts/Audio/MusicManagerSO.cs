@@ -21,7 +21,8 @@ public class Soundgroup
     { 
         RECRUIT, 
         ACTION, 
-        ESCAPE 
+        ESCAPE,
+        MENU
     } 
      
     public PhaseState musicState = PhaseState.MACROGAME; 
@@ -34,7 +35,7 @@ public class Soundgroup
 [System.Serializable] 
 public class SoundRef 
 { 
-    public int BPM = 120; 
+    public int BPM = 100; 
     public AudioClip Clip; 
     [Range(0,2)]
     public float musicVolume = 1;
