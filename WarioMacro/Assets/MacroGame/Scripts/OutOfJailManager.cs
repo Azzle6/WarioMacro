@@ -10,6 +10,7 @@ public class OutOfJailManager : MonoBehaviour
     
     public OutOfJailElement[] jailedUI = new OutOfJailElement[12];
     public GameObject[] rows = new GameObject[6];
+    public List<GameObject> activeRows = new List<GameObject>() ;
     public EventSystemFocus eventSystemFocus;
     public ScrollRect scrollRect;
     public bool isOpen;
@@ -26,13 +27,13 @@ public class OutOfJailManager : MonoBehaviour
 
         if (currentGo == null) 
             return;
-        if (rows[currentRowId] != currentGo.transform.parent.gameObject)
+        if (activeRows[currentRowId] != currentGo.transform.parent.gameObject)
         {
             lastRowId = currentRowId;
-            for(int i = 0;i<rows.Length;i++)
+            for(int i = 0;i<activeRows.Count;i++)
             {
                 
-                if (rows[i] == currentGo.transform.parent.gameObject)
+                if (activeRows[i] == currentGo.transform.parent.gameObject)
                     currentRowId = i;
             }
         }
@@ -98,6 +99,10 @@ public class OutOfJailManager : MonoBehaviour
             {
                 go.SetActive(false);
             }
+            else
+            {
+                activeRows.Add(go);
+            }
         }
     }
     
@@ -114,6 +119,7 @@ public class OutOfJailManager : MonoBehaviour
     {
         jailPanel.SetActive(false);
         isOpen = false;
+        activeRows.Clear();
         InputManager.lockInput = false;
         GameController.OnInteractionEnd();
         AudioManager.MacroPlayRandomSound("BarmanExit");
