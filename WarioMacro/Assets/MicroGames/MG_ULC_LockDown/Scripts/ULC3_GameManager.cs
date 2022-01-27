@@ -3,10 +3,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class ULC3_GameManager : MonoBehaviour, ITickable
 {
-    [SerializeField] [Range(1, 3)] private int difficulty = 1;
+    //[SerializeField] [Range(1, 3)] private int difficulty = 1;
 
     [SerializeField] private GameObject[] safesPrefab;
-    private GameObject safe; 
+    [SerializeField] private GameObject[] cadranPrefab;
+    [SerializeField] private GameObject[] KeysPrefab;
+    private GameObject safe;
+    private GameObject cadran;
 
     private ULC3_Pivot currentPivot;
     private int pivotIndex = 0;
@@ -18,11 +21,16 @@ public class ULC3_GameManager : MonoBehaviour, ITickable
     public Animator lockerAnimator;
     public Animator locker2Animator;
     public Animator wheelAnimator;
+    
+    public Animator keyAnimator;
+    public Animator key2Animator;
+    public Animator key3Animator;
 
     public GameObject victory;
     public GameObject loose;
 
     private int endTick = -1;
+    private int endTry = 0;
 
     void Start()
     {
@@ -34,7 +42,8 @@ public class ULC3_GameManager : MonoBehaviour, ITickable
         
         //Instantiate a safe according to the selected difficulty
         safe = Instantiate(safesPrefab[GameController.difficulty-1], new Vector3(0,1,0), Quaternion.identity, transform);
-        
+        cadran = Instantiate(cadranPrefab[GameController.difficulty - 1], new Vector3(0, 1, 0), Quaternion.identity, transform);
+
         //currentPivot corresponds to which pivot we're currently moving
         currentPivot = safe.transform.GetChild(pivotIndex).GetComponent<ULC3_Pivot>();
         currentPivot.isSelected = true;
@@ -68,7 +77,7 @@ public class ULC3_GameManager : MonoBehaviour, ITickable
                 }
                 else
                 {
-                    ULC3_AudioManager.instance.PlaySFX("Select", 1);
+                    KeysTry();
                 }
             }
         }
@@ -104,10 +113,11 @@ public class ULC3_GameManager : MonoBehaviour, ITickable
             GameController.FinishGame(result);
         }
     }
-
+    
     public void WinGame()
     {
         winGame = true;
+        //cran.SetActive(false);
         currentPivot.isSelected = false;
         
         // Lance la coroutine de victoire
@@ -130,6 +140,27 @@ public class ULC3_GameManager : MonoBehaviour, ITickable
         {
             loose.SetActive(true);
             ULC3_AudioManager.instance.PlaySFX("Alarm", 1);
+        }
+    }
+
+    public void KeysTry()
+    {
+        endTry +=1;
+        if (endTry == 1)
+        {
+            keyAnimator.SetTrigger("KeyBreak");
+            ULC3_AudioManager.instance.PlaySFX("KeyBreak", 1);
+        }
+        else if (endTry == 2)
+        {
+            key2Animator.SetTrigger("Key2Break");
+            ULC3_AudioManager.instance.PlaySFX("KeyBreak", 1);
+        }
+        else if (endTry == 3)
+        {
+            key3Animator.SetTrigger("Key3Break");
+            ULC3_AudioManager.instance.PlaySFX("KeyBreak", 1);
+            LooseGame();
         }
     }
 

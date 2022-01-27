@@ -8,9 +8,11 @@ namespace MiniGame.DeadPoule
         [SerializeField] private Sound tickSound;
 
         public static System.Action OnReachingEndGame;
-        private bool gameEnd;
+        private bool reachedMaxTickCount;
 
         private float startTime;
+        private int currentTick;
+        private bool callDone; 
 
         private void Start()
         {
@@ -20,31 +22,48 @@ namespace MiniGame.DeadPoule
         }
 
         public void OnTick()
-        {
-            Debug.Log("tick");
-            // 2 seconds of countdown to read the keyword
-            // weird tick call on start from GameController that is not considered as a real tick (currentTick == 5 does not count that first weird tick) 
-            if (Time.time - startTime < 0.025f || gameEnd) return;
+        { 
+            Debug.Log("tick " + GameController.currentTick);
 
-            if (GameController.currentTick <= 5)
+            if (reachedMaxTickCount) return;
+
+            if (NOC3_MinigameController.PlayerSequenceTracker == (int)NOC3_MinigameController.Difficulty || NOC3_MinigameController.FailedSequenceBeforeEnd)
+            {
+                if (!callDone)
+                {
+                    Debug.Log("final gameplay tick " + GameController.currentTick);
+
+                    callDone = true; 
+                    OnReachingEndGame();
+                    GameController.StopTimer();
+                    currentTick = GameController.currentTick;
+                }
+
+                if (GameController.currentTick - currentTick == 3)
+                {
+                    Debug.Log("post-final gameplay tick " + GameController.currentTick);
+                    GameController.FinishGame(NOC3_MinigameController.HasWon);
+                }                
+            }
+
+            if (callDone) return;
+
+            if (GameController.currentTick <= 5 && Time.time > Time.fixedDeltaTime + Mathf.Epsilon) // second part to avoid tick sound when currentTick == 0
             {
                 NOC3_AudioManager.PlaySound(tickSound.clip, tickSound.volume, tickSound.delay);
 
                 if (GameController.currentTick == 5)
                 {
-                    Debug.Log("tick 5");
+                    Debug.Log("capped final gameplay tick");
                     GameController.StopTimer();
+                    OnReachingEndGame();
                 }
-            }
-            else if (GameController.currentTick == 6)
-            {
-                OnReachingEndGame();
-            }
+            } 
             else if (GameController.currentTick == 8)
             {
-                Debug.Log("tick 8");
+                Debug.Log("reached max tick count");
 
-                gameEnd = true;
+                reachedMaxTickCount = true;
                 GameController.FinishGame(NOC3_MinigameController.HasWon);
             }
         }

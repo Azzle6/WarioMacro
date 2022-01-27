@@ -8,14 +8,16 @@ public class NOB2_GuardBehaviour : MonoBehaviour
     [SerializeField] private Light2D light;
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject finishLine;
+    [SerializeField] private int detectionJauge;
+    [SerializeField] private int detectionThreshold;
     [SerializeField] private float detectionDepth;
     [SerializeField] private int detectionWidth;
     [SerializeField] private Vector3 detectionSpread;
-    private bool playerFound = false;
+    //private bool playerFound = false;
     
-    void Update()
+    void FixedUpdate()
     {
-        if (!playerFound)
+        if (detectionJauge <= detectionThreshold)
         {
             for (int i = 0; i < detectionWidth; i++)
             {
@@ -25,7 +27,7 @@ public class NOB2_GuardBehaviour : MonoBehaviour
                     Debug.DrawRay(transform.position,   new Vector3(hit.point.x - transform.position.x,hit.point.y - transform.position.y, 0), Color.green);
                     if (hit.collider.gameObject == player)
                     {
-                        playerFound = true;
+                        detectionJauge++;
                     }
                 }
                 else
@@ -39,7 +41,7 @@ public class NOB2_GuardBehaviour : MonoBehaviour
                     Debug.DrawRay(transform.position,   new Vector3(hit.point.x - transform.position.x,hit.point.y - transform.position.y, 0), Color.green);
                     if (hit.collider.gameObject == player)
                     {
-                        playerFound = true;
+                        detectionJauge++;
                     }
                 }
                 else
@@ -48,7 +50,7 @@ public class NOB2_GuardBehaviour : MonoBehaviour
                 }
             }
             
-            if (playerFound && NOB2_GameManager.instance.resultPending)
+            if (detectionJauge > detectionThreshold && NOB2_GameManager.instance.resultPending)
             {
                 light.color = Color.red;
                 light.intensity = 3;
