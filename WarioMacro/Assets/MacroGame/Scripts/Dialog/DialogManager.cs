@@ -12,6 +12,7 @@ public class DialogManager : MonoBehaviour
     [SerializeField] private TMP_Text textZone;
     [SerializeField] private DialogConstructor curDial;
     [SerializeField] private GameObject ButtonTemplate;
+    [SerializeField] private Image charaSprite;
     private GameObject[] Buttons;
     private IEnumerator currentCoroutine;
     private bool isInDialog;
@@ -32,6 +33,13 @@ public class DialogManager : MonoBehaviour
         }
 
         curDial = currentDial;
+        if (curDial.chara != null)
+        {
+            charaSprite.sprite = curDial.chara;
+            charaSprite.gameObject.SetActive(true);
+        }
+        else charaSprite.gameObject.SetActive(false);
+        
         isInDialog = true;
         dialogGO.SetActive(true);
 
