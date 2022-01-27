@@ -53,6 +53,9 @@ public class GameController : Ticker
 
     public bool WantToContinue;
 
+
+    public int nbMicroGamesSpecialist;
+    public int nbMicroGames;
     public static void Register()
     {
         if (instance != null) return;
@@ -134,6 +137,8 @@ public class GameController : Ticker
         runChronometer = true;
         Alarm.isActive = false;
         scoreManager.ShowMoney();
+        nbMicroGames = 0;
+        nbMicroGamesSpecialist = 0;
     }
 
     private IEnumerator GameLoop()
@@ -303,6 +308,7 @@ public class GameController : Ticker
             
             currentMG++;
             yield return new WaitForSeconds(1f);
+            nbMicroGames++;
         }
 
         FinalNodeResult =

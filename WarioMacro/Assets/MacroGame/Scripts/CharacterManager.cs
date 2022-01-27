@@ -128,7 +128,7 @@ public class CharacterManager : MonoBehaviour
         Character rdCharacter = playerTeam[Random.Range(0, playerTeam.Count)];
         life.Imprison(rdCharacter);
         GameController.instance.hallOfFame.SetCharacterToJail(rdCharacter);
-        imprisonedCharacters.Add(new Imprisoned(rdCharacter, 4, 25000));
+        imprisonedCharacters.Add(new Imprisoned(rdCharacter, 4, 3000));
         playerTeam.Remove(rdCharacter);
         UpdateAvailable();
     }
