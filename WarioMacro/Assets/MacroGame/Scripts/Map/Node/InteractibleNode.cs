@@ -20,13 +20,8 @@ public class InteractibleNode : MonoBehaviour
 
     public void EndGame()
     {
-        StartCoroutine(WaitForEndGame());
-    }
-
-    private IEnumerator WaitForEndGame()
-    {
-        yield return StartCoroutine(GameController.instance.ToggleEndGame(true));
+        StartCoroutine(GameController.instance.ToggleEndGame(true));
         //NotDestroyedScript.instance.EndRun(true);
-        GameController.instance.InteractiveEventEnd();
+        //GameController.instance.InteractiveEventEnd();
     }
 }

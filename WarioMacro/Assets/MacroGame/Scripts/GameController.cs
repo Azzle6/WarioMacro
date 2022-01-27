@@ -115,6 +115,7 @@ public class GameController : Ticker
         
         //yield return new WaitForSecondsRealtime(0.5f);
         while (!InputManager.GetKeyDown(ControllerKey.A)) yield return null;
+        GameController.instance.InteractiveEventEnd();
         if(value)
             AudioManager.StopMacroSound("VictoryLoop",0);
         else
