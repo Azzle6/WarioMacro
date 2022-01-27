@@ -11,7 +11,7 @@ public class OutOfJailManager : MonoBehaviour
     public OutOfJailElement[] jailedUI = new OutOfJailElement[12];
     public GameObject[] rows = new GameObject[6];
     public EventSystemFocus eventSystemFocus;
-    public ScrollRect ScrollRect;
+    public ScrollRect scrollRect;
     public bool isOpen;
     public GameObject jailPanel;
     private GameObject go;
@@ -36,22 +36,22 @@ public class OutOfJailManager : MonoBehaviour
         switch (currentRowId+lastRowId)
         {
             case 1:
-                ScrollRect.verticalNormalizedPosition = 1;
+                scrollRect.verticalNormalizedPosition = 1;
                 break;
             case 3:
-                ScrollRect.verticalNormalizedPosition = 0.75f;
+                scrollRect.verticalNormalizedPosition = 0.75f;
                 break;
             case 5:
-                ScrollRect.verticalNormalizedPosition = 0.5f;
+                scrollRect.verticalNormalizedPosition = 0.5f;
                 break;
             case 7:
-                ScrollRect.verticalNormalizedPosition = 0.25f;
+                scrollRect.verticalNormalizedPosition = 0.25f;
                 break;
             case 9:
-                ScrollRect.verticalNormalizedPosition = 0;
+                scrollRect.verticalNormalizedPosition = 0;
                 break;
             default:
-                ScrollRect.verticalNormalizedPosition = 1;
+                scrollRect.verticalNormalizedPosition = 1;
                 break;
         }
         
@@ -107,5 +107,6 @@ public class OutOfJailManager : MonoBehaviour
         isOpen = false;
         InputManager.lockInput = false;
         GameController.OnInteractionEnd();
+        AudioManager.MacroPlayRandomSound("BarmanExit");
     }
 }
