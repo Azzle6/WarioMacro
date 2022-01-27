@@ -10,6 +10,8 @@ public class NOB3_PlankHit : MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private BoxCollider2D boxCollider;
     [SerializeField] private GameObject fxPrefab;
+    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private Sprite[] sprites;
     [SerializeField] private AudioClip plankHitAudio;
     [SerializeField] private AudioClip plankBreakAudio;
     [SerializeField] private float timeBeforeDisable;
@@ -33,12 +35,11 @@ public class NOB3_PlankHit : MonoBehaviour
         {
             PopOut();
             AudioManager.PlaySound(plankBreakAudio);
+            return;
         }
-        else
-        {
-            Shake();
-            AudioManager.PlaySound(plankHitAudio);
-        }
+        Shake();
+        AudioManager.PlaySound(plankHitAudio);
+        spriteRenderer.sprite = sprites[remainingHits - 1];
     }
 
     private void PopOut()

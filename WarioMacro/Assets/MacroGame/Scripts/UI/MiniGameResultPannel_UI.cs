@@ -77,6 +77,9 @@ public class MiniGameResultPannel_UI : MonoBehaviour
         ClearAllNodes();
         ToggleWindow(false);
 
+        //SetGain(1500);
+        //ToggleMoneyBag(true);
+
         if(debug)
         {
             ToggleWindow(true);
@@ -296,9 +299,17 @@ public class MiniGameResultPannel_UI : MonoBehaviour
         pinkOutlineTextField.text = keyword;
     }
 
-    public void EnableMoneyBag()
+    public void SetGain(int gain)
     {
-        moneyBagGO.SetActive(true);
+        string s = gain.ToString();
+        string gainString = "+ " + gain + " $";
+
+        moneyTextField.text = gainString;
+    }
+
+    public void ToggleMoneyBag(bool toggle)
+    {
+        moneyBagGO.SetActive(toggle);
     }
 
     IEnumerator CascadingNodeAnim()
@@ -337,6 +348,7 @@ public class MiniGameResultPannel_UI : MonoBehaviour
 
     public IEnumerator CharaApparition(int nodeType)
     {
+
         if(nodeType <= 1) yield break;
 
         Debug.Log(CharacterManager.instance.SpecialistOfTypeInTeam(nodeType));
@@ -353,6 +365,7 @@ public class MiniGameResultPannel_UI : MonoBehaviour
         Debug.Log(selectedChara);
 
         if (selectedChara == null) yield break;
+        GameController.instance.nbMicroGamesSpecialist++;
         AudioManager.MacroPlaySound(selectedChara.GetMGSoundName());
         charaSpecialistSprite.sprite = selectedChara.fullSizeSprite;
         charaApparitionGO.SetActive(true);

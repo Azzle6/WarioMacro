@@ -32,7 +32,7 @@ public class OutOfJailElement : MonoBehaviour
     public void SetJail(CharacterManager.Imprisoned imprisoned)
     {
         priceTMP.text = imprisoned.price +"$";
-        timeLeftTMP.text = imprisoned.turnLeft.ToString();
+        timeLeftTMP.text = imprisoned.turnLeft + " run until comeback...";
         imp = imprisoned;
     }
 

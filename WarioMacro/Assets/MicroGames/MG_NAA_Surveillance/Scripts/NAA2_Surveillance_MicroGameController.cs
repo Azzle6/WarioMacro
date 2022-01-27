@@ -67,7 +67,6 @@ public class NAA2_Surveillance_MicroGameController : MonoBehaviour, ITickable
 
     public void OnTick()
     {
-        Debug.Log(GameController.currentTick);
         if(GameController.currentTick == 5 && !gameOver)
         {
             AudioManager.PlaySound(victorySound, 0.7f, 0);

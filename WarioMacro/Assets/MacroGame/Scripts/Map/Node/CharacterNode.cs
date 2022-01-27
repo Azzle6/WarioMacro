@@ -52,14 +52,18 @@ public class CharacterNode : MonoBehaviour
 
     public void Recruit()
     {
-        CharacterManager.instance.Recruit(currentChara);
-        AudioManager.MacroPlaySound(currentChara.mastery == Character.Level.Novice ? "NoviceSelection" : "CharacterSelection");
+        if (CharacterManager.instance.playerTeam.Count < 4)
+        {
+            CharacterManager.instance.Recruit(currentChara);
+            AudioManager.MacroPlaySound(currentChara.mastery == Character.Level.Novice ? "NoviceSelection" : "CharacterSelection");
 
-        NodeEventScript.EventInteractible.RemoveAllListeners();
-        UnityEvent NewEvent = new UnityEvent();
-        NewEvent.AddListener(() => DialogManager.instance.StartDialog(AlreadyRecruitDialog));
-        //NodeEventScript.EventInteractible.AddListener(() => DialogManager.instance.StartDialog(AlreadyRecruitDialog));
-        NodeEventScript.EventInteractible = NewEvent;
+            NodeEventScript.EventInteractible.RemoveAllListeners();
+            UnityEvent NewEvent = new UnityEvent();
+            NewEvent.AddListener(() => DialogManager.instance.StartDialog(AlreadyRecruitDialog));
+            //NodeEventScript.EventInteractible.AddListener(() => DialogManager.instance.StartDialog(AlreadyRecruitDialog));
+            NodeEventScript.EventInteractible = NewEvent;
+        }
+        
     }
 
     public void PlayCharacterSound()

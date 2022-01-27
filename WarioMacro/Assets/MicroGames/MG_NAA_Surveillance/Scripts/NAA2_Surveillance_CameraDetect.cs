@@ -84,6 +84,8 @@ public class NAA2_Surveillance_CameraDetect : MonoBehaviour
         result = Physics2D.Raycast(camSprite.transform.position, player.transform.position - camSprite.transform.position, contactFilter, results);
         Debug.DrawRay(camSprite.transform.position, player.transform.position - camSprite.transform.position, Color.red, 4);
 
+        if (results == null) return;
+
         if(results[0].collider.gameObject == player)
         {
             detectedTime += Time.deltaTime;
