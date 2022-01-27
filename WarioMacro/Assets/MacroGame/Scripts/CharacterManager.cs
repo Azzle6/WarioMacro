@@ -34,10 +34,11 @@ public class CharacterManager : MonoBehaviour
     }
 
 
-    public int SpecialistOfTypeInTeam(int type)
+    public Character SpecialistOfTypeInTeam(int type)
     {
-        return playerTeam.Count(c => c.characterType == type);
+        return playerTeam.FirstOrDefault(c => c.characterType == type);
     }
+    
     [Serializable]
     public class Imprisoned
     {
@@ -232,15 +233,20 @@ public class CharacterManager : MonoBehaviour
         SetRecruitable();
     }
     
-    public void FreeImprisoned(Imprisoned imp)
+    public bool FreeImprisoned(Imprisoned imp)
     {
-        if (!imprisonedCharacters.Contains(imp)) return;
-        if (!GameController.instance.scoreManager.Pay((int)imp.price)) return;
+        if (!imprisonedCharacters.Contains(imp)) return false;
+        if (!GameController.instance.scoreManager.Pay((int)imp.price)) return false;
         foreach (var list in allAvailableCharacters.Where(list => imp.character.characterType == list.type))
         {
             list.Add(imp.character);
             imprisonedCharacters.Remove(imp);
         }
+        
+        UpdateAvailable();
+        PlayerPrefs.Save();
+
+        return true;
     }
 
     public Character GetCharacter(string character)
@@ -253,6 +259,14 @@ public class CharacterManager : MonoBehaviour
                 {
                     return c;
                 }
+            }
+        }
+
+        foreach (var c in novices)
+        {
+            if (c.ToString() == character)
+            {
+                return c;
             }
         }
         return (from i in imprisonedCharacters where i.character.ToString() == character select i.character).FirstOrDefault();

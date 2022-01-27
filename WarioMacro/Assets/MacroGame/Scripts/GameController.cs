@@ -300,8 +300,11 @@ public class GameController : Ticker
         if (result)
         {
             settingsManager.IncreaseBPM();
+            Character c = characterManager.SpecialistOfTypeInTeam(behaviourNode.GetMGDomain(mgNumber));
             scoreManager.AddMoney(rewardChart.GetMoneyBags(MapManager.currentPhase, behaviourNode.behaviour) *
-                                  (characterManager.SpecialistOfTypeInTeam(behaviourNode.GetMGDomain(mgNumber)) > 0 ? 2 : 1));
+                                  (c != default(Character)
+                                      ? (c.mastery == Character.Level.Expert ? 2 : 1.5f) 
+                                      : 1));
         }
         else
         {

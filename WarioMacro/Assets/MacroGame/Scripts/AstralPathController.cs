@@ -15,9 +15,13 @@ public class AstralPathController : GameController
     {
         GameControllerSO.instance.currentDifficulty = 3;
         normalLights.SetActive(false);
+        instance.macroObjects.Remove(normalLights);
         alarmPostProcess.SetActive(false);
+        instance.macroObjects.Remove(alarmPostProcess);
         astralLights.SetActive(true);
+        instance.macroObjects.Add(astralLights);
         astralPostProcess.SetActive(true);
+        instance.macroObjects.Add(astralPostProcess);
         
         yield return instance.player.ExitPortal();
         

@@ -13,9 +13,9 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI moneyBagsText;
 
     
-    public void AddMoney(int addedValue)
+    public void AddMoney(float addedValue)
     {
-        currentRunMoney += addedValue * scoreMultiplier;
+        currentRunMoney += (int) (addedValue * scoreMultiplier);
         ShowMoney();
         moneyBagsDirector.Play();
         AudioManager.MacroPlaySound("CashGain", 0);
