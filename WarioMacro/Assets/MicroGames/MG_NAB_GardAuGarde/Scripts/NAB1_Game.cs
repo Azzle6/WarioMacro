@@ -22,12 +22,13 @@ public class NAB1_Game : MonoBehaviour, ITickable
 
     private int angle1;
     private int angle2;
-    private bool moving;
     private int maxTick = 8;
 
     private bool playing = true;
     private bool seen = false;
     private bool result;
+    private bool moving;
+    private bool keyPressed;
     
     private void Start()
     {
@@ -66,10 +67,12 @@ public class NAB1_Game : MonoBehaviour, ITickable
 
     void Update()
     {
-        if (InputManager.GetKeyDown(ControllerKey.A) || InputManager.GetKeyDown(ControllerKey.B) || InputManager.GetKeyDown(ControllerKey.X) || InputManager.GetKeyDown(ControllerKey.Y))
+        if ((InputManager.GetKeyDown(ControllerKey.A) || InputManager.GetKeyDown(ControllerKey.B) || InputManager.GetKeyDown(ControllerKey.X) || InputManager.GetKeyDown(ControllerKey.Y)) && !keyPressed)
         {
+            Debug.Log("key");
             player.GetComponent<NAB1_PlayerMove>().Move();
             moving = true;
+            keyPressed = true;
             result = true;
         }
         
@@ -92,7 +95,6 @@ public class NAB1_Game : MonoBehaviour, ITickable
 
     public void OnTick()
     {
-        
         if ((result || seen) && (GameController.currentTick < 5) && playing)
         {
             GameController.StopTimer();
