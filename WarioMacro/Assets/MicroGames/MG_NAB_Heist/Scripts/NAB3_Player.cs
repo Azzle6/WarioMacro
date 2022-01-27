@@ -50,7 +50,8 @@ public class NAB3_Player : MonoBehaviour, ITickable
     
     void Update()
     {
-        if (InputManager.GetKeyDown(ControllerKey.A))
+        if (InputManager.GetKeyDown(ControllerKey.A) || InputManager.GetKeyDown(ControllerKey.B) 
+        || InputManager.GetKeyDown(ControllerKey.Y) || InputManager.GetKeyDown(ControllerKey.X))
         {
             if (isGrounded == true)
             {

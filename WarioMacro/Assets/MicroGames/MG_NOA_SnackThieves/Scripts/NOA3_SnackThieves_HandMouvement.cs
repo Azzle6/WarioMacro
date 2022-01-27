@@ -30,7 +30,6 @@ public class NOA3_SnackThieves_HandMouvement : MonoBehaviour, ITickable
 
     public void OnTick()
     {
-        Debug.Log(tickEnd);
         if (GameController.currentTick == 5 && !isFinished)
         {
             if (results == false)
@@ -57,7 +56,7 @@ public class NOA3_SnackThieves_HandMouvement : MonoBehaviour, ITickable
 
     void Update()
     {
-        if (InputManager.GetKeyDown(ControllerKey.A))
+        if ((InputManager.GetKeyDown(ControllerKey.A)) || (InputManager.GetKeyDown(ControllerKey.B)) || (InputManager.GetKeyDown(ControllerKey.X)) || (InputManager.GetKeyDown(ControllerKey.Y)))
         {
             go = true;
         }

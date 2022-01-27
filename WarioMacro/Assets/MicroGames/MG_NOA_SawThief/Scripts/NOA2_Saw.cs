@@ -213,7 +213,7 @@ public class NOA2_Saw : MonoBehaviour, ITickable
 
     void SawActive()
     {
-        if (InputManager.GetKeyDown(ControllerKey.A) && GameController.currentTick < 5)
+        if ((InputManager.GetKeyDown(ControllerKey.A) || InputManager.GetKeyDown(ControllerKey.B) || InputManager.GetKeyDown(ControllerKey.X) || InputManager.GetKeyDown(ControllerKey.Y)) && GameController.currentTick < 5)
         {
             sawAValue(tValue);
             moving = false;

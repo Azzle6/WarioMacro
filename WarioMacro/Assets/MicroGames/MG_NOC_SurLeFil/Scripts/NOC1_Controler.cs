@@ -19,9 +19,13 @@ public class NOC1_Controler : MonoBehaviour, ITickable
     [SerializeField] private AudioClip sonDefaite;
     [SerializeField] private AudioClip sonVictoire;
     [SerializeField] private AudioClip sonFeu;
+    
     public SpriteRenderer spriteRender;
     public Sprite sprite1;
     public Sprite sprite2;
+    public Sprite sprite3;
+    public Image backGround;
+    
     private string ButtonDown;
     private string ButtonBefore;
     private bool result;
@@ -33,7 +37,9 @@ public class NOC1_Controler : MonoBehaviour, ITickable
     private bool isWalking = false;
     private bool songIn = false;
     private bool sprite = false;
+    
     private AudioClip actualSong;
+
     
 
     void Start()
@@ -118,7 +124,9 @@ public class NOC1_Controler : MonoBehaviour, ITickable
         }
         else
         {
+            backGround.sprite = sprite3;
             winner.SetActive(true);
+            animator.Play("NOC_GoodEnd");
             AudioManager.PlaySound(sonVictoire);
         }
     }
@@ -146,6 +154,7 @@ public class NOC1_Controler : MonoBehaviour, ITickable
         }
         else if (GameController.currentTick == actualTick + 3)
         {
+            animator.Play("void");
             AudioManager.StopSound(sonFeu);
             GameController.FinishGame(result);
         }
