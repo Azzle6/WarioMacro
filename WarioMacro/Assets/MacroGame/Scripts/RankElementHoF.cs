@@ -23,7 +23,7 @@ public class RankElementHoF : MonoBehaviour
         timeTMP.text = String.Format("{0:00}:{1:00}", minutes, seconds);
         foreach (var key in run.team.Keys)
         {
-            portraits[i].sprite = key.lifebarSprite;
+            portraits[i].sprite = key.portraitSprite;
             mask[i].SetActive(!run.team[key]);
             i++;
         }

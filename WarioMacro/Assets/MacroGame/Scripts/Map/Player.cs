@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Player : MonoBehaviour
 {
     public GameObject[] arrowPrefabs = new GameObject[4];
 
-    [SerializeField] private PlayerAnimation playerAnimation;
+    [FormerlySerializedAs("playerAnimation")] [SerializeField] private PortalAnimation portalAnimation;
     [SerializeField] private Transform puppetMainCharacter;
     [SerializeField] private Animator animator;
     [SerializeField] private float moveSpeed = 1f;
@@ -39,16 +40,16 @@ public class Player : MonoBehaviour
     public IEnumerator EnterPortal()
     {
         animator.SetTrigger(portalEnter);
-        while (playerAnimation.animationState)
+        while (portalAnimation.animationState)
             yield return null;
-        playerAnimation.animationState = true;
+        portalAnimation.animationState = true;
     }
     
     public IEnumerator ExitPortal()
     {
         animator.SetTrigger(portalExit);
         //while (playerAnimation.animationState) yield return null;
-        playerAnimation.animationState = true;
+        portalAnimation.animationState = true;
         yield return null;
         //animator.SetTrigger(idle);
     }
