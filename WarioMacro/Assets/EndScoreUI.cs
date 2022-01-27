@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,9 +13,10 @@ public class EndScoreUI : MonoBehaviour
     public GameObject endFailure;
     public Image[] defeatPortraits;
     public Image[] successPortraits;
+    public TextMeshProUGUI score;
 
-    
-    public IEnumerator ToggleEndSuccess()
+
+    public void ToggleEndSuccess()
     {
         var i = 0;
         foreach (var t in GameController.instance.hallOfFame.currentRun.team)
@@ -21,14 +24,13 @@ public class EndScoreUI : MonoBehaviour
             successPortraits[i].sprite = t.Key.portraitSprite;
             i++;
         }
+        score.text = GameController.instance.hallOfFame.currentRun.score +"$";
+        
         endPanel.SetActive(true);
         endSuccess.SetActive(true);
-        AudioManager.MacroPlaySound("GameWin", 0);
-        yield return new WaitForSeconds(6);
-        CloseEndScore();
     }
     
-    public IEnumerator ToggleEndFailure()
+    public void ToggleEndFailure()
     {
         var i = 0;
         foreach (var t in GameController.instance.hallOfFame.currentRun.team)
@@ -38,9 +40,6 @@ public class EndScoreUI : MonoBehaviour
         }
         endPanel.SetActive(true);
         endFailure.SetActive(true);
-        AudioManager.MacroPlaySound("GameLose", 0);
-        yield return new WaitForSeconds(6);
-        CloseEndScore();
     }
 
     public void CloseEndScore()

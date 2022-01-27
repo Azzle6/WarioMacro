@@ -85,26 +85,37 @@ public class GameController : Ticker
 
     internal IEnumerator ToggleEndGame(bool value)
     {
+        MusicManager.instance.AudioS.Stop();
         if (value)
         {
-            //macroGameCanvasAnimator.SetTrigger(victory);
-            yield return StartCoroutine(endScoreUI.ToggleEndSuccess());
+            instance.hallOfFame.UpdateHallOfFame(instance.scoreManager.currentRunMoney,instance.chronometer);
+            AudioManager.MacroPlaySound("VictoryTheme",0);
+            AudioManager.MacroPlaySoundLoop("VictoryLoop",6);
+            yield return new WaitForSeconds(6);
+            endScoreUI.ToggleEndSuccess();
             scoreManager.AddToCurrentMoney();
             
         }
         else
         {
-            yield return StartCoroutine(endScoreUI.ToggleEndFailure());
-            //macroGameCanvasAnimator.SetTrigger(defeat);
-            
+            AudioManager.MacroPlaySound("DefeatTheme",0);
+            AudioManager.MacroPlaySoundLoop("DefeatLoop",6);
+            yield return new WaitForSeconds(6);
+            endScoreUI.ToggleEndFailure();
+
         }
 
-        instance.hallOfFame.UpdateHallOfFame(instance.scoreManager.currentRunMoney,instance.chronometer);
+        
         characterManager.ResetEndGame();
         PlayerPrefs.Save();
         
         //yield return new WaitForSecondsRealtime(0.5f);
-        //while (!InputManager.GetKeyDown(ControllerKey.A)) yield return null;
+        while (!InputManager.GetKeyDown(ControllerKey.A)) yield return null;
+        if(value)
+            AudioManager.StopMacroSound("VictoryLoop",0);
+        else
+            AudioManager.StopMacroSound("DefeatLoop",0);
+        endScoreUI.CloseEndScore();
         //NotDestroyedScript.isAReload = true;
         AsyncOperation asyncLoadLvl = SceneManager.LoadSceneAsync(1, LoadSceneMode.Single);
         while (!asyncLoadLvl.isDone) yield return null;

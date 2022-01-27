@@ -93,6 +93,12 @@ public class AudioManager : MonoBehaviour
         SoundInfo sound = instance.soundList.FindSound(soundName);
         instance.StartCoroutine(instance.PlayAudio(sound.clip, AudioType.Sound, sound.clipVolume, delay));
     }
+    
+    public static void MacroPlaySoundLoop(string soundName, float delay)
+    {
+        SoundInfo sound = instance.soundList.FindSound(soundName);
+        instance.StartCoroutine(instance.PlayAudioLoop(sound.clip, AudioType.Sound, sound.clipVolume, delay));
+    }
 
     public static void MacroPlayRandomSound(string soundName) => MacroPlayRandomSound(soundName, 0);
 
@@ -206,6 +212,29 @@ public class AudioManager : MonoBehaviour
                 break;
         }
     }
+    
+    private IEnumerator PlayAudioLoop(AudioClip audioClip, AudioType type, float volume, float delay)
+    {
+        if (volume < 0 || volume > 1)
+        {
+            throw new ArgumentException("Volume must be an integer between 0 and 1.");
+        }
+        
+        yield return new WaitForSeconds(delay);
+
+        switch (type)
+        {
+            case AudioType.Music:
+                PlayAudioLoop(audioClip, volume, musicSources, ref currentMusicSourceID);
+                break;
+            case AudioType.Sound:
+                PlayAudioLoop(audioClip, volume, soundSources, ref currentSoundSourceID);
+                break;
+            case AudioType.SoundMG:
+                PlayAudioLoop(audioClip, volume, mgSoundSources, ref currentMGSoundSourceID);
+                break;
+        }
+    }
 
     [SuppressMessage("ReSharper", "TailRecursiveCall")]
     private void PlayAudio(AudioClip audioClip, float volume, IReadOnlyList<AudioSource> audioSources, ref int currentID)
@@ -215,6 +244,7 @@ public class AudioManager : MonoBehaviour
         {
             audioSource.clip = audioClip;
             audioSource.volume = volume;
+            audioSource.loop = false;
             audioSource.Play();
 
             unavailableAudioCount = 0;
@@ -236,6 +266,37 @@ public class AudioManager : MonoBehaviour
         }
 
         PlayAudio(audioClip, volume, audioSources, ref currentID);
+    }
+    
+    private void PlayAudioLoop(AudioClip audioClip, float volume, IReadOnlyList<AudioSource> audioSources, ref int currentID)
+    {
+        AudioSource audioSource = audioSources[currentID];
+        if (!audioSource.isPlaying)
+        {
+            audioSource.clip = audioClip;
+            audioSource.volume = volume;
+            audioSource.loop = true;
+            audioSource.Play();
+
+            unavailableAudioCount = 0;
+
+            return;
+        }
+
+        currentID++;
+        unavailableAudioCount++;
+
+        if (currentID > audioSources.Count - 1)
+        {
+            currentID = 0;
+        }
+
+        if (unavailableAudioCount > audioSources.Count)
+        {
+            audioSource.Stop();
+        }
+
+        PlayAudioLoop(audioClip, volume, audioSources, ref currentID);
     }
 
     private IEnumerator StopAudio(AudioClip audioClip, AudioType type, float delay)
