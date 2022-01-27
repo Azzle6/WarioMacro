@@ -41,7 +41,8 @@ public class HallOfFame : MonoBehaviour
             return toString;
         }
     }
-
+    
+    
     public void StartRun(Character[] team)
     {
         foreach (var c in team)
