@@ -337,6 +337,7 @@ public class MiniGameResultPannel_UI : MonoBehaviour
 
     public IEnumerator CharaApparition(int nodeType)
     {
+
         if(nodeType <= 1) yield break;
 
         Debug.Log(CharacterManager.instance.SpecialistOfTypeInTeam(nodeType));
@@ -353,6 +354,7 @@ public class MiniGameResultPannel_UI : MonoBehaviour
         Debug.Log(selectedChara);
 
         if (selectedChara == null) yield break;
+        GameController.instance.nbMicroGamesSpecialist++;
         AudioManager.MacroPlaySound(selectedChara.GetMGSoundName());
         charaSpecialistSprite.sprite = selectedChara.fullSizeSprite;
         charaApparitionGO.SetActive(true);
