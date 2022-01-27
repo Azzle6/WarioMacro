@@ -76,7 +76,8 @@ public class OutOfJailManager : MonoBehaviour
             }
         }
         SetRowsUI();
-        eventSystemFocus.firstSelected = jailedUI.First(c => c.gameObject.activeSelf).gameObject;
+        if(jailedUI.Any(c => c.gameObject.activeSelf))
+            eventSystemFocus.firstSelected = jailedUI.First(c => c.gameObject.activeSelf).gameObject;
     }
 
     public void SetRowsUI()
@@ -103,6 +104,7 @@ public class OutOfJailManager : MonoBehaviour
     public void CloseJail()
     {
         jailPanel.SetActive(false);
+        isOpen = false;
         InputManager.lockInput = false;
         GameController.OnInteractionEnd();
     }
