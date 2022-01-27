@@ -53,6 +53,7 @@ public class DialogManager : MonoBehaviour
     private string[] currentCharaDialog;
     public bool isCharaDialog;
     public TMP_Text nametext;
+    public TMP_Text nametextOutline;
 
     private void Awake()
     {
@@ -76,6 +77,7 @@ public class DialogManager : MonoBehaviour
         {
             charaSprite.sprite = curDial.chara;
             nametext.text = curDial.name;
+            nametextOutline.text = curDial.name;
             charaSprite.gameObject.SetActive(true);
         }
         else
@@ -83,6 +85,7 @@ public class DialogManager : MonoBehaviour
             if(curDial.chara != null) charaSprite.sprite = curDial.chara;
             charaSprite.gameObject.SetActive(false);
             nametext.text = curDial.name;
+            nametextOutline.text = curDial.name;
         }
         
         isInDialog = true;
