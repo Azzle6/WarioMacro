@@ -257,7 +257,6 @@ public class GameController : Ticker
             menu.enabled = false;
 
             // Launch transition
-            AudioManager.MacroPlaySound("MiniGameEnter", 0);
             yield return StartCoroutine(transitionController.TransitionHandler(currentScene, true));
 
 
