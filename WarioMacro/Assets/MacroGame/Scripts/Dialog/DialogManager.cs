@@ -6,16 +6,50 @@ using UnityEngine.UI;
 
 public class DialogManager : MonoBehaviour
 {
+    static public bool FindDialog(DialogConstructor dial)
+    {
+        var characterNode = dial.GetComponent<CharacterNode>();
+        if (characterNode != null)
+        {
+            var dialogLines = new string[0];
+
+            // Recruit Phase
+            if (RecruitmentController.isInRecruitmentLoop)
+            {
+                var currentChara = characterNode.currentChara;
+                if (currentChara == null)
+                {
+                    Debug.LogWarning("Character node " + characterNode + " has no currentChara");
+                    return false;
+                }
+                
+                var isRecruited = CharacterManager.instance.playerTeam.Contains(characterNode.currentChara);
+                dialogLines = isRecruited ? currentChara.AlreadyRecruitDialog : currentChara.RecruitDialog;
+            }
+            
+            if (dialogLines.Length > 0)
+            {
+                dial.dialogs = dialogLines;
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
     public static DialogManager instance;
     [SerializeField] private GameObject dialogGO;
     [SerializeField] private GameObject ButtonsParent;
     [SerializeField] private TMP_Text textZone;
     [SerializeField] private DialogConstructor curDial;
     [SerializeField] private GameObject ButtonTemplate;
+    [SerializeField] private Image charaSprite;
     private GameObject[] Buttons;
     private IEnumerator currentCoroutine;
     private bool isInDialog;
     private int curIndex;
+    private string[] currentCharaDialog;
+    public bool isCharaDialog;
 
     private void Awake()
     {
@@ -30,8 +64,18 @@ public class DialogManager : MonoBehaviour
             Debug.Log("player is already in a dialog.");
             return;
         }
-
         curDial = currentDial;
+        
+        if(FindDialog(currentDial))
+            Debug.Log("New dialogs found for: " + currentDial);
+        
+        if (curDial.chara != null)
+        {
+            charaSprite.sprite = curDial.chara;
+            charaSprite.gameObject.SetActive(true);
+        }
+        else charaSprite.gameObject.SetActive(false);
+        
         isInDialog = true;
         dialogGO.SetActive(true);
 
@@ -45,14 +89,16 @@ public class DialogManager : MonoBehaviour
     {
         textZone.text = "";
 
+        string[] dialogToDisplay = isCharaDialog ? currentCharaDialog : curDial.dialogs;
+
         if (curDial.dialogs.Length == 0)
         {
             Debug.Log("Dialogues vides !");
             yield break;
         }
-        for (int i = 0; i < curDial.dialogs[curIndex].Length; i++)
+        for (int i = 0; i < dialogToDisplay[curIndex].Length; i++)
         {
-            textZone.text = string.Concat(textZone.text, curDial.dialogs[curIndex][i]);
+            textZone.text = string.Concat(textZone.text, dialogToDisplay[curIndex][i]);
             yield return new WaitForSeconds(0.02f);
         }
         
