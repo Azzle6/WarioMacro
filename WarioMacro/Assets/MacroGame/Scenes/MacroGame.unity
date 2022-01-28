@@ -3233,6 +3233,7 @@ MonoBehaviour:
   score: {fileID: 1869944340}
   nbMicroGames: {fileID: 654537951}
   nbSpecialistMicroGames: {fileID: 1884876889}
+  bonusGain: {fileID: 998054113}
 --- !u!1 &797653707
 GameObject:
   m_ObjectHideFlags: 0
@@ -3920,6 +3921,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5707645420141278030, guid: 498c15a445819fd45923950925854ddc, type: 3}
   m_PrefabInstance: {fileID: 953197242}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &998054113 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5935700950009249440, guid: 4273146a748655947aac99f93c7e0cc7, type: 3}
+  m_PrefabInstance: {fileID: 1254750757}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!320 &1018517684 stripped
 PlayableDirector:
   m_CorrespondingSourceObject: {fileID: 4104179151765241174, guid: d885208160eb0ce4e857b5d06d735208, type: 3}
@@ -4479,6 +4491,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2008032678}
     m_Modifications:
+    - target: {fileID: 1142025536174779904, guid: 4273146a748655947aac99f93c7e0cc7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1532767143385595574, guid: 4273146a748655947aac99f93c7e0cc7, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -4717,6 +4733,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2299236976351629883, guid: 4273146a748655947aac99f93c7e0cc7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2299236976351629885, guid: 4273146a748655947aac99f93c7e0cc7, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5935700949180013891, guid: 4273146a748655947aac99f93c7e0cc7, type: 3}
@@ -6843,6 +6863,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2008032678}
     m_Modifications:
+    - target: {fileID: 703760622037609825, guid: d885208160eb0ce4e857b5d06d735208, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: fce147e71a5b26e4a8d51bfb1505e2b8, type: 2}
+    - target: {fileID: 703760622037609825, guid: d885208160eb0ce4e857b5d06d735208, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 5921031252192849395, guid: fce147e71a5b26e4a8d51bfb1505e2b8, type: 2}
     - target: {fileID: 4633293152434012578, guid: d885208160eb0ce4e857b5d06d735208, type: 3}
       propertyPath: m_Pivot.x
       value: 0

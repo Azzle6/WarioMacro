@@ -31,7 +31,6 @@ public class NAB1_Guard : MonoBehaviour
         seen = Physics.Raycast(new Ray(new Vector3(transform.position.x, 0.5f,transform.position.z) + transform.forward*0.5f,  transform.forward),out hit, 4.3f);
         if (seen && hit.collider.name == "Ch45" && flashlight)
         {
-            Debug.Log("vu");
             hit.collider.SendMessageUpwards("Spotted", SendMessageOptions.DontRequireReceiver);
             Camera.main.GetComponent<Animator>().SetBool("Seen", true);
             GetComponent<Animator>().SetTrigger("Spot");
@@ -49,7 +48,6 @@ public class NAB1_Guard : MonoBehaviour
         seen = Physics.BoxCast(new Vector3(transform.position.x, 0.5f,transform.position.z), new Vector3(2,0,2), transform.forward, out hit);
         if (seen && hit.collider.name == "Ch45" && flashlight)
         {
-            Debug.Log("hahahaha");
             hit.collider.SendMessageUpwards("Spotted", SendMessageOptions.DontRequireReceiver);
             Camera.main.GetComponent<Animator>().SetBool("Seen", true);
             GetComponent<Animator>().SetTrigger("Spot");

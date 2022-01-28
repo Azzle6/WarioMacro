@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using GameTypes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -96,7 +97,9 @@ public class GameController : Ticker
             AudioManager.MacroPlaySound("VictoryTheme",0);
             AudioManager.MacroPlaySoundLoop("VictoryLoop",6);
             yield return new WaitForSeconds(6);
-            endScoreUI.ToggleEndSuccess();
+            int bonusScore = characterManager.playerTeam.Sum(character => 50);
+            endScoreUI.ToggleEndSuccess(bonusScore);
+            scoreManager.AddMoney(bonusScore);
             scoreManager.AddToCurrentMoney();
             
         }
@@ -115,11 +118,10 @@ public class GameController : Ticker
         
         //yield return new WaitForSecondsRealtime(0.5f);
         while (!InputManager.GetKeyDown(ControllerKey.A)) yield return null;
-        if(value)
-            AudioManager.StopMacroSound("VictoryLoop",0);
-        else
-            AudioManager.StopMacroSound("DefeatLoop",0);
-        
+        instance.InteractiveEventEnd();
+        AudioManager.AmStopAllCoroutines();
+        AudioManager.StopMacroSound(value ? "VictoryLoop" : "DefeatLoop", 0);
+
         //NotDestroyedScript.isAReload = true;
         AsyncOperation asyncLoadLvl = SceneManager.LoadSceneAsync(1, LoadSceneMode.Single);
         while (!asyncLoadLvl.isDone) yield return null;
@@ -330,7 +332,7 @@ public class GameController : Ticker
                                       : 1));
             
             resultPanel.SetGain( Mathf.FloorToInt(rewardChart.GetMoneyBags(MapManager.currentPhase, behaviourNode.behaviour) * (c != default(Character)
-                ? (c.mastery == Character.Level.Expert ? 2 : 1.5f) 
+                ? (c.mastery == Character.Level.Expert ? 1.5f : 1.2f) 
                 : 1)));
             UIMoneyField.SetCounterTextTyping(scoreManager.currentRunMoney.ToString());
             Debug.Log(scoreManager.currentRunMoney.ToString());

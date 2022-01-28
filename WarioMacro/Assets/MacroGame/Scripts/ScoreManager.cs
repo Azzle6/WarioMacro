@@ -23,7 +23,7 @@ public class ScoreManager : MonoBehaviour
 
     public void ShowMoney()
     {
-        moneyBagsText.text = currentRunMoney.ToString();
+        moneyBagsText.text = currentRunMoney + "$";
     }
     
     public void AddToCurrentMoney()

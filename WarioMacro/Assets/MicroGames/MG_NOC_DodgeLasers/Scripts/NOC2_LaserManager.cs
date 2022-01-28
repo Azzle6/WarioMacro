@@ -40,6 +40,8 @@ public class NOC2_LaserManager : MonoBehaviour, ITickable
             return;
         }
 
+        currentTick = 0;
+        result = false;
         instance = this;
         GameManager.Register();
         GameController.Init(this);
@@ -50,6 +52,7 @@ public class NOC2_LaserManager : MonoBehaviour, ITickable
 
     public void OnTick()
     {
+        
         currentTick = GameController.currentTick;
         if (GameController.currentTick == 5)
         {
