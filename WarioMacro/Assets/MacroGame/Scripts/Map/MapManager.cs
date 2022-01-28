@@ -237,5 +237,7 @@ public class MapManager : MonoBehaviour
     {
         var rd = new System.Random();
         mapPrefabQueue = new Queue<GameObject>(mapPrefabList.OrderBy(go => rd.Next()));
+        floor = 0;
+        currentPhase = 0;
     }
 }
