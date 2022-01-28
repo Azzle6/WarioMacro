@@ -54,6 +54,7 @@ public class DialogManager : MonoBehaviour
     public bool isCharaDialog;
     public TMP_Text nametext;
     public TMP_Text nametextOutline;
+    private bool cancelled;
 
     private void Awake()
     {
@@ -128,8 +129,10 @@ public class DialogManager : MonoBehaviour
             LastDialog();
             while (!InputManager.GetKeyDown(ControllerKey.A, true) && (!curDial.canBeCanceled || !InputManager.GetKeyDown(ControllerKey.B, true)))
             {
+                
                 yield return null;
             }
+            if (InputManager.GetKeyDown(ControllerKey.B, true)) cancelled = true;
             //yield return new WaitUntil(() => InputManager.GetKeyDown(ControllerKey.A, true));
             Debug.Log("QUIT");
             FinishDialog();
@@ -146,6 +149,12 @@ public class DialogManager : MonoBehaviour
     private void LastDialog()
     {
         ButtonsParent.SetActive(true);
+        if (ButtonsParent.transform.childCount > 0)
+        {
+            EventSystem.current.SetSelectedGameObject(ButtonsParent.transform.GetChild(0).gameObject);
+            ButtonsParent.transform.GetChild(0).GetComponent<Animator>().Play("Dialog_ChoiceButton_Hover");
+        }
+        
     }
 
     private void FinishDialog()
@@ -169,7 +178,8 @@ public class DialogManager : MonoBehaviour
         curIndex = 0;
         isInDialog = false;
         Ticker.lockTimescale = false;
-        if(curDial.InteractionEndWhenDialogEnd) GameController.OnInteractionEnd();
+        if(curDial.InteractionEndWhenDialogEnd || cancelled) GameController.OnInteractionEnd();
+        cancelled = false;
         foreach (GameObject but in Buttons)
         {
             but.GetComponent<Button>().onClick.RemoveAllListeners();
@@ -211,6 +221,7 @@ public class DialogManager : MonoBehaviour
         
         ButtonsParent.SetActive(false);
         ButtonsParent.GetComponent<EventSystemFocus>().firstSelected = buttons[0];
+        
         return buttons.ToArray();
     }
     

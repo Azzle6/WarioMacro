@@ -16,6 +16,7 @@ public class NAB1_PlayerMove : MonoBehaviour
     [SerializeField] private AudioClip moveSound;
     [SerializeField] private AudioClip defeatSound;
     [SerializeField] private TMP_Text victoryText;
+    [SerializeField] private TMP_Text defeatText;
 
     void Start()
     {
@@ -66,6 +67,8 @@ public class NAB1_PlayerMove : MonoBehaviour
 
     private IEnumerator DisplayVictoryText()
     {
+        defeatText.enabled = false;
+        AudioManager.StopSound(defeatSound);
         yield return new WaitForSeconds(0.5f);
 
         victoryText.enabled = true;

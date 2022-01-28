@@ -42,7 +42,7 @@ public class Tutorial_UI : MonoBehaviour
     public void ToggleWindow(bool toggle)
     {
         allPannels.gameObject.SetActive(toggle);
-        if (!toggle) GameController.OnInteractionEnd();
+        if (!toggle && GameController.OnInteractionEnd != null) GameController.OnInteractionEnd();
     }
 
     public void ToggleContent(int contentIndex, bool toggle)
